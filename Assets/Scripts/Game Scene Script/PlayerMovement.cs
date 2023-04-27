@@ -4,45 +4,45 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-// Á¦ÀÛÀÚ :¹æ¹ÎÈ£
+// ì œì‘ì :ë°©ë¯¼í˜¸
 namespace mino {
 
     public class PlayerMovement : MonoBehaviour
     {
-        //ÇÃ·¹ÀÌ¾îÀÇ ¾Ö´Ï¸ŞÀÌÅÍ¸¦ °ü¸®
+        //í”Œë ˆì´ì–´ì˜ ì• ë‹ˆë©”ì´í„°ë¥¼ ê´€ë¦¬
         [Header("Player Animator Setting")]
         [SerializeField]
-        //ÇÃ·¹ÀÌ¾î ¾Ö´Ï¸ŞÀÌ¼ÇÀ» °ü¸®
+        //í”Œë ˆì´ì–´ ì• ë‹ˆë©”ì´ì…˜ì„ ê´€ë¦¬
         private Animator AniSetting;
-        //ÇÃ·¹ÀÌ¾îÀÇ ±âº»»óÅÂ°ªÀ» IDLE·Î ÁöÁ¤ÇÔ
+        //í”Œë ˆì´ì–´ì˜ ê¸°ë³¸ìƒíƒœê°’ì„ IDLEë¡œ ì§€ì •í•¨
         //public PlayerState currentState = PlayerState.Idle;
 
-        //ÇÃ·¹ÀÌ¾îÀÇ ¿òÁ÷ÀÓÀ» °ü¸®
+        //í”Œë ˆì´ì–´ì˜ ì›€ì§ì„ì„ ê´€ë¦¬
         [Header ("Player Move")]
         [SerializeField]
-        //ÀÌµ¿¼Óµµ ÁöÁ¤ ÃÊ´ç 5MÀÇ ¼Óµµ·Î ÀÌµ¿½ÃÅ³°ÅÀÓ
+        //ì´ë™ì†ë„ ì§€ì • ì´ˆë‹¹ 5Mì˜ ì†ë„ë¡œ ì´ë™ì‹œí‚¬ê±°ì„
         private float moveSpeed = 5f;
-        //1ÃÊ¿¡ ¹æÇâÀ» È¸Àü½ÃÅ³ ±âÁØÀ» Á¤ÇØÁØ´Ù.
+        //1ì´ˆì— ë°©í–¥ì„ íšŒì „ì‹œí‚¬ ê¸°ì¤€ì„ ì •í•´ì¤€ë‹¤.
         private float rotAnglePerSecond = 360;
-        //¸¶¿ì½º Å¬¸¯ÇÏ´Â ÁöÁ¡À» ¹Ş¾Æ¿Ã°÷
+        //ë§ˆìš°ìŠ¤ í´ë¦­í•˜ëŠ” ì§€ì ì„ ë°›ì•„ì˜¬ê³³
         private Vector3 curTargetPos;
 
-        //ÇÃ·¹ÀÌ¾îÀÇ ¸¶¿ì½ºÅ¬¸¯À» °ü¸®
+        //í”Œë ˆì´ì–´ì˜ ë§ˆìš°ìŠ¤í´ë¦­ì„ ê´€ë¦¬
         [Header("Monster Click!")]
         [SerializeField]
-        //¸ó½ºÅÍ °ü·Ã ¿ÀºêÁ§Æ® »ı¼º
+        //ëª¬ìŠ¤í„° ê´€ë ¨ ì˜¤ë¸Œì íŠ¸ ìƒì„±
         private GameObject ClickEmeny;
 
-        //ÇÃ·¹ÀÌ¾î¿¡°Ô º¸ÀÏ UI ÀÌº¥Æ®µéÀ» ÁöÁ¤ÇØÁÜ
+        //í”Œë ˆì´ì–´ì—ê²Œ ë³´ì¼ UI ì´ë²¤íŠ¸ë“¤ì„ ì§€ì •í•´ì¤Œ
         [Header("UI EVENT")]
         [SerializeField]
-        //Àû¿¡°Ô ÁØ µ¥¹ÌÁö¸¦ Ç¥½ÃÇØÁÙ ÅØ½ºÆ® ÁöÁ¤
+        //ì ì—ê²Œ ì¤€ ë°ë¯¸ì§€ë¥¼ í‘œì‹œí•´ì¤„ í…ìŠ¤íŠ¸ ì§€ì •
         public TMP_Text HitDamage;
-        //Àû¿¡°Ô ¹ŞÀº µ¥¹ÌÁö¸¦ Ç¥½ÃÇØÁÙ ÅØ½ºÆ® ÁöÁ¤
+        //ì ì—ê²Œ ë°›ì€ ë°ë¯¸ì§€ë¥¼ í‘œì‹œí•´ì¤„ í…ìŠ¤íŠ¸ ì§€ì •
         public TMP_Text VoidDamage;
-        //ÀûÀÇ Ã¼·ÂÀ» Ç¥½ÃÇØÁÙ ½½¶óÀÌ´õ ÁöÁ¤
+        //ì ì˜ ì²´ë ¥ì„ í‘œì‹œí•´ì¤„ ìŠ¬ë¼ì´ë” ì§€ì •
         public Slider EnemyHPBar;
-        //³ªÀÇ Ã¼·ÂÀ» º¸ÀÌ°Ô ÇØÁÙ ½½¶óÀÌ´õ¸¦ ÁöÁ¤
+        //ë‚˜ì˜ ì²´ë ¥ì„ ë³´ì´ê²Œ í•´ì¤„ ìŠ¬ë¼ì´ë”ë¥¼ ì§€ì •
         public Slider MyHPBar;
 
 
@@ -51,11 +51,11 @@ namespace mino {
         void Start()
         {
             
-            //ÀûÀÇ ½½¶óÀÌ´õ¸¦ ÃÊ±âÈ­ ÇÔ
+            //ì ì˜ ìŠ¬ë¼ì´ë”ë¥¼ ì´ˆê¸°í™” í•¨
             EnemyHPBar=GetComponent<Slider>();
-            //³ªÀÇ ½½¶óÀÌ´õ¸¦ ÃÊ±âÈ­ ÇÔ
+            //ë‚˜ì˜ ìŠ¬ë¼ì´ë”ë¥¼ ì´ˆê¸°í™” í•¨
             MyHPBar=GetComponent<Slider>();
-            //Ã³À½¿¡´Â ÀûÀÇ Ã¼·Â¹Ù¸¦ ¾Èº¸ÀÌµµ·Ï ÇÑ´Ù.
+            //ì²˜ìŒì—ëŠ” ì ì˜ ì²´ë ¥ë°”ë¥¼ ì•ˆë³´ì´ë„ë¡ í•œë‹¤.
             EnemyHPBar.enabled=true;
 
         }
@@ -65,7 +65,7 @@ namespace mino {
         {
 
         }
-        //Ä³¸¯ÅÍ¸¦ ÀÌµ¿½ÃÅ³ º¯¼ö ÁöÁ¤
+        //ìºë¦­í„°ë¥¼ ì´ë™ì‹œí‚¬ ë³€ìˆ˜ ì§€ì •
         public void MovePoint(Vector3 targetpos)
         {
             

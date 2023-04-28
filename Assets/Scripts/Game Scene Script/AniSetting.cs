@@ -8,7 +8,7 @@ namespace mino
     public enum PlayerState
     {
         Idle,   //0 가만히 있는 상태 지정할거
-        Walk,   //1 마우스로 클릭해서 이동할때 실행할 애니메이션
+        Run,   //1 마우스로 클릭해서 이동할때 실행할 애니메이션
         LongAttack, //2 원거리 무기 공격모션 애니메이션
         GunAttackIdle, //3 무기: 총 공격 애니메이션
         BowAttackIdle,  //4 무기 : 활 공격 애니메이션

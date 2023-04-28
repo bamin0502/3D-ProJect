@@ -6,7 +6,6 @@ using TMPro;
 
 // 제작자 :방민호
 namespace mino {
-
     public class PlayerMovement : MonoBehaviour
     {
         //플레이어의 애니메이터를 관리
@@ -46,7 +45,6 @@ namespace mino {
         public Slider MyHPBar;
 
 
-
         // Start is called before the first frame update
         void Start()
         {
@@ -74,8 +72,10 @@ namespace mino {
         {
 
         }
+
         
-        public void AttackCalculate() {
+        public void AttackCalculate() 
+        {
             
         }
     }

@@ -6,7 +6,8 @@ public class ItemPickup : MonoBehaviour
 {
     //임성훈
     
-    [Header("Resource에서 맞는 아이템 찾아서 넣어주세요")]public Item item; // 아이템 정보
+    [Header("Resource에서 맞는 아이템 찾아서 넣어주세요")]
+    public Item item; // 아이템 정보
 
     public void PickUp()
     {

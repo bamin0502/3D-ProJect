@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        Managers mag = Managers.GetInstance();//방민호
         _navAgent = GetComponent<NavMeshAgent>();
         _camera = Camera.main;
     }

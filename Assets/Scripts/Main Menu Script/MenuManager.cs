@@ -7,6 +7,7 @@ using UnityEngine.Events;
 using TMPro;
 using System.Data.Common;
 
+//제작자 : 방민호
 public class MenuManager: MonoBehaviour
 {
    

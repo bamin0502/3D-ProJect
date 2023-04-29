@@ -3,6 +3,8 @@ using UnityEngine.AI;
 
 public class PlayerMovement : MonoBehaviour
 {
+    //임성훈
+    
     private NavMeshAgent _navAgent;
 
     private Camera _camera;

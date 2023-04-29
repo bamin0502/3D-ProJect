@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    //임성훈
+    
     public Camera mainCamera; //메인 카메라
     public Camera minimapCamera; //미니맵 카메라
 

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class RightClickAnimation : MonoBehaviour
 {
+    //임성훈
+    
     public GameObject clickAnimationPrefab; // 클릭 애니메이션 프리팹
     public int poolSize = 20; // 풀 크기
     public float animationDuration = 1.5f; // 애니메이션 지속 시간 (초)

@@ -2738,7 +2738,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1998469430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2751,6 +2751,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d15ee7e9d204a524a93a10344ab22c79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fieldRange: 200
+  fieldIntensity: 1
+  damage: 5
+  fieldParticleSystem: {fileID: 0}
+  MagneticNoticeText: {fileID: 0}
 --- !u!4 &1998469431
 Transform:
   m_ObjectHideFlags: 0
@@ -4963,6 +4968,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3b142aff00077849bf596affff3e3d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 10
+  Health: 1000
 --- !u!136 &5431673224202211077
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -3,11 +3,12 @@ using UnityEngine.AI;
 
 public class PlayerMovement : MonoBehaviour
 {
-    //임성훈
-    
+    //임성훈   
     private NavMeshAgent _navAgent;
-
     private Camera _camera;
+    //방민호
+    public float damage = 10.0f;
+    public float Health = 1000.0f;
 
     private void Start()
     {
@@ -28,5 +29,12 @@ public class PlayerMovement : MonoBehaviour
                 _navAgent.SetDestination(hit.point);
             }
         }
+    }
+
+    //내용추가 방민호
+    public void TakeDamage(float damage)
+    {
+        Health -= damage;
+        
     }
 }

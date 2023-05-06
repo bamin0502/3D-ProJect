@@ -7,42 +7,42 @@ using UnityEngine.Events;
 using TMPro;
 using System.Data.Common;
 
-//Á¦ÀÛÀÚ : ¹æ¹ÎÈ£
+//ì œì‘ì : ë°©ë¯¼í˜¸
 public class MenuManager: MonoBehaviour
 {
    
-    [Header("È¯°æ ¿É¼Ç ¼³Á¤Ã¢")]
-    //Ç®½ºÅ©¸° ÁöÁ¤ º¯¼ö ¼±¾ğ
+    [Header("í™˜ê²½ ì˜µì…˜ ì„¤ì •ì°½")]
+    //í’€ìŠ¤í¬ë¦° ì§€ì • ë³€ìˆ˜ ì„ ì–¸
     //FullScreenMode screenMode;
-    //Ç®½ºÅ©¸° Àü¿ë Åä±Û ¼±¾ğ
+    //í’€ìŠ¤í¬ë¦° ì „ìš© í† ê¸€ ì„ ì–¸
     //public Toggle fullscreenBtn;
-    //ÇÁ·¹ÀÓ º¯¼ö ÁöÁ¤
+    //í”„ë ˆì„ ë³€ìˆ˜ ì§€ì •
     //private int framerate;
-    //ÇØ»óµµ °ü·Ã ¸®½ºÆ®¹è¿­ ¼±¾ğ
+    //í•´ìƒë„ ê´€ë ¨ ë¦¬ìŠ¤íŠ¸ë°°ì—´ ì„ ì–¸
     //List<Resolution> resolutions = new List<Resolution>();
-    //µå·Ó´Ù¿î º¯¼ö ¼±¾ğ
+    //ë“œë¡­ë‹¤ìš´ ë³€ìˆ˜ ì„ ì–¸
     //public TMP_Dropdown resolutionDropdown;
-    //ÇØ»óµµ¸¦ º¯°æÇÒ¼ö ÀÖ°Ô ÇØÁÖ´Â º¯¼ö ¼±¾ğ
+    //í•´ìƒë„ë¥¼ ë³€ê²½í• ìˆ˜ ìˆê²Œ í•´ì£¼ëŠ” ë³€ìˆ˜ ì„ ì–¸
     int resolutionNum;
-    //¹è°æÀ½¾Ç ½½¶óÀÌ´õ ÁöÁ¤
+    //ë°°ê²½ìŒì•… ìŠ¬ë¼ì´ë” ì§€ì •
     [SerializeField] public Slider BackGroundMusic;
-    //ÀÌÆåÆ® »ç¿îµå ½½¶óÀÌ´õ ÁöÁ¤
+    //ì´í™íŠ¸ ì‚¬ìš´ë“œ ìŠ¬ë¼ì´ë” ì§€ì •
     [SerializeField] public Slider SoundEffect;
-    //¹è°æÀ½ ÁöÁ¤
+    //ë°°ê²½ìŒ ì§€ì •
     [SerializeField] public AudioSource BackGround;
-    //ÀÌÆåÆ® »ç¿îµå ÁöÁ¤
+    //ì´í™íŠ¸ ì‚¬ìš´ë“œ ì§€ì •
     [SerializeField] public AudioSource EffectSound;
 
-    [Header("°ü¸® ¿ÀºêÁ§Æ® ¼³Á¤")]
-    //¸®½ºÆ® ¹è¿­ ÇüÅÂ·Î ½½¶óÀÌ´õ¸¦ °ü¸®ÇÔ
+    [Header("ê´€ë¦¬ ì˜¤ë¸Œì íŠ¸ ì„¤ì •")]
+    //ë¦¬ìŠ¤íŠ¸ ë°°ì—´ í˜•íƒœë¡œ ìŠ¬ë¼ì´ë”ë¥¼ ê´€ë¦¬í•¨
     [SerializeField] public List<Slider> slider = new List<Slider>();
-    //¸®½ºÆ®¹è¿­ ÇüÅÂ·Î ÀÌ¹ÌÁö¸¦ °ü¸®ÇÔ
+    //ë¦¬ìŠ¤íŠ¸ë°°ì—´ í˜•íƒœë¡œ ì´ë¯¸ì§€ë¥¼ ê´€ë¦¬í•¨
     [SerializeField] public List<Image> image = new List<Image>();
 
     // Start is called before the first frame update
     void Start()
     {
-        //¿É¼Ç Ã¢ ºñÈ°¼ºÈ­
+        //ì˜µì…˜ ì°½ ë¹„í™œì„±í™”
         image[1].transform.gameObject.SetActive(false);
         
     }
@@ -56,29 +56,29 @@ public class MenuManager: MonoBehaviour
 
 
     }
-    //¿É¼Ç ¹öÆ°À» ´­·¶À»¶§ ¿É¼ÇÃ¢À» ¿­°Ô ¸¸µé ¸Ş¼­µå¸¦ ÁöÁ¤
+    //ì˜µì…˜ ë²„íŠ¼ì„ ëˆŒë €ì„ë•Œ ì˜µì…˜ì°½ì„ ì—´ê²Œ ë§Œë“¤ ë©”ì„œë“œë¥¼ ì§€ì •
     public void OptionturnOn()
     {
-        image[1].transform.gameObject.SetActive(true);
+        image[1].rectTransform.gameObject.SetActive(true);
     }
-    //¿É¼Ç´İ±â ¹öÆ°À» ´­·¶À»¶§ ¿É¼ÇÃ¢À» ´İ°Ô ¸¸µé ¸Ş¼­µå ÁöÁ¤
+    //ì˜µì…˜ë‹«ê¸° ë²„íŠ¼ì„ ëˆŒë €ì„ë•Œ ì˜µì…˜ì°½ì„ ë‹«ê²Œ ë§Œë“¤ ë©”ì„œë“œ ì§€ì •
     public void OptionturnOff()
     {
         image[1].rectTransform.gameObject.SetActive(false);
     }
-    //°ÔÀÓ½ÇÇàÀ» ½ÃÅ³ ¸Ş¼­µå ÁöÁ¤
+    //ê²Œì„ì‹¤í–‰ì„ ì‹œí‚¬ ë©”ì„œë“œ ì§€ì •
     public void GamestartButtonClick()
     {
-        //·Îµù¾ÀÀÌ ½ÇÇàÈÄ¿¡ °ÔÀÓ¾ÀÀ¸·Î ÀÌµ¿ÇÏµµ·Ï Ã³¸®
+        //ë¡œë”©ì”¬ì´ ì‹¤í–‰í›„ì— ê²Œì„ì”¬ìœ¼ë¡œ ì´ë™í•˜ë„ë¡ ì²˜ë¦¬
         LoadingSceneManager.LoadScene("Game Scene");
     }
-    //°ÔÀÓÁ¾·á¸¦ ½ÃÅ³ ¸Ş¼­µå ÁöÁ¤
+    //ê²Œì„ì¢…ë£Œë¥¼ ì‹œí‚¬ ë©”ì„œë“œ ì§€ì •
     public void QuitGame()
     {
         Application.Quit();
-        Debug.Log("°ÔÀÓ Á¾·á È®ÀÎ¿ë");
+        Debug.Log("ê²Œì„ ì¢…ë£Œ í™•ì¸ìš©");
     }
-    //»çÀÌÁî¸¦ Á¶ÀıÇÒ ¸Ş¼­µå ¼±¾ğ
+    //ì‚¬ì´ì¦ˆë¥¼ ì¡°ì ˆí•  ë©”ì„œë“œ ì„ ì–¸
     //public void ChangeSize()
     //{
     //    for (int i = 0; i < Screen.resolutions.Length; i++)
@@ -87,7 +87,7 @@ public class MenuManager: MonoBehaviour
     //            resolutions.Add(Screen.resolutions[i]);
     //    }
     //    resolutionDropdown.options.Clear();
-    //    //ÃÊ±â ¼³Á¤°ª ÁöÁ¤
+    //    //ì´ˆê¸° ì„¤ì •ê°’ ì§€ì •
     //    int optionNum = 0;
     //    foreach (Resolution item in resolutions)
     //    {
@@ -100,20 +100,20 @@ public class MenuManager: MonoBehaviour
     //        optionNum++;
     //    }
     //    resolutionDropdown.RefreshShownValue();
-    //    //Ç®½ºÅ©¸° ¹öÆ°ÀÇ Å¬¸¯¿©ºÎ¸¦ ¹İÈ¯ÇÔ(´­¸° »óÅÂ¸é true ¾Æ´Ï¸é false ¹İÈ¯)
+    //    //í’€ìŠ¤í¬ë¦° ë²„íŠ¼ì˜ í´ë¦­ì—¬ë¶€ë¥¼ ë°˜í™˜í•¨(ëˆŒë¦° ìƒíƒœë©´ true ì•„ë‹ˆë©´ false ë°˜í™˜)
     //    fullscreenBtn.isOn = Screen.fullScreenMode.Equals(FullScreenMode.FullScreenWindow) ? true : false;
     //}
-    //ÇØ´ç µå·Ó´Ù¿î value ¹øÈ£¿¡ ¸Â°Ô º¯°æÇÏ°Ô ÇØÁÖ´Â ¸Ş¼­µå »ı¼º
+    //í•´ë‹¹ ë“œë¡­ë‹¤ìš´ value ë²ˆí˜¸ì— ë§ê²Œ ë³€ê²½í•˜ê²Œ í•´ì£¼ëŠ” ë©”ì„œë“œ ìƒì„±
     //public void DropboxOptionChange(int x)
     //{
     //    resolutionNum = x;
     //}
-    ////È®ÀÎ¹öÆ°À» ´©¸£´ÂÁö È®ÀÎÇÏ´Â ¸Ş¼­µå »ı¼º
+    ////í™•ì¸ë²„íŠ¼ì„ ëˆ„ë¥´ëŠ”ì§€ í™•ì¸í•˜ëŠ” ë©”ì„œë“œ ìƒì„±
     //public void OKBtnClick()
     //{
     //    Screen.SetResolution(resolutions[resolutionNum].width, resolutions[resolutionNum].height, screenMode);
     //}
-    ////Ç®½ºÅ©¸°ÀÎÁö ¾Æ´ÑÁö ¿©ºÎ¸¦ ÆÇ´ÜÇÏ´Â ¸Ş¼­µå »ı¼º
+    ////í’€ìŠ¤í¬ë¦°ì¸ì§€ ì•„ë‹Œì§€ ì—¬ë¶€ë¥¼ íŒë‹¨í•˜ëŠ” ë©”ì„œë“œ ìƒì„±
     //public void FullScreenBtn(bool isFull)
     //{
         

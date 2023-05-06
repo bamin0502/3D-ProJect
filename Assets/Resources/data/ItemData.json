@@ -1,0 +1,26 @@
+{
+    "Item": [
+        {
+            "itemName": "체력물약",
+            "itemType": "소모성",
+            "health": 10,
+            "prefab": "HealthPotion"
+        },
+        {
+            "itemName": "화염수류탄",
+            "itemType": "투척용",
+            "damage": 10,
+            "dot": 2,
+            "rapidTime": 5,
+            "prefab": "FireGrenade"
+        },
+        {
+            "itemName": "암흑수류탄",
+            "itemType": "투척용",
+            "damage": 10,
+            "sight": 1,
+            "rapidTime": 5,
+            "prefab": "DarkGrenade"
+        }
+    ]
+}

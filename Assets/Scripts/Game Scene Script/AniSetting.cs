@@ -2,21 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//Á¦ÀÛÀÚ ¹æ¹ÎÈ£
+//ì œì‘ì ë°©ë¯¼í˜¸
 namespace mino 
 {
     public enum PlayerState
     {
-        Idle,   //0 °¡¸¸È÷ ÀÖ´Â »óÅÂ ÁöÁ¤ÇÒ°Å
-        Run,   //1 ¸¶¿ì½º·Î Å¬¸¯ÇØ¼­ ÀÌµ¿ÇÒ¶§ ½ÇÇàÇÒ ¾Ö´Ï¸ŞÀÌ¼Ç
-        LongAttack, //2 ¿ø°Å¸® ¹«±â °ø°İ¸ğ¼Ç ¾Ö´Ï¸ŞÀÌ¼Ç
-        GunAttackIdle, //3 ¹«±â: ÃÑ °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç
-        BowAttackIdle,  //4 ¹«±â : È° °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç
-        ShortAttack,   //5  ±ÙÁ¢ ¹«±â ¾Ö´Ï¸ŞÀÌ¼Ç ÁöÁ¤ 
-        HabberAttackIdle,   //6 ¹«±â : ÇØ¸Ó °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç
-        Dead, //7 Á×¾úÀ»¶§
-        SpaceMove, //8 ½ºÆäÀÌ½º¹Ù¸¦ ´­·¶À» ¶§ ³ª°¡°Ô ÇÒ ¾Ö´Ï¸ŞÀÌ¼Ç
-        ItemUse, //9 ¾ÆÀÌÅÛÀ» »ç¿ëÁßÀÏ¶§ ½ÇÇà½ÃÅ³ ¾Ö´Ï¸ŞÀÌ¼Ç 
+        Idle,   //0 ê°€ë§Œíˆ ìˆëŠ” ìƒíƒœ ì§€ì •í• ê±°
+        RunForward,   //1 ë§ˆìš°ìŠ¤ë¡œ í´ë¦­í•´ì„œ ì´ë™í• ë•Œ ì‹¤í–‰í•  ì• ë‹ˆë©”ì´ì…˜
+        LongAttack, //2 ì›ê±°ë¦¬ ë¬´ê¸° ê³µê²©ëª¨ì…˜ ì• ë‹ˆë©”ì´ì…˜
+        GunAttackIdle, //3 ë¬´ê¸°: ì´ ê³µê²© ì• ë‹ˆë©”ì´ì…˜
+        BowAttackIdle,  //4 ë¬´ê¸° : í™œ ê³µê²© ì• ë‹ˆë©”ì´ì…˜
+        ShortAttack,   //5  ê·¼ì ‘ ë¬´ê¸° ì• ë‹ˆë©”ì´ì…˜ ì§€ì • 
+        HammerAttackIdle,   //6 ë¬´ê¸° : í•´ë¨¸ ê³µê²© ì• ë‹ˆë©”ì´ì…˜
+        Dead, //7 ì£½ì—ˆì„ë•Œ
+        SpaceMove, //8 ìŠ¤í˜ì´ìŠ¤ë°”ë¥¼ ëˆŒë €ì„ ë•Œ ë‚˜ê°€ê²Œ í•  ì• ë‹ˆë©”ì´ì…˜
+        ItemUse, //9 ì•„ì´í…œì„ ì‚¬ìš©ì¤‘ì¼ë•Œ ì‹¤í–‰ì‹œí‚¬ ì• ë‹ˆë©”ì´ì…˜ 
+        GetHit //10 ë§ì•˜ì„ë•Œ ë‚˜ì˜¤ê²Œí•  ì• ë‹ˆë©”ì´ì…˜
     }
 
     public class AniSetting : MonoBehaviour
@@ -27,10 +28,10 @@ namespace mino
         {
             ani = GetComponent<Animator>();
         }
-        //enum °ª¿¡ µû¶ó¼­ Çàµ¿ÇÏ°Ô ÇÒ°ÅÀÓ
+        //enum ê°’ì— ë”°ë¼ì„œ í–‰ë™í•˜ê²Œ í• ê±°ì„
         public void ChangeAnimation(PlayerState aniNumber)
         {
-            //¿¡´Ï¸ŞÀÌ¼ÇÀÇ °ªÀ» aniPlayer¿¡¼­ ¹øÈ£¿¡ µû¶ó¼­ °¡Á®¿À°Ô ÇÒ°ÍÀÓ!
+            //ì—ë‹ˆë©”ì´ì…˜ì˜ ê°’ì„ aniPlayerì—ì„œ ë²ˆí˜¸ì— ë”°ë¼ì„œ ê°€ì ¸ì˜¤ê²Œ í• ê²ƒì„!
             ani.SetInteger("aniPlayer", (int)aniNumber);
         }
     }

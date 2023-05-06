@@ -6,7 +6,9 @@ using TMPro;
 
 public class MagneticField : MonoBehaviour
     {
+        //자기장 크기 설정
         public float fieldRange = 200.0f;
+        //자기장 세기 설정
         public int fieldIntensity = 1;
         public float damage = 5f;
         public ParticleSystem fieldParticleSystem;
@@ -16,7 +18,7 @@ public class MagneticField : MonoBehaviour
         private const string PLAYER_TAG = "Player";
         public TMP_Text MagneticNoticeText;
         private float Timer = 120f;
-
+        
         void Start()
         {
             fieldParticleSystem.Stop();
@@ -37,7 +39,7 @@ public class MagneticField : MonoBehaviour
                 PlayerMovement player = other.GetComponent<PlayerMovement>();
                 if (player != null)
                 {
-                    player.TakeDamage(damage * damageMultiplier[fieldIntensity - 1] * Time.deltaTime);
+                    //player.TakeDamage(damage * damageMultiplier[fieldIntensity - 1] * Time.deltaTime);
                 }
             }
         }
@@ -86,7 +88,7 @@ public class MagneticField : MonoBehaviour
             Timer -= Time.deltaTime;
             if (Timer > 0f)
             {
-                MagneticNoticeText.text = "자기장 생성까지 " + Mathf.CeilToInt(Timer).ToString() + " 초만큼 남았습니다.";
+                MagneticNoticeText.text = "자기장 생성까지 " + Mathf.CeilToInt(Timer).ToString() + "초만큼 남았습니다.";
             }
             else
             {
@@ -95,7 +97,7 @@ public class MagneticField : MonoBehaviour
             }
         }
 
-        void Update()
+    void Update()
         {
             NoticeMagneticFieldText();
         }

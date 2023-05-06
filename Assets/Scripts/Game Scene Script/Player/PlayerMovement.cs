@@ -29,6 +29,13 @@ public class PlayerMovement : MonoBehaviour
 
         ChangedState(PlayerState.Idle);
 
+        var Playerstat = new PlayerStat
+        {
+            damage = 10,
+            Health = 100
+        };
+        File.WriteAllText(Application.dataPath + "/PlayerStat.json", JsonUtility.ToJson(Playerstat));
+        Debug.Log(Application.dataPath + "/PlayerStat.json");
 
         //로그작동되는지 확인(확인결과 이상무)
         //TakeDamage();
@@ -66,21 +73,14 @@ public class PlayerMovement : MonoBehaviour
     //내용추가 방민호 Json화
     public void TakeDamage()
     {
-        var Playerstat = new PlayerStat
-        {
-            damage = 10,
-            Health = 100
-        };
-        File.WriteAllText(Application.dataPath + "/PlayerStat.json", JsonUtility.ToJson(Playerstat));
-        Debug.Log(Application.dataPath + "/PlayerStat.json");
 
         string LoadPlayerstat = File.ReadAllText(Application.dataPath + "/PlayerStat.json");
         Debug.Log("ReadAllText :" + LoadPlayerstat);
-
         PlayerStat data = JsonUtility.FromJson<PlayerStat>(LoadPlayerstat);
         string log = string.Format("data {0},{1}", data.damage, data.Health);
         Debug.Log(log);
 
+        
     }
     void ChangedState(PlayerState newState)
     {

@@ -32,7 +32,7 @@ public class CameraController : MonoBehaviour
         Vector3 newPosition = gameObject.transform.position;
         if (minimapCamera.transform.position != newPosition)
         {
-            newPosition.y = 50f;
+            newPosition.y = 60f;
             minimapCamera.transform.position = newPosition;
         }
         

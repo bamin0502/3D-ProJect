@@ -37,8 +37,12 @@ public class PlayerMovement : MonoBehaviour
     bool isCoolingDown = false;
     float cooldownEndTime = 0f;
     float cooldownTime = 10f;
-    public SpacebarCooldownUI cooldownUI;
-    public TMP_Text coolText; 
+    //public SpacebarCooldownUI cooldownUI;
+    public TMP_Text coolText;
+
+    public UnityEngine.UI.Image fill;
+    private float MaxCooldown = 10f;
+    private float currentCooldown = 10f;
     void Start()
     {
         Managers mag = Managers.GetInstance();//방민호
@@ -102,7 +106,7 @@ public class PlayerMovement : MonoBehaviour
         if (!isCoolingDown && Input.GetKeyDown(KeyCode.Space))
         {
             ChangedState(PlayerState.SpaceMove);
-            cooldownUI.Update();
+            
             isCoolingDown = true;
             cooldownEndTime = Time.time + cooldownTime;                           
 
@@ -114,6 +118,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (remainingTime > 0)
             {
+                SpaceBarUI();
                 coolText.text = "쿨타임까지 " + Mathf.CeilToInt(remainingTime).ToString() + "초 남았습니다."; ;
             }
             else
@@ -233,11 +238,25 @@ public class PlayerMovement : MonoBehaviour
     {
         Destroy(gameObject);        
     }
-    private IEnumerator UpdateCoolText()
+    public void SpaceBarUI()
     {
-        float remainingTime = Mathf.Max(0f, cooldownEndTime - Time.time);
-        coolText.text = "쿨타임까지 " + Mathf.CeilToInt(remainingTime).ToString() + " 초 남았습니다.";
-        yield return null;
-    }
+        SetCurrentCooldown(currentCooldown - Time.deltaTime);
 
+        if (currentCooldown < 0f)
+            currentCooldown = MaxCooldown;
+    }
+    private void UpdateFillAmount()
+    {
+        fill.fillAmount = currentCooldown / MaxCooldown;
+    }
+    public void SetMaxCooldown(in float value)
+    {
+        MaxCooldown = value;
+        UpdateFillAmount();
+    }
+    public void SetCurrentCooldown(in float value)
+    {
+        currentCooldown = value;
+        UpdateFillAmount();
+    }
 }

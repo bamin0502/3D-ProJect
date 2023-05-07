@@ -33,9 +33,9 @@ public class Slot : MonoBehaviour, IPointerClickHandler
         ItemSlotnum4 = KeyCode.Alpha4;
         ItemSlotnum5 = KeyCode.Alpha5;
         ItemSlotnum6 = KeyCode.Alpha6;
-        SlotGroup = transform.parent.parent.GetComponent<RectTransform>().rect;
-        CoolTimeImage.transform.gameObject.SetActive(false);
-        GButtonImage.transform.gameObject.SetActive(false);
+        //SlotGroup = transform.parent.parent.GetComponent<RectTransform>().rect;
+        //CoolTimeImage.transform.gameObject.SetActive(false);
+        //GButtonImage.transform.gameObject.SetActive(false);
     }
     //드래그 밖으로 아이템이 나갈시에는 아이템을 파괴시킬거임
     public void OnEndDrag(PointerEventData eventData)

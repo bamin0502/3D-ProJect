@@ -5,6 +5,12 @@ using UnityEngine.UIElements;
 using Newtonsoft.Json;
 using System.IO;
 using System;
+using UnityEngine.UI;
+using System.Timers;
+using TMPro;
+using System.Collections.Generic;
+using System.Collections;
+
 class PlayerStat 
 {
     public float damage=0;
@@ -16,18 +22,19 @@ public class PlayerMovement : MonoBehaviour
     //임성훈   
     private NavMeshAgent _navAgent;
     private Camera _camera;
-    //방민호
     private float rotAnglePerSecond = 360f;
     private Vector3 curTargetPos;
+    //방민호
     public PlayerState currentState = PlayerState.Idle;
     private AniSetting ani;
     public Action OnDead;//죽었을때 호출할 이벤트
-    public GameObject SpaceBarImage;//스페이스바를 눌렀을때 나올 이미지
-    public GameObject BackGroundSpaceBarImage;//스페이스바를 눌렀을때 쿨타임동안 나오게 할 이미지
+    bool isCoolingDown = false;
+    float cooldownEndTime = 0f;
+    float cooldownTime = 10f;
+    public SpacebarCooldownUI cooldownUI;
+    public TMP_Text coolText; 
     void Start()
     {
-        SpaceBarImage.SetActive(false);
-        BackGroundSpaceBarImage.SetActive(false);
         Managers mag = Managers.GetInstance();//방민호
         _navAgent = GetComponent<NavMeshAgent>();
         _camera = Camera.main;
@@ -66,14 +73,28 @@ public class PlayerMovement : MonoBehaviour
         {
             ChangedState(PlayerState.Idle);
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (!isCoolingDown && Input.GetKeyDown(KeyCode.Space))
         {
             ChangedState(PlayerState.SpaceMove);
-            //몬스터에게 공격을 받았을 시에는 중간에 바로 바꿀수 있도록 할예정 근데 참조함수 몰라서 일단 주석처리
-            //if(currentState == Enemy.GetHit)
-            //{
-            //    ChangedState(PlayerState.GetHit);
-            //}
+            cooldownUI.Update();
+            isCoolingDown = true;
+            cooldownEndTime = Time.time + cooldownTime;                           
+
+        }
+        if (isCoolingDown)
+        {
+
+            float remainingTime = Mathf.Max(0, cooldownEndTime - Time.time);
+
+            if (remainingTime > 0)
+            {
+                coolText.text = "쿨타임까지 " + Mathf.CeilToInt(remainingTime).ToString() + " 초 남았습니다.";
+            }
+            else
+            {
+                isCoolingDown = false;
+                coolText.text = "";
+            }
         }
         //몬스터에 맞아서 GetHit 애니메이션이 실행되면 TakeDamage를 호출시킨다.
         if (currentState == PlayerState.GetHit)
@@ -81,7 +102,7 @@ public class PlayerMovement : MonoBehaviour
             TakeDamage();
         }
     }
-
+    
     //내용추가 방민호 Json화
     public void TakeDamage()
     {
@@ -115,7 +136,7 @@ public class PlayerMovement : MonoBehaviour
         currentState = newState;
                 
     }
-    void UpdateState()
+    public void UpdateState()
     {
         switch (currentState) 
         {
@@ -163,7 +184,8 @@ public class PlayerMovement : MonoBehaviour
     void PlayerStateSpaceMoveIdle()
     {
         TurnToDestination();
-
+        isCoolingDown = false;
+        
     }
     void PlayerStateDead()
     {
@@ -177,7 +199,13 @@ public class PlayerMovement : MonoBehaviour
     }
     public void Dead()
     {
-        Destroy(gameObject);
-        
+        Destroy(gameObject);        
     }
+    private IEnumerator UpdateCoolText()
+    {
+        float remainingTime = Mathf.Max(0f, cooldownEndTime - Time.time);
+        coolText.text = "쿨타임까지 " + Mathf.CeilToInt(remainingTime).ToString() + " 초 남았습니다.";
+        yield return null;
+    }
+
 }

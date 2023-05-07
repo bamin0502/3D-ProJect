@@ -16,6 +16,12 @@ class PlayerStat
     public float damage=0;
     public float Health=0;
 }
+class EnemyStat 
+{
+    public float damage = 0;
+    public float Health = 0;
+}
+
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -42,14 +48,34 @@ public class PlayerMovement : MonoBehaviour
 
         ChangedState(PlayerState.Idle);
 
-        var Playerstat = new PlayerStat
+        var Playerstat = new PlayerStat //플레이어 설정
         {
-            damage = 10,
-            Health = 100
+            damage = 20,
+            Health = 200
+        };
+        var Enemystat1 = new EnemyStat //몬스터1 설정
+        {
+            damage=20,
+            Health=50
+        };
+        var Enemystat2 = new EnemyStat //몬스터2 설정
+        {
+            damage=10,
+            Health=70
+        };
+        var Enemystat3 = new EnemyStat //몬스터3 설정
+        {
+            damage=30,
+            Health=30
         };
         File.WriteAllText(Application.dataPath + "/PlayerStat.json", JsonUtility.ToJson(Playerstat));
         Debug.Log(Application.dataPath + "/PlayerStat.json");
-
+        File.WriteAllText(Application.dataPath + "/EnemyStat.json", JsonUtility.ToJson(Enemystat1));
+        Debug.Log(Application.dataPath + "/EnemyStat.json");
+        File.WriteAllText(Application.dataPath + "/EnemyStat.json", JsonUtility.ToJson(Enemystat2));
+        Debug.Log(Application.dataPath + "/EnemyStat.json");
+        File.WriteAllText(Application.dataPath + "/EnemyStat.json", JsonUtility.ToJson(Enemystat2));
+        Debug.Log(Application.dataPath + "/EnemyStat.json");
         //로그작동되는지 확인(확인결과 이상무)
         //TakeDamage();
     }
@@ -88,7 +114,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (remainingTime > 0)
             {
-                coolText.text = "쿨타임까지 " + Mathf.CeilToInt(remainingTime).ToString() + " 초 남았습니다.";
+                coolText.text = "쿨타임까지 " + Mathf.CeilToInt(remainingTime).ToString() + "초 남았습니다."; ;
             }
             else
             {
@@ -109,18 +135,24 @@ public class PlayerMovement : MonoBehaviour
         //PlayerStat.json으로 저장되어 있는 파일의 값을 읽어 온다.
         string LoadPlayerstat = File.ReadAllText(Application.dataPath + "/PlayerStat.json");
         Debug.Log("ReadAllText :" + LoadPlayerstat);
+        string LoadEnemyStat = File.ReadAllText(Application.dataPath + "/EnemyStat.json");
+        Debug.Log("ReadAllText :" + LoadEnemyStat);
         //FromJson으로 값을 가져오고 log로 데이터를 역직렬화를 시킨다.
         PlayerStat data = JsonUtility.FromJson<PlayerStat>(LoadPlayerstat);
-        string log = string.Format("data {0},{1}", data.damage, data.Health);
+        EnemyStat endata = JsonUtility.FromJson<EnemyStat>(LoadEnemyStat);
+        string log = string.Format("data {0},{1}", endata.damage, data.Health);
         Debug.Log(log);
         //현재 체력 - 현재 데미지
-        data.Health -= data.damage;
+        data.Health -= endata.damage;
+
         //다시 직렬화를 시켜준다. 다만 이건 플레이어의 공격력과 체력 두개의 값으로
         //아마 몬스터가 되면 몬스터의 공격력하고 플레이어의 체력을 가져온뒤에 넣어야할거같다
         // 그래서 아마 플레이어의 TakeDamage는 플레이어의 체력- 몬스터 공격력
         // 몬스터의 TakeDamage는 몬스터 체력- 플레이어의 공격력이 되도록
         string TakeDamage = JsonUtility.ToJson(data);
         File.WriteAllText(Application.dataPath + "/PlayerStat.json", TakeDamage);
+        string TakeEnemy = JsonUtility.ToJson(endata);
+        File.WriteAllText(Application.dataPath + "EnemyStat.json", TakeEnemy);
         //플레이어의 체력이 0보다 크거나 같으면 캐릭터의 애니메이션을 Dead로 만들고 OnDead Delegate 호출
         if(data.Health <= 0)
         {

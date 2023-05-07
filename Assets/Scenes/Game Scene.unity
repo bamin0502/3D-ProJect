@@ -7657,7 +7657,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentState: 0
   cooldownUI: {fileID: 1468278235}
-  coolText: {fileID: 2059995838}
+  coolText: {fileID: 950511796}
 --- !u!114 &5431673224202211081
 MonoBehaviour:
   m_ObjectHideFlags: 0

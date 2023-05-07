@@ -21,10 +21,13 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 curTargetPos;
     public PlayerState currentState = PlayerState.Idle;
     private AniSetting ani;
-    public Action OnDead;
+    public Action OnDead;//죽었을때 호출할 이벤트
+    public GameObject SpaceBarImage;//스페이스바를 눌렀을때 나올 이미지
+    public GameObject BackGroundSpaceBarImage;//스페이스바를 눌렀을때 쿨타임동안 나오게 할 이미지
     void Start()
     {
-        
+        SpaceBarImage.SetActive(false);
+        BackGroundSpaceBarImage.SetActive(false);
         Managers mag = Managers.GetInstance();//방민호
         _navAgent = GetComponent<NavMeshAgent>();
         _camera = Camera.main;
@@ -160,6 +163,7 @@ public class PlayerMovement : MonoBehaviour
     void PlayerStateSpaceMoveIdle()
     {
         TurnToDestination();
+
     }
     void PlayerStateDead()
     {

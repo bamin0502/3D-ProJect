@@ -218,9 +218,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler
                     item.Pickup();
                     Destroy(item.gameObject);
                 }
-
-            }
-           
+            }           
         }
         else
         {

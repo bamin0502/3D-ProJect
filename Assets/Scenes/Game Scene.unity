@@ -2558,6 +2558,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: syringer
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 76798f47f99e96a4aa0569ca3e75a100, type: 3}
+      propertyPath: m_TagString
+      value: Item
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 76798f47f99e96a4aa0569ca3e75a100, type: 3}
@@ -7502,6 +7506,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
+  SpaceBarImage: {fileID: 1468278231}
+  BackGroundSpaceBarImage: {fileID: 910099180}
 --- !u!114 &5431673224202211081
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -25,12 +25,12 @@ class EnemyStat
 
 public class PlayerMovement : MonoBehaviour
 {
-    //임성훈   
+    //만든이: 임성훈   
     private NavMeshAgent _navAgent;
     private Camera _camera;
     private float rotAnglePerSecond = 360f;
     private Vector3 curTargetPos;
-    //방민호
+    //만든이: 방민호
     public PlayerState currentState = PlayerState.Idle;
     private AniSetting ani;
     public Action OnDead;//죽었을때 호출할 이벤트
@@ -39,18 +39,20 @@ public class PlayerMovement : MonoBehaviour
     float cooldownTime = 10f;
     //public SpacebarCooldownUI cooldownUI;
     public TMP_Text coolText;
-
+    public GameObject SpaceUI;
     public UnityEngine.UI.Image fill;
     private float MaxCooldown = 10f;
     private float currentCooldown = 10f;
     void Start()
     {
-        Managers mag = Managers.GetInstance();//방민호
+        //만든이 : 임성훈
         _navAgent = GetComponent<NavMeshAgent>();
         _camera = Camera.main;
-        ani=GetComponent<AniSetting>();
-
-        ChangedState(PlayerState.Idle);
+        //만든이 : 방민호
+        Managers mag = Managers.GetInstance();
+        ani =GetComponent<AniSetting>();
+        SpaceUI.SetActive(false);//스페이스바 UI 비활성화
+        ChangedState(PlayerState.Idle);//플레이어 기본상태를 Idle로 지정
 
         var Playerstat = new PlayerStat //플레이어 설정
         {
@@ -86,6 +88,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        //만든이 : 임성훈 
         if (Input.GetMouseButtonDown(1)) // 오른쪽 클릭
         {
             Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
@@ -98,7 +101,7 @@ public class PlayerMovement : MonoBehaviour
             }
 
         }
-        //만약 플레이어가 목적지에 도착하였을때! 다시 애니메이션을 기본상태로 되돌림
+        //만약 플레이어가 목적지에 도착하였을때! 다시 애니메이션을 기본상태로 되돌림 , 만든이:방민호
         if (!_navAgent.pathPending && _navAgent.remainingDistance <= _navAgent.stoppingDistance && !_navAgent.hasPath)
         {
             ChangedState(PlayerState.Idle);
@@ -106,7 +109,7 @@ public class PlayerMovement : MonoBehaviour
         if (!isCoolingDown && Input.GetKeyDown(KeyCode.Space))
         {
             ChangedState(PlayerState.SpaceMove);
-            
+            SpaceUI.SetActive(true);
             isCoolingDown = true;
             cooldownEndTime = Time.time + cooldownTime;                           
 
@@ -118,23 +121,24 @@ public class PlayerMovement : MonoBehaviour
 
             if (remainingTime > 0)
             {
-                SpaceBarUI();
-                coolText.text = "쿨타임까지 " + Mathf.CeilToInt(remainingTime).ToString() + "초 남았습니다."; ;
+                SpaceBarUI();//시간이 남아있는동안 실행시킬거임
+                coolText.text = Mathf.CeilToInt(remainingTime).ToString();
             }
             else
             {
+                SpaceUI.SetActive(false);
                 isCoolingDown = false;
                 coolText.text = "";
             }
         }
-        //몬스터에 맞아서 GetHit 애니메이션이 실행되면 TakeDamage를 호출시킨다.
+        //몬스터에 맞아서 GetHit 애니메이션이 실행되면 TakeDamage를 호출시킨다. , 만든이:방민호
         if (currentState == PlayerState.GetHit)
         {
             TakeDamage();
         }
     }
     
-    //내용추가 방민호 Json화
+    //내용추가 만든이 : 방민호 Json화
     public void TakeDamage()
     {
         //PlayerStat.json으로 저장되어 있는 파일의 값을 읽어 온다.
@@ -238,6 +242,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Destroy(gameObject);        
     }
+    //스킬 쿨타임 전용 UI제작 MethodS
     public void SpaceBarUI()
     {
         SetCurrentCooldown(currentCooldown - Time.deltaTime);

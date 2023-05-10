@@ -11,16 +11,6 @@ using TMPro;
 using System.Collections.Generic;
 using System.Collections;
 
-class PlayerStat 
-{
-    public float damage=0;
-    public float Health=0;
-}
-class EnemyStat 
-{
-    public float damage = 0;
-    public float Health = 0;
-}
 
 
 public class PlayerMovement : MonoBehaviour
@@ -54,36 +44,6 @@ public class PlayerMovement : MonoBehaviour
         SpaceUI.SetActive(false);//스페이스바 UI 비활성화
         ChangedState(PlayerState.Idle);//플레이어 기본상태를 Idle로 지정
 
-        var Playerstat = new PlayerStat //플레이어 설정
-        {
-            damage = 20,
-            Health = 200
-        };
-        var Enemystat1 = new EnemyStat //몬스터1 설정
-        {
-            damage=20,
-            Health=50
-        };
-        var Enemystat2 = new EnemyStat //몬스터2 설정
-        {
-            damage=10,
-            Health=70
-        };
-        var Enemystat3 = new EnemyStat //몬스터3 설정
-        {
-            damage=30,
-            Health=30
-        };
-        File.WriteAllText(Application.dataPath + "/PlayerStat.json", JsonUtility.ToJson(Playerstat));
-        Debug.Log(Application.dataPath + "/PlayerStat.json");
-        File.WriteAllText(Application.dataPath + "/EnemyStat.json", JsonUtility.ToJson(Enemystat1));
-        Debug.Log(Application.dataPath + "/EnemyStat.json");
-        File.WriteAllText(Application.dataPath + "/EnemyStat.json", JsonUtility.ToJson(Enemystat2));
-        Debug.Log(Application.dataPath + "/EnemyStat.json");
-        File.WriteAllText(Application.dataPath + "/EnemyStat.json", JsonUtility.ToJson(Enemystat2));
-        Debug.Log(Application.dataPath + "/EnemyStat.json");
-        //로그작동되는지 확인(확인결과 이상무)
-        //TakeDamage();
     }
 
     private void Update()
@@ -149,10 +109,10 @@ public class PlayerMovement : MonoBehaviour
         //FromJson으로 값을 가져오고 log로 데이터를 역직렬화를 시킨다.
         PlayerStat data = JsonUtility.FromJson<PlayerStat>(LoadPlayerstat);
         EnemyStat endata = JsonUtility.FromJson<EnemyStat>(LoadEnemyStat);
-        string log = string.Format("data {0},{1}", endata.damage, data.Health);
+        string log = string.Format("data {0},{1},{2}", endata.damage, data.Health,data.PlayerHealth);
         Debug.Log(log);
         //현재 체력 - 현재 데미지
-        data.Health -= endata.damage;
+        data.PlayerHealth=data.Health -= endata.damage;
 
         //다시 직렬화를 시켜준다. 다만 이건 플레이어의 공격력과 체력 두개의 값으로
         //아마 몬스터가 되면 몬스터의 공격력하고 플레이어의 체력을 가져온뒤에 넣어야할거같다
@@ -163,7 +123,7 @@ public class PlayerMovement : MonoBehaviour
         string TakeEnemy = JsonUtility.ToJson(endata);
         File.WriteAllText(Application.dataPath + "EnemyStat.json", TakeEnemy);
         //플레이어의 체력이 0보다 크거나 같으면 캐릭터의 애니메이션을 Dead로 만들고 OnDead Delegate 호출
-        if(data.Health <= 0)
+        if(data.PlayerHealth <= 0)
         {
             ChangedState(PlayerState.Dead);
             OnDead.Invoke();//아직 연결안함
@@ -243,7 +203,7 @@ public class PlayerMovement : MonoBehaviour
         
         Destroy(gameObject);        
     }
-    //스킬 쿨타임 전용 UI제작 Methods
+    ///스킬 쿨타임 전용 UI제작 Methods///
     public void SpaceBarUI()
     {
         SetCurrentCooldown(currentCooldown - Time.deltaTime);
@@ -265,4 +225,5 @@ public class PlayerMovement : MonoBehaviour
         currentCooldown = value;
         UpdateFillAmount();
     }
+    ///-------------------------///
 }

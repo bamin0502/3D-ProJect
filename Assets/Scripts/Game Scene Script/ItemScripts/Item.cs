@@ -5,35 +5,9 @@ using UnityEngine.UI;
 using Newtonsoft.Json;
 using System.IO;
 
-
-
-[Serializable]
-class Itemdata
-{
-    public string itemName=""; // 아이템의 이름
-    public float Health=0; //아이템 회복량
-    public float damage=0; //아이템 데미지
-    public float dot=0; //아이템 도트데미지
-    public float sight=0; //아이템 시야설정
-}
-
-
 [CreateAssetMenu(fileName = "CreateItem", menuName = "Item")]
 public class Item : ScriptableObject
 {
-    void start()
-    {
-        var potion = new Itemdata
-        {
-            itemName="Potion",
-            Health = 30
-        };
-
-        //potion의 아이템 값을 읽어옴
-        File.WriteAllText(Application.dataPath + "/Itemdata.json", JsonUtility.ToJson(potion));
-        Debug.Log(Application.dataPath + "/Itemdata.json");
-
-    }
     public enum ItemType // 아이템 유형
     {
         Countable,  //쌓을 수 있는 아이템

@@ -18,7 +18,7 @@ public class MenuManager: MonoBehaviour
     {
         //옵션 창 비활성화
         image[1].transform.gameObject.SetActive(false);
-        
+        image[2].transform.gameObject.SetActive(false);
     }
     //옵션 버튼을 눌렀을때 옵션창을 열게 만들 메서드를 지정
     public void OptionturnOn()
@@ -35,6 +35,10 @@ public class MenuManager: MonoBehaviour
     {
         //로딩씬이 실행후에 게임씬으로 이동하도록 처리
         LoadingSceneManager.LoadScene("Game Scene");
+    }
+    public void MultiGameStartButtonClick()
+    {
+        image[2].transform.gameObject.SetActive(true);
     }
     //게임종료를 시킬 메서드 지정
     public void QuitGame()

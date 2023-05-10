@@ -5,7 +5,7 @@ using TMPro;
 public class ResolutionDropdown : MonoBehaviour
 {
     public TMP_Dropdown resolutionDropdown;
-
+    public Toggle fullscreenToggle;
     private int[] resolutionsWidths = { 2560, 1920, 1280 };
     private int[] resolutionsHeights = { 1440, 1080, 720 };
 
@@ -27,5 +27,9 @@ public class ResolutionDropdown : MonoBehaviour
     {
         int resolutionIndex = resolutionDropdown.value;
         Screen.SetResolution(resolutionsWidths[resolutionIndex], resolutionsHeights[resolutionIndex], Screen.fullScreen);
+    }
+    private void OnFullscreenToggleValueChanged()
+    {
+        Screen.fullScreen = fullscreenToggle.isOn;
     }
 }

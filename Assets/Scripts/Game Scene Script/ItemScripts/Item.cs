@@ -5,28 +5,58 @@ using UnityEngine.UI;
 using Newtonsoft.Json;
 using System.IO;
 
+
+
 [Serializable]
-public class Itemdata
+class Itemdata
 {
     public string itemName=""; // 아이템의 이름
-    public Sprite itemImage; // 아이템의 이미지(인벤 토리 안에서 띄울)
-    public float health; //아이템 회복량
-    public float damage; //아이템 데미지
-    public float dot; //아이템 도트데미지
-    public float sight; //아이템 시야설정
+    public float Health=0; //아이템 회복량
+    public float damage=0; //아이템 데미지
+    public float dot=0; //아이템 도트데미지
+    public float sight=0; //아이템 시야설정
 }
 
 
 [CreateAssetMenu(fileName = "CreateItem", menuName = "Item")]
 public class Item : ScriptableObject
 {
+    void start()
+    {
+        var potion = new Itemdata
+        {
+            itemName="Potion",
+            Health = 30
+        };
 
+        //potion의 아이템 값을 읽어옴
+        File.WriteAllText(Application.dataPath + "/Itemdata.json", JsonUtility.ToJson(potion));
+        Debug.Log(Application.dataPath + "/Itemdata.json");
+
+    }
     public enum ItemType // 아이템 유형
     {
         Countable,  //쌓을 수 있는 아이템
         NoneCountable, //쌓을 수 없는 아이템
     }
-
+    public void UsePotion()
+    {
+        string LoadItemdata = File.ReadAllText(Application.dataPath + "/Itemdata.json");
+        Debug.Log("ReadAllText :" + LoadItemdata);
+        string LoadPlayerstat = File.ReadAllText(Application.dataPath + "/PlayerStat.json");
+        Itemdata data = JsonUtility.FromJson<Itemdata>(LoadItemdata);
+        PlayerStat playdata = JsonUtility.FromJson<PlayerStat>(LoadPlayerstat);
+        //물약의 아이템이름, 물약의 회복량을 가져옴
+        string log = string.Format("data {0},{1}", data.itemName, data.Health);
+        //플레이어의 체력을 가져옴
+        string enlog = string.Format("data {0}", playdata.Health);
+        playdata.Health += data.Health;
+        //기존 플레이어 체력보다 더 많이 회복을 할수 없도록 제한
+        if (playdata.Health <= (playdata.Health += data.Health))
+        {
+            Debug.Log("더 이상 회복할수 없습니다! 이미 체력이 최대입니다.");
+        }
+    }
     public Action OnPickUp; //줍기 기능
     public string itemName; // 아이템의 이름
     public ItemType itemType; // 아이템 유형

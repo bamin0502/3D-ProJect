@@ -208,22 +208,22 @@ public class Slot : MonoBehaviour, IPointerClickHandler
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.collider.gameObject.CompareTag("Item"))
-        {
-            GButtonImage.transform.gameObject.SetActive(true);
-            {
-                if(Input.GetKeyDown(KeyCode.G)){
-                    var item = other.gameObject.GetComponent<Inventory>();
-
-                    item.Pickup();
-                    Destroy(item.gameObject);
-                }
-            }           
-        }
-        else
-        {
-            GButtonImage.transform.gameObject.SetActive(false);
-        }
+        other.collider.gameObject.CompareTag("Item");
+        //if (other.collider.gameObject.CompareTag("Item")) 
+        //{
+        //    GButtonImage.transform.gameObject.SetActive(true);
+        //    {
+        //        if(Input.GetKeyDown(KeyCode.G)){
+        //            var item = other.gameObject.GetComponent<Inventory>();
+                    
+        //            Destroy(item.gameObject);
+        //        }
+        //    }           
+        //}
+        //else
+        //{
+        //    GButtonImage.transform.gameObject.SetActive(false);
+        //}
     }
 
 }

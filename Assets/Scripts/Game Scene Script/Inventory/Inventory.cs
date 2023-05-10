@@ -7,20 +7,11 @@ using UnityEngine.UI;
 using TMPro;
 using mino;
 
-[Serializable]
-public class ItemData
-{
-    public string ItemName;//아이템 이름
-    public Sprite ItemImage;//아이템 이미지
-    public GameObject ItemPrefab;//아이템 프리팹
-    public int Count = 1;
-    public string ItemType;// 아이템유형 설정
-}
-
 public class Inventory : MonoBehaviour 
 {
     public static Inventory Instance; //인벤토리 싱글톤
     public Item item;
+
     private void Awake()
     {
         if (Instance == null)
@@ -43,8 +34,9 @@ public class Inventory : MonoBehaviour
     {
         //slots = slotsBase.GetComponentsInChildren<Slot>(); //슬롯 베이스에 있는 모든 슬롯 가져오기
         InitializeItems();
-       
+        
     }
+
 
     public void SaveInventory()
     {
@@ -88,9 +80,7 @@ public class Inventory : MonoBehaviour
             return;
         }
     }
-    public void Pickup()
-    {
-        item.OnPickUp?.Invoke();
-    }
+
+
 }
 

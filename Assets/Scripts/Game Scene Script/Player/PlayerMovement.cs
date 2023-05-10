@@ -240,9 +240,10 @@ public class PlayerMovement : MonoBehaviour
     }
     public void Dead()
     {
+        
         Destroy(gameObject);        
     }
-    //스킬 쿨타임 전용 UI제작 MethodS
+    //스킬 쿨타임 전용 UI제작 Methods
     public void SpaceBarUI()
     {
         SetCurrentCooldown(currentCooldown - Time.deltaTime);

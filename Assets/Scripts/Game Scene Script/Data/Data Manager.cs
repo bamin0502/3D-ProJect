@@ -58,6 +58,7 @@ public class DataManager : MonoBehaviour
             itemName = "Potion",
             Health = 30
         };
+        
 
         //potion의 아이템 값을 읽어옴
         File.WriteAllText(Application.dataPath + "/Itemdata.json", JsonUtility.ToJson(potion));

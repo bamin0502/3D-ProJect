@@ -43,7 +43,7 @@ public class CameraController : MonoBehaviour
             gameObject.transform.position = position; // 플레이어 따라다니게
             mainCamera.transform.position = position + _currentOffset;
         }
-        if (Input.GetKeyDown(KeyCode.Space)) _isPlayerFollow = true; // 스페이스바 누르면 플레이어 위치로
+        //if (Input.GetKeyDown(KeyCode.Space)) _isPlayerFollow = true; // 스페이스바 누르면 플레이어 위치로
         float scroll = Input.GetAxis("Mouse ScrollWheel"); //휠 입력 받음
         CameraMove(); // 화살표로 카메라 이동
         ChangeStep(scroll); // 휠로 카메라 줌

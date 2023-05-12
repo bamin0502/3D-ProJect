@@ -29,12 +29,15 @@ public class Inventory : MonoBehaviour
     [Header("Resources에 있는 모든 아이템을 넣어주세요")][SerializeField] private Item[] baseItemData; //기본 아이템들
 
     public Slot[] slots; //슬롯들
+    private void Update()
+    {
 
+    }
     void Start()
     {
         //slots = slotsBase.GetComponentsInChildren<Slot>(); //슬롯 베이스에 있는 모든 슬롯 가져오기
         InitializeItems();
-        
+
     }
 
 
@@ -59,7 +62,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    private void GetItem(Item _item, int _count = 1) //아이템 획득기능
+    public void GetItem(Item _item, int _count = 1) //아이템 획득기능
     {
         //쌓을수 있는 아이템일때는 아래 코드 작동
         if (_item.itemType != Item.ItemType.NoneCountable)
@@ -80,7 +83,6 @@ public class Inventory : MonoBehaviour
             return;
         }
     }
-
 
 }
 

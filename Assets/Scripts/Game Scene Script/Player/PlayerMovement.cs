@@ -33,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
     public UnityEngine.UI.Image fill;
     private float MaxCooldown = 10f;
     private float currentCooldown = 10f;
+    
     void Start()
     {
         //만든이 : 임성훈
@@ -43,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
         ani =GetComponent<AniSetting>();
         SpaceUI.SetActive(false);//스페이스바 UI 비활성화
         ChangedState(PlayerState.Idle);//플레이어 기본상태를 Idle로 지정
-
+        
     }
 
     private void Update()
@@ -203,6 +204,7 @@ public class PlayerMovement : MonoBehaviour
         
         Destroy(gameObject);        
     }
+
     ///스킬 쿨타임 전용 UI제작 Methods///
     public void SpaceBarUI()
     {

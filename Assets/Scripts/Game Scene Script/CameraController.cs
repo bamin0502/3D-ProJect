@@ -20,9 +20,12 @@ public class CameraController : MonoBehaviour
     private float _targetAngle; // 목표 각도
     private float _currentAngle; // 현재 각도
 
+
+    
     private void Start()
     {
         UpdateStep(0);
+
     }
 
     
@@ -48,6 +51,9 @@ public class CameraController : MonoBehaviour
         CameraMove(); // 화살표로 카메라 이동
         ChangeStep(scroll); // 휠로 카메라 줌
         UpdateStep(scroll); // 줌에 따른 카메라 위치, 각도 조정
+        //아이템 먹는거 실험
+
+
     }
 
     private void CameraMove()

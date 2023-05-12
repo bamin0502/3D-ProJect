@@ -12,7 +12,9 @@ public class WeaponController : MonoBehaviour
     private Weapon equippedWeapon;
     private Transform currentTarget;
     private float attackTimer;
-
+    //김하겸
+    //private Weapon targetedWeapon;
+    //private Weapon equippedWeapon;
     private void Update()
     {
         HandleInput();

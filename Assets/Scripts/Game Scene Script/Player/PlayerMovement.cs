@@ -49,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        
         //만든이 : 임성훈 
         if (Input.GetMouseButtonDown(1)) // 오른쪽 클릭
         {
@@ -92,11 +93,8 @@ public class PlayerMovement : MonoBehaviour
                 coolText.text = "";
             }
         }
-        //몬스터에 맞아서 GetHit 애니메이션이 실행되면 TakeDamage를 호출시킨다. , 만든이:방민호
-        if (currentState == PlayerState.GetHit)
-        {
-            TakeDamage();
-        }
+        
+
     }
     
     //내용추가 만든이 : 방민호 Json화
@@ -167,7 +165,8 @@ public class PlayerMovement : MonoBehaviour
     }
     void PlayerStateGetHit()
     {
-       
+        
+        DataManager.Inst.SetPlayerAttack();
     }
     void PlayerStateIdle()
     {
@@ -200,8 +199,7 @@ public class PlayerMovement : MonoBehaviour
         transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, Time.deltaTime * rotAnglePerSecond);
     }
     public void Dead()
-    {
-        
+    {        
         Destroy(gameObject);        
     }
 

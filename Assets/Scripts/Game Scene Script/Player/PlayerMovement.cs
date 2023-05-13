@@ -96,35 +96,11 @@ public class PlayerMovement : MonoBehaviour
     }
     
     //내용추가 만든이 : 방민호 Json화
-    public void TakeDamage()
+    public static void TakeDamage()
     {
-        //PlayerStat.json으로 저장되어 있는 파일의 값을 읽어 온다.
-        string LoadPlayerstat = File.ReadAllText(Application.dataPath + "/PlayerStat.json");
-        Debug.Log("ReadAllText :" + LoadPlayerstat);
-        string LoadEnemyStat = File.ReadAllText(Application.dataPath + "/EnemyStat.json");
-        Debug.Log("ReadAllText :" + LoadEnemyStat);
-        //FromJson으로 값을 가져오고 log로 데이터를 역직렬화를 시킨다.
-        PlayerStat data = JsonUtility.FromJson<PlayerStat>(LoadPlayerstat);
-        EnemyStat endata = JsonUtility.FromJson<EnemyStat>(LoadEnemyStat);
-        string log = string.Format("data {0},{1},{2}", endata.damage, data.Health,data.PlayerHealth);
-        Debug.Log(log);
-        //현재 체력 - 현재 데미지
-        data.PlayerHealth=data.Health -= endata.damage;
 
-        //다시 직렬화를 시켜준다. 다만 이건 플레이어의 공격력과 체력 두개의 값으로
-        //아마 몬스터가 되면 몬스터의 공격력하고 플레이어의 체력을 가져온뒤에 넣어야할거같다
-        // 그래서 아마 플레이어의 TakeDamage는 플레이어의 체력- 몬스터 공격력
-        // 몬스터의 TakeDamage는 몬스터 체력- 플레이어의 공격력이 되도록
-        string TakeDamage = JsonUtility.ToJson(data);
-        File.WriteAllText(Application.dataPath + "/PlayerStat.json", TakeDamage);
-        string TakeEnemy = JsonUtility.ToJson(endata);
-        File.WriteAllText(Application.dataPath + "EnemyStat.json", TakeEnemy);
-        //플레이어의 체력이 0보다 크거나 같으면 캐릭터의 애니메이션을 Dead로 만들고 OnDead Delegate 호출
-        if(data.PlayerHealth <= 0)
-        {
-            ChangedState(PlayerState.Dead);
-            OnDead.Invoke();//아직 연결안함
-        }
+        DataManager.Inst.SetPlayerAttack();
+
     }
     void ChangedState(PlayerState newState)
     {
@@ -161,10 +137,9 @@ public class PlayerMovement : MonoBehaviour
         }
 
     }
-    void PlayerStateGetHit()
+    public void PlayerStateGetHit()
     {
-        
-        DataManager.Inst.SetPlayerAttack();
+        TakeDamage();
     }
     void PlayerStateIdle()
     {

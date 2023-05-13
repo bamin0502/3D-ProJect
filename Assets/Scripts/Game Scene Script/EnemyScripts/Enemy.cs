@@ -11,11 +11,11 @@ public class Enemy : MonoBehaviour
     public BoxCollider attackArea;
     public bool isAttack;
 
-    Rigidbody rigid;
-    BoxCollider boxcollider;
-    Material mat;
-    NavMeshAgent nav;
-    Animator anim;
+    private Rigidbody rigid;
+    private BoxCollider boxcollider;
+    private Material mat;
+    private NavMeshAgent nav;
+    private Animator anim;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,12 +36,14 @@ public class Enemy : MonoBehaviour
         if (other.tag == "Hammer")
         {
             //웨폰 스크립트 참조하기
-
+            DataManager.Inst.SetEnemyAttack();
+            OnDamage();
         }
         else if (other.tag == "Bullet")
         {
             //웨폰 스크립트 참조하기
-
+            DataManager.Inst.SetEnemyAttack();
+            OnDamage();
         }
     }
     IEnumerator OnDamage()
@@ -55,8 +57,6 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-
-
             mat.color = Color.gray;
             Destroy(gameObject, 4);
             gameObject.layer = 7;
@@ -116,7 +116,7 @@ public class Enemy : MonoBehaviour
         isAttack = true;
         anim.SetBool("isAttack", true);
 
-
+        PlayerMovement.TakeDamage();
         yield return new WaitForSeconds(1f); //각 몬스터마다 시간설정을 다르게해 공격속도 조절
         attackArea.enabled = true;
 

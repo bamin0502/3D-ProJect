@@ -6570,6 +6570,29 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1623313558}
   m_CullTransparentMesh: 1
+--- !u!1 &1624281567 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1783563462218004, guid: 7f931d4b5c97d194d8726ddf5acdd440, type: 3}
+  m_PrefabInstance: {fileID: 2015343975}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1624281570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1624281567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 060608e1d8a18e744b2f000ffb79bfa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 0
+  curHealth: 0
+  target: {fileID: 0}
+  isChase: 0
+  attackArea: {fileID: 0}
+  isAttack: 0
 --- !u!64 &1706884557
 MeshCollider:
   m_ObjectHideFlags: 0

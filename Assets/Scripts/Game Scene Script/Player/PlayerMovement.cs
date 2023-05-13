@@ -61,7 +61,6 @@ public class PlayerMovement : MonoBehaviour
                 _navAgent.SetDestination(hit.point);
                 ChangedState(PlayerState.RunForward);
             }
-
         }
         //만약 플레이어가 목적지에 도착하였을때! 다시 애니메이션을 기본상태로 되돌림 , 만든이:방민호
         if (!_navAgent.pathPending && _navAgent.remainingDistance <= _navAgent.stoppingDistance && !_navAgent.hasPath)
@@ -78,7 +77,6 @@ public class PlayerMovement : MonoBehaviour
         }
         if (isCoolingDown)
         {
-
             float remainingTime = Mathf.Max(0, cooldownEndTime - Time.time);
 
             if (remainingTime > 0)

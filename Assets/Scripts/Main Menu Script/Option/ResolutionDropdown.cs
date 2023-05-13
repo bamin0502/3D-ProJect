@@ -19,10 +19,13 @@ public class ResolutionDropdown : MonoBehaviour
             resolutionDropdown.options.Add(new TMP_Dropdown.OptionData(resolutionsWidths[i].ToString() + "x" + resolutionsHeights[i].ToString()));
         }
 
-        resolutionDropdown.value = 1; // 첫번째 해상도 선택, 제일 기본적인 1920 * 1080 으로 시작하게 할거임
+        resolutionDropdown.value = 2; 
+       
+    }
+    private void Update()
+    {
         resolutionDropdown.onValueChanged.AddListener(delegate { OnResolutionDropdownValueChanged(); }); // Dropdown 이벤트 추가
     }
-
     private void OnResolutionDropdownValueChanged()
     {
         int resolutionIndex = resolutionDropdown.value;

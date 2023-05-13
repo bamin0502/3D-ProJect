@@ -3,7 +3,42 @@ guid: 9d7a8e6f428dbac4ca74546632a89611
 ModelImporter:
   serializedVersion: 22103
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: moon
+    second: {fileID: 2100000, guid: 04da0ce90621f4140962c68593ae2546, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: moon2
+    second: {fileID: 2100000, guid: 969f0cda150b98843a98f1d6397afcf5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ring
+    second: {fileID: 2100000, guid: ded4005ee73a1e34fadc2969f5bf8c81, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: stairs
+    second: {fileID: 2100000, guid: d3a2a2181f0b8ab49983db8e52ce5dbe, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: top
+    second: {fileID: 2100000, guid: faa0e21b949731a4087ce538245a26ce, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: tower
+    second: {fileID: 2100000, guid: be231512bf740274b8e104d2a2c89566, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wall
+    second: {fileID: 2100000, guid: 04da0ce90621f4140962c68593ae2546, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

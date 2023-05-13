@@ -6,8 +6,11 @@ using System.IO;
 using UnityEngine.Events;
 using System.Security.Cryptography;
 using System.Text;
+using System;
 
-//솔직히 이게임에 암호화까지 필요한가 싶긴한데 그래도 해보는거임
+//솔직히 이 게임에 암호화까지 필요한가 싶긴한데 그래도 해보는거임
+//기존에는 유니티 에셋내에 json파일이 보였으나 암호화로 인해서 아마 안보일거임 정상적으로 작동하니 걱정마세요
+//암호화 방법은 https://gist.github.com/Curookie/5de19e581eb54cff7d7b643408ba930c 의 224줄에 있는 내용을 참고했음
 public class PlayerStat
 {
     public string name = "";
@@ -44,7 +47,7 @@ public class DataManager : MonoBehaviour
     [System.NonSerialized]
     public UnityEvent deadEvent = new UnityEvent();
     public static DataManager Inst;
-    // 암호화에 사용할 키(임시임)
+    // 암호화에 사용할 키 ,16바이트 키임 
     private readonly string encryptionKey = "EncryptionKey123";
 
     private static readonly byte[] EncryptionKey = new byte[]
@@ -119,26 +122,53 @@ public class DataManager : MonoBehaviour
     {
         string jsonData = JsonConvert.SerializeObject(data);
         byte[] encryptedData = Encrypt(jsonData);
+
+        // 암호화된 데이터의 길이를 저장
+        int encryptedDataLength = encryptedData.Length;
+
+        // 저장할 데이터 배열 생성 (길이 정보 + 암호화된 데이터)
+        byte[] savedData = new byte[4 + encryptedDataLength];
+
+        // 길이 정보를 바이트 배열로 변환하여 저장
+        byte[] lengthBytes = BitConverter.GetBytes(encryptedDataLength);
+        Buffer.BlockCopy(lengthBytes, 0, savedData, 0, 4);
+
+        // 암호화된 데이터를 저장
+        Buffer.BlockCopy(encryptedData, 0, savedData, 4, encryptedDataLength);
+
         string filePath = GetFilePath(fileName);
-        File.WriteAllBytes(filePath, encryptedData);
-        Debug.Log("Saved encrypted data to: " + filePath);
+        File.WriteAllBytes(filePath, savedData);
+        Debug.Log("암호화된 데이터를 저장했습니다: " + filePath);
     }
     //자동으로 로딩시킬거임
     private T LoadFromJsonEncrypted<T>(string fileName)
     {
+        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
         string filePath = GetFilePath(fileName);
-        if (File.Exists(filePath))
+        byte[] savedData = File.ReadAllBytes(filePath);
+
+        if (savedData.Length < 4)
         {
-            byte[] encryptedData = File.ReadAllBytes(filePath);
-            string jsonData = Decrypt(encryptedData);
-            T data = JsonConvert.DeserializeObject<T>(jsonData);
-            return data;
-        }
-        else
-        {
-            Debug.LogError("파일을 찾을 수 없음!: " + filePath);
+            Debug.LogError("암호화된 데이터의 길이 정보가 올바르지 않습니다.");
             return default(T);
         }
+
+        // 저장된 데이터 배열에서 길이 정보를 읽어옴
+        int encryptedDataLength = BitConverter.ToInt32(savedData, 0);
+
+        if (encryptedDataLength != savedData.Length - 4)
+        {
+            Debug.LogError("암호화된 데이터의 길이가 올바르지 않습니다.");
+            return default(T);
+        }
+
+        // 길이 정보를 제외한 실제 암호화된 데이터 배열 생성
+        byte[] encryptedData = new byte[encryptedDataLength];
+        Buffer.BlockCopy(savedData, 4, encryptedData, 0, encryptedDataLength);
+
+        string decryptedJsonData = Decrypt(encryptedData); // 복호화된 JSON 데이터를 가져옵니다.
+        T data = JsonConvert.DeserializeObject<T>(decryptedJsonData);
+        return data;
     }
     //해당 코드를 암호화 시킴
     private byte[] Encrypt(string data)
@@ -156,9 +186,10 @@ public class DataManager : MonoBehaviour
                 {
                     csEncrypt.Write(rawData, 0, rawData.Length);
                     csEncrypt.FlushFinalBlock();
-                }
 
-                return msEncrypt.ToArray();
+                    byte[] encryptedData = msEncrypt.ToArray();
+                    return encryptedData;
+                }
             }
         }
     }
@@ -170,18 +201,22 @@ public class DataManager : MonoBehaviour
         {
             aesAlg.Key = EncryptionKey;
             aesAlg.IV = IV;
-            using (MemoryStream msDecrypt = new MemoryStream(encryptedData))
+            aesAlg.IV = IV;
+
+            using (MemoryStream msDecrypt = new MemoryStream())
             {
-                using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, aesAlg.CreateDecryptor(), CryptoStreamMode.Read))
+                using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV), CryptoStreamMode.Write))
                 {
-                    using (StreamReader srDecrypt = new StreamReader(csDecrypt))
-                    {
-                        return srDecrypt.ReadToEnd();
-                    }
+                    csDecrypt.Write(encryptedData, 0, encryptedData.Length);
+                    csDecrypt.FlushFinalBlock(); // Flush the final block to the memory stream
                 }
+
+                byte[] decryptedBytes = msDecrypt.ToArray();
+                return Encoding.UTF8.GetString(decryptedBytes).TrimEnd('\0'); // Remove padding characters
             }
         }
     }
+    //랜덤 암호화키 발급
     private byte[] GenerateRandomIV()
     {
         byte[] iv = new byte[16];
@@ -191,16 +226,16 @@ public class DataManager : MonoBehaviour
         }
         return iv;
     }
-
+    //파일을 읽어오는 기능임
     private string GetFilePath(string fileName)
     {
-        return Path.Combine(Application.persistentDataPath, fileName);
+        return Path.Combine("Assets/Resources/Data", fileName);
     }
     //랜덤 데미지 함수(고정형 데미지가 아닌 랜덤으로 데미지를 줄거임)
     public int GetRandomDamage()
     {
         WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
-        int randAttack = Random.Range(weaponData.damage, weaponData.damage + 10);
+        int randAttack = UnityEngine.Random.Range(weaponData.damage, weaponData.damage + 10);
         return randAttack;
     }
     //몬스터에게 데미지를 줄 기능
@@ -254,8 +289,6 @@ public class DataManager : MonoBehaviour
         // WeaponData 저장
         WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
         SaveToJsonEncrypted(weaponData, "WeaponData.json");
-
-        //뒤에 만들것도 위랑 같은 방식으로 만들면 됩니다.
 
         // 추가적인 데이터 저장 로직을 여기에 구현하면 됩니다.
 

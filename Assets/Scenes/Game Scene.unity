@@ -4304,8 +4304,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1053235648}
+  - component: {fileID: 1053235649}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: DataManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4326,6 +4327,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1053235649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1053235647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88fd87e367629e14c93db4ff01161de4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1053336684
 Transform:
   m_ObjectHideFlags: 0
@@ -6575,24 +6588,19 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1783563462218004, guid: 7f931d4b5c97d194d8726ddf5acdd440, type: 3}
   m_PrefabInstance: {fileID: 2015343975}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1624281570
-MonoBehaviour:
+--- !u!65 &1624281573
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1624281567}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 060608e1d8a18e744b2f000ffb79bfa7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 0
-  curHealth: 0
-  target: {fileID: 0}
-  isChase: 0
-  attackArea: {fileID: 0}
-  isAttack: 0
+  serializedVersion: 2
+  m_Size: {x: 3.9675975, y: 2.7943351, z: 3.3005736}
+  m_Center: {x: -0.059329208, y: 0.7012056, z: 0.30966}
 --- !u!64 &1706884557
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -8375,6 +8383,10 @@ PrefabInstance:
     - target: {fileID: 1783563462218004, guid: 7f931d4b5c97d194d8726ddf5acdd440, type: 3}
       propertyPath: m_Name
       value: Polygonal Metalon Green
+      objectReference: {fileID: 0}
+    - target: {fileID: 1783563462218004, guid: 7f931d4b5c97d194d8726ddf5acdd440, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 4215789226532830, guid: 7f931d4b5c97d194d8726ddf5acdd440, type: 3}
       propertyPath: m_RootOrder

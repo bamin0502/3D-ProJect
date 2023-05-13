@@ -106,6 +106,7 @@ public class Enemy : MonoBehaviour
         if (rayHits.Length > 0 && !isAttack)
         {
             StartCoroutine(Attack());
+            
         }
     }
 
@@ -116,7 +117,7 @@ public class Enemy : MonoBehaviour
         isAttack = true;
         anim.SetBool("isAttack", true);
 
-        PlayerMovement.TakeDamage();
+        
         yield return new WaitForSeconds(1f); //각 몬스터마다 시간설정을 다르게해 공격속도 조절
         attackArea.enabled = true;
 

@@ -8,8 +8,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System;
 
-//솔직히 이 게임에 암호화까지 필요한가 싶긴한데 그래도 해보는거임
-//기존에는 유니티 에셋내에 json파일이 보였으나 암호화로 인해서 아마 안보일거임 정상적으로 작동하니 걱정마세요
+//솔직히 이 게임에 암호화까지 필요한가 싶긴한데 그래도 해보는거임 더군다나 이 게임은 뒤에 경쟁게임이여서
+//기존에는 유니티 에셋내에 json파일의 내용이 보였으나 암호화로 인해서 아마 안보일거임 정상적으로 작동하니 걱정마세요
 //암호화 방법은 https://gist.github.com/Curookie/5de19e581eb54cff7d7b643408ba930c 의 224줄에 있는 내용을 참고했음
 public class PlayerStat
 {
@@ -47,8 +47,6 @@ public class DataManager : MonoBehaviour
     [System.NonSerialized]
     public UnityEvent deadEvent = new UnityEvent();
     public static DataManager Inst;
-    // 암호화에 사용할 키 ,16바이트 키임 
-    private readonly string encryptionKey = "EncryptionKey123";
 
     private static readonly byte[] EncryptionKey = new byte[]
     {
@@ -77,28 +75,28 @@ public class DataManager : MonoBehaviour
             name = "",
             Level = 1,
             Exp = 0,
-            Health = 200,
-            PlayerHealth = 200
+            Health = 1000,
+            PlayerHealth = 1000
         };
 
         var enemyStat1 = new EnemyStat
         {
             EnemyHealth = 50,
-            damage = 20,
+            damage = 30,
             Health = 50
         };
 
         var enemyStat2 = new EnemyStat
         {
             EnemyHealth = 70,
-            damage = 10,
+            damage = 20,
             Health = 70
         };
 
         var enemyStat3 = new EnemyStat
         {
             EnemyHealth = 30,
-            damage = 30,
+            damage = 40,
             Health = 30
         };
 
@@ -194,7 +192,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    //해당 코드를 복호화 시킬거임
+    //해당 코드를 다시 복호화 시킬거임
     private string Decrypt(byte[] encryptedData)
     {
         using (Aes aesAlg = Aes.Create())

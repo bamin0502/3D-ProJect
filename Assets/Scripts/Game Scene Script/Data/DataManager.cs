@@ -66,6 +66,7 @@ public class DataManager : MonoBehaviour
     private void Start()
     {
         SaveData();
+        InitializeData();
     }
     //여기다가 var타입으로 만들고 SaveToJson방식으로 저장시킬거임
     private void InitializeData()
@@ -81,9 +82,9 @@ public class DataManager : MonoBehaviour
 
         var enemyStat1 = new EnemyStat
         {
-            EnemyHealth = 50,
+            EnemyHealth = 100,
             damage = 30,
-            Health = 50
+            Health = 100
         };
 
         var enemyStat2 = new EnemyStat
@@ -95,9 +96,9 @@ public class DataManager : MonoBehaviour
 
         var enemyStat3 = new EnemyStat
         {
-            EnemyHealth = 30,
+            EnemyHealth = 50,
             damage = 40,
-            Health = 30
+            Health = 50
         };
 
         var potion = new Itemdata
@@ -107,8 +108,9 @@ public class DataManager : MonoBehaviour
         };
 
         var weapon = new WeaponData { damage = 30 };
+        //이거는 일단 비활성화(inventory는 Json을 안사용할수도 있음)
+        //SaveToJsonEncrypted(potion, "Itemdata.json");
 
-        SaveToJsonEncrypted(potion, "Itemdata.json");
         SaveToJsonEncrypted(playerStat, "PlayerStat.json");
         SaveToJsonEncrypted(enemyStat1, "EnemyStat1.json");
         SaveToJsonEncrypted(enemyStat2, "EnemyStat2.json");
@@ -136,7 +138,7 @@ public class DataManager : MonoBehaviour
 
         string filePath = GetFilePath(fileName);
         File.WriteAllBytes(filePath, savedData);
-        Debug.Log("암호화된 데이터를 저장했습니다: " + filePath);
+        //Debug.Log("암호화된 데이터를 저장했습니다: " + filePath);
     }
     //자동으로 로딩시킬거임
     private T LoadFromJsonEncrypted<T>(string fileName)
@@ -215,32 +217,33 @@ public class DataManager : MonoBehaviour
         }
     }
     //랜덤 암호화키 발급
-    private byte[] GenerateRandomIV()
-    {
-        byte[] iv = new byte[16];
-        using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
-        {
-            rngCsp.GetBytes(iv);
-        }
-        return iv;
-    }
+    //private byte[] GenerateRandomIV()
+    //{
+    //    byte[] iv = new byte[16];
+    //    using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
+    //    {
+    //        rngCsp.GetBytes(iv);
+    //    }
+    //    return iv;
+    //}
     //파일을 읽어오는 기능임
     private string GetFilePath(string fileName)
     {
         return Path.Combine("Assets/Resources/Data", fileName);
     }
     //랜덤 데미지 함수(고정형 데미지가 아닌 랜덤으로 데미지를 줄거임)
-    public int GetRandomDamage()
+    public int GetWeaponRandomDamage()
     {
         WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
         int randAttack = UnityEngine.Random.Range(weaponData.damage, weaponData.damage + 10);
         return randAttack;
     }
+
     //몬스터에게 데미지를 줄 기능
     public void SetEnemyAttack()
     {
         EnemyStat enemyStat = LoadFromJsonEncrypted<EnemyStat>("EnemyStat1.json");
-        enemyStat.EnemyHealth -= GetRandomDamage();
+        enemyStat.EnemyHealth -= GetWeaponRandomDamage();
         UpdateAfterReceiveEnemyAttack(enemyStat);
     }
     //플레이어가 데미지를 받을 기능
@@ -276,16 +279,21 @@ public class DataManager : MonoBehaviour
     {
         // PlayerStat 저장
         PlayerStat playerStat = LoadFromJsonEncrypted<PlayerStat>("PlayerStat.json");
+        Debug.Log("PlayerStat: " + playerStat.name + ", Level: " + playerStat.Level + ", Exp: " + playerStat.Exp + ", Health: " + playerStat.Health + ", PlayerHealth: " + playerStat.PlayerHealth);
         SaveToJsonEncrypted(playerStat, "PlayerStat.json");
         // EnemyStat 저장
         EnemyStat enemyStat1 = LoadFromJsonEncrypted<EnemyStat>("EnemyStat1.json");
+        Debug.Log("EnemyHealth: " + enemyStat1.EnemyHealth + ", Health:" + enemyStat1.Health + ",damage:" + enemyStat1.damage);
         SaveToJsonEncrypted(enemyStat1, "EnemyStat1.json");
         EnemyStat enemyStat2 = LoadFromJsonEncrypted<EnemyStat>("EnemyStat2.json");
+        Debug.Log("EnemyHealth: " + enemyStat2.EnemyHealth + ", Health:" + enemyStat2.Health + ",damage:" + enemyStat2.damage);
         SaveToJsonEncrypted(enemyStat2, "EnemyStat2.json");
         EnemyStat enemyStat3 = LoadFromJsonEncrypted<EnemyStat>("EnemyStat3.json");
+        Debug.Log("EnemyHealth: " + enemyStat3.EnemyHealth + ", Health:" + enemyStat3.Health + ",damage:" + enemyStat3.damage);
         SaveToJsonEncrypted(enemyStat3, "EnemyStat3.json");
         // WeaponData 저장
         WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
+        Debug.Log("WeaponDamage:" + weaponData.damage);
         SaveToJsonEncrypted(weaponData, "WeaponData.json");
 
         // 추가적인 데이터 저장 로직을 여기에 구현하면 됩니다.

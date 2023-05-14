@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ground
   - Item
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -13,8 +14,8 @@ TagManager:
   - Item
   - Water
   - UI
-  - 
-  - 
+  - EnemyDead
+  - Player
   - 
   - 
   - 

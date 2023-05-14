@@ -1,42 +1,68 @@
-using System;
-using TMPro;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using Newtonsoft.Json;
-using System.IO;
 
-[CreateAssetMenu(fileName = "CreateItem", menuName = "Item")]
-public class Item : ScriptableObject
+public class Item : MonoBehaviour
 {
-    public enum ItemType // 아이템 유형
+    public enum TYPE { HP, MP }
+
+    public TYPE type;           // 아이템의 타입.
+    public Sprite DefaultImg;   // 기본 이미지.
+    public int MaxCount;        // 겹칠수 있는 최대 숫자.  
+
+    public string Name;         // 아이템의 이름.
+    
+    public void Init(string Name, int MaxCount)
     {
-        Countable,  //쌓을 수 있는 아이템
-        NoneCountable, //쌓을 수 없는 아이템
-    }
-    public void UsePotion()
-    {
-        string LoadItemdata = File.ReadAllText(Application.dataPath + "/Itemdata.json");
-        Debug.Log("ReadAllText :" + LoadItemdata);
-        string LoadPlayerstat = File.ReadAllText(Application.dataPath + "/PlayerStat.json");
-        Itemdata data = JsonUtility.FromJson<Itemdata>(LoadItemdata);
-        PlayerStat playdata = JsonUtility.FromJson<PlayerStat>(LoadPlayerstat);
-        //물약의 아이템이름, 물약의 회복량을 가져옴
-        string log = string.Format("data {0},{1}", data.itemName, data.Health);
-        //플레이어의 체력을 가져옴
-        string enlog = string.Format("data {0}", playdata.Health);
-        playdata.Health += data.Health;
-        //기존 플레이어 체력보다 더 많이 회복을 할수 없도록 제한
-        if (playdata.Health <= (playdata.Health += data.Health))
+        // 이름에 따라 타입을 결정.
+        switch (Name)
         {
-            Debug.Log("더 이상 회복할수 없습니다! 이미 체력이 최대입니다.");
+            case "HP": type = TYPE.HP; break;
+            case "MP": type = TYPE.MP; break;
+        }
+
+        this.Name = Name;           // 이름을 초기화.
+        this.MaxCount = MaxCount;   // 겹칠수 있는 한계 개수를 초기화.
+
+
+        Sprite[] spr = ObjManager.Call().spr;       // 이미지 배열을 가져온다.
+        int Count = ObjManager.Call().spr.Length;   // 이미지 배열의 총 크기.
+                                                    // 이미지의 이름과 아이템의 이름을 비교.
+        for (int i = 0; i < Count; i++)
+        {
+            // 두 이름이 같으면 그 이미지를 DefaultImg에 셋팅.
+            if (spr[i].name == this.Name)
+            {
+                DefaultImg = spr[i];
+                break;
+            }
         }
     }
-    public Action OnPickUp; //줍기 기능
-    public string itemName; // 아이템의 이름
-    public ItemType itemType; // 아이템 유형
-    public Sprite itemImage; // 아이템의 이미지(인벤 토리 안에서 띄울)
-    public GameObject itemPrefab; // 아이템의 프리팹 (아이템 생성시 프리팹으로 찍어냄)
+
+    // 인벤토리에 접근하기 위한 변수.
+    private Inventory Iv;
+
+    void Awake()
+    {
+        // 태그명이 "Inventory"인 객체의 GameObject를 반환한다.
+        // 반환된 객체가 가지고 있는 스크립트를 GetComponent를 통해 가져온다.
+        Iv = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>();
+
+    }
+
+    void AddItem()
+    {
+        // 아이템 획득에 실패할 경우.
+        if (!Iv.AddItem(this))
+            Debug.Log("아이템이 가득 찼습니다.");
+        else // 아이템 획득에 성공할 경우.
+            gameObject.SetActive(false); // 아이템을 비활성화 시켜준다.
+    }
+    // 충돌체크
+    void OnTriggerEnter(Collider _col)
+    {
+        // 플레이어와 충돌하면.
+        if (_col.gameObject.layer == 6)
+            AddItem();
+    }
 }
-
-
-

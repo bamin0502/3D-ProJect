@@ -1,88 +1,202 @@
-using UnityEngine;
-using System.IO;
-using System;
-using Newtonsoft.Json;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UI;
-using TMPro;
-using mino;
+using UnityEngine;
 
-public class Inventory : MonoBehaviour 
+public class Inventory : MonoBehaviour
 {
-    public static Inventory Instance; //인벤토리 싱글톤
-    public Item item;
 
-    private void Awake()
+    // 공개
+    public List<GameObject> AllSlot;    // 모든 슬롯을 관리해줄 리스트.
+    public RectTransform InvenRect;     // 인벤토리의 Rect
+    public GameObject OriginSlot;       // 오리지널 슬롯.
+
+    public float slotSize;              // 슬롯의 사이즈.
+    public float slotGap;               // 슬롯간 간격.
+    public float slotCountX;            // 슬롯의 가로 개수.
+    public float slotCountY;            // 슬롯의 세로 개수.
+
+    // 비공개.
+    private float InvenWidth;           // 인벤토리 가로길이.
+    private float InvenHeight;          // 인밴토리 세로길이.
+    private float EmptySlot;            // 빈 슬롯의 개수.
+
+    void Awake()
     {
-        if (Instance == null)
+        // 인벤토리 이미지의 가로, 세로 사이즈 셋팅.
+        InvenWidth = (slotCountX * slotSize) + (slotCountX * slotGap) + slotGap;
+        InvenHeight = (slotCountY * slotSize) + (slotCountY * slotGap) + slotGap;
+
+        // 셋팅된 사이즈로 크기를 설정.
+        InvenRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, InvenWidth); // 가로.
+        InvenRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, InvenHeight);  // 세로.
+
+        // 슬롯 생성하기.
+        for (int y = 0; y < slotCountY; y++)
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    [Header("슬롯 베이스")][SerializeField] private GameObject slotsBase; //슬롯들 담겨있는 베이스
-    [Header("Resources에 있는 모든 아이템을 넣어주세요")][SerializeField] private Item[] baseItemData; //기본 아이템들
-
-    public Slot[] slots; //슬롯들
-    private void Update()
-    {
-
-    }
-    void Start()
-    {
-        //slots = slotsBase.GetComponentsInChildren<Slot>(); //슬롯 베이스에 있는 모든 슬롯 가져오기
-        InitializeItems();
-
-    }
-
-
-    public void SaveInventory()
-    {
-        //인벤토리 저장 기능
-        //저장할때는 아이템의 개수와 이름만 저장
-    }
-
-    public void LoadInventory()
-    {
-        //인벤토리 불러오기 기능
-
-        //불러오기에서 슬롯 아이템 이름으로 아이템을 찾고 그 아이템에 맞는 개수와 이미지를 불러옴
-    }
-
-    private void InitializeItems()
-    {
-        foreach (var item in baseItemData) // 기본 아이템에 대한 동작 설정
-        {
-            item.OnPickUp = () => GetItem(item); //주울 수 있음 기능을 각 아이템에 부여
-        }
-    }
-
-    public void GetItem(Item _item, int _count = 1) //아이템 획득기능
-    {
-        //쌓을수 있는 아이템일때는 아래 코드 작동
-        if (_item.itemType != Item.ItemType.NoneCountable)
-        {
-            foreach (var slot in slots)
+            for (int x = 0; x < slotCountX; x++)
             {
-                if (slot.item == null || slot.item.itemName != _item.itemName) continue;
-                slot.SetSlotCount(_count);
-                return;
+                // 슬롯을 복사한다.
+                GameObject slot = Instantiate(OriginSlot) as GameObject;
+                // 슬롯의 RectTransform을 가져온다.
+                RectTransform slotRect = slot.GetComponent<RectTransform>();
+                // 슬롯의 자식인 투명이미지의 RectTransform을 가져온다.
+                RectTransform item = slot.transform.GetChild(0).GetComponent<RectTransform>();
+
+                slot.name = "slot_" + y + "_" + x; // 슬롯 이름 설정.
+                slot.transform.parent = transform; // 슬롯의 부모를 설정. (Inventory객체가 부모임.)
+
+                // 슬롯이 생성될 위치 설정하기.
+                slotRect.localPosition = new Vector3((slotSize * x) + (slotGap * (x + 1)),
+                                                   -((slotSize * y) + (slotGap * (y + 1))),
+                                                      0);
+
+                // 슬롯의 자식인 투명이미지의 사이즈 설정하기.
+                slotRect.localScale = Vector3.one;
+                slotRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, slotSize); // 가로
+                slotRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, slotSize);   // 세로.
+
+                // 슬롯의 사이즈 설정하기.
+                item.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, slotSize - slotSize * 0.3f); // 가로.
+                item.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, slotSize - slotSize * 0.3f);   // 세로.
+
+                // 리스트에 슬롯을 추가.
+                AllSlot.Add(slot);
             }
         }
 
-        //쌓을수 없는 아이템일때는 아래 코드 작동
-        foreach (var slot in slots)
+        // 빈 슬롯 = 슬롯의 숫자.
+        EmptySlot = AllSlot.Count;
+    }
+
+    // 아이템을 넣기위해 모든 슬롯을 검사.
+    public bool AddItem(Item item)
+    {
+        // 슬롯에 총 개수.
+        int slotCount = AllSlot.Count;
+
+        // 넣기위한 아이템이 슬롯에 존재하는지 검사.
+        for (int i = 0; i < slotCount; i++)
         {
-            if (slot.item != null) continue;
-            slot.AddItem(_item, _count);
+            // 그 슬롯의 스크립트를 가져온다.
+            Slot slot = AllSlot[i].GetComponent<Slot>();
+
+            // 슬롯이 비어있으면 통과.
+            if (!slot.isSlots())
+                continue;
+
+            // 슬롯에 존재하는 아이템의 타입과 넣을려는 아이템의 타입이 같고.
+            // 슬롯에 존재하는 아이템의 겹칠수 있는 최대치가 넘지않았을 때. (true일 때)
+            if (slot.ItemReturn().type == item.type && slot.ItemMax(item))
+            {
+                // 슬롯에 아이템을 넣는다.
+                slot.AddItem(item);
+                return true;
+            }
+        }
+
+        // 빈 슬롯에 아이템을 넣기위한 검사.
+        for (int i = 0; i < slotCount; i++)
+        {
+            Slot slot = AllSlot[i].GetComponent<Slot>();
+
+            // 슬롯이 비어있지 않으면 통과
+            if (slot.isSlots())
+                continue;
+            if(slot != null)
+            {
+                slot.AddItem(item);
+                return true;
+            }
+
+        }
+
+        // 위에 조건에 해당되는 것이 없을 때 아이템을 먹지 못함.
+        return false;
+    }
+    public Slot NearDisSlot(Vector3 Pos)
+    {
+        float Min = 10000f;
+        int Index = -1;
+
+        int Count = AllSlot.Count;
+        for (int i = 0; i < Count; i++)
+        {
+            Vector2 sPos = AllSlot[i].transform.GetChild(0).position;
+            float Dis = Vector2.Distance(sPos, Pos);
+
+            if (Dis < Min)
+            {
+                Min = Dis;
+                Index = i;
+            }
+        }
+
+        if (Min > slotSize)
+            return null;
+
+        return AllSlot[Index].GetComponent<Slot>();
+    }
+    // 아이템 옮기기 및 교환.
+    public void Swap(Slot slot, Vector3 Pos)
+    {
+        Slot FirstSlot = NearDisSlot(Pos);
+
+        // 현재 슬롯과 옮기려는 슬롯이 같으면 함수 종료.
+        if (slot == FirstSlot || FirstSlot == null)
+        {
+            slot.UpdateInfo(true, slot.slot.Peek().DefaultImg);
             return;
+        }
+
+        // 가까운 슬롯이 비어있으면 옮기기.
+        if (!FirstSlot.isSlots())
+        {
+            Swap(FirstSlot, slot);
+        }
+        // 교환.
+        else
+        {
+            int Count = slot.slot.Count;
+            Item item = slot.slot.Peek();
+            Stack<Item> temp = new Stack<Item>();
+
+            {
+                for (int i = 0; i < Count; i++)
+                    temp.Push(item);
+
+                slot.slot.Clear();
+            }
+
+            Swap(slot, FirstSlot);
+
+            {
+                Count = temp.Count;
+                item = temp.Peek();
+
+                for (int i = 0; i < Count; i++)
+                    FirstSlot.slot.Push(item);
+
+                FirstSlot.UpdateInfo(true, temp.Peek().DefaultImg);
+            }
         }
     }
 
-}
+    // 1: 비어있는 슬롯, 2: 안 비어있는 슬롯.
+    void Swap(Slot xFirst, Slot oSecond)
+    {
+        int Count = oSecond.slot.Count;
+        Item item = oSecond.slot.Peek();
 
+        for (int i = 0; i < Count; i++)
+        {
+            if (xFirst != null)
+                xFirst.slot.Push(item);
+        }
+
+        if (xFirst != null)
+            xFirst.UpdateInfo(true, oSecond.ItemReturn().DefaultImg);
+
+        oSecond.slot.Clear();
+        oSecond.UpdateInfo(false, oSecond.DefaultImg);
+    }
+}

@@ -71,8 +71,3 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
-[merge]
-tool = unityyamlmerge
-[mergetool “unityyamlmerge”]
-trustExitCode = false
-cmd = /Applications/Unity/Unity.app/Contents/Tools/UnityYAMLMerge merge -p “$BASE” “$REMOTE” “$LOCAL” “$MERGED”

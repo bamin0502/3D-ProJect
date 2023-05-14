@@ -7387,6 +7387,7 @@ GameObject:
   - component: {fileID: 1727532172}
   - component: {fileID: 1727532174}
   - component: {fileID: 1727532173}
+  - component: {fileID: 1727532175}
   m_Layer: 5
   m_Name: InventoryGroup
   m_TagString: Untagged
@@ -7460,6 +7461,29 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1727532175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1727532171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b20d88f981caf1d44a1b4beb95e764b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AllSlot:
+  - {fileID: 1775020305}
+  - {fileID: 971147471555707135}
+  - {fileID: 971147470750265272}
+  - {fileID: 971147471014745206}
+  InvenRect: {fileID: 1727532172}
+  OriginSlot: {fileID: 1775020305}
+  slotSize: 100
+  slotGap: 10
+  slotCountX: 4
+  slotCountY: 1
 --- !u!1 &1761713155
 GameObject:
   m_ObjectHideFlags: 0
@@ -13492,6 +13516,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 543450651882933874}
+  - component: {fileID: 919132147625727179}
+  - component: {fileID: 919132147625727178}
+  - component: {fileID: 919132147625727177}
   m_Layer: 0
   m_Name: kit
   m_TagString: Untagged
@@ -13499,6 +13526,51 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!54 &919132147625727177
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132147625727176}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &919132147625727178
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132147625727176}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &919132147625727179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132147625727176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eea8b9ed7ac15c14e93af0c6481bc138, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  DefaultImg: {fileID: 21300000, guid: 8e9b03bafc3b9bb4c8c1ac546183ad6b, type: 3}
+  MaxCount: 99
+  Name: Kit
 --- !u!1 &919132147842784482
 GameObject:
   m_ObjectHideFlags: 0

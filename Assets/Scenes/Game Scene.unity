@@ -106,15 +106,15 @@ NavMeshSettings:
   m_BuildSettings:
     serializedVersion: 2
     agentTypeID: 0
-    agentRadius: 0.5
-    agentHeight: 2.5
+    agentRadius: 0.2
+    agentHeight: 2
     agentSlope: 45
     agentClimb: 0.4
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
     minRegionArea: 2
     manualCellSize: 0
-    cellSize: 0.16666667
+    cellSize: 0.06666667
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
@@ -460,7 +460,6 @@ Transform:
   - {fileID: 1861012795}
   - {fileID: 543450653550889418}
   - {fileID: 1380918412498836785}
-  - {fileID: 9027066300665315800}
   - {fileID: 5895020343000405033}
   - {fileID: 4981443620651950495}
   - {fileID: 4017810137105457}
@@ -4742,6 +4741,7 @@ Transform:
   m_Children:
   - {fileID: 1587427898}
   - {fileID: 179943378}
+  - {fileID: 9027066300665315800}
   m_Father: {fileID: 393444516}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7555,7 +7555,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1938466822}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.096830785, y: -0.52124846, z: 0.0390625}
+  m_LocalPosition: {x: 0.096830785, y: -1.3, z: 0.0390625}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7570,7 +7570,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1938391222}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.054830786, y: -0.35824847, z: 0.2270625}
+  m_LocalPosition: {x: 0.16, y: -0.997, z: 0.2270625}
   m_LocalScale: {x: 1.3765684, y: 1.3765682, z: 1.3765682}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11469,7 +11469,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919132148890519780}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 109.17698, y: 0, z: 54.8136}
+  m_LocalPosition: {x: 109.17698, y: -0.7, z: 54.8136}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -21745,8 +21745,8 @@ GameObject:
   m_Name: hole-graveyard-fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 1
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!23 &3914544738858614202
 MeshRenderer:
@@ -24843,8 +24843,8 @@ GameObject:
   m_Name: hole-graveyard-base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 1
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &5280273934045188680
 Transform:
@@ -35121,7 +35121,7 @@ Transform:
   m_Children:
   - {fileID: 8865334415840319271}
   - {fileID: 4053999019322630161}
-  m_Father: {fileID: 67826309}
+  m_Father: {fileID: 1190341120}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &9043264697828179073

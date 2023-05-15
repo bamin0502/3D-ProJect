@@ -23,7 +23,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: stairs
-    second: {fileID: 2100000, guid: d3a2a2181f0b8ab49983db8e52ce5dbe, type: 2}
+    second: {fileID: 2100000, guid: 7908a83c70228e448854148b616e5740, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -38,7 +38,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: wall
-    second: {fileID: 2100000, guid: 04da0ce90621f4140962c68593ae2546, type: 2}
+    second: {fileID: 2100000, guid: 969f0cda150b98843a98f1d6397afcf5, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

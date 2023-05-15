@@ -6,9 +6,10 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using TMPro;
 using System.Data.Common;
+using Sirenix.OdinInspector;
 
 //제작자 : 방민호
-public class MenuManager: MonoBehaviour
+public class MenuManager: SerializedMonoBehaviour
 {
     [Header("관리 오브젝트 설정")]
     //리스트배열 형태로 이미지를 관리함

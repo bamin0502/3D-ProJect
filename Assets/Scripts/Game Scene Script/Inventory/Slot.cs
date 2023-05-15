@@ -5,9 +5,10 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using Sirenix.OdinInspector;
+
 public class Slot : SerializedMonoBehaviour
 {
-
+    
     public Stack<Item> slot;       // 슬롯을 스택으로 만든다.
     public TMP_Text text;       // 아이템에 개수를 표현해줄 텍스트.
     public Sprite DefaultImg; // 슬롯에 있는 아이템을 다 사용할 경우 아무것도 없는 이미지를 넣어줄 필요가 있다.

@@ -3659,7 +3659,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 255
 --- !u!114 &1173366699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3717,6 +3717,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e357a806feec6024fbea732090f1b1e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   image:
   - {fileID: 2078090453}
   - {fileID: 1439816091}
@@ -3733,6 +3742,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8282caf792cd4ee44831779529c556a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   resolutionDropdown: {fileID: 996634905}
   fullscreenToggle: {fileID: 38337764}
 --- !u!114 &1173366703
@@ -3747,6 +3765,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65451e4c29dad834faf1292004893d60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   bgmSlider: {fileID: 109529073}
   sfxSlider: {fileID: 1996083710}
 --- !u!1 &1178972548

@@ -3,7 +3,37 @@ guid: 52f0ff44975732c4ca2a5cea7a8955c8
 ModelImporter:
   serializedVersion: 22103
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Stone wall
+    second: {fileID: 2100000, guid: 969f0cda150b98843a98f1d6397afcf5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: hand
+    second: {fileID: 2100000, guid: c24a0225bf7aa37449bac0612e6ac837, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: house wall
+    second: {fileID: 2100000, guid: 5c6c891a1c52bfc41a8cc601cf04a7e6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: moon
+    second: {fileID: 2100000, guid: 04da0ce90621f4140962c68593ae2546, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: step
+    second: {fileID: 2100000, guid: c24a0225bf7aa37449bac0612e6ac837, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: step.001
+    second: {fileID: 2100000, guid: c24a0225bf7aa37449bac0612e6ac837, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

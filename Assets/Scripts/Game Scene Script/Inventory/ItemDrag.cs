@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Sirenix.OdinInspector;
 
-public class ItemDrag : MonoBehaviour
+public class ItemDrag : SerializedMonoBehaviour
 {
 
     public Transform Img;   // 빈 이미지 객체.

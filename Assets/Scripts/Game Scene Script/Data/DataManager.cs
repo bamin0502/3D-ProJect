@@ -276,11 +276,12 @@ public class DataManager : SerializedMonoBehaviour
             deadEvent.Invoke();
         }
     }
+    
     private void SaveData()
     {
         // PlayerStat 저장
         PlayerStat playerStat = LoadFromJsonEncrypted<PlayerStat>("PlayerStat.json");
-        Debug.Log("PlayerStat: " + playerStat.name + ", Level: " + playerStat.Level + ", Exp: " + playerStat.Exp + ", Health: " + playerStat.Health + ", PlayerHealth: " + playerStat.PlayerHealth);
+        Debug.Log("name: " + playerStat.name + ", Level: " + playerStat.Level + ", Exp: " + playerStat.Exp + ", Health: " + playerStat.Health + ", PlayerHealth: " + playerStat.PlayerHealth);
         SaveToJsonEncrypted(playerStat, "PlayerStat.json");
         // EnemyStat 저장
         EnemyStat enemyStat1 = LoadFromJsonEncrypted<EnemyStat>("EnemyStat1.json");

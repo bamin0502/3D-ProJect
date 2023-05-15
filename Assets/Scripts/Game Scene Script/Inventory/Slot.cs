@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-
-public class Slot : MonoBehaviour
+using System;
+using Sirenix.OdinInspector;
+public class Slot : SerializedMonoBehaviour
 {
 
     public Stack<Item> slot;       // 슬롯을 스택으로 만든다.
     public TMP_Text text;       // 아이템에 개수를 표현해줄 텍스트.
     public Sprite DefaultImg; // 슬롯에 있는 아이템을 다 사용할 경우 아무것도 없는 이미지를 넣어줄 필요가 있다.
-
+    public Image itemImage;  // 아이템 이미지
+    private Item currentItem; // 현재 아이템
     private Image ItemImg;
     private bool isSlot;     // 현재 슬롯이 비어있는지?
 
@@ -42,9 +44,29 @@ public class Slot : MonoBehaviour
 
     public void AddItem(Item item)
     {
-        // 스택에 아이템 추가.
-        slot.Push(item);
-        UpdateInfo(true, item.DefaultImg);
+        if (item == null)
+        {
+            Debug.LogError("추가할 아이템이 유효하지 않습니다.");
+            return;
+        }
+        if(item != null)
+        {
+            if (item)
+            {
+                currentItem = item;
+                itemImage.sprite = item.DefaultImg;
+                itemImage.gameObject.SetActive(true);
+            }
+            else
+            {
+                return;
+            }
+        }
+        else
+        {
+            Debug.LogError("Inventory 컴포넌트가 유효하지않습니다.");
+        }
+
     }
 
     // 아이템 사용.
@@ -80,5 +102,10 @@ public class Slot : MonoBehaviour
             text.text = slot.Count.ToString();
         else
             text.text = "";
+    }
+
+    public bool IsEmpty()
+    {
+        return currentItem == null;
     }
 }

@@ -7,6 +7,7 @@ using UnityEngine.Events;
 using System.Security.Cryptography;
 using System.Text;
 using System;
+using Sirenix.OdinInspector;
 
 //솔직히 이 게임에 암호화까지 필요한가 싶긴한데 그래도 해보는거임 더군다나 이 게임은 뒤에 경쟁게임이여서
 //기존에는 유니티 에셋내에 json파일의 내용이 보였으나 암호화로 인해서 아마 안보일거임 정상적으로 작동하니 걱정마세요
@@ -41,7 +42,7 @@ public class WeaponData
     public int damage = 0;
 }
 
-public class DataManager : MonoBehaviour
+public class DataManager : SerializedMonoBehaviour
 {
     public bool isDead { get; set; }
     [System.NonSerialized]

@@ -12,6 +12,9 @@ public class WeaponController : MonoBehaviour
     private Weapon equippedWeapon;
     private Transform currentTarget;
     private float attackTimer;
+    //새로운 거 
+    public Vector3 PickPosition;
+    public Vector3 PickRotation;
     //김하겸
     //private Weapon targetedWeapon;
     //private Weapon equippedWeapon;
@@ -120,9 +123,18 @@ public class WeaponController : MonoBehaviour
 
         newWeapon.isEquipped = true;
         newWeapon.transform.parent = weaponHolder;
-        newWeapon.transform.localPosition = Vector3.zero;
-        newWeapon.transform.localRotation = Quaternion.identity;
-
+        //새로운 코드 
+        newWeapon.transform.localPosition = PickPosition;
+        newWeapon.transform.localRotation = Quaternion.Euler(PickRotation);
+        //기존 코드
+        //newWeapon.transform.localPosition = Vector3.zero;
+        //newWeapon.transform.localRotation = Quaternion.identity;
+        //칼 같은 경우는 한손으로도 어색하지가 않아서 이리 해도 되지만
+        //총 같은 경우는 한손이면 어색한 것이 좀 있음 
+        //이 같은 경우는 총드는 애니메이션을 찾은다음 
+        //그 총들었을때의 애니메이션을 실행시키는 방식으로 하는것이 좋습니다.
+        //저도 일단 찾아볼테니까 보고 참고만 해주세요 기존에 하고 있던 방식을
+        //굳히 바꿀 필요는 없습니다.
         equippedWeapon = newWeapon;
     }
 

@@ -26,9 +26,12 @@ public class ItemDropController : MonoBehaviour
     {
         CheckItem();
         TryAction();
+        
+    }
+    private void OnGUI()
+    {
         OnDrawGizmos();
     }
-
     private void TryAction()
     {
         if (Input.GetKeyDown(KeyCode.G))
@@ -80,7 +83,7 @@ public class ItemDropController : MonoBehaviour
     {
 #if UNITY_EDITOR
         // 현재 설정된 layerMask 값을 시각적으로 표시합니다.
-        Handles.Label(transform.position, "Layer Mask: " + LayerMask.LayerToName(layerMask));
+        Handles.Label(transform.position, "아이템을 먹을 수 있는 선 발사 확인용: " + LayerMask.LayerToName(layerMask));
 
         // 정면으로 레이를 그려서 레이어가 앞으로 나가는지 여부를 확인합니다.
         Debug.DrawRay(transform.position, transform.forward * range, Color.red);

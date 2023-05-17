@@ -26,6 +26,7 @@ public class Slot : SerializedMonoBehaviour
     {
         // 스택 메모리 할당.
         slot = new Stack<Item>();
+        itemImage.enabled = false;
 
         // 맨 처음엔 슬롯이 비어있다.
         isSlot = false;
@@ -56,7 +57,7 @@ public class Slot : SerializedMonoBehaviour
             {
                 currentItem = item;
                 itemImage.sprite = item.DefaultImg;
-                itemImage.gameObject.SetActive(true);
+                itemImage.enabled = true;
             }
             else
             {

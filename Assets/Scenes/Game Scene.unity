@@ -25251,10 +25251,10 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   type: 0
-  DefaultImg: {fileID: 21300000, guid: 8e9b03bafc3b9bb4c8c1ac546183ad6b, type: 3}
+  DefaultImg: {fileID: 21300000, guid: 2e43f0691f0d7404eae8d01381da65a0, type: 3}
   MaxCount: 99
   Name: Kit
-  Iv: {fileID: 0}
+  Iv: {fileID: 1727532175}
 --- !u!1 &919132147842784482
 GameObject:
   m_ObjectHideFlags: 0

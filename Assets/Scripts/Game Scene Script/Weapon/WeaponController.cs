@@ -142,6 +142,7 @@ public class WeaponController : MonoBehaviour
     {
         equippedWeapon.transform.SetParent(null);
         equippedWeapon.isEquipped = false;
+        equippedWeapon.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
         equippedWeapon.transform.position = transform.position + transform.forward * 1f;
         equippedWeapon = null;
     }

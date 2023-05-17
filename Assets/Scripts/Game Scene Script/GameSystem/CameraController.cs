@@ -97,16 +97,16 @@ public class CameraController : MonoBehaviour
             switch (_currentStep)
             {
                 case 1:
-                    _targetAngle = 45.0f;
-                    _targetOffset = new Vector3(0, 30, -30);
+                    _targetAngle = 60f;
+                    _targetOffset = new Vector3(0, 30, -15);
                     break;
                 case 2:
-                    _targetAngle = 45.0f;
-                    _targetOffset = new Vector3(0, 15, -15);
+                    _targetAngle = 60f;
+                    _targetOffset = new Vector3(0, 15, -8);
                     break;
                 case 3:
-                    _targetAngle = 30.0f;
-                    _targetOffset = new Vector3(0, 6, -10);
+                    _targetAngle = 45f;
+                    _targetOffset = new Vector3(0, 6, -5);
                     break;
             }
 

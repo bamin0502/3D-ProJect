@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour
 
     public float cameraMoveSpeed = 30f; //카메라 속도
     public Transform player; //플레이어 위치
+    public Terrain terrain; //미니맵의 시야를 안보이게 할 시점 설정을 위한 터레닝 지정
 
     private bool _isPlayerFollow = true; //플레이어 따라다니게 할지 여부
     
@@ -114,6 +115,7 @@ public class CameraController : MonoBehaviour
 
             Quaternion targetRotation = Quaternion.Euler(_currentAngle, 0, 0);
             mainCamera.transform.rotation = targetRotation;
+            
         }
         else
         {

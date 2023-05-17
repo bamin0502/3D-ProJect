@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - Inventory
   - DragImg
+  - Terrain
   layers:
   - Default
   - TransparentFX

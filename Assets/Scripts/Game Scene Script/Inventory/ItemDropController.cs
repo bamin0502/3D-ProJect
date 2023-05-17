@@ -55,7 +55,7 @@ public class ItemDropController : MonoBehaviour
     {
         pickupActivated = true;
         actionText.gameObject.SetActive(true);
-        actionText.text = hitInfo.transform.GetComponent<ItemPickup>().item.itemName + " 획득 " + "<color=yellow>" + "(E)" + "</color>";
+        actionText.text = hitInfo.transform.GetComponent<ItemPickup>().item.itemName + " 획득 " + "<color=yellow>" + "(G)" + "</color>";
     }
 
     private void ItemInfoDisappear()
@@ -78,12 +78,12 @@ public class ItemDropController : MonoBehaviour
     }
     private void OnDrawGizmos()
     {
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
         // 현재 설정된 layerMask 값을 시각적으로 표시합니다.
         Handles.Label(transform.position, "Layer Mask: " + LayerMask.LayerToName(layerMask));
 
         // 정면으로 레이를 그려서 레이어가 앞으로 나가는지 여부를 확인합니다.
         Debug.DrawRay(transform.position, transform.forward * range, Color.red);
-    #endif
+#endif
     }
 }

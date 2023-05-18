@@ -253,6 +253,7 @@ public class DataManager : SerializedMonoBehaviour
         EnemyStat enemyStat = LoadFromJsonEncrypted<EnemyStat>("EnemyStat1.json");
         PlayerStat playerStat = LoadFromJsonEncrypted<PlayerStat>("PlayerStat.json");
         playerStat.PlayerHealth -= enemyStat.damage;
+        UImanager.inst.UpdatePlayerHp(playerStat);
         UpdateAfterReceivePlayerAttack(playerStat);
     }
     //몬스터 데미지 가상함수

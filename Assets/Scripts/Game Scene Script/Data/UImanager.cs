@@ -8,6 +8,11 @@ public class UImanager : MonoBehaviour
 {
     public static UImanager inst;
 
+    [SerializeField] private TMP_Text playerHp;
+    [SerializeField] private TMP_Text playerMp;
+    [SerializeField] private Image hpBar;
+    [SerializeField] private Image mpBar;
+
     public TMP_Text PlayerLevel;
     public TMP_Text PlayerExp;
     
@@ -21,6 +26,8 @@ public class UImanager : MonoBehaviour
         inst = this;
         
     }
+
+
     public void Start()
     {
 
@@ -29,8 +36,14 @@ public class UImanager : MonoBehaviour
     {
         
     }
-    public void UpdatePlayer()
+    public void UpdatePlayerHp(PlayerStat playerStat)
     {
-        
+        hpBar.fillAmount = (float) playerStat.PlayerHealth / playerStat.Health;
+        playerHp.text = playerStat.PlayerHealth.ToString();
+    }
+
+    public void UpdatePlayerMp(PlayerStat playerStat)
+    {
+        //mp아직 없음
     }
 }

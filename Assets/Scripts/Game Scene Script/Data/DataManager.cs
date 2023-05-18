@@ -50,6 +50,9 @@ public class DataManager : SerializedMonoBehaviour
     public static DataManager Inst;
     [SerializeField]
     private DataManager[] itemEffects;
+    [SerializeField]
+    private SlotToolTip theSlotToolTip;
+
     public string itemName;  // 아이템의 이름(Key값으로 사용할 것)
     private static readonly byte[] EncryptionKey = new byte[]
     {
@@ -109,11 +112,15 @@ public class DataManager : SerializedMonoBehaviour
             itemName = "Potion",
             Health = 30
         };
+        var adrophine = new Itemdata 
+        { 
+            itemName= "adrophine",
+            damage=30
+        };
 
         var weapon = new WeaponData { damage = 30 };
-        //이거는 일단 비활성화(inventory는 Json을 안사용할수도 있음)
+        SaveToJsonEncrypted(adrophine, "Itemdata.json");
         SaveToJsonEncrypted(potion, "Itemdata.json");
-
         SaveToJsonEncrypted(playerStat, "PlayerStat.json");
         SaveToJsonEncrypted(enemyStat1, "EnemyStat1.json");
         SaveToJsonEncrypted(enemyStat2, "EnemyStat2.json");
@@ -292,6 +299,7 @@ public class DataManager : SerializedMonoBehaviour
         PlayerStat playerStat = LoadFromJsonEncrypted<PlayerStat>("PlayerStat.json");
         Debug.Log("name: " + playerStat.name + ", Level: " + playerStat.Level + ", Exp: " + playerStat.Exp + ", Health: " + playerStat.Health + ", PlayerHealth: " + playerStat.PlayerHealth);
         SaveToJsonEncrypted(playerStat, "PlayerStat.json");
+
         // EnemyStat 저장
         EnemyStat enemyStat1 = LoadFromJsonEncrypted<EnemyStat>("EnemyStat1.json");
         Debug.Log("EnemyHealth: " + enemyStat1.EnemyHealth + ", Health:" + enemyStat1.Health + ",damage:" + enemyStat1.damage);
@@ -302,13 +310,19 @@ public class DataManager : SerializedMonoBehaviour
         EnemyStat enemyStat3 = LoadFromJsonEncrypted<EnemyStat>("EnemyStat3.json");
         Debug.Log("EnemyHealth: " + enemyStat3.EnemyHealth + ", Health:" + enemyStat3.Health + ",damage:" + enemyStat3.damage);
         SaveToJsonEncrypted(enemyStat3, "EnemyStat3.json");
+
         // WeaponData 저장
         WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
         Debug.Log("WeaponDamage:" + weaponData.damage);
         SaveToJsonEncrypted(weaponData, "WeaponData.json");
+
+        //Itemdata 저장
         Itemdata potion = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
         Debug.Log("Health:" + potion.Health);
         SaveToJsonEncrypted(potion, "Itemdata.json");
+        Itemdata adrophine = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
+        Debug.Log("Damage Increase:" + adrophine.damage);
+        SaveToJsonEncrypted(adrophine, "Itemdata.json");
         // 추가적인 데이터 저장 로직을 여기에 구현하면 됩니다.
 
         Debug.Log("데이터 저장 성공.");
@@ -316,5 +330,13 @@ public class DataManager : SerializedMonoBehaviour
     public void LevelUP()
     {
         //아직 구현 안함 뒤에 한다면 UImanager에 연동하게 할듯
+    }
+    public void ShowToolTip(Item _item, Vector3 _pos)
+    {
+        theSlotToolTip.ShowToolTip(_item, _pos);
+    }
+    public void HideToolTip()
+    {
+        theSlotToolTip.HideToolTip();
     }
 }

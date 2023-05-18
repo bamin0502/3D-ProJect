@@ -5,6 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Item", menuName = "New Item/item")]
 public class Item : ScriptableObject
 {
+    [TextArea]
+    public string itemDesc;
     public enum ItemType 
     { 
         Used,

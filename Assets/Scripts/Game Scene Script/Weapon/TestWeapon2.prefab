@@ -111,7 +111,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponName: Sword1
+  range: 2
   damage: 50
   isEquipped: 1
   attackInterval: 1
-  range: 2
+  weaponType: 2

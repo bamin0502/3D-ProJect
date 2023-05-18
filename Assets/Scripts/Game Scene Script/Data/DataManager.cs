@@ -275,14 +275,13 @@ public class DataManager : SerializedMonoBehaviour
             PlayerStat playerStat = LoadFromJsonEncrypted<PlayerStat>("PlayerStat.json");
             Itemdata potion = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
             playerStat.Health += potion.Health;
-
             if (playerStat.PlayerHealth <= playerStat.Health)
             {
+                
                 Debug.Log("사용을 시도 하였으나 플레이어의 체력이 꽉차있어서 사용이 불가능합니다.");
                 return;
             }
         }   
-
         return;
     }
     private void SaveData()

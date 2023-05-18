@@ -5,7 +5,6 @@ using UnityEngine;
 public class RangedWeapon : Weapon
 {
     //임성훈 
-    public float range;
     public GameObject projectilePrefab; //발사체 프리팹
 
     public override void Attack(Transform target)

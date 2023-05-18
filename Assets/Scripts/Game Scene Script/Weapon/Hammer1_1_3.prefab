@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponName: Hammer
-  range: 2
+  range: 20
   damage: 5
   isEquipped: 0
   attackInterval: 1

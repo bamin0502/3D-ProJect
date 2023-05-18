@@ -11,7 +11,6 @@ public class WeaponController : MonoBehaviour
     private Weapon targetedWeapon;
     public Weapon equippedWeapon;
     public Transform currentTarget;
-    private float attackTimer;
     //새로운 거 
     public Vector3 PickPosition;
     public Vector3 PickRotation;
@@ -60,7 +59,6 @@ public class WeaponController : MonoBehaviour
     {
         currentTarget = target;
         agent.stoppingDistance = GetWeaponRange();
-        attackTimer = 0f;
     }
 
     private float GetWeaponRange()

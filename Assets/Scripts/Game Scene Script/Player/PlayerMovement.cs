@@ -54,12 +54,12 @@ public class PlayerMovement : SerializedMonoBehaviour
         while (isAttacking)
         {
             // Attack animation 시작
-            ChangedState(attackState);
+            ChangedState(idleState);
             yield return new WaitForSeconds(0.1f);
             float curAnimationTime = ani.ani.GetCurrentAnimatorStateInfo(0).length;
             yield return new WaitForSeconds(curAnimationTime);
-            ChangedState(idleState);
-            yield return new WaitForSeconds(attackInterval + curAnimationTime);
+            ChangedState(attackState);
+            yield return new WaitForSeconds(attackInterval);
         }
 
     }
@@ -87,27 +87,30 @@ public class PlayerMovement : SerializedMonoBehaviour
 
                 if (weaponController.currentTarget == null)
                 {
-                    ChangedState(PlayerState.RunForward);
                     StopAllCoroutines();
+                    ChangedState(PlayerState.RunForward);
                     isAttacking = false;
                 }
 
                 if (weaponController.currentTarget != null && distance <= weaponController.equippedWeapon.range)
                 {
                     isAttacking = true;
+
+                    float interval = weaponController.equippedWeapon.attackInterval;
+                    
                     switch (weaponController.equippedWeapon.weaponType)
                     {
                         case WeaponType.Gun:
                             //총
                             break;
                         case WeaponType.Bow:
-                            StartCoroutine(AttackRoutine(WeaponType.Bow, PlayerState.BowAttackIdle, PlayerState.Idle, weaponController.equippedWeapon.attackInterval));
+                            StartCoroutine(AttackRoutine(WeaponType.Bow, PlayerState.BowAttackIdle, PlayerState.Idle, interval));
                             break; //활
                         case WeaponType.OneHanded:
-                            StartCoroutine(AttackRoutine(WeaponType.OneHanded, PlayerState.ShortAttack, PlayerState.Idle, weaponController.equippedWeapon.attackInterval));
+                            StartCoroutine(AttackRoutine(WeaponType.OneHanded, PlayerState.ShortAttack, PlayerState.Idle, interval));
                             break; //한손
                         case WeaponType.TwoHanded:
-                            StartCoroutine(AttackRoutine(WeaponType.TwoHanded, PlayerState.HammerAttackIdle, PlayerState.Idle, weaponController.equippedWeapon.attackInterval));
+                            StartCoroutine(AttackRoutine(WeaponType.TwoHanded, PlayerState.HammerAttackIdle, PlayerState.Idle, interval));
                             break; //양손
                         default:
                             break; //없음

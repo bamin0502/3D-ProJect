@@ -1,113 +1,73 @@
-//using System.Collections;
-//using System.Collections.Generic;
-//using UnityEngine;
-//using UnityEngine.UI;
-//using TMPro;
-//using System;
-//using Sirenix.OdinInspector;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using UnityEngine.EventSystems;
 
-//public class Slot : SerializedMonoBehaviour
-//{
-    
-//    public Stack<Item> slot;       // 슬롯을 스택으로 만든다.
-//    public TMP_Text text;       // 아이템에 개수를 표현해줄 텍스트.
-//    public Sprite DefaultImg; // 슬롯에 있는 아이템을 다 사용할 경우 아무것도 없는 이미지를 넣어줄 필요가 있다.
-//    public Image itemImage;  // 아이템 이미지
-//    private Item currentItem; // 현재 아이템
-//    private Image ItemImg;
-//    private bool isSlot;     // 현재 슬롯이 비어있는지?
+public class Slot : MonoBehaviour, IPointerClickHandler
+{
+    public Item item; //획득한 아이템을 기록
+    public int ItemCount; //획득한 아이템의 개수를 기록할거임
+    public Image itemImage; //아이템의 이미지를 가져올거임
 
-//    public Item ItemReturn() { return slot.Peek(); } // 슬롯에 존재하는 아이템이 뭔지 반환.
-//    public bool ItemMax(Item item) { return ItemReturn().MaxCount > slot.Count; } // 겹칠수 있는 한계치를 넘으면.   
-//    public bool isSlots() { return isSlot; } // 슬롯이 현재 비어있는지? 에 대한 플래그 반환.
-//    public void SetSlots(bool isSlot) { this.isSlot = isSlot; }
+    [SerializeField] private TMP_Text text_Count;//아이템의 개수를 표시할 텍스트 지정
+    [SerializeField] private GameObject go_CountImage;
+    private DataManager theItemEffectDatabase;
+    void Start()
+    {
+        theItemEffectDatabase = FindObjectOfType<DataManager>();
+    }
 
-//    void Start()
-//    {
-//        // 스택 메모리 할당.
-//        slot = new Stack<Item>();
-//        itemImage.enabled = false;
+    private void SetColor(float _alpha)
+    {
+        Color color = itemImage.color;
+        color.a = _alpha;
+        itemImage.color = color;
+    }
+    public void AddItem(Item _item, int _count = 1)
+    {
+        item = _item;
+        ItemCount = _count;
+        itemImage.sprite = item.itemImage;
+        //아이템의 타입이 사용할수 있는 타입이거나 던질수 있는 타입이면
+        if (item.itemType == Item.ItemType.Used && item.itemType == Item.ItemType.Throw)
+        {
+            go_CountImage.SetActive(true);
+            text_Count.text = ItemCount.ToString();
+        }
+        SetColor(1);
+    }
+    public void SetSlotCount(int _count)
+    {
+        ItemCount += _count;
+        text_Count.text = ItemCount.ToString();
+        if (ItemCount <= 0)
+            ClearSlot();
+    }
+    private void ClearSlot()
+    {
+        item = null;
+        ItemCount = 0;
+        itemImage.sprite = null;
+        SetColor(0);
 
-//        // 맨 처음엔 슬롯이 비어있다.
-//        isSlot = false;
+        text_Count.text = "0";
+        go_CountImage.SetActive(false);
+    }
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            if (item != null)
+            {
+                theItemEffectDatabase.UseItem(item);
+                if (item.itemType == Item.ItemType.Used)
+                {
 
-//        // 인벤토리 및 슬롯의 크기가 커지가나 작아지면
-//        // 텍스트 폰트의 크기도 유동적으로 바뀌어야 한다.
-//        // 텍스트 폰트의 크기를 슬롯에 크기에 따라 변경해주는 구문이다.
-//        //RectTransform rect = text.gameObject.GetComponent<RectTransform>();
-//        float Size = text.gameObject.transform.parent.GetComponent<RectTransform>().sizeDelta.x;
-//        text.fontSize = (int)(Size * 0.5f);
-
-//        // 텍스트 컴포넌트의 RectTransform을 가져온다.
-//        // 텍스트 객체의 부모 객체의 x지름을 가져온다.
-//        // 폰트의 크기를 부모 객체의 x지름 / 2 만큼으로 지정해준다.
-//        ItemImg = transform.GetChild(0).GetComponent<Image>();
-//    }
-
-//    public void AddItem(Item item)
-//    {
-//        if (item == null)
-//        {
-//            Debug.LogError("추가할 아이템이 유효하지 않습니다.");
-//            return;
-//        }
-//        if(item != null)
-//        {
-//            if (item)
-//            {
-//                currentItem = item;
-//                itemImage.sprite = item.DefaultImg;
-//                itemImage.enabled = true;
-//            }
-//            else
-//            {
-//                return;
-//            }
-//        }
-//        else
-//        {
-//            Debug.LogError("Inventory 컴포넌트가 유효하지않습니다.");
-//        }
-
-//    }
-
-//    // 아이템 사용.
-//    public void ItemUse()
-//    {
-//        // 슬롯이 비어있으면 함수를 종료.
-//        if (!isSlot)
-//            return;
-
-//        // 슬롯에 아이템이 1개인 경우.
-//        // 아이템이 1개일 때 사용하게 되면 0개가 된다.
-//        if (slot.Count == 1)
-//        {
-//            // 혹시 모를 오류를 방지하기 위해 slot리스트를 Clear해준다
-//            slot.Clear();
-//            // 아이템 사용으로 인해 아이템 개수를 표현하는 텍스트가 달라졌으므로 업데이트 시켜준다.
-//            UpdateInfo(false, DefaultImg);
-//            return;
-//        }
-
-//        slot.Pop();
-//        UpdateInfo(isSlot, ItemImg.sprite);
-//    }
-
-//    // 슬롯에 대한 각종 정보 업데이트.
-//    public void UpdateInfo(bool isSlot, Sprite sprite)
-//    {
-
-//        this.isSlot = isSlot;
-//        transform.GetChild(0).GetComponent<Image>().sprite = sprite;
-
-//        if (slot.Count > 1)
-//            text.text = slot.Count.ToString();
-//        else
-//            text.text = "";
-//    }
-
-//    public bool IsEmpty()
-//    {
-//        return currentItem == null;
-//    }
-//}
+                    SetSlotCount(-1);
+                }
+            }
+        }
+    }
+}

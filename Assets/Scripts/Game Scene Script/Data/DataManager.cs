@@ -32,8 +32,8 @@ public class Itemdata
 {
     public string itemName = ""; // 아이템의 이름
     public float Health = 0; //아이템 회복량
-    public float damage = 0; //아이템 데미지
-    public float dot = 0; //아이템 도트데미지
+    public int damage = 0; //아이템 데미지
+    public float dot = 0; //아이템 지속시간 설정
     public float sight = 0; //아이템 시야설정
 }
 
@@ -115,7 +115,8 @@ public class DataManager : SerializedMonoBehaviour
         var adrophine = new Itemdata 
         { 
             itemName= "adrophine",
-            damage=30
+            damage=30,
+            dot=180
         };
 
         var weapon = new WeaponData { damage = 30 };
@@ -276,22 +277,35 @@ public class DataManager : SerializedMonoBehaviour
             deadEvent.Invoke();
         }
     }
-    public void UseItem(Item _item)
+    public bool UseItem(Item _item)
     {
-        if (_item.itemType == Item.ItemType.Used)
+        PlayerStat playerStat = LoadFromJsonEncrypted<PlayerStat>("PlayerStat.json");
+        Itemdata itemdata = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
+        WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
+        if (_item.itemType == Item.ItemType.buff)
         {
-            PlayerStat playerStat = LoadFromJsonEncrypted<PlayerStat>("PlayerStat.json");
-            Itemdata potion = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
-            playerStat.Health += potion.Health;
+            weaponData.damage += itemdata.damage;
+            Debug.Log("현재 무기 공격력:" + weaponData.damage + "아이템으로 인한 공격력 증가량: " + itemdata.damage);
 
-            if (playerStat.PlayerHealth <= playerStat.Health)
+            StartCoroutine(RemoveBuffAfterDuration(itemdata.dot));
+            return true;
+        }
+        if (_item.itemType == Item.ItemType.Used && itemdata.Health > 0)
+        {
+            float totalHealth = playerStat.Health + itemdata.Health;
+            Debug.Log("현재 체력: " + playerStat.Health + " 회복량: " + itemdata.Health);
+
+            if (totalHealth > playerStat.PlayerHealth)
             {
-                Debug.Log("사용을 시도 하였으나 플레이어의 체력이 꽉차있어서 사용이 불가능합니다.");
-                return;
+                Debug.Log("사용을 시도하였으나 플레이어의 체력이 꽉 차있어서 사용이 불가능합니다.");
+                return false;
             }
+
+            playerStat.Health = totalHealth;
+            return true;
         }
 
-        return;
+        return false;
     }
     private void SaveData()
     {
@@ -318,7 +332,7 @@ public class DataManager : SerializedMonoBehaviour
 
         //Itemdata 저장
         Itemdata potion = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
-        Debug.Log("Health:" + potion.Health);
+        Debug.Log("회복량 확인:" + potion.Health);
         SaveToJsonEncrypted(potion, "Itemdata.json");
         Itemdata adrophine = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
         Debug.Log("Damage Increase:" + adrophine.damage);
@@ -331,6 +345,7 @@ public class DataManager : SerializedMonoBehaviour
     {
         //아직 구현 안함 뒤에 한다면 UImanager에 연동하게 할듯
     }
+    //미구현 코드들
     public void ShowToolTip(Item _item, Vector3 _pos)
     {
         theSlotToolTip.ShowToolTip(_item, _pos);
@@ -338,5 +353,16 @@ public class DataManager : SerializedMonoBehaviour
     public void HideToolTip()
     {
         theSlotToolTip.HideToolTip();
+    }
+    //
+    private IEnumerator RemoveBuffAfterDuration(float dot)
+    {
+        Itemdata itemdata = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
+        WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
+        yield return new WaitForSeconds(180);
+
+        // 버프 지속 시간이 지나면 아이템 효과를 되돌림
+        weaponData.damage -= itemdata.damage;
+        Debug.Log("버프 지속 시간이 지나서 무기 공격력이 복구되었습니다.");
     }
 }

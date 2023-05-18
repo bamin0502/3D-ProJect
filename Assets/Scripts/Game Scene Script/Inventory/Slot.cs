@@ -31,7 +31,7 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
         ItemCount = _count;
         itemImage.sprite = item.itemImage;
         //아이템의 타입이 사용할수 있는 타입이거나 던질수 있는 타입이면
-        if (item.itemType == Item.ItemType.Used || item.itemType == Item.ItemType.Throw)
+        if (item.itemType == Item.ItemType.Used || item.itemType == Item.ItemType.Throw || item.itemType ==Item.ItemType.buff)
         {
             go_CountImage.SetActive(true);
             text_Count.text = ItemCount.ToString();
@@ -66,12 +66,19 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
         {
             if (item != null)
             {
-                theItemEffectDatabase.UseItem(item);
-                if (item.itemType == Item.ItemType.Used)
+                bool itemUsed=theItemEffectDatabase.UseItem(item);
+                if(itemUsed)
                 {
-
-                    SetSlotCount(-1);
+                    if (item.itemType == Item.ItemType.Used || item.itemType == Item.ItemType.buff)
+                    {
+                        SetSlotCount(-1);
+                    }
                 }
+                else
+                {
+                    Debug.Log("아이템 사용에 실패했습니다.");
+                }
+
             }
         }
     }

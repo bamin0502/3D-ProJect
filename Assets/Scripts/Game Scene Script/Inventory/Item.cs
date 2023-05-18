@@ -10,7 +10,8 @@ public class Item : ScriptableObject
     public enum ItemType 
     { 
         Used,
-        Throw
+        Throw,
+        buff
     }
     public string itemName;
     public ItemType itemType;

@@ -42,6 +42,6 @@ public class MouseCursorController : MonoBehaviour
 
     void ChangeCursor(Texture2D cursorTexture)
     {
-        Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.Auto);
+        Cursor.SetCursor(cursorTexture, new Vector2(cursorTexture.width / 3, 0), CursorMode.Auto);
     }
 }

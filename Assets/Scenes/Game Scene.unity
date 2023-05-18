@@ -5584,10 +5584,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponName: Hammer
+  range: 2
   damage: 50
   isEquipped: 0
   attackInterval: 3
-  range: 2
+  weaponType: 0
 --- !u!65 &568414288
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7796,6 +7797,10 @@ PrefabInstance:
     - target: {fileID: 1470545362, guid: 3d3d35011688bc44eac8b2b636f8c816, type: 3}
       propertyPath: isEquipped
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1470545362, guid: 3d3d35011688bc44eac8b2b636f8c816, type: 3}
+      propertyPath: attackInterval
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2608792799293983407, guid: 3d3d35011688bc44eac8b2b636f8c816, type: 3}
       propertyPath: m_Name
@@ -34709,6 +34714,7 @@ MonoBehaviour:
     - Name: OnDead
       Entry: 6
       Data: 
+  weaponController: {fileID: 5431673224202211082}
   currentState: 0
   coolText: {fileID: 950511796}
   SpaceUI: {fileID: 1468278231}
@@ -34734,6 +34740,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  ani: {fileID: 2125983593316423032}
 --- !u!114 &5431673224202211082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34749,6 +34756,8 @@ MonoBehaviour:
   weaponHolder: {fileID: 7678843401564189731}
   agent: {fileID: 5431673224202211075}
   weaponPickupRange: 1.5
+  equippedWeapon: {fileID: 0}
+  currentTarget: {fileID: 0}
   PickPosition: {x: -0.04, y: 0.083, z: 0.404}
   PickRotation: {x: 151.413, y: -103.622, z: 246.972}
 --- !u!4 &5433019565478254928

@@ -18,13 +18,14 @@ namespace mino
         Dead, //7 죽었을때
         SpaceMove, //8 스페이스바를 눌렀을 때 나가게 할 애니메이션
         ItemUse, //9 아이템을 사용중일때 실행시킬 애니메이션 
-        GetHit //10 맞았을때 나오게할 애니메이션
+        GetHit, //10 맞았을때 나오게할 애니메이션
+        Gathering //11 아이템 주울때 애니메이션
     }
 
     public class AniSetting : SerializedMonoBehaviour
     {
         
-        Animator ani;
+        public Animator ani;
         // Start is called before the first frame update
         void Start()
         {

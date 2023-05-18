@@ -4192,8 +4192,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1000/1000
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8a5d832b5962894489ae360bd0411ea5, type: 2}
-  m_sharedMaterial: {fileID: 6063669660960320027, guid: 8a5d832b5962894489ae360bd0411ea5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 219e5903c22b3424fbfacb129e63759e, type: 2}
+  m_sharedMaterial: {fileID: -6283377178291358885, guid: 219e5903c22b3424fbfacb129e63759e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6002,14 +6002,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 663346079}
-  m_LocalRotation: {x: 0.8859864, y: 0.09048724, z: -0.09080997, w: 0.44563854}
-  m_LocalPosition: {x: 0.0000041481107, y: -0.05700195, z: 1.6900558}
+  m_LocalRotation: {x: 0.70693374, y: 0.0006168714, z: -0.0006171729, w: 0.70727926}
+  m_LocalPosition: {x: 0.0000041481107, y: 0, z: 0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2451349273652386468}
   m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 126.284, y: 7.794998, z: -7.710999}
+  m_LocalEulerAnglesHint: {x: 89.972, y: 0, z: -0.1}
 --- !u!114 &663346082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8058,8 +8058,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1000/1000
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8a5d832b5962894489ae360bd0411ea5, type: 2}
-  m_sharedMaterial: {fileID: 6063669660960320027, guid: 8a5d832b5962894489ae360bd0411ea5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 219e5903c22b3424fbfacb129e63759e, type: 2}
+  m_sharedMaterial: {fileID: -6283377178291358885, guid: 219e5903c22b3424fbfacb129e63759e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -11414,7 +11414,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1975194375736644, guid: 128a80094e00bf34fa2555766a7eea0e, type: 3}
       propertyPath: m_Name
-      value: Enemy Boxi
+      value: Enemy Box
       objectReference: {fileID: 0}
     - target: {fileID: 1975194375736644, guid: 128a80094e00bf34fa2555766a7eea0e, type: 3}
       propertyPath: m_Layer
@@ -19585,8 +19585,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 219e5903c22b3424fbfacb129e63759e, type: 2}
-  m_sharedMaterial: {fileID: -6283377178291358885, guid: 219e5903c22b3424fbfacb129e63759e, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6bec80a320b44074c96e97df7bff189c, type: 2}
+  m_sharedMaterial: {fileID: 5049333743693506051, guid: 6bec80a320b44074c96e97df7bff189c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -24318,7 +24318,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919132148372653255}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 32.499, y: 0.055000007, z: 13.614}
+  m_LocalPosition: {x: 32.499, y: 0.075, z: 13.614}
   m_LocalScale: {x: 0.100000046, y: 0.1, z: 0.100000046}
   m_ConstrainProportionsScale: 0
   m_Children:

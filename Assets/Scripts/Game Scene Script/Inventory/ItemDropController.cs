@@ -21,7 +21,8 @@ public class ItemDropController : MonoBehaviour
 
     [SerializeField]
     private TMP_Text actionText;  // 행동을 보여 줄 텍스트
-
+    [SerializeField]
+    private Inventory theInventory;
     void FixedUpdate()
     {
         CheckItem();
@@ -74,6 +75,7 @@ public class ItemDropController : MonoBehaviour
             if (hitInfo.transform != null)
             {
                 Debug.Log(hitInfo.transform.GetComponent<ItemPickup>().item.itemName + " 획득 했습니다.");  // 인벤토리 넣기
+                theInventory.AcquireItem(hitInfo.transform.GetComponent<ItemPickup>().item);
                 Destroy(hitInfo.transform.gameObject);
                 ItemInfoDisappear();
             }

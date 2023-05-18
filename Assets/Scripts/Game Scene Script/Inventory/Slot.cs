@@ -31,7 +31,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler
         ItemCount = _count;
         itemImage.sprite = item.itemImage;
         //아이템의 타입이 사용할수 있는 타입이거나 던질수 있는 타입이면
-        if (item.itemType == Item.ItemType.Used && item.itemType == Item.ItemType.Throw)
+        if (item.itemType == Item.ItemType.Used || item.itemType == Item.ItemType.Throw)
         {
             go_CountImage.SetActive(true);
             text_Count.text = ItemCount.ToString();

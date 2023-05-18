@@ -16,7 +16,6 @@ using Sirenix.OdinInspector;
 public class PlayerMovement : SerializedMonoBehaviour
 {
     //만든이: 임성훈   
-    public WeaponController weaponController;
     private NavMeshAgent _navAgent;
     private Camera _camera;
     private float rotAnglePerSecond = 360f;
@@ -34,8 +33,7 @@ public class PlayerMovement : SerializedMonoBehaviour
     public UnityEngine.UI.Image fill;
     private float MaxCooldown = 10f;
     private float currentCooldown = 10f;
-    private bool isAttacking = false;
-
+    
     void Start()
     {
         //만든이 : 임성훈
@@ -43,36 +41,15 @@ public class PlayerMovement : SerializedMonoBehaviour
         _camera = Camera.main;
         //만든이 : 방민호
         Managers mag = Managers.GetInstance();
-        ani = GetComponent<AniSetting>();
+        ani =GetComponent<AniSetting>();
         SpaceUI.SetActive(false);//스페이스바 UI 비활성화
         ChangedState(PlayerState.Idle);//플레이어 기본상태를 Idle로 지정
-
-    }
-
-    IEnumerator AttackRoutine(WeaponType weaponType, PlayerState attackState, PlayerState idleState, float attackInterval)
-    {
-        while (isAttacking)
-        {
-            // Attack animation 시작
-            ChangedState(attackState);
-            yield return new WaitForSeconds(0.1f);
-            float curAnimationTime = ani.ani.GetCurrentAnimatorStateInfo(0).length;
-            yield return new WaitForSeconds(curAnimationTime);
-            ChangedState(idleState);
-            yield return new WaitForSeconds(attackInterval + curAnimationTime);
-        }
-
-    }
-
-    void Attack(){
-        if(weaponController.equippedWeapon != null){
-            weaponController.equippedWeapon.Attack(weaponController.currentTarget);
-        }
+        
     }
 
     private void Update()
     {
-
+        
         //만든이 : 임성훈 
         if (Input.GetMouseButtonDown(1)) // 오른쪽 클릭
         {
@@ -82,38 +59,7 @@ public class PlayerMovement : SerializedMonoBehaviour
             {
                 // 이동할 위치로 플레이어를 이동
                 _navAgent.SetDestination(hit.point);
-
-                float distance = Vector3.Distance(transform.position, hit.point);
-
-                if (weaponController.currentTarget == null)
-                {
-                    ChangedState(PlayerState.RunForward);
-                    StopAllCoroutines();
-                    isAttacking = false;
-                }
-
-                if (weaponController.currentTarget != null && distance <= weaponController.equippedWeapon.range)
-                {
-                    isAttacking = true;
-                    switch (weaponController.equippedWeapon.weaponType)
-                    {
-                        case WeaponType.Gun:
-                            //총
-                            break;
-                        case WeaponType.Bow:
-                            StartCoroutine(AttackRoutine(WeaponType.Bow, PlayerState.BowAttackIdle, PlayerState.Idle, weaponController.equippedWeapon.attackInterval));
-                            break; //활
-                        case WeaponType.OneHanded:
-                            StartCoroutine(AttackRoutine(WeaponType.OneHanded, PlayerState.ShortAttack, PlayerState.Idle, weaponController.equippedWeapon.attackInterval));
-                            break; //한손
-                        case WeaponType.TwoHanded:
-                            StartCoroutine(AttackRoutine(WeaponType.TwoHanded, PlayerState.HammerAttackIdle, PlayerState.Idle, weaponController.equippedWeapon.attackInterval));
-                            break; //양손
-                        default:
-                            break; //없음
-                    }
-                }
-
+                ChangedState(PlayerState.RunForward);
             }
         }
         //만약 플레이어가 목적지에 도착하였을때! 다시 애니메이션을 기본상태로 되돌림 , 만든이:방민호
@@ -126,7 +72,7 @@ public class PlayerMovement : SerializedMonoBehaviour
             ChangedState(PlayerState.SpaceMove);
             SpaceUI.SetActive(true);
             isCoolingDown = true;
-            cooldownEndTime = Time.time + cooldownTime;
+            cooldownEndTime = Time.time + cooldownTime;                           
 
         }
         if (isCoolingDown)
@@ -145,10 +91,10 @@ public class PlayerMovement : SerializedMonoBehaviour
                 coolText.text = "";
             }
         }
-
+        
 
     }
-
+    
     //내용추가 만든이 : 방민호 Json화
     public static void TakeDamage()
     {
@@ -162,11 +108,11 @@ public class PlayerMovement : SerializedMonoBehaviour
             return;
         ani.ChangeAnimation(newState);
         currentState = newState;
-
+                
     }
     public void UpdateState()
     {
-        switch (currentState)
+        switch (currentState) 
         {
             case PlayerState.Idle:
                 PlayerStateIdle();
@@ -202,22 +148,22 @@ public class PlayerMovement : SerializedMonoBehaviour
     void PlayerStateRunForward()
     {
         TurnToDestination();
-
+        
     }
     void PlayerStateBowAttackIdle()
     {
         TurnToDestination();
-
+        
     }
     void PlayerStateSpaceMoveIdle()
     {
         TurnToDestination();
         isCoolingDown = false;
-
+        
     }
     void PlayerStateDead()
     {
-        OnDead += Dead;
+        OnDead += Dead;      
     }
     public void TurnToDestination()
     {
@@ -226,8 +172,8 @@ public class PlayerMovement : SerializedMonoBehaviour
         transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, Time.deltaTime * rotAnglePerSecond);
     }
     public void Dead()
-    {
-        Destroy(gameObject);
+    {        
+        Destroy(gameObject);        
     }
 
     ///스킬 쿨타임 전용 UI제작 Methods///

@@ -5,6 +5,8 @@ using UnityEngine;
 public class MeleeWeapon : Weapon
 {
     //임성훈
+    public float range;
+
     public override void Attack(Transform target)
     {
         float distance = Vector3.Distance(transform.position, target.position);

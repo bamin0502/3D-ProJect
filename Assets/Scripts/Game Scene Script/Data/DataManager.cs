@@ -48,7 +48,9 @@ public class DataManager : SerializedMonoBehaviour
     [System.NonSerialized]
     public UnityEvent deadEvent = new UnityEvent();
     public static DataManager Inst;
-
+    [SerializeField]
+    private DataManager[] itemEffects;
+    public string itemName;  // 아이템의 이름(Key값으로 사용할 것)
     private static readonly byte[] EncryptionKey = new byte[]
     {
     // 32바이트(256비트) 암호화 키
@@ -110,8 +112,7 @@ public class DataManager : SerializedMonoBehaviour
 
         var weapon = new WeaponData { damage = 30 };
         //이거는 일단 비활성화(inventory는 Json을 안사용할수도 있음)
-        //SaveToJsonEncrypted(potion, "Itemdata.json");
-
+        SaveToJsonEncrypted(potion, "Itemdata.json");
         SaveToJsonEncrypted(playerStat, "PlayerStat.json");
         SaveToJsonEncrypted(enemyStat1, "EnemyStat1.json");
         SaveToJsonEncrypted(enemyStat2, "EnemyStat2.json");
@@ -217,16 +218,6 @@ public class DataManager : SerializedMonoBehaviour
             }
         }
     }
-    //랜덤 암호화키 발급
-    //private byte[] GenerateRandomIV()
-    //{
-    //    byte[] iv = new byte[16];
-    //    using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
-    //    {
-    //        rngCsp.GetBytes(iv);
-    //    }
-    //    return iv;
-    //}
     //파일을 읽어오는 기능임
     private string GetFilePath(string fileName)
     {
@@ -277,7 +268,23 @@ public class DataManager : SerializedMonoBehaviour
             deadEvent.Invoke();
         }
     }
-    
+    public void UseItem(Item _item)
+    {
+        if (_item.itemType == Item.ItemType.Used)
+        {
+            PlayerStat playerStat = LoadFromJsonEncrypted<PlayerStat>("PlayerStat.json");
+            Itemdata potion = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
+            playerStat.Health += potion.Health;
+
+            if (playerStat.PlayerHealth <= playerStat.Health)
+            {
+                Debug.Log("사용을 시도 하였으나 플레이어의 체력이 꽉차있어서 사용이 불가능합니다.");
+                return;
+            }
+        }   
+
+        return;
+    }
     private void SaveData()
     {
         // PlayerStat 저장
@@ -298,6 +305,9 @@ public class DataManager : SerializedMonoBehaviour
         WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
         Debug.Log("WeaponDamage:" + weaponData.damage);
         SaveToJsonEncrypted(weaponData, "WeaponData.json");
+        Itemdata potion = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
+        Debug.Log("Health:" + potion.Health);
+        SaveToJsonEncrypted(potion, "Itemdata.json");
 
         // 추가적인 데이터 저장 로직을 여기에 구현하면 됩니다.
 

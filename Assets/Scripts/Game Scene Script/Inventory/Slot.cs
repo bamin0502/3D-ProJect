@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 
-public class Slot : MonoBehaviour, IPointerClickHandler
+public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
     public Item item; //획득한 아이템을 기록
     public int ItemCount; //획득한 아이템의 개수를 기록할거임
@@ -55,6 +55,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler
         text_Count.text = "0";
         go_CountImage.SetActive(false);
     }
+    //아이템이 있는 슬롯을 클릭했을때 호출할 이벤트
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Right)
@@ -69,5 +70,48 @@ public class Slot : MonoBehaviour, IPointerClickHandler
                 }
             }
         }
+    }
+    //아이템이 있는 슬롯을 처음 드래그할때 호출할 이벤트
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if(item != null)
+        {
+            DragSlot.inst.dragSlot = this;
+            DragSlot.inst.DragSetImage(itemImage);
+            DragSlot.inst.transform.position = eventData.position;
+        }
+    }
+    //아이템이 있는 슬롯을 드래그 중일때 호출할 이벤트
+    public void OnDrag(PointerEventData eventData)
+    {
+        if(item != null)
+        {
+            DragSlot.inst.transform.position = eventData.position;
+        }
+    }
+    //아이템이 있던 슬롯을 드래그가 끝났을때 호출할 이벤트 
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        DragSlot.inst.SetColor(0);
+        DragSlot.inst.dragSlot = null;
+    }
+    //해당 빈 슬롯에 무언가가 마우스 드롭 되었을때 발생할 이벤트
+    public void OnDrop(PointerEventData eventData)
+    {
+        if (DragSlot.inst.dragSlot != null)
+            ChangeSlot();
+    }
+    //슬롯의 내용을 서로 바꾼다.
+    private void ChangeSlot()
+    {
+        Item _tempItem = item;
+        int _tempItemCount = ItemCount;
+
+        AddItem(DragSlot.inst.dragSlot.item, DragSlot.inst.dragSlot.ItemCount);
+
+        if (_tempItem != null)
+            DragSlot.inst.dragSlot.AddItem(_tempItem, _tempItemCount);
+        else
+            DragSlot.inst.dragSlot.ClearSlot();
     }
 }

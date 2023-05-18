@@ -4,13 +4,14 @@ using UnityEngine.AI;
 public class WeaponController : MonoBehaviour
 {
     //임성훈
-
+    
     public Transform weaponHolder;
     public NavMeshAgent agent;
     public float weaponPickupRange = 1.5f;
     private Weapon targetedWeapon;
-    public Weapon equippedWeapon;
-    public Transform currentTarget;
+    private Weapon equippedWeapon;
+    private Transform currentTarget;
+    private float attackTimer;
     //새로운 거 
     public Vector3 PickPosition;
     public Vector3 PickRotation;
@@ -59,6 +60,7 @@ public class WeaponController : MonoBehaviour
     {
         currentTarget = target;
         agent.stoppingDistance = GetWeaponRange();
+        attackTimer = 0f;
     }
 
     private float GetWeaponRange()
@@ -92,6 +94,7 @@ public class WeaponController : MonoBehaviour
         if (Vector3.Distance(transform.position, currentTarget.position) <= agent.stoppingDistance)
         {
             FaceTarget();
+            UpdateAttackTimerAndAttack();
         }
     }
 
@@ -101,6 +104,15 @@ public class WeaponController : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
     }
 
+    private void UpdateAttackTimerAndAttack()
+    {
+        attackTimer += Time.deltaTime;
+        if (attackTimer >= equippedWeapon.attackInterval)
+        {
+            equippedWeapon.Attack(currentTarget);
+            attackTimer = 0f;
+        }
+    }
 
     private void EquipWeapon(Weapon newWeapon)
     {

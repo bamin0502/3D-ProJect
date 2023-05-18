@@ -4,12 +4,6 @@ using UnityEngine;
 using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
-    public float detectionRadius = 5f; // Player를 감지할 범위
-    public float returnSpeed = 5f; // 본래 자리로 돌아가는 속도
-
-    private Transform player; // Player의 Transform 컴포넌트
-    private Vector3 originalPosition; // 본래 자리의 위치
-    private bool isReturning = false; // 본래 자리로 돌아가는 중인지 여부
     public int maxHealth;
     public int curHealth;
     public Transform target;
@@ -25,9 +19,6 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform; // Player를 찾아서 Transform을 가져옴
-        originalPosition = transform.position; // 본래 자리의 위치를 저장
-        Invoke("ChaseStart", 1);
 
     }
     private void Awake()
@@ -38,7 +29,7 @@ public class Enemy : MonoBehaviour
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
 
-        
+        Invoke("ChaseStart", 2);
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -84,51 +75,22 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float distance = Vector3.Distance(transform.position, player.position);
         if (nav.enabled)
         {
-            if (distance <= detectionRadius)
-            {
-                
-
-                if (!isReturning)
-                {
-                    
-                    nav.SetDestination(target.position);
-                    nav.isStopped = !isChase;
-                }
-            }
-            else if (isReturning) // 추적 중이 아니고 본래 자리로 돌아가는 중인 경우
-            {
-                // Enemy Object의 이동 방향을 본래 자리로 설정
-                Vector3 direction = (originalPosition - transform.position).normalized;
-                transform.position += direction * Time.deltaTime * returnSpeed;
-
-                // 본래 자리에 도달하면 본래 자리로 돌아왔으므로 돌아가는 중인 플래그를 해제
-                if (Vector3.Distance(transform.position, originalPosition) < 0.1f)
-                {
-                    isReturning = false;
-                }
-            }
+            nav.SetDestination(target.position);
+            nav.isStopped = !isChase;
         }
 
     }
-    public void ReturnToOriginalPosition()
-    {
-        isReturning = true;
-    }
+
     void FreezeVelocity()
     {
-        float distance = Vector3.Distance(transform.position, player.position);
-        
-        
-            if (isChase)
-            {
-                rigid.velocity = Vector3.zero;
-                rigid.angularVelocity = Vector3.zero;
-            }
+        if (isChase)
+        {
+            rigid.velocity = Vector3.zero;
+            rigid.angularVelocity = Vector3.zero;
+        }
     }
-    
 
     void FixedUpdate()
     {
@@ -156,9 +118,9 @@ public class Enemy : MonoBehaviour
         anim.SetBool("isAttack", true);
 
         
-        yield return new WaitForSeconds(3f); //각 몬스터마다 시간설정을 다르게해 공격속도 조절
+        yield return new WaitForSeconds(1f); //각 몬스터마다 시간설정을 다르게해 공격속도 조절
         attackArea.enabled = true;
-        
+
         yield return new WaitForSeconds(3f); //각 몬스터마다 시간설정을 다르게해 공격속도 조절
         attackArea.enabled = false;
 

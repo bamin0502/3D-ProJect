@@ -25,10 +25,9 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //player = GameObject.FindGameObjectWithTag("Player").transform; // Player를 찾아서 Transform을 가져옴
+        player = GameObject.FindGameObjectWithTag("Player").transform; // Player를 찾아서 Transform을 가져옴
         originalPosition = transform.position; // 본래 자리의 위치를 저장
         Invoke("ChaseStart", 1);
-        player=GameObject.FindObjectOfType<Transform>().transform;
 
     }
     private void Awake()

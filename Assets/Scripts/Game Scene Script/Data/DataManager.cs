@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System;
 using Sirenix.OdinInspector;
+using TMPro;
 
 //솔직히 이 게임에 암호화까지 필요한가 싶긴한데 그래도 해보는거임 더군다나 이 게임은 뒤에 경쟁게임이여서
 //기존에는 유니티 에셋내에 json파일의 내용이 보였으나 암호화로 인해서 아마 안보일거임 정상적으로 작동하니 걱정마세요
@@ -52,7 +53,8 @@ public class DataManager : SerializedMonoBehaviour
     private DataManager[] itemEffects;
     [SerializeField]
     private SlotToolTip theSlotToolTip;
-
+    [SerializeField]
+    private TMP_Text UseItemResultText;
     public string itemName;  // 아이템의 이름(Key값으로 사용할 것)
     private static readonly byte[] EncryptionKey = new byte[]
     {
@@ -282,6 +284,7 @@ public class DataManager : SerializedMonoBehaviour
         PlayerStat playerStat = LoadFromJsonEncrypted<PlayerStat>("PlayerStat.json");
         Itemdata itemdata = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
         WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
+        
         if (_item.itemType == Item.ItemType.buff)
         {
             weaponData.damage += itemdata.damage;
@@ -290,6 +293,7 @@ public class DataManager : SerializedMonoBehaviour
             StartCoroutine(RemoveBuffAfterDuration(itemdata.dot));
             return true;
         }
+
         if (_item.itemType == Item.ItemType.Used && itemdata.Health > 0)
         {
             float totalHealth = playerStat.Health + itemdata.Health;
@@ -298,9 +302,11 @@ public class DataManager : SerializedMonoBehaviour
             if (totalHealth > playerStat.PlayerHealth)
             {
                 Debug.Log("사용을 시도하였으나 플레이어의 체력이 꽉 차있어서 사용이 불가능합니다.");
+                
+                StartCoroutine(UsedItemText());
                 return false;
             }
-
+            
             playerStat.Health = totalHealth;
             return true;
         }
@@ -364,5 +370,11 @@ public class DataManager : SerializedMonoBehaviour
         // 버프 지속 시간이 지나면 아이템 효과를 되돌림
         weaponData.damage -= itemdata.damage;
         Debug.Log("버프 지속 시간이 지나서 무기 공격력이 복구되었습니다.");
+    }
+    private IEnumerator UsedItemText()
+    {
+        UseItemResultText.text = "이미 체력이 최대입니다!";
+        yield return new WaitForSeconds(2);
+        UseItemResultText.text = "";
     }
 }

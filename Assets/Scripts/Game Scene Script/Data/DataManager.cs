@@ -10,6 +10,7 @@ using System;
 using Sirenix.OdinInspector;
 using TMPro;
 
+
 //솔직히 이 게임에 암호화까지 필요한가 싶긴한데 그래도 해보는거임 더군다나 이 게임은 뒤에 경쟁게임이여서
 //기존에는 유니티 에셋내에 json파일의 내용이 보였으나 암호화로 인해서 아마 안보일거임 정상적으로 작동하니 걱정마세요
 //암호화 방법은 https://gist.github.com/Curookie/5de19e581eb54cff7d7b643408ba930c 의 224줄에 있는 내용을 참고했음
@@ -45,6 +46,7 @@ public class WeaponData
 
 public class DataManager : SerializedMonoBehaviour
 {
+    
     public bool isDead { get; set; }
     [System.NonSerialized]
     public UnityEvent deadEvent = new UnityEvent();
@@ -56,6 +58,14 @@ public class DataManager : SerializedMonoBehaviour
     [SerializeField]
     private TMP_Text UseItemResultText;
     public string itemName;  // 아이템의 이름(Key값으로 사용할 것)
+
+    private const string PlayerFilePath = "data/PlayerStat";
+    private const string Enemy1FilePath = "data/EnemyStat1";
+    private const string Enemy2FilePath = "data/EnemyStat2";
+    private const string Enemy3FilePath = "data/EnemyStat3";
+    private const string ItemFilePath = "data/Itemdata";
+    private const string WeaponFilePath = "data/WeaponData";
+
     private static readonly byte[] EncryptionKey = new byte[]
     {
     // 32바이트(256비트) 암호화 키
@@ -75,6 +85,7 @@ public class DataManager : SerializedMonoBehaviour
     {
         SaveData();
         InitializeData();
+        UnityEngine.Object[] objects = Resources.LoadAll("Resources/data");
     }
     //여기다가 var타입으로 만들고 SaveToJson방식으로 저장시킬거임
     private void InitializeData()
@@ -377,4 +388,5 @@ public class DataManager : SerializedMonoBehaviour
         yield return new WaitForSeconds(2);
         UseItemResultText.text = "";
     }
+
 }

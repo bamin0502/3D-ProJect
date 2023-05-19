@@ -14,6 +14,7 @@ using TMPro;
 //솔직히 이 게임에 암호화까지 필요한가 싶긴한데 그래도 해보는거임 더군다나 이 게임은 뒤에 경쟁게임이여서
 //기존에는 유니티 에셋내에 json파일의 내용이 보였으나 암호화로 인해서 아마 안보일거임 정상적으로 작동하니 걱정마세요
 //암호화 방법은 https://gist.github.com/Curookie/5de19e581eb54cff7d7b643408ba930c 의 224줄에 있는 내용을 참고했음
+[Serializable]
 public class PlayerStat
 {
     public string name = "";
@@ -22,14 +23,14 @@ public class PlayerStat
     public float PlayerHealth = 0;
     public float Health = 0;
 }
-
+[Serializable]
 public class EnemyStat
 {
     public float EnemyHealth = 0;
     public float damage = 0;
     public float Health = 0;
 }
-
+[Serializable]
 public class Itemdata
 {
     public string itemName = ""; // 아이템의 이름
@@ -38,7 +39,7 @@ public class Itemdata
     public float dot = 0; //아이템 지속시간 설정
     public float sight = 0; //아이템 시야설정
 }
-
+[Serializable]
 public class WeaponData
 {
     public int damage = 0;
@@ -85,7 +86,7 @@ public class DataManager : SerializedMonoBehaviour
     {
         SaveData();
         InitializeData();
-        UnityEngine.Object[] objects = Resources.LoadAll("Resources/data");
+        
     }
     //여기다가 var타입으로 만들고 SaveToJson방식으로 저장시킬거임
     private void InitializeData()
@@ -161,13 +162,16 @@ public class DataManager : SerializedMonoBehaviour
         Buffer.BlockCopy(encryptedData, 0, savedData, 4, encryptedDataLength);
 
         string filePath = GetFilePath(fileName);
+        
         File.WriteAllBytes(filePath, savedData);
+       
         //Debug.Log("암호화된 데이터를 저장했습니다: " + filePath);
     }
     //자동으로 로딩시킬거임
     private T LoadFromJsonEncrypted<T>(string fileName)
     {
         string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+        
         string filePath = GetFilePath(fileName);
         byte[] savedData = File.ReadAllBytes(filePath);
 
@@ -192,6 +196,7 @@ public class DataManager : SerializedMonoBehaviour
 
         string decryptedJsonData = Decrypt(encryptedData); // 복호화된 JSON 데이터를 가져옵니다.
         T data = JsonConvert.DeserializeObject<T>(decryptedJsonData);
+        
         return data;
     }
     //해당 코드를 암호화 시킴
@@ -241,9 +246,9 @@ public class DataManager : SerializedMonoBehaviour
         }
     }
 
-    private string GetFilePath(string fileName)
-    {
-        return Path.Combine("Assets/Resources/Data", fileName);
+    string GetFilePath(string fileName)
+    {        
+        return Path.Combine(Application.dataPath+"/StreamingAssets", fileName);
     }
     //랜덤 데미지 함수(고정형 데미지가 아닌 랜덤으로 데미지를 줄거임)
     public int GetWeaponRandomDamage()

@@ -157,7 +157,8 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Standalone: com.BucheonUnivercity-3DProject.-----------------------
+    Android: com.BucheonUnivercity3DProject.WrinkleTimeArea
+    Standalone: com.BucheonUnivercity-3DProject.Wrinkle-Time-Area
   buildNumber:
     Standalone: 0
     iPhone: 0
@@ -765,7 +766,9 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   scriptingDefineSymbols:
     Standalone: ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1
-  additionalCompilerArguments: {}
+    Windows Store Apps: ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1
+  additionalCompilerArguments:
+    Windows Store Apps: []
   platformArchitecture: {}
   scriptingBackend: {}
   il2cppCompilerConfiguration: {}

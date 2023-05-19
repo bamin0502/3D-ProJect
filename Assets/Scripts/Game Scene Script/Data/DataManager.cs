@@ -11,9 +11,12 @@ using Sirenix.OdinInspector;
 using TMPro;
 
 
-//솔직히 이 게임에 암호화까지 필요한가 싶긴한데 그래도 해보는거임 더군다나 이 게임은 뒤에 경쟁게임이여서
-//기존에는 유니티 에셋내에 json파일의 내용이 보였으나 암호화로 인해서 아마 안보일거임 정상적으로 작동하니 걱정마세요
-//암호화 방법은 https://gist.github.com/Curookie/5de19e581eb54cff7d7b643408ba930c 의 224줄에 있는 내용을 참고했음
+/* 솔직히 이 게임에 암호화까지 필요한가 싶긴한데 그래도 해보는거임
+더군다나 이 게임은 뒤에 경쟁게임이여서
+기존에는 유니티 에셋내에 json파일의 내용이 보였으나
+암호화로 인해서 아마 안보일거임 정상적으로 작동하니 걱정마세요
+암호화 방법은 https://gist.github.com/Curookie/5de19e581eb54cff7d7b643408ba930c
+의 224줄에 있는 내용을 참고했음 */
 [Serializable]
 public class PlayerStat
 {
@@ -59,13 +62,6 @@ public class DataManager : SerializedMonoBehaviour
     [SerializeField]
     private TMP_Text UseItemResultText;
     public string itemName;  // 아이템의 이름(Key값으로 사용할 것)
-
-    private const string PlayerFilePath = "data/PlayerStat";
-    private const string Enemy1FilePath = "data/EnemyStat1";
-    private const string Enemy2FilePath = "data/EnemyStat2";
-    private const string Enemy3FilePath = "data/EnemyStat3";
-    private const string ItemFilePath = "data/Itemdata";
-    private const string WeaponFilePath = "data/WeaponData";
 
     private static readonly byte[] EncryptionKey = new byte[]
     {
@@ -367,7 +363,10 @@ public class DataManager : SerializedMonoBehaviour
     {
         //아직 구현 안함 뒤에 한다면 UImanager에 연동하게 할듯
     }
-    //미구현 코드들
+    /*
+     * 미구현 코드들 아이템이 있는 슬롯에 
+     * 마우스를 가져가면 툴팁이 뜨는건데 
+     * 할지 말지는 고민중     
     public void ShowToolTip(Item _item, Vector3 _pos)
     {
         theSlotToolTip.ShowToolTip(_item, _pos);
@@ -376,12 +375,12 @@ public class DataManager : SerializedMonoBehaviour
     {
         theSlotToolTip.HideToolTip();
     }
-    //
+    */
     private IEnumerator RemoveBuffAfterDuration(float dot)
     {
         Itemdata itemdata = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
         WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
-        yield return new WaitForSeconds(180);
+        yield return new WaitForSeconds(30);
 
         // 버프 지속 시간이 지나면 아이템 효과를 되돌림
         weaponData.damage -= itemdata.damage;

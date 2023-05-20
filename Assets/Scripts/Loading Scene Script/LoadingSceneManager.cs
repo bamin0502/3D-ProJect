@@ -1,64 +1,49 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class LoadingSceneManager : MonoBehaviour
 {
-    //µ¿Àû º¯¼ö ¼±¾ğ
     public static string nextScene;
-    //progress¹Ù¸¦ Á÷·ÄÈ­ÇÔ
     [SerializeField] Image ProgressBar;
-    // Start is called before the first frame update
+
     void Start()
     {
         StartCoroutine(LoadScene());
     }
 
-    // Update is called once per frame
-    void Update()
+    public static void LoadScene(string sceneName)
     {
-        
-    }
-    public static void LoadScene(string SceneName)
-    {
-        nextScene = SceneName;
+        nextScene = sceneName;
         SceneManager.LoadScene("Loading Scene");
     }
+
     IEnumerator LoadScene()
     {
         yield return null;
         AsyncOperation operation = SceneManager.LoadSceneAsync(nextScene);
         operation.allowSceneActivation = false;
         float timer = 0.0f;
-        //¾ÆÁ÷ Ã³¸®°¡ ¿Ï·áµÇÁö ¾Ê¾Ò´Ù¸é
+        float targetFillAmount = 0.9f; // ëª©í‘œë¡œ í•˜ëŠ” fillAmount ê°’ (90%)
+        float timeToFill = 3.0f; // ProgressBarë¥¼ ì±„ìš°ëŠ” ë° ê±¸ë¦¬ëŠ” ì‹œê°„
+
         while (!operation.isDone)
         {
-            //°á°ú°ªÀ» ¹İÈ¯ÇÔ
             yield return null;
-            timer += Time.deltaTime;
-            //Ãâ·ÂÀÌ 90ÆÛ°¡ µÇ±â Àü¿¡´Â 
-            if (operation.progress < 0.9f)
-            {
-                //Á¡Á¡ ½½¶óÀÌ´õ¸¦ Ã¤¿ö°¨
-                ProgressBar.fillAmount = Mathf.Lerp(ProgressBar.fillAmount, operation.progress, timer);
-                if (ProgressBar.fillAmount >= operation.progress)
-                {
-                    timer = 0f;
-                }
 
-            }
-            else
+            timer += Time.deltaTime;
+
+            // ProgressBarë¥¼ ì²œì²œíˆ ì°¨ê²Œ ë³´ì´ë„ë¡ ë³´ê°„ ì²˜ë¦¬
+            float progress = Mathf.Lerp(ProgressBar.fillAmount, operation.progress, timer / timeToFill);
+            ProgressBar.fillAmount = progress;
+
+            if (ProgressBar.fillAmount >= targetFillAmount)
             {
-                ProgressBar.fillAmount = Mathf.Lerp(ProgressBar.fillAmount, 1f, timer);
-                //ÁøÇàµµ°¡ 1ÀÌ µÇ¾úÀ¸¸é
-                if (ProgressBar.fillAmount == 1.0f)
+                // ProgressBarê°€ ëª©í‘œì¹˜ì— ë„ë‹¬í•˜ë©´ ë‚˜ë¨¸ì§€ ì‹œê°„ì„ ê¸°ë‹¤ë¦° í›„ ì”¬ ì „í™˜
+                if (timer >= timeToFill)
                 {
-                    //¾ÀÀÌµ¿À» ½ÃÅ°°í
                     operation.allowSceneActivation = true;
-                    
-                    //Á¾·á½ÃÅ´
                     yield break;
                 }
             }

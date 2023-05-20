@@ -126,7 +126,7 @@ public class DataManager : SerializedMonoBehaviour
         { 
             itemName= "adrophine",
             damage=30,
-            dot=180
+            dot=30
         };
 
         var weapon = new WeaponData { damage = 30 };

@@ -5,10 +5,10 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Inst;
 
     [Range(0f, 1f)]
-    public float bgmVolume = 0.5f;
+    public float bgmVolume = 1f;
 
     [Range(0f, 1f)]
-    public float sfxVolume = 0.5f;
+    public float sfxVolume = 1f;
 
     private AudioSource bgmAudioSource;
     private AudioSource[] sfxAudioSource;

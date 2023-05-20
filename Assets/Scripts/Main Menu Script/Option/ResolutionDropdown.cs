@@ -15,6 +15,8 @@ public class ResolutionDropdown : SerializedMonoBehaviour
     }
     private void Start()
     {
+        // Toggle 요소의 이벤트에 메서드 연결
+        fullscreenToggle.onValueChanged.AddListener(delegate { OnFullscreenToggleValueChanged(); });
         // Dropdown 요소에 3가지 해상도를 추가합니다.
         resolutionDropdown.ClearOptions();
 
@@ -23,6 +25,7 @@ public class ResolutionDropdown : SerializedMonoBehaviour
             resolutionDropdown.options.Add(new TMP_Dropdown.OptionData(resolutionsWidths[i].ToString() + "x" + resolutionsHeights[i].ToString()));
         }      
     }
+
     private void Update()
     {
         resolutionDropdown.onValueChanged.AddListener(delegate { OnResolutionDropdownValueChanged(); }); // Dropdown 이벤트 추가

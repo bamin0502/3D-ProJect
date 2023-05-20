@@ -8,8 +8,8 @@ public class AudioManagerUI : SerializedMonoBehaviour
 
     private void Start()
     {
-        bgmSlider.value = PlayerPrefs.GetFloat("bgmVolume", 0.5f);
-        sfxSlider.value = PlayerPrefs.GetFloat("sfxVolume", 0.5f);
+        bgmSlider.value = PlayerPrefs.GetFloat("bgmVolume", 1f);
+        sfxSlider.value = PlayerPrefs.GetFloat("sfxVolume", 1f);
 
         AudioManager.Inst.bgmVolume = bgmSlider.value;
         AudioManager.Inst.sfxVolume = sfxSlider.value;

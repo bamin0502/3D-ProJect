@@ -46,5 +46,13 @@ public class MenuManager: SerializedMonoBehaviour
     {
         Application.Quit();
         Debug.Log("게임 종료 확인용");
-    }   
+    }
+    public void GitButtonClicked()
+    {
+        Application.OpenURL("https://github.com/bamin0502/3D-ProJect");
+    }
+    public void YouTubeButtonClicked()
+    {
+        Application.OpenURL("");
+    }
 }

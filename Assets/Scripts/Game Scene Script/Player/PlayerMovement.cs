@@ -99,9 +99,7 @@ public class PlayerMovement : SerializedMonoBehaviour
     //내용추가 만든이 : 방민호 Json화
     public static void TakeDamage()
     {
-
         DataManager.Inst.SetPlayerAttack();
-
     }
     public void ChangedState(PlayerState newState)
     {
@@ -116,7 +114,7 @@ public class PlayerMovement : SerializedMonoBehaviour
     {
         weaponController.currentTarget.TryGetComponent(out Enemy enemy);
         enemy.TakeDamage();
-
+        
         weaponController.equippedWeapon.Attack(weaponController.currentTarget);
     }
     

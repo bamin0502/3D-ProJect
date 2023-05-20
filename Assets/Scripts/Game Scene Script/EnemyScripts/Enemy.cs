@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour
     private Material mat;
     private NavMeshAgent nav;
     private Animator anim;
+    private DataManager Damage;
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +36,7 @@ public class Enemy : MonoBehaviour
     {
         //DataManager.Inst.SetEnemyAttack(); //null이라 일단 주석처리
         StartCoroutine(OnDamage());
+        Damage.SetEnemyAttack();
     }
     IEnumerator OnDamage()
     {

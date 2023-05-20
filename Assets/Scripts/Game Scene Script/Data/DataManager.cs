@@ -259,6 +259,7 @@ public class DataManager : SerializedMonoBehaviour
     {
         EnemyStat enemyStat = LoadFromJsonEncrypted<EnemyStat>("EnemyStat1.json");
         enemyStat.EnemyHealth -= GetWeaponRandomDamage();
+        UImanager.inst.UpdateEnemyHp(enemyStat);
         UpdateAfterReceiveEnemyAttack(enemyStat);
     }
     //플레이어가 데미지를 받을 기능

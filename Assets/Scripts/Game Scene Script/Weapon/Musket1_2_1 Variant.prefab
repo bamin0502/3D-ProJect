@@ -65,19 +65,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3050473083335013294, guid: 7070f2e474af67a498e180139d5a2df6, type: 3}
   m_PrefabInstance: {fileID: 5801766705787125856}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &1309681899
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8849979052018349006}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.8443581, y: 0.1803576, z: 0.09471339}
-  m_Center: {x: -0.003304258, y: -0.012822244, z: 0.0000000037252903}
 --- !u!114 &1309681898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,9 +77,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2ba1009265a7e34eae3eca1831e5c23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  range: 5
   weaponName: MusKet1
   damage: 20
   isEquipped: 0
   attackInterval: 0.5
-  range: 5
+  weaponType: 0
   projectilePrefab: {fileID: 4358048232385363613, guid: 5f253e8394d9a00448410677789d480b, type: 3}

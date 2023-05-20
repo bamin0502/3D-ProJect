@@ -7,10 +7,10 @@ public class WeaponController : MonoBehaviour
     
     public Transform weaponHolder;
     public NavMeshAgent agent;
-    public float weaponPickupRange = 1.5f;
+    private float weaponPickupRange = 2f;
     private Weapon targetedWeapon;
-    private Weapon equippedWeapon;
-    private Transform currentTarget;
+    public Weapon equippedWeapon;
+    public Transform currentTarget;
     private float attackTimer;
     //새로운 거 
     public Vector3 PickPosition;
@@ -71,7 +71,7 @@ public class WeaponController : MonoBehaviour
     private void ClearTarget()
     {
         currentTarget = null;
-        agent.stoppingDistance = 0f;
+        agent.stoppingDistance = 0.3f;
     }
 
     private void TryPickupWeapon()
@@ -94,7 +94,6 @@ public class WeaponController : MonoBehaviour
         if (Vector3.Distance(transform.position, currentTarget.position) <= agent.stoppingDistance)
         {
             FaceTarget();
-            UpdateAttackTimerAndAttack();
         }
     }
 
@@ -103,17 +102,7 @@ public class WeaponController : MonoBehaviour
         Quaternion targetRotation = Quaternion.LookRotation(currentTarget.position - transform.position);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
     }
-
-    private void UpdateAttackTimerAndAttack()
-    {
-        attackTimer += Time.deltaTime;
-        if (attackTimer >= equippedWeapon.attackInterval)
-        {
-            equippedWeapon.Attack(currentTarget);
-            attackTimer = 0f;
-        }
-    }
-
+    
     private void EquipWeapon(Weapon newWeapon)
     {
         if (equippedWeapon != null)

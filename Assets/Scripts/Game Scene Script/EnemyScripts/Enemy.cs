@@ -31,20 +31,10 @@ public class Enemy : MonoBehaviour
 
         Invoke("ChaseStart", 2);
     }
-    private void OnTriggerEnter(Collider other)
+    public void TakeDamage()
     {
-        if (other.tag == "Hammer")
-        {
-            //웨폰 스크립트 참조하기
-            DataManager.Inst.SetEnemyAttack();
-            OnDamage();
-        }
-        else if (other.tag == "Bullet")
-        {
-            //웨폰 스크립트 참조하기
-            DataManager.Inst.SetEnemyAttack();
-            OnDamage();
-        }
+        //DataManager.Inst.SetEnemyAttack(); //null이라 일단 주석처리
+        StartCoroutine(OnDamage());
     }
     IEnumerator OnDamage()
     {

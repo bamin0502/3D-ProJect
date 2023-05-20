@@ -15,14 +15,15 @@ using Sirenix.OdinInspector;
 
 public class PlayerMovement : SerializedMonoBehaviour
 {
-    //만든이: 임성훈   
+    //만든이: 임성훈
+    [SerializeField] private WeaponController weaponController;
     private NavMeshAgent _navAgent;
     private Camera _camera;
     private float rotAnglePerSecond = 360f;
     private Vector3 curTargetPos;
     //만든이: 방민호
     public PlayerState currentState = PlayerState.Idle;
-    private AniSetting ani;
+    public AniSetting ani;
     public Action OnDead;//죽었을때 호출할 이벤트
     bool isCoolingDown = false;
     float cooldownEndTime = 0f;
@@ -44,8 +45,8 @@ public class PlayerMovement : SerializedMonoBehaviour
         ani =GetComponent<AniSetting>();
         SpaceUI.SetActive(false);//스페이스바 UI 비활성화
         ChangedState(PlayerState.Idle);//플레이어 기본상태를 Idle로 지정
-        
     }
+    
 
     private void Update()
     {
@@ -102,7 +103,7 @@ public class PlayerMovement : SerializedMonoBehaviour
         DataManager.Inst.SetPlayerAttack();
 
     }
-    void ChangedState(PlayerState newState)
+    public void ChangedState(PlayerState newState)
     {
         if (currentState == newState)
             return;
@@ -110,6 +111,15 @@ public class PlayerMovement : SerializedMonoBehaviour
         currentState = newState;
                 
     }
+
+    public void Attack()
+    {
+        weaponController.currentTarget.TryGetComponent(out Enemy enemy);
+        enemy.TakeDamage();
+
+        weaponController.equippedWeapon.Attack(weaponController.currentTarget);
+    }
+    
     public void UpdateState()
     {
         switch (currentState) 

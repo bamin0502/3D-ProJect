@@ -24,7 +24,7 @@ namespace mino
     public class AniSetting : SerializedMonoBehaviour
     {
         
-        Animator ani;
+        public Animator ani;
         // Start is called before the first frame update
         void Start()
         {

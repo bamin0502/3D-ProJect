@@ -64,19 +64,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1753325093932854839, guid: a3884a940f9a8d3418a27008b045837c, type: 3}
   m_PrefabInstance: {fileID: 4350834412626551960}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &1470545363
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2608792799293983407}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.21625297, y: 1.178661, z: 0.08534306}
-  m_Center: {x: 0, y: 0.0051040053, z: -0.000000035390258}
 --- !u!114 &1470545362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,8 +76,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e776399180208994bbbe3b8258d35ebe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  range: 1
   weaponName: Sword1
-  damage: 50
+  damage: 20
   isEquipped: 0
-  attackInterval: 1
-  range: 2
+  attackInterval: 50
+  weaponType: 2

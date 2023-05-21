@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5546931322854842985}
   - component: {fileID: 3746715119630413359}
   - component: {fileID: 3939768505864972274}
-  - component: {fileID: 7263321147756640278}
   m_Layer: 0
   m_Name: Musket1_2_1
   m_TagString: Untagged
@@ -84,15 +83,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7263321147756640278
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3050473083335013294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee2154ce45024a647a6bb2afcc97f78f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

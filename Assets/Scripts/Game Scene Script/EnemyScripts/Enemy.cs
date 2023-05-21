@@ -30,11 +30,7 @@ public class Enemy : MonoBehaviour
     
     private Animator anim;
     private DataManager Damage;
-    // Start is called before the first frame update
-    void Start()
-    {
-       
-    }
+
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
@@ -42,7 +38,8 @@ public class Enemy : MonoBehaviour
         mat = GetComponent<MeshRenderer>().material;
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
-        
+        //이런식으로 참고 가능하니 참고하셈
+        target = GameObject.FindGameObjectWithTag("Player").transform;
         originalPosition = transform.position;
         
     }

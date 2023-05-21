@@ -1,3 +1,4 @@
+#region using 선언문들
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,14 +10,18 @@ using System.Text;
 using System;
 using Sirenix.OdinInspector;
 using TMPro;
+#endregion
 
-
+#region 설명
 /* 솔직히 이 게임에 암호화까지 필요한가 싶긴한데 그래도 해보는거임
 더군다나 이 게임은 뒤에 경쟁게임이여서
 기존에는 유니티 에셋내에 json파일의 내용이 보였으나
 암호화로 인해서 아마 안보일거임 정상적으로 작동하니 걱정마세요
 암호화 방법은 https://gist.github.com/Curookie/5de19e581eb54cff7d7b643408ba930c
 의 224줄에 있는 내용을 참고했음 */
+#endregion
+
+#region Json타입 지정, 여기서는 플레이어, 몬스터 , 무기 , 아이템등을 만들었음
 [Serializable]
 public class PlayerStat
 {
@@ -47,10 +52,10 @@ public class WeaponData
 {
     public int damage = 0;
 }
-
+#endregion
 public class DataManager : SerializedMonoBehaviour
 {
-    
+    #region 변수지정
     public bool isDead { get; set; }
     [System.NonSerialized]
     public UnityEvent deadEvent = new UnityEvent();
@@ -62,6 +67,8 @@ public class DataManager : SerializedMonoBehaviour
     [SerializeField]
     private TMP_Text UseItemResultText;
     public string itemName;  // 아이템의 이름(Key값으로 사용할 것)
+    #endregion
+
     #region 32바이트 암호화키
     private static readonly byte[] EncryptionKey = new byte[]
     {
@@ -85,8 +92,7 @@ public class DataManager : SerializedMonoBehaviour
     private void Start()
     {
         SaveData();
-        InitializeData();
-        
+        InitializeData();        
     }
     #region 여기다가 var타입으로 만들고 SaveToJson방식으로 저장시킬거임
     private void InitializeData()

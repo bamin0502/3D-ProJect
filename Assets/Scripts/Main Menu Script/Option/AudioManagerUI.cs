@@ -6,27 +6,28 @@ public class AudioManagerUI : SerializedMonoBehaviour
     public Slider bgmSlider;
     public Slider sfxSlider;
 
+    private SoundManager soundManager;
+
     private void Start()
     {
+        soundManager = SoundManager.instance;
+
         bgmSlider.value = PlayerPrefs.GetFloat("bgmVolume", 1f);
         sfxSlider.value = PlayerPrefs.GetFloat("sfxVolume", 1f);
 
-        AudioManager.Inst.bgmVolume = bgmSlider.value;
-        AudioManager.Inst.sfxVolume = sfxSlider.value;
-
-        bgmSlider.onValueChanged.AddListener(delegate { OnBgmVolumeChanged(); });
-        sfxSlider.onValueChanged.AddListener(delegate { OnSfxVolumeChanged(); });
+        bgmSlider.onValueChanged.AddListener(OnBgmVolumeChanged);
+        sfxSlider.onValueChanged.AddListener(OnSfxVolumeChanged);
     }
 
-    private void OnBgmVolumeChanged()
+    private void OnBgmVolumeChanged(float volume)
     {
-        AudioManager.Inst.bgmVolume = bgmSlider.value;
-        PlayerPrefs.SetFloat("bgmVolume", bgmSlider.value);
+        soundManager.SetBgmVolume(volume);
+        PlayerPrefs.SetFloat("bgmVolume", volume);
     }
 
-    private void OnSfxVolumeChanged()
+    private void OnSfxVolumeChanged(float volume)
     {
-        AudioManager.Inst.sfxVolume = sfxSlider.value;
-        PlayerPrefs.SetFloat("sfxVolume", sfxSlider.value);
+        soundManager.SetSfxVolume(volume);
+        PlayerPrefs.SetFloat("sfxVolume", volume);
     }
 }

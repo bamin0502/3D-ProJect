@@ -77,6 +77,7 @@ public class ItemDropController : MonoBehaviour
                 Debug.Log(hitInfo.transform.GetComponent<ItemPickup>().item.itemName + " 획득 했습니다.");  // 인벤토리 넣기
                 theInventory.AcquireItem(hitInfo.transform.GetComponent<ItemPickup>().item);
                 Destroy(hitInfo.transform.gameObject);
+                SoundManager.instance.PlaySE("Item Drop");
                 ItemInfoDisappear();
             }
         }

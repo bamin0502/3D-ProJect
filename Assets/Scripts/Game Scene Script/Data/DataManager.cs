@@ -260,7 +260,7 @@ public class DataManager : SerializedMonoBehaviour
     }
     #endregion
 
-    #region 파일읽어오는 경로 지정
+    #region 파일읽어오는 경로 지정 빌드시에도 파일을 읽어올수 있도록 경로를 StreamingAssets으로 지정함
     string GetFilePath(string fileName)
     {        
         return Path.Combine(Application.dataPath+"/StreamingAssets", fileName);
@@ -277,7 +277,7 @@ public class DataManager : SerializedMonoBehaviour
     }
 
     //몬스터에게 데미지를 줄 기능
-    public void SetEnemyAttack()
+    public virtual void SetEnemyAttack(Enemy enemy)
     {         
         EnemyStat enemyStat = LoadFromJsonEncrypted<EnemyStat>("EnemyStat1.json");
         float totalHealth = enemyStat.EnemyHealth -= GetWeaponRandomDamage();
@@ -294,7 +294,7 @@ public class DataManager : SerializedMonoBehaviour
         
     }
     //플레이어가 데미지를 받을 기능
-    public void SetPlayerAttack()
+    public virtual void SetPlayerAttack()
     {
         EnemyStat enemyStat = LoadFromJsonEncrypted<EnemyStat>("EnemyStat1.json");
         PlayerStat playerStat = LoadFromJsonEncrypted<PlayerStat>("PlayerStat.json");
@@ -327,7 +327,7 @@ public class DataManager : SerializedMonoBehaviour
     #endregion
 
     #region 아이템 사용관련 구현
-    public bool UseItem(Item _item)
+    public virtual bool UseItem(Item _item)
     {
         PlayerStat playerStat = LoadFromJsonEncrypted<PlayerStat>("PlayerStat.json");
         Itemdata itemdata = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
@@ -377,6 +377,7 @@ public class DataManager : SerializedMonoBehaviour
         yield return new WaitForSeconds(2);
         UseItemResultText.text = "";
     }
+
     #endregion
 
     #region var 타입에 따른 데이터저장

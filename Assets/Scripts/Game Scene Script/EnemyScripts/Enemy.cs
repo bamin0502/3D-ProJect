@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using Newtonsoft.Json;
+
 public class Enemy : MonoBehaviour
 {
     public float maxHealth;
@@ -50,7 +50,8 @@ public class Enemy : MonoBehaviour
     {
         //DataManager.Inst.SetEnemyAttack(); //null이라 일단 주석처리
         StartCoroutine(OnDamage());
-        Damage.SetEnemyAttack();
+        
+
     }
     IEnumerator OnDamage()
     {

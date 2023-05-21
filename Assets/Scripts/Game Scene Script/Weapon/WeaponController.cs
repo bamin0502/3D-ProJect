@@ -46,7 +46,7 @@ public class WeaponController : MonoBehaviour
                 }
                 else if (hit.collider.TryGetComponent(out targetedWeapon))
                 {
-                    
+                    return;
                 }
                 else
                 {

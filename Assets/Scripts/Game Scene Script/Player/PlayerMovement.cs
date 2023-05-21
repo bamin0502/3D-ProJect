@@ -50,7 +50,7 @@ public class PlayerMovement : SerializedMonoBehaviour
 
     private void Update()
     {
-        
+        #region 플레이어 이동관련
         //만든이 : 임성훈 
         if (Input.GetMouseButtonDown(1)) // 오른쪽 클릭
         {
@@ -92,32 +92,35 @@ public class PlayerMovement : SerializedMonoBehaviour
                 coolText.text = "";
             }
         }
-        
+        #endregion
 
     }
-    
+
     //내용추가 만든이 : 방민호 Json화
     public static void TakeDamage()
     {
         DataManager.Inst.SetPlayerAttack();
     }
-    public void ChangedState(PlayerState newState)
+    #region 플레이어 회전관련
+    public void TurnToDestination()
     {
-        if (currentState == newState)
-            return;
-        ani.ChangeAnimation(newState);
-        currentState = newState;
-                
+        //회전
+        Quaternion lookRotation = Quaternion.LookRotation(curTargetPos - transform.position);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, Time.deltaTime * rotAnglePerSecond);
     }
+    #endregion
 
+    public void Dead()
+    {
+        Destroy(gameObject);
+    }
     public void Attack()
     {
         weaponController.currentTarget.TryGetComponent(out Enemy enemy);
-        
-        
+                
         weaponController.equippedWeapon.Attack(weaponController.currentTarget);
     }
-    
+    #region 플레이어 애니메이션 관련
     public void UpdateState()
     {
         switch (currentState) 
@@ -173,18 +176,18 @@ public class PlayerMovement : SerializedMonoBehaviour
     {
         OnDead += Dead;      
     }
-    public void TurnToDestination()
+    public void ChangedState(PlayerState newState)
     {
-        //회전
-        Quaternion lookRotation = Quaternion.LookRotation(curTargetPos - transform.position);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, Time.deltaTime * rotAnglePerSecond);
-    }
-    public void Dead()
-    {        
-        Destroy(gameObject);        
-    }
+        if (currentState == newState)
+            return;
+        ani.ChangeAnimation(newState);
+        currentState = newState;
 
-    ///스킬 쿨타임 전용 UI제작 Methods///
+    }
+    #endregion
+
+
+    #region 스킬 쿨타임 전용 UI제작 Methods
     public void SpaceBarUI()
     {
         SetCurrentCooldown(currentCooldown - Time.deltaTime);
@@ -201,10 +204,17 @@ public class PlayerMovement : SerializedMonoBehaviour
         MaxCooldown = value;
         UpdateFillAmount();
     }
+    
     public void SetCurrentCooldown(in float value)
     {
         currentCooldown = value;
         UpdateFillAmount();
     }
-    ///-------------------------///
+    #endregion
+
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        TakeDamage();
+    }
 }

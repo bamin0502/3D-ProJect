@@ -56,6 +56,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Polygonal Metalon Green Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 4079348483528774353, guid: af0d37eee67ea1e4c90c6c03df9e6616, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4079348483528774355, guid: af0d37eee67ea1e4c90c6c03df9e6616, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4079348483528774356, guid: af0d37eee67ea1e4c90c6c03df9e6616, type: 3}
+      propertyPath: m_AutoBraking
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4079348483528774356, guid: af0d37eee67ea1e4c90c6c03df9e6616, type: 3}
+      propertyPath: m_WalkableMask
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4079348484822822231, guid: af0d37eee67ea1e4c90c6c03df9e6616, type: 3}
       propertyPath: m_SizeDelta.x
       value: 1.5

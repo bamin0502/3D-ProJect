@@ -62,7 +62,7 @@ public class DataManager : SerializedMonoBehaviour
     [SerializeField]
     private TMP_Text UseItemResultText;
     public string itemName;  // 아이템의 이름(Key값으로 사용할 것)
-
+    #region 32바이트 암호화키
     private static readonly byte[] EncryptionKey = new byte[]
     {
     // 32바이트(256비트) 암호화 키
@@ -71,12 +71,16 @@ public class DataManager : SerializedMonoBehaviour
     0x10, 0x32, 0x54, 0x76, 0x98, 0xBA, 0xDC, 0xFE,
     0xEF, 0xCD, 0xAB, 0x89, 0x67, 0x45, 0x23, 0x01
     };
+    #endregion
+
+    #region 16바이트 암호화키
     private byte[] IV = new byte[]
     { 
     // 16바이트(128비트) 암호화 IV
     0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF,
     0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10
     };
+    #endregion
 
     private void Start()
     {
@@ -84,7 +88,7 @@ public class DataManager : SerializedMonoBehaviour
         InitializeData();
         
     }
-    //여기다가 var타입으로 만들고 SaveToJson방식으로 저장시킬거임
+    #region 여기다가 var타입으로 만들고 SaveToJson방식으로 저장시킬거임
     private void InitializeData()
     {
         var playerStat = new PlayerStat
@@ -138,7 +142,9 @@ public class DataManager : SerializedMonoBehaviour
         SaveToJsonEncrypted(enemyStat3, "EnemyStat3.json");
         SaveToJsonEncrypted(weapon, "WeaponData.json");
     }
-    //자동으로 저장시켜줄거임
+    #endregion
+
+    #region 암호화저장방식
     private void SaveToJsonEncrypted<T>(T data, string fileName)
     {
         string jsonData = JsonConvert.SerializeObject(data);
@@ -163,7 +169,9 @@ public class DataManager : SerializedMonoBehaviour
        
         //Debug.Log("암호화된 데이터를 저장했습니다: " + filePath);
     }
-    //자동으로 로딩시킬거임
+    #endregion
+
+    #region 암호화로드방식
     private T LoadFromJsonEncrypted<T>(string fileName)
     {
         string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
@@ -195,7 +203,9 @@ public class DataManager : SerializedMonoBehaviour
         
         return data;
     }
-    //해당 코드를 암호화 시킴
+    #endregion
+
+    #region Json암호화방식
     private byte[] Encrypt(string data)
     {
         byte[] rawData = Encoding.UTF8.GetBytes(data);
@@ -218,8 +228,9 @@ public class DataManager : SerializedMonoBehaviour
             }
         }
     }
+    #endregion
 
-    //해당 코드를 다시 복호화 시킬거임
+    #region Json복호화방식
     private string Decrypt(byte[] encryptedData)
     {
         using (Aes aesAlg = Aes.Create())
@@ -241,12 +252,17 @@ public class DataManager : SerializedMonoBehaviour
             }
         }
     }
+    #endregion
 
+    #region 파일읽어오는 경로 지정
     string GetFilePath(string fileName)
     {        
         return Path.Combine(Application.dataPath+"/StreamingAssets", fileName);
     }
-    //랜덤 데미지 함수(고정형 데미지가 아닌 랜덤으로 데미지를 줄거임)
+    #endregion
+
+
+    #region 플레이어,몬스터 데미지 처리방식 구현
     public int GetWeaponRandomDamage()
     {
         WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
@@ -256,11 +272,20 @@ public class DataManager : SerializedMonoBehaviour
 
     //몬스터에게 데미지를 줄 기능
     public void SetEnemyAttack()
-    {
+    {         
         EnemyStat enemyStat = LoadFromJsonEncrypted<EnemyStat>("EnemyStat1.json");
+        float totalHealth = enemyStat.EnemyHealth -= GetWeaponRandomDamage();
         enemyStat.EnemyHealth -= GetWeaponRandomDamage();
+        Debug.Log("몬스터 체력:" + enemyStat.EnemyHealth + "무기 공격력: " + GetWeaponRandomDamage() + "= 현재 몬스터 남은 체력: " + enemyStat.Health);
+        if (totalHealth <=0)
+        {
+            Debug.Log("몬스터가 체력이 0보다 작거나 같습니다.");
+            
+            UpdateAfterReceiveEnemyAttack(enemyStat);
+        }
+        
         UImanager.inst.UpdateEnemyHp(enemyStat);
-        UpdateAfterReceiveEnemyAttack(enemyStat);
+        
     }
     //플레이어가 데미지를 받을 기능
     public void SetPlayerAttack()
@@ -271,6 +296,7 @@ public class DataManager : SerializedMonoBehaviour
         UImanager.inst.UpdatePlayerHp(playerStat);
         UpdateAfterReceivePlayerAttack(playerStat);
     }
+    
     //몬스터 데미지 가상함수
     protected virtual void UpdateAfterReceiveEnemyAttack(EnemyStat enemyStat)
     {
@@ -292,6 +318,9 @@ public class DataManager : SerializedMonoBehaviour
             deadEvent.Invoke();
         }
     }
+    #endregion
+
+    #region 아이템 사용관련 구현
     public bool UseItem(Item _item)
     {
         PlayerStat playerStat = LoadFromJsonEncrypted<PlayerStat>("PlayerStat.json");
@@ -326,6 +355,25 @@ public class DataManager : SerializedMonoBehaviour
 
         return false;
     }
+    private IEnumerator RemoveBuffAfterDuration(float dot)
+    {
+        Itemdata itemdata = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
+        WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
+        yield return new WaitForSeconds(30);
+
+        // 버프 지속 시간이 지나면 아이템 효과를 되돌림
+        weaponData.damage -= itemdata.damage;
+        Debug.Log("버프 지속 시간이 지나서 무기 공격력이 복구되었습니다.");
+    }
+    private IEnumerator UsedItemText()
+    {
+        UseItemResultText.text = "이미 체력이 최대입니다!";
+        yield return new WaitForSeconds(2);
+        UseItemResultText.text = "";
+    }
+    #endregion
+
+    #region var 타입에 따른 데이터저장
     private void SaveData()
     {
         // PlayerStat 저장
@@ -360,10 +408,14 @@ public class DataManager : SerializedMonoBehaviour
 
         Debug.Log("데이터 저장 성공.");
     }
+    #endregion
+    
     public void LevelUP()
     {
         //아직 구현 안함 뒤에 한다면 UImanager에 연동하게 할듯
     }
+
+    #region 할지 안할지 모르겠는 스크립트들
     /*
      * 미구현 코드들 아이템이 있는 슬롯에 
      * 마우스를 가져가면 툴팁이 뜨는건데 
@@ -377,21 +429,6 @@ public class DataManager : SerializedMonoBehaviour
         theSlotToolTip.HideToolTip();
     }
     */
-    private IEnumerator RemoveBuffAfterDuration(float dot)
-    {
-        Itemdata itemdata = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
-        WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
-        yield return new WaitForSeconds(30);
-
-        // 버프 지속 시간이 지나면 아이템 효과를 되돌림
-        weaponData.damage -= itemdata.damage;
-        Debug.Log("버프 지속 시간이 지나서 무기 공격력이 복구되었습니다.");
-    }
-    private IEnumerator UsedItemText()
-    {
-        UseItemResultText.text = "이미 체력이 최대입니다!";
-        yield return new WaitForSeconds(2);
-        UseItemResultText.text = "";
-    }
+    #endregion
 
 }

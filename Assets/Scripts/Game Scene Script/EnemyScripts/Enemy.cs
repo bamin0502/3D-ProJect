@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Newtonsoft.Json;
 public class Enemy : MonoBehaviour
 {
-    public int maxHealth;
-    public int curHealth;
-   
-  
+    public float maxHealth;
+    public float curHealth;
+    
     public BoxCollider attackArea;
     
     public float detectionRadius = 5f; // Player를 감지할 범위
@@ -33,7 +33,7 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+       
     }
     private void Awake()
     {
@@ -42,6 +42,7 @@ public class Enemy : MonoBehaviour
         mat = GetComponent<MeshRenderer>().material;
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
+        
         originalPosition = transform.position;
         
     }

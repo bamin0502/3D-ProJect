@@ -113,7 +113,7 @@ public class PlayerMovement : SerializedMonoBehaviour
     public void Attack()
     {
         weaponController.currentTarget.TryGetComponent(out Enemy enemy);
-        enemy.TakeDamage();
+        
         
         weaponController.equippedWeapon.Attack(weaponController.currentTarget);
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using mino;
@@ -12,6 +13,7 @@ public class MeleeWeaponController : MonoBehaviour
     private RaycastHit hitInfo;
     private Transform currentTarget;
     private Weapon currentWeapon;
+    private Coroutine attackRoutine;
 
     void Update()
     {
@@ -22,29 +24,36 @@ public class MeleeWeaponController : MonoBehaviour
     {
         currentWeapon = weaponController.equippedWeapon;
         currentTarget = weaponController.currentTarget;
-
+        
+        if(currentWeapon == null) return;
+        
         if (currentTarget != null && IsTargetInRange())
         {
             if (!isAttack)
             {
-                StartCoroutine(AttackCoroutine());
+                attackRoutine = StartCoroutine(AttackCoroutine());
             }
-        }
-        else
-        {
-            isAttack = false;
         }
     }
 
-    IEnumerator AttackCoroutine()
+    private IEnumerator AttackCoroutine()
     {
         isAttack = true;
         
         playerMovement.ChangedState(PlayerState.HammerAttackIdle);
 
+        var weaponInterval = currentWeapon.attackInterval;
+        var weaponType = currentWeapon.weaponType;
+
         while (isAttack)
         {
-            switch (currentWeapon.weaponType)
+            if (currentTarget == null || !IsTargetInRange())
+            {
+                isAttack = false;
+                StopCoroutine(attackRoutine);
+            }
+
+            switch (weaponType)
             {
                 case WeaponType.Bow:
                     playerMovement.ani.ani.SetTrigger("BowAttack");
@@ -59,14 +68,8 @@ public class MeleeWeaponController : MonoBehaviour
                     playerMovement.ani.ani.SetTrigger("TwoHandedAttack");
                     break;
             }
-
-            if (currentTarget == null ||
-                !IsTargetInRange()) // if target disappeared or not in range anymore, stop attack
-            {
-                isAttack = false;
-            }
-
-            yield return new WaitForSeconds(currentWeapon.attackInterval);
+            
+            yield return new WaitForSeconds(weaponInterval);
         }
     }
 

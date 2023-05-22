@@ -58,6 +58,8 @@ public class WeaponController : MonoBehaviour
 
     private void SetTarget(Transform target)
     {
+        if(equippedWeapon == null) return;
+        
         currentTarget = target;
         agent.stoppingDistance = GetWeaponRange();
         attackTimer = 0f;

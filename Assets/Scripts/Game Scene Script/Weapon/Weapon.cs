@@ -19,6 +19,8 @@ public abstract class Weapon : MonoBehaviour
     public bool isEquipped = false; //장착 여부
     public float attackInterval;
     public WeaponType weaponType;
+    public Vector3 PickPosition;
+    public Vector3 PickRotation;
 
 
     public abstract void Attack(Transform target);

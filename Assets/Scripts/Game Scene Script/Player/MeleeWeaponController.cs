@@ -27,12 +27,9 @@ public class MeleeWeaponController : MonoBehaviour
         
         if(currentWeapon == null) return;
         
-        if (currentTarget != null && IsTargetInRange())
-        {
-            if (!isAttack)
-            {
-                attackRoutine = StartCoroutine(AttackCoroutine());
-            }
+        if (weaponController.isAttack && !isAttack)
+        { 
+            attackRoutine = StartCoroutine(AttackCoroutine());
         }
     }
 
@@ -47,7 +44,7 @@ public class MeleeWeaponController : MonoBehaviour
 
         while (isAttack)
         {
-            if (currentTarget == null || !IsTargetInRange())
+            if (!weaponController.isAttack)
             {
                 isAttack = false;
                 StopCoroutine(attackRoutine);

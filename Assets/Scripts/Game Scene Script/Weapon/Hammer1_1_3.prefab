@@ -102,3 +102,5 @@ MonoBehaviour:
   isEquipped: 0
   attackInterval: 50
   weaponType: 3
+  PickPosition: {x: -0.04, y: 0.083, z: 0.404}
+  PickRotation: {x: 151.413, y: -103.622, z: 246.972}

@@ -55,12 +55,20 @@ public class PlayerMovement : SerializedMonoBehaviour
         if (Input.GetMouseButtonDown(1)) // 오른쪽 클릭
         {
             Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+            LayerMask layerMask = ~LayerMask.GetMask("Player");
 
-            if (Physics.Raycast(ray, out var hit))
+            if (Physics.Raycast(ray, out var hit, Mathf.Infinity, layerMask))
             {
-                // 이동할 위치로 플레이어를 이동
-                _navAgent.SetDestination(hit.point);
-                ChangedState(PlayerState.RunForward);
+                if (!weaponController.isAttack)
+                {
+                    _navAgent.SetDestination(hit.point);
+                    ChangedState(PlayerState.RunForward);
+                }
+                else
+                {
+                    ChangedState(PlayerState.HammerAttackIdle);
+                }
+                
             }
         }
         //만약 플레이어가 목적지에 도착하였을때! 다시 애니메이션을 기본상태로 되돌림 , 만든이:방민호

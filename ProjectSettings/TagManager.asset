@@ -10,6 +10,8 @@ TagManager:
   - Inventory
   - DragImg
   - Terrain
+  - Home
+  - Game Option
   layers:
   - Default
   - TransparentFX
@@ -20,7 +22,7 @@ TagManager:
   - EnemyDead
   - Player
   - Enemy
-  - 
+  - Ground
   - 
   - 
   - 

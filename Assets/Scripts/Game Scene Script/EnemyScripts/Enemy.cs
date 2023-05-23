@@ -47,8 +47,6 @@ public class Enemy : MonoBehaviour
     {
         //DataManager.Inst.SetEnemyAttack(); //null이라 일단 주석처리
         StartCoroutine(OnDamage());
-        
-
     }
     IEnumerator OnDamage()
     {

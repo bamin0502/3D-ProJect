@@ -5536,7 +5536,7 @@ GameObject:
   m_Name: Rock_Platform_C
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 1
+  m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!1001 &181521314
@@ -43695,7 +43695,7 @@ GameObject:
   m_Name: Rock_Platform_D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 1
+  m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &1587427898
@@ -48244,11 +48244,11 @@ GameObject:
   - component: {fileID: 1762000931}
   - component: {fileID: 1764900869}
   - component: {fileID: 1763902149}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Rock_ground1
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 1
+  m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!1 &1761713159
@@ -72088,7 +72088,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grenadePrefab: {fileID: 2754795323997618879, guid: 35e0c0da8e5223b4cac2dd4e75d0d38d, type: 3}
   maxThrowRange: 10
-  damageRadius: 5
   groundLayer:
     serializedVersion: 2
     m_Bits: 512

@@ -2,15 +2,22 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class LoadingSceneManager : MonoBehaviour
 {
     public static string nextScene;
     [SerializeField] Image ProgressBar;
+    [SerializeField] TMP_Text ProgressText;
+    [SerializeField] string[] sentences;
+    [SerializeField] float textDelay = 3.0f;
+
+    private int currentSentenceIndex = 0;
 
     void Start()
     {
         StartCoroutine(LoadScene());
+        StartCoroutine(DisPlaySentences());
     }
 
     public static void LoadScene(string sceneName)
@@ -26,7 +33,7 @@ public class LoadingSceneManager : MonoBehaviour
         operation.allowSceneActivation = false;
         float timer = 0.0f;
         float targetFillAmount = 0.9f; // 목표로 하는 fillAmount 값 (90%)
-        float timeToFill = 3.0f; // ProgressBar를 채우는 데 걸리는 시간
+        float timeToFill = 5.0f; // ProgressBar를 채우는 데 걸리는 시간
 
         while (!operation.isDone)
         {
@@ -47,6 +54,16 @@ public class LoadingSceneManager : MonoBehaviour
                     yield break;
                 }
             }
+        }
+    }
+    IEnumerator DisPlaySentences()
+    {
+        while (currentSentenceIndex < sentences.Length)
+        {
+            int randomIndex = Random.Range(0, sentences.Length);
+            ProgressText.text = sentences[randomIndex];
+            currentSentenceIndex++;
+            yield return new WaitForSeconds(textDelay);
         }
     }
 }

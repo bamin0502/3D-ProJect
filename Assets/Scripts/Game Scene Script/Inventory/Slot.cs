@@ -81,6 +81,7 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
 
             }
         }
+        
     }
     //아이템이 있는 슬롯을 처음 드래그할때 호출할 이벤트
     public void OnBeginDrag(PointerEventData eventData)

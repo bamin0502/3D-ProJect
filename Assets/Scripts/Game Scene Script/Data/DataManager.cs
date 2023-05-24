@@ -47,15 +47,26 @@ public class Itemdata
     public float dot = 0; //아이템 지속시간 설정
     public float sight = 0; //아이템 시야설정
 }
+//[Serializable]
+//public class Itemdata2
+//{
+//    public string itemName = ""; // 아이템의 이름
+//    public float Health = 0; //아이템 회복량
+//    public int damage = 0; //아이템 데미지
+//    public float dot = 0; //아이템 지속시간 설정
+//    public float sight = 0; //아이템 시야설정
+//}
 [Serializable]
 public class WeaponData
 {
     public int damage = 0;
 }
 #endregion
+
 public class DataManager : SerializedMonoBehaviour
 {
     #region 변수지정
+    [Title ("메소드 지정")]
     public bool isDead { get; set; }
     [System.NonSerialized]
     public UnityEvent deadEvent = new UnityEvent();
@@ -67,6 +78,8 @@ public class DataManager : SerializedMonoBehaviour
     [SerializeField]
     private TMP_Text UseItemResultText;
     public string itemName;  // 아이템의 이름(Key값으로 사용할 것)
+    
+
     #endregion
 
     #region 32바이트 암호화키
@@ -127,21 +140,25 @@ public class DataManager : SerializedMonoBehaviour
             Health = 50
         };
 
-        var potion = new Itemdata
+        var Item = new Itemdata
         {
             itemName = "Potion",
-            Health = 30
+            Health = 30,
+            damage = 30
         };
-        var adrophine = new Itemdata 
-        { 
-            itemName= "adrophine",
-            damage=30,
-            dot=30
-        };
+        //var adrophine = new Itemdata2 
+        //{ 
+        //    itemName= "adrophine",
+        //    damage=30,
+        //    dot=30
+        //};
 
-        var weapon = new WeaponData { damage = 30 };
-        SaveToJsonEncrypted(adrophine, "Itemdata.json");
-        SaveToJsonEncrypted(potion, "Itemdata.json");
+        var weapon = new WeaponData 
+        { 
+            damage = 30 
+        };
+        //SaveToJsonEncrypted(adrophine, "Itemdata2.json");
+        SaveToJsonEncrypted(Item, "Itemdata.json");
         SaveToJsonEncrypted(playerStat, "PlayerStat.json");
         SaveToJsonEncrypted(enemyStat1, "EnemyStat1.json");
         SaveToJsonEncrypted(enemyStat2, "EnemyStat2.json");
@@ -331,12 +348,13 @@ public class DataManager : SerializedMonoBehaviour
     {
         PlayerStat playerStat = LoadFromJsonEncrypted<PlayerStat>("PlayerStat.json");
         Itemdata itemdata = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
+        
         WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
         
         if (_item.itemType == Item.ItemType.buff)
         {
             weaponData.damage += itemdata.damage;
-            Debug.Log("현재 무기 공격력:" + weaponData.damage + "아이템으로 인한 공격력 증가량: " + itemdata.damage);
+            Debug.Log("현재 무기 공격력:" + weaponData.damage + " 아이템으로 인한 공격력 증가량: " + itemdata.damage);
 
             StartCoroutine(RemoveBuffAfterDuration(itemdata.dot));
             return true;

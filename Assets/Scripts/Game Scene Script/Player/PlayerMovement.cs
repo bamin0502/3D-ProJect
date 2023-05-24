@@ -40,8 +40,7 @@ public class PlayerMovement : SerializedMonoBehaviour
         //만든이 : 임성훈
         _navAgent = GetComponent<NavMeshAgent>();
         _camera = Camera.main;
-        //만든이 : 방민호
-        Managers mag = Managers.GetInstance();
+        //만든이 : 방민호        
         ani =GetComponent<AniSetting>();
         SpaceUI.SetActive(false);//스페이스바 UI 비활성화
         ChangedState(PlayerState.Idle);//플레이어 기본상태를 Idle로 지정

@@ -92,9 +92,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3274450549029296133}
-  - component: {fileID: 562454027876565283}
   - component: {fileID: -2259404942098031152}
-  - component: {fileID: -8910255824831667836}
+  - component: {fileID: -5369929984874903123}
+  - component: {fileID: 3222696157538578045}
   m_Layer: 0
   m_Name: Molotov_cocktail
   m_TagString: Untagged
@@ -119,7 +119,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &562454027876565283
+--- !u!114 &-2259404942098031152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2754795323997618879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75a24ea81995d4548bf7f3dc78a14381, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosionRadius: 3
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  damage: 50
+--- !u!54 &-5369929984874903123
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -135,25 +152,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-2259404942098031152
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2754795323997618879}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75a24ea81995d4548bf7f3dc78a14381, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  explosionDelay: 2
-  explosionRadius: 3
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 256
---- !u!65 &-8910255824831667836
-BoxCollider:
+--- !u!136 &3222696157538578045
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -162,9 +162,10 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.17353821
+  m_Height: 1.4748952
+  m_Direction: 1
+  m_Center: {x: 0.00340271, y: 0.7313249, z: -0.003115654}
 --- !u!1 &6860086220349621533
 GameObject:
   m_ObjectHideFlags: 0

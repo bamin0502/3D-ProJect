@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,25 +6,41 @@ using UnityEngine;
 public class ThrownWeapon : MonoBehaviour
 {
     //임성훈
-    public float explosionDelay = 2f;
-    public float explosionRadius;
-    public LayerMask enemyLayer;
-    private Collider[] enemies;
+    public float explosionRadius;  //폭발 반경
+    public LayerMask enemyLayer;  //적 레이어
+    public float damage = 50f; //데미지
+    public float delay = 3f;
+    private Collider[] enemies = new Collider[20]; //최대 20마리까지 데미지 줌
 
     void Start()
     {
-        Invoke("Explode", explosionDelay);
+        StartCoroutine(ExplosionAfterDelay());
+    }
+
+    private void OnTriggerEnter(Collider ground)
+    {
+        if (ground.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            Explode();
+        }
+    }
+    
+    IEnumerator ExplosionAfterDelay()
+    {
+        yield return new WaitForSeconds(delay);
+        Explode();
     }
 
     void Explode()
     {
-        var size = Physics.OverlapSphereNonAlloc(transform.position, explosionRadius, enemies, enemyLayer);
+        int numColliders = Physics.OverlapSphereNonAlloc(transform.position, explosionRadius, enemies, enemyLayer);
 
-        foreach (Collider enemy in enemies)
+        for (int i = 0; i < numColliders; i++)
         {
-            //나중에 적에게 데미지를 주는 코드를 넣어야함
+            Collider enemy = enemies[i];
+            return;
         }
-
+        
         Destroy(gameObject);
     }
 }

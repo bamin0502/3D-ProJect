@@ -5,12 +5,15 @@ using UnityEngine;
 public class ThrownWeaponController : MonoBehaviour
 {
     //임성훈
-    public GameObject grenadePrefab;
-    public float maxThrowRange = 10f;
-    public LayerMask groundLayer;
-    public GameObject throwRangeIndicator;
-    public GameObject damageRangeIndicator;
-    private bool isGrenadeMode;
+    public Camera _cam;  //카메라
+    public GameObject grenadePrefab;   // 수류탄 프리팹(나중에 인벤토리에서 가져오는걸로 수정)
+    public float maxThrowRange = 10f;  // 최대 던지기 범위
+    public LayerMask groundLayer;  // 땅 레이어
+    public GameObject throwRangeIndicator;  // 던지기 범위 표시
+    public GameObject damageRangeIndicator;  // 데미지 범위 표시
+    private bool isGrenadeMode; //던지기 모드
+    public float grenadeFlightTime = 2.0f; // 수류탄 날라가는 시간
+    public float spinSpeed = 1.0f; // 수류탄 회전속도
 
     void Update()
     {
@@ -40,15 +43,33 @@ public class ThrownWeaponController : MonoBehaviour
 
     void ThrowGrenade()
     {
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y,
-            Camera.main.transform.position.y));
+        Vector3 mousePosition = GetMousePositionOnGround();
+        float distanceToMouse = Vector3.Distance(mousePosition, transform.position);
         
+        if (distanceToMouse > maxThrowRange)
+        {
+            Vector3 directionToMouse = (mousePosition - transform.position).normalized;
+            mousePosition = transform.position + directionToMouse * maxThrowRange;
+            distanceToMouse = maxThrowRange;
+        }
+
         GameObject grenade = Instantiate(grenadePrefab, transform.position, Quaternion.identity);
-        
+
         Vector3 direction = (mousePosition - transform.position).normalized;
 
-        grenade.GetComponent<Rigidbody>().velocity = direction * maxThrowRange;
+        float velocityXZ = distanceToMouse / grenadeFlightTime;
+        float velocityY = 0.5f * Mathf.Abs(Physics.gravity.y) * grenadeFlightTime;
+
+        Vector3 velocity = new Vector3(direction.x * velocityXZ, velocityY, direction.z * velocityXZ);
+
+        Rigidbody rb = grenade.GetComponent<Rigidbody>();
+        rb.velocity = velocity;
+
+        //수류탄에 랜덤으로 회전 추가
+        rb.AddTorque(Random.insideUnitSphere * spinSpeed, ForceMode.VelocityChange);
+
     }
+    
 
     void UpdateIndicators()
     {
@@ -78,10 +99,9 @@ public class ThrownWeaponController : MonoBehaviour
 
     Vector3 GetMousePositionOnGround()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, groundLayer))
         {
-            Debug.Log(hit.point);
             return hit.point;
         }
 

@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,7 +24,17 @@ public abstract class Weapon : MonoBehaviour
     public WeaponType weaponType;
     public Vector3 PickPosition;
     public Vector3 PickRotation;
+    private DataManager dataManager;
 
+    private void Awake()
+    {
+        dataManager=FindObjectOfType<DataManager>();
+    }
+    void Start()
+    {
 
+    }
+
+   
     public abstract void Attack(Transform target);
 }

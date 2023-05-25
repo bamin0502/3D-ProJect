@@ -72,7 +72,13 @@ public class DataManager : SerializedMonoBehaviour
     public UnityEvent deadEvent = new UnityEvent();
     public static DataManager Inst;
     [SerializeField]
-    private DataManager[] itemEffects;
+    private Itemdata[] itemEffects;//아이템 관련 값 지정
+    [SerializeField]
+    private WeaponData[] weaponEffects;//무기 공격력 값 
+    [SerializeField]
+    private PlayerStat[] playerStats;//플레이어 스탯 
+    [SerializeField]
+    private EnemyStat[] enemyStats;//몬스터 스탯
     [SerializeField]
     private SlotToolTip theSlotToolTip;
     [SerializeField]
@@ -195,7 +201,7 @@ public class DataManager : SerializedMonoBehaviour
     #endregion
 
     #region 암호화로드방식
-    private T LoadFromJsonEncrypted<T>(string fileName)
+    public T LoadFromJsonEncrypted<T>(string fileName)
     {
         string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
         
@@ -392,7 +398,7 @@ public class DataManager : SerializedMonoBehaviour
         Itemdata itemdata = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
         WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
         yield return new WaitForSeconds(30);
-
+        UseItemResultText.text = "아이템의 효과가 사라졌습니다.";
         // 버프 지속 시간이 지나면 아이템 효과를 되돌림
         weaponData.damage -= itemdata.damage;
         Debug.Log("버프 지속 시간이 지나서 무기 공격력이 복구되었습니다.");

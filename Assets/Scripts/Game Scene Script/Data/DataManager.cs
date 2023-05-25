@@ -291,6 +291,7 @@ public class DataManager : SerializedMonoBehaviour
         WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
         int randAttack = UnityEngine.Random.Range(weaponData.damage, weaponData.damage + 10);
         return randAttack;
+        
     }
 
     //몬스터에게 데미지를 줄 기능
@@ -347,11 +348,28 @@ public class DataManager : SerializedMonoBehaviour
     public virtual bool UseItem(Item _item)
     {   
         PlayerStat playerStat = LoadFromJsonEncrypted<PlayerStat>("PlayerStat.json");
-        Itemdata itemdata = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
-        
+        Itemdata itemdata = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");        
         WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
-        
-        if (_item.itemType == Item.ItemType.buff )
+
+        if (_item.itemType == Item.ItemType.Used)
+        {
+            if (itemdata.Health > 0)
+            {
+                float totalHealth = playerStat.Health + itemdata.Health;
+                Debug.Log("현재 체력: " + playerStat.Health + " 회복량: " + itemdata.Health);
+                if (totalHealth > playerStat.PlayerHealth)
+                {
+                    Debug.Log("사용을 시도하였으나 플레이어의 체력이 꽉 차있어서 사용이 불가능합니다.");
+
+                    StartCoroutine(UsedItemText());
+                    return false;
+                }
+                playerStat.Health = totalHealth;
+                return true;
+            }
+
+        }
+        else if (_item.itemType == Item.ItemType.buff )
         {
             weaponData.damage += itemdata.damage;
             Debug.Log("현재 무기 공격력:" + weaponData.damage + " 아이템으로 인한 공격력 증가량: " + itemdata.damage);
@@ -360,22 +378,6 @@ public class DataManager : SerializedMonoBehaviour
             return true;
         }
 
-        else if (_item.itemType == Item.ItemType.Used && itemdata.Health > 0)
-        {
-            float totalHealth = playerStat.Health + itemdata.Health;
-            Debug.Log("현재 체력: " + playerStat.Health + " 회복량: " + itemdata.Health);
-
-            if (totalHealth > playerStat.PlayerHealth)
-            {
-                Debug.Log("사용을 시도하였으나 플레이어의 체력이 꽉 차있어서 사용이 불가능합니다.");
-                
-                StartCoroutine(UsedItemText());
-                return false;
-            }
-            
-            playerStat.Health = totalHealth;
-            return true;
-        }
         else if (_item.itemType == Item.ItemType.Throw) 
         { 
             

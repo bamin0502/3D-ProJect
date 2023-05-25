@@ -54,9 +54,7 @@ public class MeleeWeaponController : MonoBehaviour
             {
                 case WeaponType.Bow:
                     playerMovement.ani.ani.SetTrigger("BowAttack");
-                    var currnetBow = currentWeapon.GetComponent<RangedWeapon>();
-                    var arrow = Instantiate(currnetBow.projectilePrefab, currnetBow.arrowPos.position, Quaternion.LookRotation(currnetBow.arrowPos.forward));
-                    StartCoroutine(arrow.GetComponent<Projectile>().ShotCoroutine(currentTarget));
+                    StartCoroutine(ArrowSpawnCoroutine());
                     break;
                 case WeaponType.Gun:
                     playerMovement.ani.ani.SetTrigger("GunAttack");
@@ -71,6 +69,15 @@ public class MeleeWeaponController : MonoBehaviour
 
             yield return new WaitForSeconds(weaponInterval);
         }
+    }
+
+    private IEnumerator ArrowSpawnCoroutine(){
+        yield return new WaitForSeconds(0.1f);
+
+        var currnetBow = currentWeapon.GetComponent<RangedWeapon>();
+        var arrow = Instantiate(currnetBow.projectilePrefab, currnetBow.arrowPos.position, Quaternion.LookRotation(currnetBow.arrowPos.forward));
+        arrow.transform.parent = currnetBow.transform;
+        StartCoroutine(arrow.GetComponent<Projectile>().ShotCoroutine(currentTarget));
     }
 
     private bool IsTargetInRange()

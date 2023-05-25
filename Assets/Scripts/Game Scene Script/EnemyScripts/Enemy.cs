@@ -7,27 +7,21 @@ public class Enemy : MonoBehaviour
 {
     public float maxHealth;
     public float curHealth;
-    
-    public BoxCollider attackArea;
-    
-    public float detectionRadius = 5f; // Player를 감지할 범위
-    public float attackRadius = 1f; // 공격할 범위
-    public float returnRadius = 20f; // 본래 자리로 돌아갈 범위
-    public float returnSpeed = 5f; // 본래 자리로 돌아가는 속도
 
+    public BoxCollider attackArea;
     public Transform target; // Player의 Transform 컴포넌트
     public bool isChase = false; // 추격 중인지 여부
-    
     public bool isAttack = false; // 공격 중인지 여부
-
     private NavMeshAgent nav; // NavMeshAgent 컴포넌트
-    private Vector3 originalPosition; // 본래 자리의 위치
-    private bool isReturning = false; // 본래 자리로 돌아가는 중인지 여부
+    [SerializeField] private Vector3 origninalPosition;
+
+
+    public float detectionRadius = 5f;
+ 
 
     private Rigidbody rigid;
     private BoxCollider boxcollider;
     private Material mat;
-    
     private Animator anim;
     private DataManager Damage;
 
@@ -39,9 +33,13 @@ public class Enemy : MonoBehaviour
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
         //이런식으로 참고 가능하니 참고하셈
-        target = GameObject.FindGameObjectWithTag("Player").transform;
-        originalPosition = transform.position;
+        target = GameObject.FindGameObjectWithTag("Player").gameObject.transform;
         
+
+    }
+    private void Start()
+    {
+        origninalPosition = transform.position; 
     }
     public void TakeDamage()
     {
@@ -68,74 +66,62 @@ public class Enemy : MonoBehaviour
 
         }
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Chase();
+            Debug.Log("Player Detected");
+        }
+    }
     void ChaseStart()
     {
         isChase = true;
         anim.SetBool("isWalk", true);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        float distance = Vector3.Distance(transform.position, target.position);
-
-        if (distance <= detectionRadius)
-        {
-            // 추격 시작
-            if (!isChase)
-            {
-                isChase = true;
-                anim.SetBool("isWalk", true);
-                nav.SetDestination(target.position);
-            }
-
-            // 공격 가능 범위에 들어왔을 때 공격
-            if (distance <= attackRadius && !isAttack)
-            {
-                isChase = false;
-                StartCoroutine(Attack());
-            }
-        }
-        else if (isChase)
-        {
-            // 본래 위치로 돌아가기 시작
-            if (!isReturning)
-            {
-                StartCoroutine(ReturnToOriginalPosition());
-            }
-        }
-
-}
-IEnumerator ReturnToOriginalPosition()
-    {
-        isReturning = true;
-        nav.SetDestination(originalPosition);
-
-        while (Vector3.Distance(transform.position, originalPosition) > 0.1f)
-        {
-            yield return null;
-        }
-
-        isReturning = false;
-        isChase = false;
-        anim.SetBool("isWalk", false);
- }
-
-    void FreezeVelocity()
-    {
-        if (isChase)
-        {
-            rigid.velocity = Vector3.zero;
-            rigid.angularVelocity = Vector3.zero;
-        }
-    }
-
+   
     void FixedUpdate()
     {
         Targetting();
         FreezeVelocity();
     }
-    void Targetting()
+    void FreezeVelocity()
+    {
+
+        rigid.velocity = Vector3.zero;
+        rigid.angularVelocity = Vector3.zero;
+
+    }
+    // Update is called once per frame
+    void Update()
+    {
+        nav.speed = 1f;
+        float distance = Vector3.Distance(transform.position, target.position);
+        if (distance <= detectionRadius)
+        {
+            Chase();
+        }
+        else if(distance > detectionRadius)
+        {
+            Returning();
+        }
+
+    }
+    void Returning()
+    {
+        anim.SetBool("isWalk", false);
+        nav.SetDestination(origninalPosition);
+    }
+
+    void Chase()
+    {
+        
+            ChaseStart();
+            nav.SetDestination(target.position);
+        
+    }
+    
+void Targetting()
     {
         float targetRadius = 1f;
         float targetRange = 1f;
@@ -147,22 +133,21 @@ IEnumerator ReturnToOriginalPosition()
 
         }
     }
-
-
     IEnumerator Attack()
     {
-        
+
+        isChase = false;
         isAttack = true;
         anim.SetBool("isAttack", true);
-
-
-        yield return new WaitForSeconds(1f); //각 몬스터마다 시간설정을 다르게해 공격속도 조절
+        attackArea.enabled = true;
+        yield return new WaitForSeconds(0.2f);
         attackArea.enabled = true;
 
-        yield return new WaitForSeconds(3f); //각 몬스터마다 시간설정을 다르게해 공격속도 조절
+        yield return new WaitForSeconds(1f);
         attackArea.enabled = false;
 
-       
+        yield return new WaitForSeconds(1f);
+        isChase = true;
         isAttack = false;
         anim.SetBool("isAttack", false);
     }

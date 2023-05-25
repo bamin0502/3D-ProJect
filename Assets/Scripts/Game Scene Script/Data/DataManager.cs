@@ -78,7 +78,7 @@ public class DataManager : SerializedMonoBehaviour
     [SerializeField]
     private TMP_Text UseItemResultText;
     public string itemName;  // 아이템의 이름(Key값으로 사용할 것)
-    
+   
 
     #endregion
 
@@ -311,7 +311,7 @@ public class DataManager : SerializedMonoBehaviour
         
     }
     //플레이어가 데미지를 받을 기능
-    public virtual void SetPlayerAttack()
+    public virtual void SetPlayerAttack(PlayerMovement playerMovement)
     {
         EnemyStat enemyStat = LoadFromJsonEncrypted<EnemyStat>("EnemyStat1.json");
         PlayerStat playerStat = LoadFromJsonEncrypted<PlayerStat>("PlayerStat.json");
@@ -345,13 +345,13 @@ public class DataManager : SerializedMonoBehaviour
 
     #region 아이템 사용관련 구현
     public virtual bool UseItem(Item _item)
-    {
+    {   
         PlayerStat playerStat = LoadFromJsonEncrypted<PlayerStat>("PlayerStat.json");
         Itemdata itemdata = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
         
         WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
         
-        if (_item.itemType == Item.ItemType.buff)
+        if (_item.itemType == Item.ItemType.buff )
         {
             weaponData.damage += itemdata.damage;
             Debug.Log("현재 무기 공격력:" + weaponData.damage + " 아이템으로 인한 공격력 증가량: " + itemdata.damage);
@@ -360,7 +360,7 @@ public class DataManager : SerializedMonoBehaviour
             return true;
         }
 
-        if (_item.itemType == Item.ItemType.Used && itemdata.Health > 0)
+        else if (_item.itemType == Item.ItemType.Used && itemdata.Health > 0)
         {
             float totalHealth = playerStat.Health + itemdata.Health;
             Debug.Log("현재 체력: " + playerStat.Health + " 회복량: " + itemdata.Health);
@@ -376,9 +376,15 @@ public class DataManager : SerializedMonoBehaviour
             playerStat.Health = totalHealth;
             return true;
         }
+        else if (_item.itemType == Item.ItemType.Throw) 
+        { 
+            
+        }
 
         return false;
     }
+
+
     private IEnumerator RemoveBuffAfterDuration(float dot)
     {
         Itemdata itemdata = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
@@ -395,7 +401,11 @@ public class DataManager : SerializedMonoBehaviour
         yield return new WaitForSeconds(2);
         UseItemResultText.text = "";
     }
+    private IEnumerator ThrowItemEffecter()
+    {
 
+        yield return new WaitForSeconds(1);
+    }
     #endregion
 
     #region var 타입에 따른 데이터저장

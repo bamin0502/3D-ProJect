@@ -106,7 +106,7 @@ public class PlayerMovement : SerializedMonoBehaviour
     //내용추가 만든이 : 방민호 Json화
     public static void TakeDamage()
     {
-        DataManager.Inst.SetPlayerAttack();
+        
     }
     #region 플레이어 회전관련
     public void TurnToDestination()

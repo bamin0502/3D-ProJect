@@ -135,4 +135,6 @@ MonoBehaviour:
   isEquipped: 0
   attackInterval: 3
   weaponType: 1
-  projectilePrefab: {fileID: 0}
+  PickPosition: {x: 0, y: 0, z: 0}
+  PickRotation: {x: 0, y: 0, z: 0}
+  projectilePrefab: {fileID: 6491225712752495104, guid: ed0871284de03ba408e887ba4e90e0fa, type: 3}

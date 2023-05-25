@@ -54,7 +54,9 @@ public class MeleeWeaponController : MonoBehaviour
             {
                 case WeaponType.Bow:
                     playerMovement.ani.ani.SetTrigger("BowAttack");
-                    var arrow = Instantiate(currentWeapon.GetComponent<RangedWeapon>().projectilePrefab, transform.position, Quaternion.identity);
+                    var currnetBow = currentWeapon.GetComponent<RangedWeapon>();
+                    var arrow = Instantiate(currnetBow.projectilePrefab, currnetBow.arrowPos.position, Quaternion.LookRotation(currnetBow.arrowPos.forward));
+                    StartCoroutine(arrow.GetComponent<Projectile>().ShotCoroutine(currentTarget));
                     break;
                 case WeaponType.Gun:
                     playerMovement.ani.ani.SetTrigger("GunAttack");

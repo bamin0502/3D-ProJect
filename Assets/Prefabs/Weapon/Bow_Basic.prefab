@@ -35,7 +35,7 @@ Transform:
   m_Children:
   - {fileID: 508504968186775231}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &982956449472290585
 MeshFilter:
@@ -137,8 +137,9 @@ MonoBehaviour:
   attackInterval: 3
   weaponType: 1
   PickPosition: {x: -0.008, y: 0.041, z: 0.009}
-  PickRotation: {x: 127.9, y: -113.58, z: 252.4}
-  projectilePrefab: {fileID: 0}
+  PickRotation: {x: 87, y: -130.8, z: 232}
+  arrowPos: {fileID: 508504968186775231}
+  projectilePrefab: {fileID: 6491225712752495104, guid: ed0871284de03ba408e887ba4e90e0fa, type: 3}
 --- !u!1 &5339497357753669891
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,8 +163,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5339497357753669891}
-  m_LocalRotation: {x: -0, y: -0.7071068, z: 0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.118502006, y: 0.15760571, z: 0.7491329, w: 0.63239056}
+  m_LocalPosition: {x: -0.008, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

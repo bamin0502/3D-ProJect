@@ -102242,6 +102242,26 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 1145800769}
     m_Modifications:
+    - target: {fileID: 508504968186775231, guid: fd39062f34bb47b4eb36af62fa5ea6ae, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.63239056
+      objectReference: {fileID: 0}
+    - target: {fileID: 508504968186775231, guid: fd39062f34bb47b4eb36af62fa5ea6ae, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.118502006
+      objectReference: {fileID: 0}
+    - target: {fileID: 508504968186775231, guid: fd39062f34bb47b4eb36af62fa5ea6ae, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.15760571
+      objectReference: {fileID: 0}
+    - target: {fileID: 508504968186775231, guid: fd39062f34bb47b4eb36af62fa5ea6ae, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.7491329
+      objectReference: {fileID: 0}
+    - target: {fileID: 508504968186775231, guid: fd39062f34bb47b4eb36af62fa5ea6ae, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3548874538517711366, guid: fd39062f34bb47b4eb36af62fa5ea6ae, type: 3}
       propertyPath: m_Name
       value: Bow_Basic
@@ -102292,7 +102312,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8881564413823961880, guid: fd39062f34bb47b4eb36af62fa5ea6ae, type: 3}
       propertyPath: range
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8881564413823961880, guid: fd39062f34bb47b4eb36af62fa5ea6ae, type: 3}
       propertyPath: PickPosition.x
@@ -102308,15 +102328,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8881564413823961880, guid: fd39062f34bb47b4eb36af62fa5ea6ae, type: 3}
       propertyPath: PickRotation.x
-      value: 127.9
+      value: 87
       objectReference: {fileID: 0}
     - target: {fileID: 8881564413823961880, guid: fd39062f34bb47b4eb36af62fa5ea6ae, type: 3}
       propertyPath: PickRotation.y
-      value: -113.58
+      value: -130.8
       objectReference: {fileID: 0}
     - target: {fileID: 8881564413823961880, guid: fd39062f34bb47b4eb36af62fa5ea6ae, type: 3}
       propertyPath: PickRotation.z
-      value: 252.4
+      value: 232
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []

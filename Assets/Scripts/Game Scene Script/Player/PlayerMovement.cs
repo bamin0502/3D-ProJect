@@ -121,12 +121,13 @@ public class PlayerMovement : SerializedMonoBehaviour
     {
         Destroy(gameObject);
     }
+    
     public void Attack()
     {
         weaponController.currentTarget.TryGetComponent(out Enemy enemy);
-                
         weaponController.equippedWeapon.Attack(weaponController.currentTarget);
     }
+
     #region 플레이어 애니메이션 관련
     public void UpdateState()
     {

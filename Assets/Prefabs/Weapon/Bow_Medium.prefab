@@ -137,4 +137,4 @@ MonoBehaviour:
   weaponType: 1
   PickPosition: {x: -0.008, y: 0.041, z: 0.009}
   PickRotation: {x: 183.726, y: -113.58, z: 252.4}
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 6491225712752495104, guid: ed0871284de03ba408e887ba4e90e0fa, type: 3}

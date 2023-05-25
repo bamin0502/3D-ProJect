@@ -91747,6 +91747,7 @@ GameObject:
   - component: {fileID: 1762000931}
   - component: {fileID: 1764900869}
   - component: {fileID: 1763902149}
+  - component: {fileID: 1764900870}
   m_Layer: 9
   m_Name: Rock_ground1
   m_TagString: Ground
@@ -91934,6 +91935,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1761713155}
   m_Mesh: {fileID: 4300002, guid: 3cf46886804ba3344b6c57f624f58b3b, type: 3}
+--- !u!65 &1764900870
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1761713155}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 60.157253, y: 2.1152053, z: 42.231705}
+  m_Center: {x: 0.0000019073486, y: 1.0576026, z: -0.000002861023}
 --- !u!1001 &1767400023
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -102242,11 +102256,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4182703016684982460, guid: fd39062f34bb47b4eb36af62fa5ea6ae, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -7.193096
+      value: -7.519
       objectReference: {fileID: 0}
     - target: {fileID: 4182703016684982460, guid: fd39062f34bb47b4eb36af62fa5ea6ae, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.383876
+      value: -3.82
       objectReference: {fileID: 0}
     - target: {fileID: 4182703016684982460, guid: fd39062f34bb47b4eb36af62fa5ea6ae, type: 3}
       propertyPath: m_LocalRotation.w

@@ -24,11 +24,17 @@ public class MeleeWeaponController : MonoBehaviour
     {
         currentWeapon = weaponController.equippedWeapon;
         currentTarget = weaponController.currentTarget;
-        
-        if(currentWeapon == null) return;
-        
+
+        if (currentWeapon == null) return;
+
+        if (!weaponController.isAttack && attackRoutine != null)
+        {
+            isAttack = false;
+            StopCoroutine(attackRoutine);
+        }
+
         if (weaponController.isAttack && !isAttack)
-        { 
+        {
             attackRoutine = StartCoroutine(AttackCoroutine());
         }
     }
@@ -36,7 +42,7 @@ public class MeleeWeaponController : MonoBehaviour
     private IEnumerator AttackCoroutine()
     {
         isAttack = true;
-        
+
         playerMovement.ChangedState(PlayerState.HammerAttackIdle);
 
         var weaponInterval = currentWeapon.attackInterval;
@@ -44,12 +50,6 @@ public class MeleeWeaponController : MonoBehaviour
 
         while (isAttack)
         {
-            if (!weaponController.isAttack)
-            {
-                isAttack = false;
-                StopCoroutine(attackRoutine);
-            }
-
             switch (weaponType)
             {
                 case WeaponType.Bow:
@@ -68,7 +68,7 @@ public class MeleeWeaponController : MonoBehaviour
                     playerMovement.ani.ani.SetTrigger("TwoHandedAttack");
                     break;
             }
-            
+
             yield return new WaitForSeconds(weaponInterval);
         }
     }

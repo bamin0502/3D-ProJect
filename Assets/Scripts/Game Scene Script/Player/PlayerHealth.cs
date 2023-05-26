@@ -2,18 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Data;
+using Newtonsoft.Json;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public int maxHealth = 100;
-    public int currentHealth;
+    public static int maxHealth;
+    public static int currentHealth;
     public PlayerHealthBar HealthBar;
     public Animator anim;
 
     // Start is called before the first frame update
     void Start()
     {
-        currentHealth = maxHealth;
+        string json = "{\"PlayerHealth\": 1000, \"Health\": 1000}";
+        PlayerStat playerStat = JsonConvert.DeserializeObject<PlayerStat>(json);
+        maxHealth = (int)playerStat.PlayerHealth;
+        currentHealth = (int)playerStat.Health;
     }
 
     public void TakeDamage(int damage)

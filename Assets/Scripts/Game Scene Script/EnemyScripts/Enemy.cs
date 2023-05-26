@@ -109,6 +109,10 @@ public class Enemy : MonoBehaviour
         {
             Returning();
         }
+        if (target == null)
+        {
+            Returning();
+        }
 
     }
     void Returning()

@@ -19,12 +19,12 @@ public class PlayerHealthBar : MonoBehaviour
         transform.LookAt(lookAtPosition);
     }
     
-    public PlayerHealth playerHealth;
     public Image healthBar;
 
     public void UpdatePlayerHp()
     {
-        healthBar.fillAmount = (float)playerHealth.currentHealth / playerHealth.maxHealth;
+        healthBar.fillAmount = (float)PlayerHealth.currentHealth / PlayerHealth.maxHealth;
+
     }
     
     

@@ -8,9 +8,8 @@ using Data;
 
 public class UImanager : MonoBehaviour
 {
-    public static UImanager inst;
 
-    public PlayerHealth playerHealth;
+
     [SerializeField] private TMP_Text playerHp;
     [SerializeField] private TMP_Text playerMp;
     [SerializeField] private Image hpBar;
@@ -21,12 +20,7 @@ public class UImanager : MonoBehaviour
     
     private void Awake()
     {
-        // 이미 인스턴스가 존재하면 중복 생성을 방지하기 위해 파괴
-        if (inst != null && inst != this)
-        {
-            Destroy(this.gameObject);
-        }
-        inst = this;
+
     }
 
     private void Start()
@@ -34,10 +28,10 @@ public class UImanager : MonoBehaviour
         
     }
 
-    public void UpdatePlayerHp(PlayerStat playerStat)
+    public void UpdatePlayerHp()
     {
-        hpBar.fillAmount = (float)playerHealth.currentHealth / playerHealth.currentHealth;
-        playerHp.text = playerHealth.currentHealth + "/" + playerHealth.maxHealth;
+        hpBar.fillAmount = (float)PlayerHealth.currentHealth / PlayerHealth.currentHealth;
+        playerHp.text = PlayerHealth.currentHealth + "/" + PlayerHealth.maxHealth;
     }
 
     public void UpdatePlayerMp(PlayerStat playerStat)

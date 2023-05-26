@@ -4,15 +4,31 @@ using UnityEngine;
 
 public class Fire : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    
+    public float maxDistance = 3f;
+    private bool isPlayerInRange = false;
+
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if (other.CompareTag("Player"))
+        {
+            isPlayerInRange = true;
+            PlaySound();
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerExit(Collider other)
     {
-        
+        if (other.CompareTag("Player"))
+        {
+            isPlayerInRange = false;
+        }
     }
+
+
+    private void PlaySound()
+    {
+       SoundManager.instance.PlaySE("Fire");
+    }
+
 }

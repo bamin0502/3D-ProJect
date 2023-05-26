@@ -314,7 +314,7 @@ namespace Data
                 UpdateAfterReceiveEnemyAttack(enemyStat);
             }
 
-            UImanager.inst.UpdateEnemyHp(enemyStat);
+
 
         }
         //플레이어가 데미지를 받을 기능
@@ -323,7 +323,7 @@ namespace Data
             EnemyStat enemyStat = LoadFromJsonEncrypted<EnemyStat>("EnemyStat1.json");
             PlayerStat playerStat = LoadFromJsonEncrypted<PlayerStat>("PlayerStat.json");
             playerStat.PlayerHealth -= enemyStat.damage;
-            UImanager.inst.UpdatePlayerHp(playerStat);
+
 
             UpdateAfterReceivePlayerAttack(playerStat);
         }
@@ -361,18 +361,17 @@ namespace Data
 
             if (_item.itemType == Item.ItemType.Used)
             {
-                if (itemdata.Health > 0)
+                if (PlayerHealth.currentHealth > 0)
                 {
-                    float totalHealth = playerStat.Health + itemdata.Health;
-                    Debug.Log("현재 체력: " + playerStat.Health + " 회복량: " + itemdata.Health);
-                    if (totalHealth > playerStat.PlayerHealth)
+                    PlayerHealth.currentHealth = PlayerHealth.maxHealth + (int)itemdata.Health;
+                    if (PlayerHealth.currentHealth > PlayerHealth.maxHealth + (int)itemdata.Health)
                     {
                         Debug.Log("사용을 시도하였으나 플레이어의 체력이 꽉 차있어서 사용이 불가능합니다.");
                         StartCoroutine(DisplayItemMessage("이미 체력이 최대입니다!"));
                         
                         return false;
                     }
-                    playerStat.Health = totalHealth;
+                    
                     StartCoroutine(DisplayItemMessage("체력을 회복했습니다!"));
                     return true;
                 }

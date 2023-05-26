@@ -330,6 +330,22 @@ PrefabInstance:
       propertyPath: m_UseGravity
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4079348483528774354, guid: af0d37eee67ea1e4c90c6c03df9e6616, type: 3}
+      propertyPath: itemPrefabs.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4079348483528774354, guid: af0d37eee67ea1e4c90c6c03df9e6616, type: 3}
+      propertyPath: itemPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 1609437894853043167, guid: 8d0aabb812e0c434ebc2c37a5624d9c2, type: 3}
+    - target: {fileID: 4079348483528774354, guid: af0d37eee67ea1e4c90c6c03df9e6616, type: 3}
+      propertyPath: itemPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 7005254024495169906, guid: a2be9a7ed91393c43ab45799da8e1463, type: 3}
+    - target: {fileID: 4079348483528774354, guid: af0d37eee67ea1e4c90c6c03df9e6616, type: 3}
+      propertyPath: itemPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 517679667345461060, guid: af265e193312f7e40b241a918614f063, type: 3}
     - target: {fileID: 4079348483528774355, guid: af0d37eee67ea1e4c90c6c03df9e6616, type: 3}
       propertyPath: m_IsTrigger
       value: 1

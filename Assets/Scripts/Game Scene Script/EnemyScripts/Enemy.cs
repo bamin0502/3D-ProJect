@@ -18,7 +18,10 @@ public class Enemy : MonoBehaviour
     private DataManager data;
 
     public float detectionRadius = 5f;
- 
+
+    //아이템 드랍 관련 
+    public GameObject[] itemPrefabs;
+    private bool hasDroppedItem = false; // 아이템이 이미 떨어진 상태인지 여부를 나타내는 변수
 
     private Rigidbody rigid;
     private BoxCollider boxcollider;
@@ -37,8 +40,10 @@ public class Enemy : MonoBehaviour
         mat = GetComponent<MeshRenderer>().material;
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
+        
         //이런식으로 참고 가능하니 참고하셈
-        target = GameObject.FindGameObjectWithTag("Player").gameObject.transform;       
+        target = GameObject.FindGameObjectWithTag("Player").gameObject.transform;
+        
     }
     private void Start()
     {
@@ -47,7 +52,7 @@ public class Enemy : MonoBehaviour
         EnemyStat enemyStat = dataManager.LoadFromJsonEncrypted<EnemyStat>("Enemystat1.json");
         maxHealth = enemyStat.EnemyHealth;
         curHealth = enemyStat.Health;
-
+        
         string json= "{\"damage\": 30}";
         EnemyStat enemy = JsonConvert.DeserializeObject<EnemyStat>(json);
         tmpDamage = (int)enemy.damage;
@@ -112,6 +117,7 @@ public class Enemy : MonoBehaviour
             {
                 anim.SetBool("isAttack", false);
                 StopCoroutine(attackCoroutine);
+                DropRandomItem();
             }
             return;
         }
@@ -142,7 +148,29 @@ public class Enemy : MonoBehaviour
         anim.SetBool("isWalk", false);
         nav.SetDestination(origninalPosition);
     }
+    private void DropRandomItem()
+    {
+        if (!hasDroppedItem && itemPrefabs.Length > 0)
+        {
+            StartCoroutine(DropRandomItemCoroutine());
+        }
+    }
+    private IEnumerator DropRandomItemCoroutine()
+    {
+        yield return new WaitForSeconds(1); // 몬스터가 사라진 후 일정 시간 대기
 
+        if (hasDroppedItem || itemPrefabs.Length == 0)
+        {
+            Debug.Log("아이템이 없거나 이미 아이템이 떨어졌습니다.");
+            yield break;
+        }
+        hasDroppedItem = true; // 아이템이 떨어진 상태로 변경
+
+        int randomIndex = Random.Range(0, itemPrefabs.Length); // 랜덤한 인덱스 선택
+        GameObject itemPrefab = itemPrefabs[randomIndex]; // 선택된 아이템 프리팹
+
+        Instantiate(itemPrefab, transform.position, Quaternion.identity);
+    }
     void Chase()
     {
          ChaseStart();

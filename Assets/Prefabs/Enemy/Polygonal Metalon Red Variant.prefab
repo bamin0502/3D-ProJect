@@ -681,6 +681,10 @@ MonoBehaviour:
   isAttack: 0
   origninalPosition: {x: 0, y: 0, z: 0}
   detectionRadius: 5
+  itemPrefabs:
+  - {fileID: 7005254024495169906, guid: a2be9a7ed91393c43ab45799da8e1463, type: 3}
+  - {fileID: 517679667345461060, guid: af265e193312f7e40b241a918614f063, type: 3}
+  - {fileID: 1609437894853043167, guid: 8d0aabb812e0c434ebc2c37a5624d9c2, type: 3}
   isDead: 0
   tmpDamage: 5
 --- !u!195 &2138597249

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+
 public class Enemy : MonoBehaviour
 {
     public float maxHealth;
@@ -14,7 +15,7 @@ public class Enemy : MonoBehaviour
     public bool isAttack = false; // 공격 중인지 여부
     private NavMeshAgent nav; // NavMeshAgent 컴포넌트
     [SerializeField] private Vector3 origninalPosition;
-
+    private DataManager data;
 
     public float detectionRadius = 5f;
  
@@ -35,15 +36,17 @@ public class Enemy : MonoBehaviour
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
         //이런식으로 참고 가능하니 참고하셈
-        target = GameObject.FindGameObjectWithTag("Player").gameObject.transform;
-        
-
+        target = GameObject.FindGameObjectWithTag("Player").gameObject.transform;       
     }
     private void Start()
     {
-        origninalPosition = transform.position; 
+        origninalPosition = transform.position;
+        DataManager dataManager = FindObjectOfType<DataManager>();
+        EnemyStat enemyStat = dataManager.LoadFromJsonEncrypted<EnemyStat>("Enemystat1.json");
+        maxHealth = enemyStat.EnemyHealth;
+        curHealth = enemyStat.Health;
     }
-    public void TakeDamage()
+    public void TakeDamage(Transform target)
     {
         StartCoroutine(OnDamage());
     }
@@ -52,7 +55,7 @@ public class Enemy : MonoBehaviour
         mat.color = Color.red;
         yield return new WaitForSeconds(0.1f);
 
-        if (curHealth > 0)
+        if (maxHealth > 0)
         {
             mat.color = Color.white;
         }
@@ -116,13 +119,11 @@ public class Enemy : MonoBehaviour
 
     void Chase()
     {
-        
-            ChaseStart();
-            nav.SetDestination(target.position);
-        
+         ChaseStart();
+         nav.SetDestination(target.position);       
     }
     
-void Targetting()
+    void Targetting()
     {
         float targetRadius = 1f;
         float targetRange = 1f;
@@ -136,7 +137,6 @@ void Targetting()
     }
     IEnumerator Attack()
     {
-
         isChase = false;
         isAttack = true;
         anim.SetBool("isAttack", true);

@@ -361,17 +361,20 @@ namespace Data
 
             if (_item.itemType == Item.ItemType.Used)
             {
-                if (PlayerHealth.currentHealth > 0)
+                if (PlayerHealth.currentHealth < PlayerHealth.maxHealth)  // 현재 체력이 최대 체력보다 작을 때만 회복 가능
                 {
-                    PlayerHealth.currentHealth = PlayerHealth.maxHealth + (int)itemdata.Health;
-                    if (PlayerHealth.currentHealth > PlayerHealth.maxHealth + (int)itemdata.Health)
+                    int healthToRestore = (int)itemdata.Health;
+                    int availableRestore = PlayerHealth.maxHealth - PlayerHealth.currentHealth;  // 회복 가능한 양
+
+                    if (healthToRestore > availableRestore)
                     {
                         Debug.Log("사용을 시도하였으나 플레이어의 체력이 꽉 차있어서 사용이 불가능합니다.");
-                        StartCoroutine(DisplayItemMessage("이미 체력이 최대입니다!"));
-                        
+                        StartCoroutine(DisplayItemMessage("최대 체력 이상으로는 회복할수 없습니다!"));
+
                         return false;
                     }
-                    
+
+                    PlayerHealth.currentHealth += healthToRestore;
                     StartCoroutine(DisplayItemMessage("체력을 회복했습니다!"));
                     return true;
                 }

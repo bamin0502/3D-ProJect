@@ -5,6 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     private float speed = 25f;
+    private int damage = 10;
 
     private void Start(){
         StartCoroutine(DeleteCoroutine());
@@ -32,7 +33,12 @@ public class Projectile : MonoBehaviour
         }
 
         if(target != null){
-            Debug.Log(target.name + " 를 화살로 공격했습니다");
+            bool isEnemy = target.TryGetComponent(out EnemyHealth enemy);
+            if (isEnemy)
+            {
+                enemy.TakeDamage(damage);
+            }
+            
             if (gameObject != null){
                 Destroy(gameObject);
             }

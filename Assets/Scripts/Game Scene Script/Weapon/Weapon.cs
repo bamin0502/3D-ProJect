@@ -30,11 +30,6 @@ public abstract class Weapon : MonoBehaviour
     {
         dataManager=FindObjectOfType<DataManager>();
     }
-    void Start()
-    {
 
-    }
-
-   
     public abstract void Attack(Transform target);
 }

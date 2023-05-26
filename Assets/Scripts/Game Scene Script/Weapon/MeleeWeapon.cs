@@ -7,6 +7,10 @@ public class MeleeWeapon : Weapon
     //임성훈
     public override void Attack(Transform target)
     {
-        Debug.Log("Damage: " + target.name + damage);
+        bool isEnemy = target.TryGetComponent(out EnemyHealth enemy);
+        if (isEnemy)
+        {
+            enemy.TakeDamage(damage);
+        }
     }
 }

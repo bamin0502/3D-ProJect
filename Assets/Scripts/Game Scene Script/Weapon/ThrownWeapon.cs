@@ -8,7 +8,7 @@ public class ThrownWeapon : MonoBehaviour
     //임성훈
     public float explosionRadius;  //폭발 반경
     public LayerMask enemyLayer;  //적 레이어
-    public float damage = 50f; //데미지
+    public int damage = 50; //데미지
     public float delay = 3f;
     private Collider[] enemies = new Collider[20]; //최대 20마리까지 데미지 줌
 
@@ -37,8 +37,13 @@ public class ThrownWeapon : MonoBehaviour
 
         for (int i = 0; i < numColliders; i++)
         {
-            Collider enemy = enemies[i];
-            return;
+            Collider target = enemies[i];
+
+            bool isEnemy = target.TryGetComponent(out EnemyHealth enemy);
+            if (isEnemy)
+            {
+                enemy.TakeDamage(damage);
+            }
         }
         
         Destroy(gameObject);

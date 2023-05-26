@@ -10,6 +10,6 @@ public class RangedWeapon : Weapon
 
     public override void Attack(Transform target)
     {
-        Debug.Log("Damage: " + target.name + damage);
+        ;
     }
 }

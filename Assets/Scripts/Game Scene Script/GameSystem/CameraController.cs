@@ -16,21 +16,15 @@ public class CameraController : MonoBehaviour
     private int _currentStep = 2; //현재 줌 단계
     private Vector3 _targetOffset; //목표 오프셋
     private Vector3 _currentOffset; //현재 오프셋
-
     private float _currentZoom; // 현재 확대값
     private float _targetAngle; // 목표 각도
     private float _currentAngle; // 현재 각도
-
-
     
     private void Start()
     {
         UpdateStep(0);
 
     }
-
-    
-
     void Update()
     {
         Vector3 newPosition = gameObject.transform.position;

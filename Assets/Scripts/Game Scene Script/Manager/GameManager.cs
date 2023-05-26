@@ -10,7 +10,7 @@ using Sirenix.OdinInspector;
 public class GameManager : SerializedMonoBehaviour
 {
     public static GameManager Inst;
-    [Header("관리 오브젝트 설정")]
+    [Title ("관리 오브젝트 설정")]
     //리스트배열 형태로 이미지를 관리함
     [SerializeField]
     private GameObject MainMenuImage;

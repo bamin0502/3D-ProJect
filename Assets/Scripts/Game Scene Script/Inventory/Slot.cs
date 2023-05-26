@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 using System;
+using Data;
 
 
 public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*/ IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
@@ -35,65 +36,67 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
     {
         if (Input.GetKeyDown(KeyCode.Alpha1) && slots.Length > 0)
         {
-            if (slots[0].item != null)
-            {
-                bool itemUsed = theItemEffectDatabase.UseItem(slots[0].item);
-                if (itemUsed && (slots[0].item.itemType == Item.ItemType.Used || slots[0].item.itemType == Item.ItemType.buff || slots[0].item.itemType == Item.ItemType.Throw))
-                {
-                    slots[0].SetSlotCount(-1);
-                }
-            }
-            else
-            {
-                Debug.Log("아이템 사용에 실패했습니다.");
-            }
+            UseItemInSlot(0);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2) && slots.Length > 0)
+        else if (Input.GetKeyDown(KeyCode.Alpha2) && slots.Length > 1)
         {
-            if (slots[1].item != null)
-            {
-                bool itemUsed = theItemEffectDatabase.UseItem(slots[1].item);
-                if (itemUsed && (slots[1].item.itemType == Item.ItemType.Used || slots[1].item.itemType == Item.ItemType.buff || slots[1].item.itemType == Item.ItemType.Throw))
-                {
-                    slots[1].SetSlotCount(-1);
-                }
-            }
-            else
-            {
-                Debug.Log("아이템 사용에 실패했습니다.");
-            }
+            UseItemInSlot(1);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3) && slots.Length > 0)
+        else if (Input.GetKeyDown(KeyCode.Alpha3) && slots.Length > 2)
         {
-            if (slots[2].item != null)
-            {
-                bool itemUsed = theItemEffectDatabase.UseItem(slots[2].item);
-                if (itemUsed && (slots[2].item.itemType == Item.ItemType.Used || slots[2].item.itemType == Item.ItemType.buff || slots[2].item.itemType == Item.ItemType.Throw))
-                {
-                    slots[2].SetSlotCount(-1);
-                }
-            }
-            else
-            {
-                Debug.Log("아이템 사용에 실패했습니다.");
-            }
+            UseItemInSlot(2);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha4) && slots.Length > 0)
+        else if (Input.GetKeyDown(KeyCode.Alpha4) && slots.Length > 3)
         {
-            if (slots[3].item != null)
+            UseItemInSlot(3);
+        }
+    }
+    private void UseItemInSlot(int slotIndex)
+    {
+        //if (slots[slotIndex].item != null)
+        //{
+        //    if (slots[slotIndex].item.itemType == Item.ItemType.Throw)
+        //    {
+        //        ThrowItem(item);
+        //    }
+
+        //    bool itemUsed = theItemEffectDatabase.UseItem(slots[slotIndex].item);
+
+        //    if (itemUsed && (slots[slotIndex].item.itemType == Item.ItemType.Used || slots[slotIndex].item.itemType == Item.ItemType.buff))
+        //    {
+        //        slots[slotIndex].SetSlotCount(-1);
+        //    }
+        //    else if (!itemUsed)
+        //    {
+        //        Debug.Log("아이템 사용에 실패했습니다.");
+        //    }
+        //}
+        //else
+        //{
+        //    Debug.Log("아이템 사용에 실패했습니다.");
+        //}
+        if (item != null)
+        {
+
+            bool itemUsed = theItemEffectDatabase.UseItem(item);
+            if (itemUsed)
             {
-                bool itemUsed = theItemEffectDatabase.UseItem(slots[0].item);
-                if (itemUsed && (slots[3].item.itemType == Item.ItemType.Used || slots[3].item.itemType == Item.ItemType.buff || slots[3].item.itemType == Item.ItemType.Throw))
+                if (item.itemType == Item.ItemType.Used || item.itemType == Item.ItemType.buff || item.itemType == Item.ItemType.Throw)
                 {
-                    slots[3].SetSlotCount(-1);
+                    SetSlotCount(-1);
                 }
             }
             else
             {
                 Debug.Log("아이템 사용에 실패했습니다.");
             }
+
+
         }
+<<<<<<< Updated upstream
         //Debug.Log("해당 아이템칸에 아이템이 없습니다!"); 
+=======
+>>>>>>> Stashed changes
     }
     private void SetColor(float _alpha)
     {
@@ -215,4 +218,14 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
     //{
     //    theItemEffectDatabase.HideToolTip();
     //}
+    private void ThrowItem(Item _item)
+    {
+        // 마우스 포인트를 기준으로 아이템을 던지는 로직 작성
+        // 예시: 아이템의 던지는 동작을 애니메이션으로 표현하거나, 특정 위치에 아이템을 생성하는 등의 처리
+        Vector3 mousePosition = Input.mousePosition;
+        // 마우스 포인트를 월드 좌표로 변환
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
+        // 아이템을 해당 위치에 던지는 동작 수행
+        //_item.ThrowItem(worldPosition);
+    }
 }

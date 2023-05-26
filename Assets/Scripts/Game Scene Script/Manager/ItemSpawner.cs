@@ -2,32 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//Á¦ÀÛÀÚ: ¹æ¹ÎÈ£
-namespace mino
-{
+//ì œì‘ì: ë°©ë¯¼í˜¸
+
     public class ItemSpawner : MonoBehaviour
     {
-        //»ı¼ºÇÒ ¾ÆÀÌÅÛÀ» ¸®½ºÆ®¹è¿­ Çü½ÄÀ¸·Î ÀúÀåÇÑ´Ù.
+        //ìƒì„±í•  ì•„ì´í…œì„ ë¦¬ìŠ¤íŠ¸ë°°ì—´ í˜•ì‹ìœ¼ë¡œ ì €ì¥í•œë‹¤.
         public GameObject[] Items;
-        //»ı¼ºÇÒ ¾ÆÀÌÅÛÀÇ À§Ä¡¸¦ ¸®½ºÆ®¹è¿­ Çü½ÄÀ¸·Î ÀúÀåÇÑ´Ù.
+        //ìƒì„±í•  ì•„ì´í…œì˜ ìœ„ì¹˜ë¥¼ ë¦¬ìŠ¤íŠ¸ë°°ì—´ í˜•ì‹ìœ¼ë¡œ ì €ì¥í•œë‹¤.
         public Transform[] ItemPosition;
-        //¸ó½ºÅÍÀÇ À§Ä¡°ªÀ» ÀúÀåÇÒ ¸®½ºÆ®¸¦ ¸¸µë
+        //ëª¬ìŠ¤í„°ì˜ ìœ„ì¹˜ê°’ì„ ì €ì¥í•  ë¦¬ìŠ¤íŠ¸ë¥¼ ë§Œë“¬
         public LinkedList<GameObject> MonsterPosition;
         // Start is called before the first frame update
         void Start()
         {
             ItemSpawn();
         }
-        //¾ÆÀÌÅÛÀ» »ı¼º Ã³¸®
+        //ì•„ì´í…œì„ ìƒì„± ì²˜ë¦¬
         private void ItemSpawn()
         {
-            //¸ó½ºÅÍÀÇ À§Ä¡°ªÀ» °¡Á®¿Ã°ÅÀÓ
+            //ëª¬ìŠ¤í„°ì˜ ìœ„ì¹˜ê°’ì„ ê°€ì ¸ì˜¬ê±°ì„
             Vector3 spawnPosition = GetComponent<GameObject>().transform.position;
-            //¸ó½ºÅÍ,È¤Àº Àû ÇÃ·¹ÀÌ¾î°¡ Á×¾úÀ»¶§ ±× ¸ó½ºÅÍ ÁÖÀ§·Î ¾ÆÀÌÅÛÀ» »Ñ¸±°ÅÀÓ(ÀÏ´ÜÀº ºñÈ°¼ºÈ­)
+            //ëª¬ìŠ¤í„°,í˜¹ì€ ì  í”Œë ˆì´ì–´ê°€ ì£½ì—ˆì„ë•Œ ê·¸ ëª¬ìŠ¤í„° ì£¼ìœ„ë¡œ ì•„ì´í…œì„ ë¿Œë¦´ê±°ì„(ì¼ë‹¨ì€ ë¹„í™œì„±í™”)
             //GameObject selectItem = Items[Dead.Range(0, Items.Length)];
             //GameObject Item = Instantiate(selectItem,spawnPosition,Quaternion.identity);
         }
     }
 
-}
+
 

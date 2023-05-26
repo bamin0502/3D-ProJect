@@ -11,6 +11,7 @@ using TMPro;
 using System.Collections.Generic;
 using System.Collections;
 using Sirenix.OdinInspector;
+using Data;
 
 
 public class PlayerMovement : SerializedMonoBehaviour
@@ -34,7 +35,8 @@ public class PlayerMovement : SerializedMonoBehaviour
     public UnityEngine.UI.Image fill;
     private float MaxCooldown = 10f;
     private float currentCooldown = 10f;
-    
+    private float PlayerHealth;
+    private float curHealth;
     void Start()
     {
         //만든이 : 임성훈
@@ -44,9 +46,9 @@ public class PlayerMovement : SerializedMonoBehaviour
         ani =GetComponent<AniSetting>();
         SpaceUI.SetActive(false);//스페이스바 UI 비활성화
         ChangedState(PlayerState.Idle);//플레이어 기본상태를 Idle로 지정
-    }
-    
 
+        
+    }
     private void Update()
     {
         #region 플레이어 이동관련
@@ -80,6 +82,7 @@ public class PlayerMovement : SerializedMonoBehaviour
             ChangedState(PlayerState.SpaceMove);
             SpaceUI.SetActive(true);
             isCoolingDown = true;
+
             cooldownEndTime = Time.time + cooldownTime;                           
 
         }
@@ -104,9 +107,9 @@ public class PlayerMovement : SerializedMonoBehaviour
     }
 
     //내용추가 만든이 : 방민호 Json화
-    public static void TakeDamage()
+    public virtual void TakeDamage(Transform target,int damage)
     {
-        
+        DataManager.Inst.SetPlayerAttack(target, damage);
     }
     #region 플레이어 회전관련
     public void TurnToDestination()
@@ -125,6 +128,7 @@ public class PlayerMovement : SerializedMonoBehaviour
     public void Attack()
     {
         weaponController.equippedWeapon.Attack(weaponController.currentTarget);
+
     }
 
     #region 플레이어 애니메이션 관련
@@ -157,7 +161,7 @@ public class PlayerMovement : SerializedMonoBehaviour
     }
     public void PlayerStateGetHit()
     {
-        TakeDamage();
+        
     }
     void PlayerStateIdle()
     {
@@ -220,8 +224,4 @@ public class PlayerMovement : SerializedMonoBehaviour
     #endregion
 
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        TakeDamage();
-    }
 }

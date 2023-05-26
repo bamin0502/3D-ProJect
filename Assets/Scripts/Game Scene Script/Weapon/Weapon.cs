@@ -30,6 +30,11 @@ public abstract class Weapon : MonoBehaviour
     {
         dataManager=FindObjectOfType<DataManager>();
     }
-
+    private void Start()
+    {
+        string json = "{\"damage\": 30}";
+        WeaponData weapon = JsonConvert.DeserializeObject<WeaponData>(json);
+        damage = weapon.damage;
+    }
     public abstract void Attack(Transform target);
 }

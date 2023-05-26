@@ -289,68 +289,6 @@ namespace Data
             return Path.Combine(Application.dataPath + "/StreamingAssets", fileName);
         }
         #endregion
-
-
-        #region 플레이어,몬스터 데미지 처리방식 구현
-        public int GetWeaponRandomDamage()
-        {
-            WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
-            int randAttack = UnityEngine.Random.Range(weaponData.damage, weaponData.damage + 10);
-            return randAttack;
-
-        }
-
-        //몬스터에게 데미지를 줄 기능
-        public virtual void SetEnemyAttack(Transform target)
-        {
-            EnemyStat enemyStat = LoadFromJsonEncrypted<EnemyStat>("EnemyStat1.json");
-            float totalHealth = enemyStat.EnemyHealth -= GetWeaponRandomDamage();
-            enemyStat.EnemyHealth -= GetWeaponRandomDamage();
-            Debug.Log("몬스터 체력:" + enemyStat.EnemyHealth + "무기 공격력: " + GetWeaponRandomDamage() + "= 현재 몬스터 남은 체력: " + enemyStat.Health);
-            if (totalHealth <= 0)
-            {
-                Debug.Log("몬스터가 체력이 0보다 작거나 같습니다.");
-
-                UpdateAfterReceiveEnemyAttack(enemyStat);
-            }
-
-
-
-        }
-        //플레이어가 데미지를 받을 기능
-        public virtual void SetPlayerAttack(Transform target,int damage)
-        {
-            EnemyStat enemyStat = LoadFromJsonEncrypted<EnemyStat>("EnemyStat1.json");
-            PlayerStat playerStat = LoadFromJsonEncrypted<PlayerStat>("PlayerStat.json");
-            playerStat.PlayerHealth -= enemyStat.damage;
-
-
-            UpdateAfterReceivePlayerAttack(playerStat);
-        }
-
-        //몬스터 데미지 가상함수
-        protected virtual void UpdateAfterReceiveEnemyAttack(EnemyStat enemyStat)
-        {
-            if (enemyStat.EnemyHealth <= 0)
-            {
-                enemyStat.EnemyHealth = 0;
-                isDead = true;
-                deadEvent.Invoke();
-            }
-
-        }
-        //플레이어 데미지 가상함수
-        protected virtual void UpdateAfterReceivePlayerAttack(PlayerStat playerStat)
-        {
-            if (playerStat.PlayerHealth <= 0)
-            {
-                playerStat.PlayerHealth = 0;
-                isDead = true;
-                deadEvent.Invoke();
-            }
-        }
-        #endregion
-
         #region 아이템 사용관련 구현
         public virtual bool UseItem(Item _item)
         {
@@ -383,12 +321,15 @@ namespace Data
             else if (_item.itemType == Item.ItemType.buff)
             {
                 weaponData.damage += itemdata.damage;
-                Debug.Log("현재 무기 공격력:" + weaponData.damage + " 아이템으로 인한 공격력 증가량: " + itemdata.damage);
+                Debug.Log("현재 무기 공격력: " + weaponData.damage + " 아이템으로 인한 공격력 증가량: " + itemdata.damage);
 
                 StartCoroutine(RemoveBuffAfterDuration(itemdata.dot));
                 StartCoroutine(DisplayItemMessage("공격력이 증가하였습니다!"));
+
+                itemdata.damage = weaponData.damage;
                 return true;
             }
+
 
             else if (_item.itemType == Item.ItemType.Throw)
             {

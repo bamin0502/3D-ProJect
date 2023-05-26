@@ -288,31 +288,11 @@ namespace Data
         {
             return Path.Combine(Application.dataPath + "/StreamingAssets", fileName);
         }
-<<<<<<< Updated upstream
-        
-        UImanager.inst.UpdateEnemyHp(enemyStat);
-        
-    }
-    //플레이어가 데미지를 받을 기능
-    public virtual void SetPlayerAttack(PlayerMovement playerMovement)
-    {
-        EnemyStat enemyStat = LoadFromJsonEncrypted<EnemyStat>("EnemyStat1.json");
-        PlayerStat playerStat = LoadFromJsonEncrypted<PlayerStat>("PlayerStat.json");
-        playerStat.PlayerHealth -= enemyStat.damage;
-        UpdateAfterReceivePlayerAttack(playerStat);
-    }
-    
-    //몬스터 데미지 가상함수
-    protected virtual void UpdateAfterReceiveEnemyAttack(EnemyStat enemyStat)
-    {
-        if (enemyStat.EnemyHealth <= 0)
-=======
         #endregion
 
 
         #region 플레이어,몬스터 데미지 처리방식 구현
         public int GetWeaponRandomDamage()
->>>>>>> Stashed changes
         {
             WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
             int randAttack = UnityEngine.Random.Range(weaponData.damage, weaponData.damage + 10);

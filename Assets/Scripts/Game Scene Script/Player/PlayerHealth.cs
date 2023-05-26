@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Data;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -18,8 +19,7 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        HealthBar.UpdatePlayerHp();
-        UImanager.inst.UpdatePlayerHp();
+        HealthBar.UpdatePlayerHp();        
 
         if (currentHealth <= 0)
         {

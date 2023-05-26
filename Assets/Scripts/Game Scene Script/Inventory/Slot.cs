@@ -93,10 +93,6 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
 
 
         }
-<<<<<<< Updated upstream
-        //Debug.Log("해당 아이템칸에 아이템이 없습니다!"); 
-=======
->>>>>>> Stashed changes
     }
     private void SetColor(float _alpha)
     {

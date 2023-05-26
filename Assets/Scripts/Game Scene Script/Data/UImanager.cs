@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Data;
 
 public class UImanager : MonoBehaviour
 {
@@ -30,10 +31,10 @@ public class UImanager : MonoBehaviour
 
     private void Start()
     {
-        UpdatePlayerHp();
+        
     }
 
-    public void UpdatePlayerHp()
+    public void UpdatePlayerHp(PlayerStat playerStat)
     {
         hpBar.fillAmount = (float)playerHealth.currentHealth / playerHealth.currentHealth;
         playerHp.text = playerHealth.currentHealth + "/" + playerHealth.maxHealth;
@@ -46,6 +47,6 @@ public class UImanager : MonoBehaviour
 
     public void UpdateEnemyHp(EnemyStat enemyStat)
     {
-        hpBar.fillAmount = (float)enemyStat.EnemyHealth / enemyStat.Health;       
+        hpBar.fillAmount = (float)enemyStat.EnemyHealth / enemyStat.Health;
     }
 }

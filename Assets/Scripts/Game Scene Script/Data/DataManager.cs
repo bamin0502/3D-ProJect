@@ -375,7 +375,7 @@ namespace Data
                     }
 
                     PlayerHealth.currentHealth += healthToRestore;
-                    StartCoroutine(DisplayItemMessage("체력을 회복했습니다!"));
+                    StartCoroutine(DisplayItemMessage("체력을 30 회복했습니다!"));
                     return true;
                 }
 

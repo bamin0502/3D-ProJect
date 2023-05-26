@@ -16,13 +16,6 @@ public class Enemy : MonoBehaviour
     private NavMeshAgent nav; // NavMeshAgent 컴포넌트
     [SerializeField] private Vector3 origninalPosition;
     private DataManager data;
-
-    public float detectionRadius = 5f;
-
-    //아이템 드랍 관련 
-    public GameObject[] itemPrefabs;
-    private bool hasDroppedItem = false; // 아이템이 이미 떨어진 상태인지 여부를 나타내는 변수
-
     private Rigidbody rigid;
     private BoxCollider boxcollider;
     private Material mat;
@@ -30,6 +23,13 @@ public class Enemy : MonoBehaviour
     private DataManager Damage;
     public bool isDead = false;
     private Coroutine attackCoroutine;
+    public float detectionRadius = 5f;
+    #region 아이템 드랍관련 변수 선언 - 제작자 방민호
+    //아이템 드랍 관련 
+    public GameObject[] itemPrefabs;
+    private bool hasDroppedItem = false; // 아이템이 이미 떨어진 상태인지 여부를 나타내는 변수
+    #endregion
+
 
     public int tmpDamage; //일단 테스트용 나중에 json이랑 연결해야됨
 
@@ -148,6 +148,7 @@ public class Enemy : MonoBehaviour
         anim.SetBool("isWalk", false);
         nav.SetDestination(origninalPosition);
     }
+    #region 랜덤 아이템 스폰 -제작자 방민호
     private void DropRandomItem()
     {
         if (!hasDroppedItem && itemPrefabs.Length > 0)
@@ -171,6 +172,7 @@ public class Enemy : MonoBehaviour
 
         Instantiate(itemPrefab, transform.position, Quaternion.identity);
     }
+    #endregion
     void Chase()
     {
          ChaseStart();

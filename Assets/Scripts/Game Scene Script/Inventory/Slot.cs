@@ -18,15 +18,19 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
     [SerializeField] private GameObject go_CountImage;
     private DataManager theItemEffectDatabase;
     [SerializeField] private Slot[] slots;
+    [SerializeField] private GameObject slot1;
+    [SerializeField] private GameObject slot2;
+    [SerializeField] private GameObject slot3;
+    [SerializeField] private GameObject slot4;
 
     void Start()
     {
         theItemEffectDatabase = FindObjectOfType<DataManager>();
         slots = new Slot[4];
-        slots[0] = this;
-        slots[1] = this;
-        slots[2] = this;
-        slots[3] = this;
+        slots[0] = slot1.GetComponent<Slot>();
+        slots[1] = slot2.GetComponent<Slot>();
+        slots[2] = slot3.GetComponent<Slot>();
+        slots[3] = slot4.GetComponent<Slot>();
     }
     void Update()
     {
@@ -53,45 +57,27 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
     }
     private void UseItemInSlot(int slotIndex)
     {
-        //if (slots[slotIndex].item != null)
-        //{
-        //    if (slots[slotIndex].item.itemType == Item.ItemType.Throw)
-        //    {
-        //        ThrowItem(item);
-        //    }
-
-        //    bool itemUsed = theItemEffectDatabase.UseItem(slots[slotIndex].item);
-
-        //    if (itemUsed && (slots[slotIndex].item.itemType == Item.ItemType.Used || slots[slotIndex].item.itemType == Item.ItemType.buff))
-        //    {
-        //        slots[slotIndex].SetSlotCount(-1);
-        //    }
-        //    else if (!itemUsed)
-        //    {
-        //        Debug.Log("아이템 사용에 실패했습니다.");
-        //    }
-        //}
-        //else
-        //{
-        //    Debug.Log("아이템 사용에 실패했습니다.");
-        //}
-        if (item != null)
+        if (slots[slotIndex].item != null)
         {
-
-            bool itemUsed = theItemEffectDatabase.UseItem(item);
-            if (itemUsed)
+            if (slots[slotIndex].item.itemType == Item.ItemType.Throw)
             {
-                if (item.itemType == Item.ItemType.Used || item.itemType == Item.ItemType.buff || item.itemType == Item.ItemType.Throw)
-                {
-                    SetSlotCount(-1);
-                }
+                slots[slotIndex].SetSlotCount(-1);
             }
-            else
+
+            bool itemUsed = theItemEffectDatabase.UseItem(slots[slotIndex].item);
+
+            if (itemUsed && (slots[slotIndex].item.itemType == Item.ItemType.Used || slots[slotIndex].item.itemType == Item.ItemType.buff))
+            {
+                slots[slotIndex].SetSlotCount(-1);
+            }
+            else if (!itemUsed)
             {
                 Debug.Log("아이템 사용에 실패했습니다.");
             }
-
-
+        }
+        else
+        {
+            Debug.Log("아이템 사용에 실패했습니다.");
         }
     }
     private void SetColor(float _alpha)

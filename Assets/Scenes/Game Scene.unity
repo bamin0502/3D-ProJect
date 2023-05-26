@@ -1218,7 +1218,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &46067246
 Transform:
   m_ObjectHideFlags: 0
@@ -8230,6 +8230,10 @@ MonoBehaviour:
   go_CountImage: {fileID: 2066653489}
   slots:
   - {fileID: 251851807}
+  slot1: {fileID: 251851803}
+  slot2: {fileID: 1584758662}
+  slot3: {fileID: 467638442}
+  slot4: {fileID: 674123240}
 --- !u!1 &253981111
 GameObject:
   m_ObjectHideFlags: 0
@@ -22868,6 +22872,10 @@ MonoBehaviour:
   go_CountImage: {fileID: 1186055117}
   slots:
   - {fileID: 467638446}
+  slot1: {fileID: 251851803}
+  slot2: {fileID: 1584758662}
+  slot3: {fileID: 467638442}
+  slot4: {fileID: 674123240}
 --- !u!1001 &469982863
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28739,6 +28747,10 @@ MonoBehaviour:
   go_CountImage: {fileID: 817183903}
   slots:
   - {fileID: 674123244}
+  slot1: {fileID: 251851803}
+  slot2: {fileID: 1584758662}
+  slot3: {fileID: 467638442}
+  slot4: {fileID: 674123240}
 --- !u!1001 &675640115
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -72984,6 +72996,10 @@ MonoBehaviour:
   go_CountImage: {fileID: 781360164}
   slots:
   - {fileID: 1584758666}
+  slot1: {fileID: 251851803}
+  slot2: {fileID: 1584758662}
+  slot3: {fileID: 467638442}
+  slot4: {fileID: 674123240}
 --- !u!1 &1585135529
 GameObject:
   m_ObjectHideFlags: 0

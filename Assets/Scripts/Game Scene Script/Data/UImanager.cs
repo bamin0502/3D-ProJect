@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,7 @@ public class UImanager : MonoBehaviour
 {
     public static UImanager inst;
 
+    public PlayerHealth playerHealth;
     [SerializeField] private TMP_Text playerHp;
     [SerializeField] private TMP_Text playerMp;
     [SerializeField] private Image hpBar;
@@ -24,22 +26,17 @@ public class UImanager : MonoBehaviour
             Destroy(this.gameObject);
         }
         inst = this;
-        
     }
 
-
-    public void Start()
+    private void Start()
     {
-
+        UpdatePlayerHp();
     }
-    private void Update()
+
+    public void UpdatePlayerHp()
     {
-        
-    }
-    public void UpdatePlayerHp(PlayerStat playerStat)
-    {
-        hpBar.fillAmount = (float) playerStat.PlayerHealth / playerStat.Health;
-        playerHp.text = playerStat.PlayerHealth.ToString();
+        hpBar.fillAmount = (float)playerHealth.currentHealth / playerHealth.currentHealth;
+        playerHp.text = playerHealth.currentHealth + "/" + playerHealth.maxHealth;
     }
 
     public void UpdatePlayerMp(PlayerStat playerStat)

@@ -25,6 +25,8 @@ public class Enemy : MonoBehaviour
     private Animator anim;
     private DataManager Damage;
 
+    public int tmpDamage = 5; //일단 테스트용 나중에 json이랑 연결해야됨
+
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
@@ -43,7 +45,6 @@ public class Enemy : MonoBehaviour
     }
     public void TakeDamage()
     {
-        //DataManager.Inst.SetEnemyAttack(); //null이라 일단 주석처리
         StartCoroutine(OnDamage());
     }
     IEnumerator OnDamage()
@@ -142,6 +143,13 @@ void Targetting()
         attackArea.enabled = true;
         yield return new WaitForSeconds(0.2f);
         attackArea.enabled = true;
+
+        bool isPlayer = target.TryGetComponent(out PlayerHealth playerHealth);
+        if (isPlayer)
+        {
+            Debug.Log("데미지 입힘");
+            playerHealth.TakeDamage(tmpDamage);
+        }
 
         yield return new WaitForSeconds(1f);
         attackArea.enabled = false;

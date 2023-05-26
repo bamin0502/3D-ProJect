@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Data;
@@ -25,6 +24,8 @@ public class Enemy : MonoBehaviour
     private Material mat;
     private Animator anim;
     private DataManager Damage;
+    public bool isDead = false;
+    private Coroutine attackCoroutine;
 
     public int tmpDamage = 5; //일단 테스트용 나중에 json이랑 연결해야됨
 
@@ -67,7 +68,6 @@ public class Enemy : MonoBehaviour
             isChase = false;
             nav.enabled = false;
             anim.SetTrigger("doDie");
-
         }
     }
     private void OnTriggerEnter(Collider other)
@@ -86,6 +86,7 @@ public class Enemy : MonoBehaviour
    
     void FixedUpdate()
     {
+        if(isDead) return;
         Targetting();
         FreezeVelocity();
     }
@@ -99,6 +100,15 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isDead)
+        {
+            if (attackCoroutine != null)
+            {
+                anim.SetBool("isAttack", false);
+                StopCoroutine(attackCoroutine);
+            }
+            return;
+        }
         nav.speed = 1f;
         float distance = Vector3.Distance(transform.position, target.position);
         if (distance <= detectionRadius)
@@ -135,32 +145,34 @@ public class Enemy : MonoBehaviour
         RaycastHit[] rayHits = Physics.SphereCastAll(transform.position, targetRadius, transform.forward, targetRange, LayerMask.GetMask("Player"));
         if (rayHits.Length > 0 && !isAttack)
         {
-            StartCoroutine(Attack());
-
+            attackCoroutine = StartCoroutine(Attack());
         }
     }
     IEnumerator Attack()
     {
-        isChase = false;
-        isAttack = true;
-        anim.SetBool("isAttack", true);
-        attackArea.enabled = true;
-        yield return new WaitForSeconds(0.2f);
-        attackArea.enabled = true;
-
-        bool isPlayer = target.TryGetComponent(out PlayerHealth playerHealth);
-        if (isPlayer)
+        if (!isDead)
         {
-            Debug.Log("데미지 입힘");
-            playerHealth.TakeDamage(tmpDamage);
+            isChase = false;
+            isAttack = true;
+            anim.SetBool("isAttack", true);
+            attackArea.enabled = true;
+            yield return new WaitForSeconds(0.2f);
+            attackArea.enabled = true;
+
+            bool isPlayer = target.TryGetComponent(out PlayerHealth playerHealth);
+            if (isPlayer)
+            {
+                Debug.Log("데미지 입힘");
+                playerHealth.TakeDamage(tmpDamage);
+            }
+
+            yield return new WaitForSeconds(1f);
+            attackArea.enabled = false;
+
+            yield return new WaitForSeconds(1f);
+            isChase = true;
+            isAttack = false;
+            anim.SetBool("isAttack", false);
         }
-
-        yield return new WaitForSeconds(1f);
-        attackArea.enabled = false;
-
-        yield return new WaitForSeconds(1f);
-        isChase = true;
-        isAttack = false;
-        anim.SetBool("isAttack", false);
     }
 }

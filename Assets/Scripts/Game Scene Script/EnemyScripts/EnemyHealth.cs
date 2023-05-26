@@ -28,6 +28,12 @@ public class EnemyHealth : MonoBehaviour
 
     void Die()
     {
+        Debug.Log("Enemy died!");
+        bool isEnemy = gameObject.TryGetComponent(out Enemy enemy);
+        if (isEnemy)
+        {
+            enemy.isDead = true;
+        }
         anim.SetTrigger("doDie");
     }
     

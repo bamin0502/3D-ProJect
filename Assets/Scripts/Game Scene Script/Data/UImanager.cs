@@ -33,7 +33,7 @@ public class UImanager : MonoBehaviour
     }
     public void UpdatePlayerHp()
     {
-        hpBar.fillAmount = (float)PlayerHealth.currentHealth / PlayerHealth.currentHealth;
+        hpBar.fillAmount = (float)PlayerHealth.currentHealth / PlayerHealth.maxHealth;
         playerHp.text = PlayerHealth.currentHealth + "/" + PlayerHealth.maxHealth;
     }
 

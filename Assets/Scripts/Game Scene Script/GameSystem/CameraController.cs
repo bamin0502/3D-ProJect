@@ -27,28 +27,29 @@ public class CameraController : MonoBehaviour
     }
     void Update()
     {
-        Vector3 newPosition = gameObject.transform.position;
-        if (minimapCamera.transform.position != newPosition)
+        if (player != null)
         {
-            newPosition.y = 60f;
-            minimapCamera.transform.position = newPosition;
-        }
-        
-        if (_isPlayerFollow)
-        {
-            var position = player.position;
-            
-            gameObject.transform.position = position; // 플레이어 따라다니게
-            mainCamera.transform.position = position + _currentOffset;
-        }
-        //if (Input.GetKeyDown(KeyCode.Space)) _isPlayerFollow = true; // 스페이스바 누르면 플레이어 위치로
-        float scroll = Input.GetAxis("Mouse ScrollWheel"); //휠 입력 받음
-        CameraMove(); // 화살표로 카메라 이동
-        ChangeStep(scroll); // 휠로 카메라 줌
-        UpdateStep(scroll); // 줌에 따른 카메라 위치, 각도 조정
-        //아이템 먹는거 실험
+            Vector3 newPosition = gameObject.transform.position;
+            if (minimapCamera.transform.position != newPosition)
+            {
+                newPosition.y = 60f;
+                minimapCamera.transform.position = newPosition;
+            }
 
+            if (_isPlayerFollow)
+            {
+                var position = player.position;
 
+                gameObject.transform.position = position; // 플레이어 따라다니게
+                mainCamera.transform.position = position + _currentOffset;
+            }
+
+            //if (Input.GetKeyDown(KeyCode.Space)) _isPlayerFollow = true; // 스페이스바 누르면 플레이어 위치로
+            float scroll = Input.GetAxis("Mouse ScrollWheel"); //휠 입력 받음
+            CameraMove(); // 화살표로 카메라 이동
+            ChangeStep(scroll); // 휠로 카메라 줌
+            UpdateStep(scroll); // 줌에 따른 카메라 위치, 각도 조정
+        }
     }
 
     private void CameraMove()

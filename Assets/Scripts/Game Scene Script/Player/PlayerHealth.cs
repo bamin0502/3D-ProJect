@@ -14,7 +14,7 @@ public class PlayerHealth : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        string json = "{\"PlayerHealth\": 1000, \"Health\": 1000}";
+        string json = "{\"PlayerHealth\": 10, \"Health\": 10}";
         PlayerStat playerStat = JsonConvert.DeserializeObject<PlayerStat>(json);
         maxHealth = (int)playerStat.PlayerHealth;
         currentHealth = (int)playerStat.Health;

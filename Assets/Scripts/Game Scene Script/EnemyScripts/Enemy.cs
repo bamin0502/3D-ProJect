@@ -116,15 +116,21 @@ public class Enemy : MonoBehaviour
             return;
         }
         nav.speed = 1f;
-        float distance = Vector3.Distance(transform.position, target.position);
-        if (distance <= detectionRadius)
+        if (target != null)
         {
-            Chase();
+            float distance = Vector3.Distance(transform.position, target.position);
+
+            if (distance <= detectionRadius)
+            {
+                Chase();
+            }
+            else if (distance > detectionRadius)
+            {
+                Returning();
+            }
         }
-        else if(distance > detectionRadius)
-        {
-            Returning();
-        }
+        
+        
         if (target == null)
         {
             Returning();

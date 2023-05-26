@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
+    public EnemyHealthBar enemyHealthBar;
     public int maxHealth = 100;
     public int currentHealth;
     public Animator anim;
@@ -17,7 +18,8 @@ public class EnemyHealth : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-
+        enemyHealthBar.UpdateHealth();
+        
         if (currentHealth <= 0)
         {
             Die();

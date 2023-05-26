@@ -373,6 +373,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb76676cccda8c0448ca4f7c1ebe41e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyHealthBar: {fileID: 5433801217630830623}
   maxHealth: 100
   currentHealth: 100
   anim: {fileID: 6873892545987920973}

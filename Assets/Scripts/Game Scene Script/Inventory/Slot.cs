@@ -93,7 +93,7 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
                 Debug.Log("아이템 사용에 실패했습니다.");
             }
         }
-        Debug.Log("해당 아이템칸에 아이템이 없습니다!");
+        //Debug.Log("해당 아이템칸에 아이템이 없습니다!"); 
     }
     private void SetColor(float _alpha)
     {

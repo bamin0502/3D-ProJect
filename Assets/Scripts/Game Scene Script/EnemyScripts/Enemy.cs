@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using Data;
+using Newtonsoft.Json;
 
 public class Enemy : MonoBehaviour
 {
@@ -27,7 +28,7 @@ public class Enemy : MonoBehaviour
     public bool isDead = false;
     private Coroutine attackCoroutine;
 
-    public int tmpDamage = 5; //일단 테스트용 나중에 json이랑 연결해야됨
+    public int tmpDamage; //일단 테스트용 나중에 json이랑 연결해야됨
 
     private void Awake()
     {
@@ -46,6 +47,11 @@ public class Enemy : MonoBehaviour
         EnemyStat enemyStat = dataManager.LoadFromJsonEncrypted<EnemyStat>("Enemystat1.json");
         maxHealth = enemyStat.EnemyHealth;
         curHealth = enemyStat.Health;
+
+        string json= "{\"damage\": 30}";
+        EnemyStat enemy = JsonConvert.DeserializeObject<EnemyStat>(json);
+        tmpDamage = (int)enemy.damage;
+         
     }
     public void TakeDamage(Transform target)
     {

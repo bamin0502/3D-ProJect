@@ -136,9 +136,9 @@ namespace Data
 
             var enemyStat2 = new EnemyStat
             {
-                EnemyHealth = 70,
-                damage = 20,
-                Health = 70
+                EnemyHealth = 300,
+                damage = 50,
+                Health = 300
             };
 
             var enemyStat3 = new EnemyStat

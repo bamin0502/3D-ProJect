@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Data;
+using Newtonsoft.Json;
 
 public class Boss : MonoBehaviour
 {
@@ -47,10 +49,12 @@ public class Boss : MonoBehaviour
 
     void Start()
     {
-       
-                StartCoroutine(ThinkRoutine());
-        
-      
+
+        StartCoroutine(ThinkRoutine());
+        string json = "{\"EnemyHealth\": 300, \"Health\": 20}";
+        EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
+        maxHealth = (int)enemyStat1.EnemyHealth;
+        curHealth = (int)enemyStat1.Health;
         
     }
 
@@ -150,6 +154,7 @@ public class Boss : MonoBehaviour
         bossMissileA.target = target;
         yield return new WaitForSeconds(5f);
 
+        
 
         StartCoroutine(Think());
     }
@@ -173,14 +178,25 @@ public class Boss : MonoBehaviour
         boxCollider.enabled = true;
         StartCoroutine(Think());
 
+
     }
     IEnumerator Heal()
     {
         anim.SetTrigger("doBigShot");
-        curHealth += 10;
-        Debug.Log("보스의 체력이 10 회복됨");
+
+        if (maxHealth < 300)
+        {
+            int healAmount = Mathf.Min(curHealth, 300 - maxHealth);
+            maxHealth += healAmount;
+
+            Debug.Log("보스의 체력이 " + healAmount + "만큼 회복됨, 현재 체력: " + maxHealth);
+        }
+        else
+        {
+            Debug.Log("더 이상 회복할 수 없습니다.");
+        }
+
         yield return new WaitForSeconds(5f);
         StartCoroutine(Think());
-        
     }
 }

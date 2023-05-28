@@ -5,9 +5,9 @@ using UnityEngine.AI;
 
 public class SpawningPool : MonoBehaviour
 {
-    [SerializeField] int _monsterCount = 0;     // ÇöÀç ¸ó½ºÅÍ ¼ö
-    [SerializeField] int _keepMonsterCount = 0; // ¿ùµå »ó¿¡ À¯ÁöµÇ¾ß ÇÏ´Â ¸ó½ºÅÍ ¼ö
-    int _reserveCount = 0;  // ReserveSpawn ÄÚ·çÆ¾ ÇÔ¼ö ´ç °ğ »ı¼ºÇÒ ¸ó½ºÅÍ ¼ö
+    [SerializeField] int _monsterCount = 0;     // í˜„ì¬ ëª¬ìŠ¤í„° ìˆ˜
+    [SerializeField] int _keepMonsterCount = 0; // ì›”ë“œ ìƒì— ìœ ì§€ë˜ì•¼ í•˜ëŠ” ëª¬ìŠ¤í„° ìˆ˜
+    int _reserveCount = 0;  // ReserveSpawn ì½”ë£¨í‹´ í•¨ìˆ˜ ë‹¹ ê³§ ìƒì„±í•  ëª¬ìŠ¤í„° ìˆ˜
 
     [SerializeField] Vector3 _spawnPos;
     [SerializeField] float _spawnRadius = 15.0f;
@@ -19,7 +19,7 @@ public class SpawningPool : MonoBehaviour
 
     void Start()
     {
-        //Á¹·Á¼­ ÁÖ¼®ÀÖ´Â °Ç µÚ¿¡ ÇÒ¿¹Á¤
+        //ì¡¸ë ¤ì„œ ì£¼ì„ìˆëŠ” ê±´ ë’¤ì— í• ì˜ˆì •
         //Managers.Game.OnSpawnEvent -= AddMonsterCount; 
         //Managers.Game.OnSpawnEvent += AddMonsterCount;
     }
@@ -29,6 +29,10 @@ public class SpawningPool : MonoBehaviour
         while (_reserveCount + _monsterCount < _keepMonsterCount)
         {
             StartCoroutine(ReserveSpawn());
+        }
+        if (Time.timeScale == 0)
+        {
+            return;
         }
     }
 

@@ -50,6 +50,10 @@ public class CameraController : MonoBehaviour
             ChangeStep(scroll); // 휠로 카메라 줌
             UpdateStep(scroll); // 줌에 따른 카메라 위치, 각도 조정
         }
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
     }
 
     private void CameraMove()

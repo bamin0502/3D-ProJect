@@ -24,12 +24,6 @@ public class Inventory : MonoBehaviour
         //부모의 자식값을 가져옴
         slots = go_SlotsParent.GetComponentsInChildren<Slot>();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     public void AcquireItem(Item _item, int _count = 1)
     {
         // 이미 아이템이 있는데 그 아이템 타입이 Used나 Throw형일경우

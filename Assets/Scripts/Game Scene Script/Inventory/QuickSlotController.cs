@@ -106,9 +106,5 @@ public class QuickSlotController : MonoBehaviour
     {
         return isCoolTime;
     }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 }

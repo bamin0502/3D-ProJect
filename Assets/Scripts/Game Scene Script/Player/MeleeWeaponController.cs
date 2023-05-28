@@ -18,6 +18,10 @@ public class MeleeWeaponController : MonoBehaviour
     void Update()
     {
         TryAttack();
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
     }
 
     private void TryAttack()

@@ -26,8 +26,7 @@ public class ItemDropController : MonoBehaviour
     void FixedUpdate()
     {
         CheckItem();
-        TryAction();
-        
+        TryAction();        
     }
     private void OnGUI()
     {

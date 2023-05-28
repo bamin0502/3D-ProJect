@@ -17,19 +17,13 @@ public class UImanager : MonoBehaviour
 
     public TMP_Text PlayerLevel;
     public TMP_Text PlayerExp;
-    
-    private void Awake()
-    {
-
-    }
-
-    private void Start()
-    {
-        
-    }
     private void Update()
     {
         UpdatePlayerHp();
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
     }
     public void UpdatePlayerHp()
     {

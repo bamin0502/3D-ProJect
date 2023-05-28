@@ -79,6 +79,7 @@ public class Enemy : MonoBehaviour
             isChase = false;
             nav.enabled = false;
             anim.SetTrigger("doDie");
+
         }
     }
     private void OnTriggerEnter(Collider other)
@@ -100,6 +101,8 @@ public class Enemy : MonoBehaviour
         if(isDead) return;
         Targetting();
         FreezeVelocity();
+
+        
     }
     void FreezeVelocity()
     {
@@ -118,7 +121,7 @@ public class Enemy : MonoBehaviour
                 anim.SetBool("isAttack", false);
                 StopCoroutine(attackCoroutine);
                 DropRandomItem();
-                
+
             }
             return;
         }
@@ -136,18 +139,22 @@ public class Enemy : MonoBehaviour
                 Returning();
             }
         }
-        
-        
+
+
         if (target == null)
         {
             Returning();
         }
-
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
     }
     void Returning()
     {
         anim.SetBool("isWalk", false);
         nav.SetDestination(origninalPosition);
+        
     }
     #region 랜덤 아이템 스폰 -제작자 방민호
     private void DropRandomItem()

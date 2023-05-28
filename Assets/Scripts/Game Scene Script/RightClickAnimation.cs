@@ -39,6 +39,10 @@ public class RightClickAnimation : MonoBehaviour
                 }
             }
         }
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
     }
 
     private IEnumerator PlayClickAnimation(Vector3 position)

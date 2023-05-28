@@ -35,6 +35,10 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
     void Update()
     {
         TryInputNumber();
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
     }
     private void TryInputNumber()
     {

@@ -102,6 +102,10 @@ public class PlayerMovement : SerializedMonoBehaviour
                 coolText.text = "";
             }
         }
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
         #endregion
 
     }

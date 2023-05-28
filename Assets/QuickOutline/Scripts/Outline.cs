@@ -1,4 +1,4 @@
-﻿//
+//
 //  Outline.cs
 //  QuickOutline
 //
@@ -148,7 +148,11 @@ public class Outline : MonoBehaviour {
 
       UpdateMaterialProperties();
     }
-  }
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
+    }
 
   void OnDisable() {
     foreach (var renderer in renderers) {

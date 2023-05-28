@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerSpawner : MonoBehaviour
 {
     public PlayerStats player;
-    //ÇÃ·¹ÀÌ¾îµéÀ» ½ºÆù½ÃÅ³ À§Ä¡°ªÀ» ÀúÀåÇÒ ½ºÅ©¸³Æ®
+    //í”Œë ˆì´ì–´ë“¤ì„ ìŠ¤í°ì‹œí‚¬ ìœ„ì¹˜ê°’ì„ ì €ì¥í•  ìŠ¤í¬ë¦½íŠ¸
     public Transform[] playerSpawnPoint;
     // Start is called before the first frame update
     void Start()
@@ -16,11 +16,5 @@ public class PlayerSpawner : MonoBehaviour
     {
         int number = Random.Range(0, playerSpawnPoint.Length);
         player.transform.position = playerSpawnPoint[number].transform.position;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

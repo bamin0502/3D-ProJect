@@ -29,6 +29,10 @@ public class ThrownWeaponController : MonoBehaviour
                 damageRangeIndicator.SetActive(false);
             }
         }
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
     }
 
     void ThrowGrenade()

@@ -15,6 +15,10 @@ public class MouseCursorController : MonoBehaviour
     void Update()
     {
         ChangeCursorBasedOnMouseOver();
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
     }
 
     void ChangeCursorBasedOnMouseOver()

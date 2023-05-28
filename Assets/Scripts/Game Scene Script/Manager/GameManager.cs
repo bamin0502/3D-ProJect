@@ -24,7 +24,7 @@ public class GameManager : SerializedMonoBehaviour
     private GameObject GameOptionImage;
     [SerializeField]
     private GameObject OptionTitle;
-    private bool isGamePaused; //시간을 멈출건지 안멈출건지 구분할거임
+
     private void Awake()
     {
         if (Inst == null)
@@ -71,7 +71,6 @@ public class GameManager : SerializedMonoBehaviour
     public void BackMainMenu()
     {
         LoadingSceneManager.LoadScene("Start Menu Scene");
-        Time.timeScale = 0f;
     }
 
     private void OnEnable()
@@ -212,13 +211,13 @@ public class GameManager : SerializedMonoBehaviour
     public void OptionButtonClick()
     {
         GameOptionImage.SetActive(true);
-        Time.timeScale = 0f;
+
     }
     public void BackOptionButtonClick()
     {
         GameOptionImage.SetActive(false);
-        Time.timeScale = 1f;
+
         
     }
-    
+
 }

@@ -34,6 +34,10 @@ public class WeaponController : MonoBehaviour
             MoveTowardsTarget();
             AttackTarget();
         }
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
     }
 
     private void Start()

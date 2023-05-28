@@ -319,6 +319,7 @@ namespace Data
                     return true;
                 }
 
+                return false;
             }
             else if (_item.itemType == Item.ItemType.buff)
             {
@@ -341,6 +342,8 @@ namespace Data
                     thrownWeaponController.damageRangeIndicator.SetActive(true);
                     return true;
                 }
+
+                return false;
             }
 
             return false;

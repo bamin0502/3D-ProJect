@@ -22,8 +22,9 @@ public class GameManager : SerializedMonoBehaviour
     private GameObject SourceImage;
     [SerializeField]
     private GameObject GameOptionImage;
-
-
+    [SerializeField]
+    private GameObject OptionTitle;
+    private bool isGamePaused; //시간을 멈출건지 안멈출건지 구분할거임
     private void Awake()
     {
         if (Inst == null)
@@ -70,6 +71,7 @@ public class GameManager : SerializedMonoBehaviour
     public void BackMainMenu()
     {
         LoadingSceneManager.LoadScene("Start Menu Scene");
+        Time.timeScale = 0f;
     }
 
     private void OnEnable()
@@ -85,13 +87,13 @@ public class GameManager : SerializedMonoBehaviour
         MainMenuImage = GameObject.FindGameObjectWithTag("Start Menu");
         if (MainMenuImage == null)
         {
-            Debug.Log("해당 오브젝트를 찾을 수 없습니다.");
+            Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
         }
 
         MainOptionImage = GameObject.FindGameObjectWithTag("Menu Option");
         if (MainOptionImage == null)
         {
-            Debug.Log("해당 오브젝트를 찾을 수 없습니다.");
+            Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
         }
         else
         {
@@ -101,7 +103,7 @@ public class GameManager : SerializedMonoBehaviour
         NoticeImage = GameObject.FindGameObjectWithTag("Notice");
         if (NoticeImage == null)
         {
-            Debug.Log("해당 오브젝트를 찾을 수 없습니다.");
+            Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
         }
         else
         {
@@ -111,7 +113,7 @@ public class GameManager : SerializedMonoBehaviour
         SourceImage = GameObject.FindGameObjectWithTag("Source");
         if (SourceImage == null)
         {
-            Debug.Log("해당 오브젝트를 찾을 수 없습니다.");
+            Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
         }
         else
         {
@@ -121,13 +123,21 @@ public class GameManager : SerializedMonoBehaviour
         GameOptionImage = GameObject.FindWithTag("Game Option");
         if (GameOptionImage == null)
         {
-            Debug.Log("해당 오브젝트를 찾을 수 없습니다.");
+            Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
         }
         else
         {
             GameOptionImage.gameObject.SetActive(false);
         }
-
+        OptionTitle = GameObject.FindWithTag("Option");
+        if (OptionTitle == null)
+        {
+            Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
+        }
+        else
+        {
+            OptionTitle.gameObject.SetActive(true);
+        }
         if (scene.name == "Start Menu Scene")
         {
             Button singleButton = MainMenuImage.transform.Find("SingleMode").GetComponent<Button>();
@@ -137,7 +147,7 @@ public class GameManager : SerializedMonoBehaviour
             }
             else
             {
-                Debug.Log("해당 오브젝트를 찾을 수 없습니다.");
+                Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
             }
 
             Button quitButton = MainMenuImage.transform.Find("QuitButton").GetComponent<Button>();
@@ -147,7 +157,7 @@ public class GameManager : SerializedMonoBehaviour
             }
             else
             {
-                Debug.Log("해당 오브젝트를 찾을 수 없습니다.");
+                Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
             }
 
             Button gitButton = MainOptionImage.transform.Find("GitButton").GetComponent<Button>();
@@ -157,7 +167,7 @@ public class GameManager : SerializedMonoBehaviour
             }
             else
             {
-                Debug.Log("해당 오브젝트를 찾을 수 없습니다.");
+                Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
             }
 
             Button youButton = MainOptionImage.transform.Find("YoutubeButton").GetComponent<Button>();
@@ -167,21 +177,48 @@ public class GameManager : SerializedMonoBehaviour
             }
             else
             {
-                Debug.Log("해당 오브젝트를 찾을 수 없습니다.");
+                Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
             }
             }
             else if (scene.name == "Game Scene")
             {
+            Button GameOptionButton = OptionTitle.transform.Find("Option Button").GetComponent<Button>();
+            if (GameOptionButton != null)
+            {
+                GameOptionButton.onClick.AddListener(OptionButtonClick);
+            }
+            else
+            {
+                Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
+            }
             Button homeButton = GameOptionImage.transform.Find("HomeButton").GetComponent<Button>();
             if (homeButton != null)
             {
                 homeButton.onClick.AddListener(BackMainMenu);
             }
+            Button CloseButton = GameOptionImage.transform.Find("Close Button").GetComponent<Button>();
+            if(CloseButton != null)
+            {
+                CloseButton.onClick.AddListener(BackOptionButtonClick);
+            }
             else
             {
-                Debug.Log("해당 오브젝트를 찾을 수 없습니다.");
+                Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
             }
+           
         }
+    }
+
+    public void OptionButtonClick()
+    {
+        GameOptionImage.SetActive(true);
+        Time.timeScale = 0f;
+    }
+    public void BackOptionButtonClick()
+    {
+        GameOptionImage.SetActive(false);
+        Time.timeScale = 1f;
+        
     }
     
 }

@@ -17,15 +17,6 @@ public class Fire : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            isPlayerInRange = false;
-        }
-    }
-
-
     private void PlaySound()
     {
        SoundManager.instance.PlaySE("Fire");

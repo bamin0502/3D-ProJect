@@ -2,19 +2,25 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
+using Data;
 
 public class ThrownWeapon : MonoBehaviour
 {
     //임성훈
     public float explosionRadius;  //폭발 반경
     public LayerMask enemyLayer;  //적 레이어
-    public int damage = 50; //데미지
+    public int damage; //데미지
     public float delay = 3f;
     private Collider[] enemies = new Collider[20]; //최대 20마리까지 데미지 줌
 
     void Start()
     {
         StartCoroutine(ExplosionAfterDelay());
+
+        string json = "{\"damage\": 50}";
+        Itemdata FireGrenade = JsonConvert.DeserializeObject<Itemdata>(json);
+        damage = (int)FireGrenade.damage;
     }
 
     private void OnTriggerEnter(Collider ground)

@@ -118,6 +118,7 @@ public class Enemy : MonoBehaviour
                 anim.SetBool("isAttack", false);
                 StopCoroutine(attackCoroutine);
                 DropRandomItem();
+                
             }
             return;
         }

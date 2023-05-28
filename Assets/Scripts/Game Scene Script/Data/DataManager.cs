@@ -38,6 +38,7 @@ namespace Data
         public float EnemyHealth = 0;
         public float damage = 0;
         public float Health = 0;
+        public float Heal = 0;
     }
     [Serializable]
     public class Itemdata
@@ -131,7 +132,8 @@ namespace Data
             {
                 EnemyHealth = 100,
                 damage = 30,
-                Health = 100
+                Health = 100,
+                Heal=20
             };
 
             var enemyStat2 = new EnemyStat
@@ -387,7 +389,7 @@ namespace Data
 
             // EnemyStat 저장
             EnemyStat enemyStat1 = LoadFromJsonEncrypted<EnemyStat>("EnemyStat1.json");
-            Debug.Log("EnemyHealth: " + enemyStat1.EnemyHealth + ", Health:" + enemyStat1.Health + ",damage:" + enemyStat1.damage);
+            Debug.Log("EnemyHealth: " + enemyStat1.EnemyHealth + ", Health:" + enemyStat1.Health + ",damage:" + enemyStat1.damage+"Heal:"+enemyStat1.Heal);
             SaveToJsonEncrypted(enemyStat1, "EnemyStat1.json");
             EnemyStat enemyStat2 = LoadFromJsonEncrypted<EnemyStat>("EnemyStat2.json");
             Debug.Log("EnemyHealth: " + enemyStat2.EnemyHealth + ", Health:" + enemyStat2.Health + ",damage:" + enemyStat2.damage);

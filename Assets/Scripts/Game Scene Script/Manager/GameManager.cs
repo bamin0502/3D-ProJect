@@ -215,9 +215,7 @@ public class GameManager : SerializedMonoBehaviour
     }
     public void BackOptionButtonClick()
     {
-        GameOptionImage.SetActive(false);
-
-        
+        GameOptionImage.SetActive(false);        
     }
 
 }

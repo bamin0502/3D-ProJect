@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 
 public class Boss : MonoBehaviour
 {
+    public int Healing;
     public int maxHealth;
     public int curHealth;
     public Transform target;
@@ -16,7 +17,7 @@ public class Boss : MonoBehaviour
     public Transform missilePortA;
     public Transform missilePortB;
     public float detectionRadius = 10f;
-
+    
     Vector3 lookVec;
     Vector3 tauntVec;
     public bool isLook = true;
@@ -27,6 +28,8 @@ public class Boss : MonoBehaviour
     Material mat;
     NavMeshAgent nav;
     Animator anim;
+
+    public BossHealthBar bossHealth;
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
@@ -51,11 +54,15 @@ public class Boss : MonoBehaviour
     {
 
         StartCoroutine(ThinkRoutine());
-        string json = "{\"EnemyHealth\": 300, \"Health\": 20}";
+        string json = "{\"EnemyHealth\": 300, \"Health\": 300, \"Heal\": 20}";
         EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
         maxHealth = (int)enemyStat1.EnemyHealth;
         curHealth = (int)enemyStat1.Health;
-        
+        Healing = (int)enemyStat1.Heal;
+        curHealth = maxHealth;
+
+        //BossHealthBar bossHealthBar = FindObjectOfType<BossHealthBar>(); // BossHealthBar 클래스의 인스턴스 가져오기
+        //bossHealthBar.boss = this; // 보스 클래스의 인스턴스를 BossHealthBar 클래스의 boss 변수에 할당
     }
 
    
@@ -184,11 +191,11 @@ public class Boss : MonoBehaviour
     {
         anim.SetTrigger("doBigShot");
 
-        if (maxHealth < 300)
+        if (maxHealth < curHealth)
         {
-            int healAmount = Mathf.Min(curHealth, 300 - maxHealth);
+            int healAmount = Mathf.Min(Healing, curHealth - maxHealth);
             maxHealth += healAmount;
-
+            bossHealth.UpdateHealth();
             Debug.Log("보스의 체력이 " + healAmount + "만큼 회복됨, 현재 체력: " + maxHealth);
         }
         else

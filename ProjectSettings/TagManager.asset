@@ -12,6 +12,7 @@ TagManager:
   - Terrain
   - Home
   - Game Option
+  - EnemyBullet
   layers:
   - Default
   - TransparentFX
@@ -23,8 +24,8 @@ TagManager:
   - Player
   - Enemy
   - Ground
-  - 
-  - 
+  - EnemyBullet
+  - EnemyDead
   - 
   - 
   - 

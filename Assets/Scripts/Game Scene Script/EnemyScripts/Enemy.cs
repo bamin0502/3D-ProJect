@@ -8,7 +8,8 @@ public class Enemy : MonoBehaviour
 {
     public float maxHealth;
     public float curHealth;
-
+   
+   
     public BoxCollider attackArea;
     public Transform target; // Player의 Transform 컴포넌트
     public bool isChase = false; // 추격 중인지 여부
@@ -41,7 +42,7 @@ public class Enemy : MonoBehaviour
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
         
-        //이런식으로 참고 가능하니 참고하셈
+       
         target = GameObject.FindGameObjectWithTag("Player").gameObject.transform;
         
     }
@@ -191,7 +192,7 @@ public class Enemy : MonoBehaviour
     {
         float targetRadius = 1f;
         float targetRange = 1f;
-
+       
         RaycastHit[] rayHits = Physics.SphereCastAll(transform.position, targetRadius, transform.forward, targetRange, LayerMask.GetMask("Player"));
         if (rayHits.Length > 0 && !isAttack)
         {

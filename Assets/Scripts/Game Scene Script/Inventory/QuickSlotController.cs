@@ -79,8 +79,6 @@ public class QuickSlotController : MonoBehaviour
     private void SelectedSlot(int _num)
     {
         selectedSlot = _num;
-
-
     }
     private void Execute()
     {
@@ -99,9 +97,10 @@ public class QuickSlotController : MonoBehaviour
     public void EatItem()
     {
         CoolTimeReset();
-        theItemEffectDatabase.UseItem(quickSlots[selectedSlot].item);
-        quickSlots[selectedSlot].SetSlotCount(-1);
-
+        
+        //slot.cs에서 이미 item use를 사용하고 있어서 두번 호출됨
+        //theItemEffectDatabase.UseItem(quickSlots[selectedSlot].item);
+        //quickSlots[selectedSlot].SetSlotCount(-1);
     }
     public bool GetIsCoolTime()
     {

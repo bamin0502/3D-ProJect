@@ -11,25 +11,12 @@ public class ThrownWeaponController : MonoBehaviour
     public LayerMask groundLayer;  // 땅 레이어
     public GameObject throwRangeIndicator;  // 던지기 범위 표시
     public GameObject damageRangeIndicator;  // 데미지 범위 표시
-    private bool isGrenadeMode; //던지기 모드
+    public bool isGrenadeMode; //던지기 모드
     public float grenadeFlightTime = 2.0f; // 수류탄 날라가는 시간
     public float spinSpeed = 1.0f; // 수류탄 회전속도
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.Alpha1))
-        {
-            isGrenadeMode = true;
-            throwRangeIndicator.SetActive(true);
-            damageRangeIndicator.SetActive(true);
-        }
-        else
-        {
-            isGrenadeMode = false;
-            throwRangeIndicator.SetActive(false);
-            damageRangeIndicator.SetActive(false);
-        }
-
         if (isGrenadeMode)
         {
             UpdateIndicators();
@@ -37,6 +24,9 @@ public class ThrownWeaponController : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 ThrowGrenade();
+                isGrenadeMode = false;
+                throwRangeIndicator.SetActive(false);
+                damageRangeIndicator.SetActive(false);
             }
         }
     }

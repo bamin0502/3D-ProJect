@@ -59,20 +59,14 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
     {
         if (slots[slotIndex].item != null)
         {
-            if (slots[slotIndex].item.itemType == Item.ItemType.Throw)
-            {
-                slots[slotIndex].SetSlotCount(-1);
-            }
-
             bool itemUsed = theItemEffectDatabase.UseItem(slots[slotIndex].item);
+            
+            if(!itemUsed) return;
 
-            if (itemUsed && (slots[slotIndex].item.itemType == Item.ItemType.Used || slots[slotIndex].item.itemType == Item.ItemType.buff))
+            if (slots[slotIndex].item.itemType == Item.ItemType.Used || slots[slotIndex].item.itemType == Item.ItemType.buff ||
+                slots[slotIndex].item.itemType == Item.ItemType.Throw)
             {
                 slots[slotIndex].SetSlotCount(-1);
-            }
-            else if (!itemUsed)
-            {
-                Debug.Log("아이템 사용에 실패했습니다.");
             }
         }
         else
@@ -105,7 +99,6 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
         text_Count.text = ItemCount.ToString();
         if (ItemCount <= 0)
             ClearSlot();
-
     }
 
     private void ClearSlot()

@@ -86,6 +86,8 @@ namespace Data
         [SerializeField]
         private TMP_Text UseItemResultText;
         public string itemName;  // 아이템의 이름(Key값으로 사용할 것)
+
+        [SerializeField] private ThrownWeaponController thrownWeaponController;
         #endregion
 
         #region 32바이트 암호화키
@@ -330,12 +332,15 @@ namespace Data
                 return true;
             }
 
-
             else if (_item.itemType == Item.ItemType.Throw)
             {
-                
-                enemyStat.EnemyHealth -= itemdata.damage;
-
+                if (!thrownWeaponController.isGrenadeMode)
+                {
+                    thrownWeaponController.isGrenadeMode = true;
+                    thrownWeaponController.throwRangeIndicator.SetActive(true);
+                    thrownWeaponController.damageRangeIndicator.SetActive(true);
+                    return true;
+                }
             }
 
             return false;

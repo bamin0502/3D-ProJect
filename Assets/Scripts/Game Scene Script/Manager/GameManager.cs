@@ -22,7 +22,8 @@ public class GameManager : SerializedMonoBehaviour
     private GameObject SourceImage;
     [SerializeField]
     private GameObject GameOptionImage;
-
+    [SerializeField]
+    private GameObject EndingImage;
     private void Awake()
     {
         if (Inst == null)
@@ -127,6 +128,16 @@ public class GameManager : SerializedMonoBehaviour
         {
             GameOptionImage.gameObject.SetActive(false);
         }
+        EndingImage = GameObject.FindGameObjectWithTag("Ending Image");
+        if(EndingImage == null)
+        {
+            Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
+        }
+        else
+        {
+            EndingImage.gameObject.SetActive(false);
+        }
+        //시작메뉴 씬 관련 오브젝트
         if (scene.name == "Start Menu Scene")
         {
             Button singleButton = MainMenuImage.transform.Find("SingleMode").GetComponent<Button>();
@@ -169,6 +180,7 @@ public class GameManager : SerializedMonoBehaviour
                 Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
             }
             }
+        //게임 씬 오브젝트 
             else if (scene.name == "Game Scene")
             {
 
@@ -177,11 +189,38 @@ public class GameManager : SerializedMonoBehaviour
             {
                 homeButton.onClick.AddListener(BackMainMenu);
             }
-
             else
             {
                 Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
-            }           
+            }
+            
+            Button RestartButton = EndingImage.transform.Find("Home Button").GetComponent<Button>();
+            if(RestartButton != null)
+            {
+                RestartButton.onClick.AddListener(GamestartButtonClick);
+            }
+            else
+            {
+                Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
+            }
+            Button MainButton = EndingImage.transform.Find("Main Button").GetComponent<Button>();
+            if(MainButton != null)
+            {
+                MainButton.onClick.AddListener(BackMainMenu);
+            }
+            else
+            {
+                Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
+            }
+            Button QuitButton = EndingImage.transform.Find("Quit Button").GetComponent<Button>();
+            if(QuitButton != null)
+            {
+                QuitButton.onClick.AddListener(QuitGame);
+            }
+            else
+            {
+                Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
+            }
         }
     }
 }

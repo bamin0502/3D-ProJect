@@ -22,8 +22,6 @@ public class GameManager : SerializedMonoBehaviour
     private GameObject SourceImage;
     [SerializeField]
     private GameObject GameOptionImage;
-    [SerializeField]
-    private GameObject OptionTitle;
 
     private void Awake()
     {
@@ -128,15 +126,6 @@ public class GameManager : SerializedMonoBehaviour
         {
             GameOptionImage.gameObject.SetActive(false);
         }
-        OptionTitle = GameObject.FindWithTag("Option");
-        if (OptionTitle == null)
-        {
-            Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
-        }
-        else
-        {
-            OptionTitle.gameObject.SetActive(true);
-        }
         if (scene.name == "Start Menu Scene")
         {
             Button singleButton = MainMenuImage.transform.Find("SingleMode").GetComponent<Button>();
@@ -181,41 +170,17 @@ public class GameManager : SerializedMonoBehaviour
             }
             else if (scene.name == "Game Scene")
             {
-            Button GameOptionButton = OptionTitle.transform.Find("Option Button").GetComponent<Button>();
-            if (GameOptionButton != null)
-            {
-                GameOptionButton.onClick.AddListener(OptionButtonClick);
-            }
-            else
-            {
-                Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
-            }
+
             Button homeButton = GameOptionImage.transform.Find("HomeButton").GetComponent<Button>();
             if (homeButton != null)
             {
                 homeButton.onClick.AddListener(BackMainMenu);
             }
-            Button CloseButton = GameOptionImage.transform.Find("Close Button").GetComponent<Button>();
-            if(CloseButton != null)
-            {
-                CloseButton.onClick.AddListener(BackOptionButtonClick);
-            }
+
             else
             {
                 Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
-            }
-           
+            }           
         }
     }
-
-    public void OptionButtonClick()
-    {
-        GameOptionImage.SetActive(true);
-
-    }
-    public void BackOptionButtonClick()
-    {
-        GameOptionImage.SetActive(false);        
-    }
-
 }

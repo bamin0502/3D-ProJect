@@ -19,6 +19,7 @@ public class EnemyHealth : MonoBehaviour
         maxHealth = (int)enemyStat1.EnemyHealth;
         currentHealth = (int)enemyStat1.Health;
         currentHealth = maxHealth;
+        enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
     }
 
     public void TakeDamage(int damage)

@@ -9,8 +9,6 @@ public class Bullet : MonoBehaviour
     public int damage;
     public float speed = 10f;  // 미사일 속도
       
-  
-
     private void Start()
     {
         target = GameObject.FindGameObjectWithTag("Player").transform;  // Player 태그가 달린 오브젝트를 타겟으로 설정

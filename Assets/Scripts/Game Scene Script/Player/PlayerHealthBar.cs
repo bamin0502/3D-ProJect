@@ -27,7 +27,15 @@ public class PlayerHealthBar : MonoBehaviour
 
     public void UpdatePlayerHp()
     {
-        healthBar.fillAmount = (float)PlayerHealth.currentHealth / PlayerHealth.maxHealth;
+        float currentHealth = PlayerHealth.currentHealth;
+        float maxHealth = PlayerHealth.maxHealth;
+
+        // 최소값과 최대값을 제한하여 체력 값을 계산
+        float displayedHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+
+        // 체력 바 업데이트
+        healthBar.fillAmount = displayedHealth / maxHealth;
+
 
     }
     

@@ -14,9 +14,7 @@ public class PlayerHealth : MonoBehaviour
     public PlayerHealthBar HealthBar;
     public Animator anim;
     public TMP_Text deathText;
-    public Button HomeButton;
-    public Button QuitButton;
-    public Button RestartButton;
+
 
     // Start is called before the first frame update
     void Start()
@@ -25,13 +23,14 @@ public class PlayerHealth : MonoBehaviour
         PlayerStat playerStat = JsonConvert.DeserializeObject<PlayerStat>(json);
         maxHealth = (int)playerStat.PlayerHealth;
         currentHealth = (int)playerStat.Health;
+
     }
 
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        HealthBar.UpdatePlayerHp();        
-
+        HealthBar.UpdatePlayerHp();
+        FindObjectOfType<PlayerHealthBar>().UpdatePlayerHp();
         if (currentHealth <= 0)
         {
             Die();
@@ -43,7 +42,7 @@ public class PlayerHealth : MonoBehaviour
         anim.SetTrigger("doDie");
         deathText.DOText("당신은 "+ "<color=red>" + "몬스터"+ "</color>" + "에게 죽었습니다.", 3, true, ScrambleMode.None, null);
 
-
+        EndDeath();
     }
 
     void EndDeath()

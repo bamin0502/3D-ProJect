@@ -61,8 +61,7 @@ public class Boss : MonoBehaviour
         Healing = (int)enemyStat1.Heal;
         curHealth = maxHealth;
 
-        //BossHealthBar bossHealthBar = FindObjectOfType<BossHealthBar>(); // BossHealthBar 클래스의 인스턴스 가져오기
-        //bossHealthBar.boss = this; // 보스 클래스의 인스턴스를 BossHealthBar 클래스의 boss 변수에 할당
+
     }
 
    

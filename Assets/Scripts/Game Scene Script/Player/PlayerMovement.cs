@@ -124,7 +124,10 @@ public class PlayerMovement : SerializedMonoBehaviour
     
     public void Attack()
     {
-        weaponController.equippedWeapon.Attack(weaponController.currentTarget);
+        if (weaponController.currentTarget != null)
+        {
+            weaponController.equippedWeapon.Attack(weaponController.currentTarget);
+        }
     }
 
     #region 플레이어 애니메이션 관련 -제작자 방민호

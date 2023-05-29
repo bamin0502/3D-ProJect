@@ -35,8 +35,7 @@ public class PlayerMovement : SerializedMonoBehaviour
     public UnityEngine.UI.Image fill;
     private float MaxCooldown = 10f;
     private float currentCooldown = 10f;
-    private float PlayerHealth;
-    private float curHealth;
+
     void Start()
     {
         //만든이 : 임성훈
@@ -46,7 +45,6 @@ public class PlayerMovement : SerializedMonoBehaviour
         ani =GetComponent<AniSetting>();
         SpaceUI.SetActive(false);//스페이스바 UI 비활성화
         ChangedState(PlayerState.Idle);//플레이어 기본상태를 Idle로 지정
-
         
     }
     private void Update()
@@ -110,11 +108,6 @@ public class PlayerMovement : SerializedMonoBehaviour
 
     }
 
-    //내용추가 만든이 : 방민호 Json화
-    public virtual void TakeDamage(Transform target,int damage)
-    {
-        
-    }
     #region 플레이어 회전관련
     public void TurnToDestination()
     {
@@ -135,7 +128,7 @@ public class PlayerMovement : SerializedMonoBehaviour
 
     }
 
-    #region 플레이어 애니메이션 관련
+    #region 플레이어 애니메이션 관련 -제작자 방민호
     public void UpdateState()
     {
         switch (currentState) 
@@ -225,7 +218,7 @@ public class PlayerMovement : SerializedMonoBehaviour
         currentCooldown = value;
         UpdateFillAmount();
     }
-    #endregion
+    #endregion-제작자 방민호
 
 
 }

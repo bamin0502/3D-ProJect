@@ -44,6 +44,7 @@ public class GameManager : SerializedMonoBehaviour
         NoticeImage.gameObject.SetActive(false);
         //출처 표시 창 비활성화
         SourceImage.gameObject.SetActive(false);
+
     }
     //게임 실행을 시킬 메서드 지정
     public void GamestartButtonClick()

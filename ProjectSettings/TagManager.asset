@@ -13,6 +13,7 @@ TagManager:
   - Home
   - Game Option
   - EnemyBullet
+  - Option
   layers:
   - Default
   - TransparentFX
@@ -25,8 +26,8 @@ TagManager:
   - Enemy
   - Ground
   - EnemyBullet
-  - EnemyDead
-  - 
+  - Minimap Object
+  - Object
   - 
   - 
   - 

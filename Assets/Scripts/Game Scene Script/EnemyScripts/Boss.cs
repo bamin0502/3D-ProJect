@@ -17,7 +17,8 @@ public class Boss : MonoBehaviour
     public Transform missilePortA;
     public Transform missilePortB;
     public float detectionRadius = 10f;
-    
+    private bool isTargetAlive = true;
+    private float distance;
     Vector3 lookVec;
     Vector3 tauntVec;
     public bool isLook = true;
@@ -73,17 +74,29 @@ public class Boss : MonoBehaviour
             StopAllCoroutines();
             return;
         }
-       
+
+
         if (isLook)
         {
+            if (target != null )
+            {
                 float h = Input.GetAxisRaw("Horizontal");
                 float v = Input.GetAxisRaw("Vertical");
                 lookVec = new Vector3(h, 0, v) * 5f;
                 transform.LookAt(target.position + lookVec);
+            }
+            else if (target == null)
+            {
+                Debug.Log("플레이어가 사망함");
+                StopAllCoroutines();
+                return;
+
+
+            }
         }
         else
         {
-                nav.SetDestination(tauntVec);
+            nav.SetDestination(tauntVec);
         }
         
     }
@@ -91,7 +104,8 @@ public class Boss : MonoBehaviour
     {
         while (true)
         {
-            float distance = Vector3.Distance(transform.position, target.position);
+            if(isTargetAlive && target != null)
+            distance = Vector3.Distance(transform.position, target.position);
             if (distance < detectionRadius)
             {
                 yield return StartCoroutine(Think());
@@ -204,5 +218,9 @@ public class Boss : MonoBehaviour
 
         yield return new WaitForSeconds(5f);
         StartCoroutine(Think());
+    }
+    void OnDestroy()
+    {
+        isTargetAlive = false;
     }
 }

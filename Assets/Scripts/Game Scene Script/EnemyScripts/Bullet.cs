@@ -11,6 +11,7 @@ public class Bullet : MonoBehaviour
       
     private void Start()
     {
+        if(target != null)
         target = GameObject.FindGameObjectWithTag("Player").transform;  // Player 태그가 달린 오브젝트를 타겟으로 설정
     }
 

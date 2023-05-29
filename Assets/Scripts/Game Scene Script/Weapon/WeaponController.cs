@@ -16,7 +16,7 @@ public class WeaponController : MonoBehaviour
     public Transform currentTarget;
     private float attackTimer;
     public bool isAttack;
-
+    public Canvas IconCanvas;
     //김하겸
     //private Weapon targetedWeapon;
     //private Weapon equippedWeapon;
@@ -158,35 +158,50 @@ public class WeaponController : MonoBehaviour
     private void EquipWeapon(Weapon newWeapon)
     {
         if (equippedWeapon != null)
-        {
+        {            
             DropEquippedWeapon();
         }
+        if(newWeapon != null)
+        {
+            newWeapon.isEquipped = true;
+            newWeapon.transform.parent = newWeapon.weaponType != WeaponType.Bow ? weaponHolder : weaponHolder2;
+            newWeapon.transform.localPosition = newWeapon.PickPosition;
+            newWeapon.transform.localRotation = Quaternion.Euler(newWeapon.PickRotation);
+            equippedWeapon = newWeapon;
+            if (equippedWeapon.iconCanvas != null)
+            {
+                DisableCanvas(equippedWeapon.iconCanvas); // 현재 무기의 아이콘 비활성화
+            }
+        }
 
-        newWeapon.isEquipped = true;
-        newWeapon.transform.parent = newWeapon.weaponType != WeaponType.Bow ? weaponHolder : weaponHolder2;
-        //새로운 코드 
-        //Weapon에 각자 pos하고 rot을 가지도록 했어요
-        newWeapon.transform.localPosition = newWeapon.PickPosition;
-        newWeapon.transform.localRotation = Quaternion.Euler(newWeapon.PickRotation);
-        //기존 코드
-        //newWeapon.transform.localPosition = Vector3.zero;
-        //newWeapon.transform.localRotation = Quaternion.identity;
-        //칼 같은 경우는 한손으로도 어색하지가 않아서 이리 해도 되지만
-        //총 같은 경우는 한손이면 어색한 것이 좀 있음 
-        //이 같은 경우는 총드는 애니메이션을 찾은다음 
-        //그 총들었을때의 애니메이션을 실행시키는 방식으로 하는것이 좋습니다.
-        //저도 일단 찾아볼테니까 보고 참고만 해주세요 기존에 하고 있던 방식을
-        //굳히 바꿀 필요는 없습니다.
-        equippedWeapon = newWeapon;
+       
     }
 
     private void DropEquippedWeapon()
     {
-        equippedWeapon.transform.SetParent(null);
-        equippedWeapon.isEquipped = false;
-        equippedWeapon.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-        equippedWeapon.transform.position = transform.position + transform.forward * 1f;
-        equippedWeapon = null;
+
+        if(equippedWeapon != null)
+        {
+            if(equippedWeapon.iconCanvas != null)
+            {
+                EnableCanvas(equippedWeapon.iconCanvas);
+            }
+            equippedWeapon.transform.SetParent(null);
+            equippedWeapon.isEquipped = false;
+            equippedWeapon.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+            equippedWeapon.transform.position = transform.position + transform.forward * 1f;
+            equippedWeapon = null;
+        }
+
+    }
+    private void DisableCanvas(Canvas canvas)
+    {
+        canvas.enabled = false;
+    }
+
+    private void EnableCanvas(Canvas canvas)
+    {
+        canvas.enabled = true;
     }
 }
         

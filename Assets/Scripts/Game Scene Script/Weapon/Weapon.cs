@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Data;
+using UnityEngine.UI;
 
 public enum WeaponType
 {
@@ -25,10 +26,12 @@ public abstract class Weapon : MonoBehaviour
     public Vector3 PickPosition;
     public Vector3 PickRotation;
     private DataManager dataManager;
+    public Canvas iconCanvas;
 
     private void Awake()
     {
         dataManager=FindObjectOfType<DataManager>();
+        iconCanvas = GetComponentInChildren<Canvas>();
     }
     private void Start()
     {
@@ -37,4 +40,19 @@ public abstract class Weapon : MonoBehaviour
         damage = weapon.damage;
     }
     public abstract void Attack(Transform target);
+    public void EnableCanvas()
+    {
+        if (iconCanvas != null)
+        {
+            iconCanvas.enabled = true;
+        }
+    }
+
+    public void DisableCanvas()
+    {
+        if (iconCanvas != null)
+        {
+            iconCanvas.enabled = false;
+        }
+    }
 }

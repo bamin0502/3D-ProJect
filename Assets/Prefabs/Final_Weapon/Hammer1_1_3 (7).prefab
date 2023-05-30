@@ -286,6 +286,7 @@ MonoBehaviour:
   PickPosition: {x: -0.04, y: 0.083, z: 0.404}
   PickRotation: {x: 151.413, y: -103.622, z: 246.972}
   iconCanvas: {fileID: 0}
+  weaponDamage: 1
 --- !u!65 &3503650256498993214
 BoxCollider:
   m_ObjectHideFlags: 0

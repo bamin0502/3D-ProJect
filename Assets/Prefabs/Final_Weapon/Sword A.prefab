@@ -266,26 +266,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1753325093932854839, guid: a3884a940f9a8d3418a27008b045837c, type: 3}
   m_PrefabInstance: {fileID: 7237059490433695531}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &870253666
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8951533873520316700}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e776399180208994bbbe3b8258d35ebe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  range: 1.5
-  weaponName: Sword1
-  damage: 20
-  isEquipped: 0
-  attackInterval: 1
-  weaponType: 2
-  PickPosition: {x: -0.04, y: 0.083, z: 0.404}
-  PickRotation: {x: 151.413, y: -103.622, z: 246.972}
 --- !u!65 &808032594
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -317,3 +297,25 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &870253666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8951533873520316700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e776399180208994bbbe3b8258d35ebe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  range: 1.5
+  weaponName: Sword1
+  damage: 20
+  isEquipped: 0
+  attackInterval: 1
+  weaponType: 2
+  PickPosition: {x: -0.04, y: 0.083, z: 0.404}
+  PickRotation: {x: 151.413, y: -103.622, z: 246.972}
+  iconCanvas: {fileID: 0}
+  weaponDamage: 2

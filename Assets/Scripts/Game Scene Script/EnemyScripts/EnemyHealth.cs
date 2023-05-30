@@ -7,8 +7,9 @@ using Data;
 public enum EnemyType
 {
     Boss,
-    Default,
-
+    Monster,
+    RedSpider,
+    GreenSpider
 }
 
 
@@ -18,7 +19,7 @@ public class EnemyHealth : MonoBehaviour
     public int maxHealth;
     public int currentHealth;
     public Animator anim;
-    public EnemyType enemyType = EnemyType.Default;
+    public EnemyType enemyType = EnemyType.Monster;
     
 
     // Start is called before the first frame update
@@ -26,14 +27,21 @@ public class EnemyHealth : MonoBehaviour
     {
         string json = "";
 
-        if (enemyType == EnemyType.Default)
+        if (enemyType == EnemyType.Monster)
         {
             json = "{\"EnemyHealth\": 100, \"Health\": 100}";
         }
-
+        else if (enemyType == EnemyType.RedSpider)
+        {
+            json= "{\"EnemyHealth\": 70, \"Health\": 70}";
+        }
+        else if (enemyType == EnemyType.GreenSpider)
+        {
+            json= "{\"EnemyHealth\": 50, \"Health\": 50}";
+        }
         else if (enemyType == EnemyType.Boss)
         {
-            json = "{\"EnemyHealth\": 10, \"Health\": 10}";
+            json = "{\"EnemyHealth\": 300, \"Health\": 300}";
         }
 
         EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
@@ -45,7 +53,11 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if(enemyType == EnemyType.Default)
+        if (currentHealth <= 0)
+        {
+            return;     
+        }
+        if (enemyType == EnemyType.Monster || enemyType == EnemyType.GreenSpider || enemyType == EnemyType.RedSpider)
         {
             currentHealth -= damage;
             enemyHealthBar.UpdateHealth();
@@ -55,14 +67,10 @@ public class EnemyHealth : MonoBehaviour
             currentHealth -= damage;
             enemyHealthBar.UpdateBossHealth();
         }
-        
         if (currentHealth <= 0)
         {
-            currentHealth = 0;
             Die();
         }
-
-
     }
 
     void Die()

@@ -6,6 +6,14 @@ using Newtonsoft.Json;
 
 public class Enemy : MonoBehaviour
 {
+    public enum EnemyDamage
+    {
+        RedMonster,
+        RedSpider,
+        GreenSpider
+    }
+
+
     public float maxHealth;
     public float curHealth;
    
@@ -25,12 +33,13 @@ public class Enemy : MonoBehaviour
     public bool isDead = false;
     private Coroutine attackCoroutine;
     public float detectionRadius = 5f;
+    public EnemyDamage EnemyDam;
     #region 아이템 드랍관련 변수 선언 - 제작자 방민호
     //아이템 드랍 관련 
     public GameObject[] itemPrefabs;
     private bool hasDroppedItem = false; // 아이템이 이미 떨어진 상태인지 여부를 나타내는 변수
     #endregion
-
+    
 
     public int tmpDamage; //일단 테스트용 나중에 json이랑 연결해야됨
 
@@ -54,7 +63,20 @@ public class Enemy : MonoBehaviour
         maxHealth = enemyStat.EnemyHealth;
         curHealth = enemyStat.Health;
         
-        string json= "{\"damage\": 30}";
+        string json = "";
+
+        if (EnemyDam == EnemyDamage.RedMonster)
+        {
+            json = "{\"damage\": 30}";
+        }
+        else if (EnemyDam == EnemyDamage.RedSpider)
+        {
+            json = "{\"damage\": 10}";
+        }
+        else if (EnemyDam == EnemyDamage.GreenSpider)
+        {
+            json = "{\"damage\": 20}";
+        }
         EnemyStat enemy = JsonConvert.DeserializeObject<EnemyStat>(json);
         tmpDamage = (int)enemy.damage;
          

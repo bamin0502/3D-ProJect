@@ -13,6 +13,13 @@ public enum WeaponType
     OneHanded,
     TwoHanded,
 }
+public enum WeaponDamage 
+{
+    Bow,
+    Hammer,
+    Sword
+}
+
 
 public abstract class Weapon : MonoBehaviour
 {
@@ -27,7 +34,7 @@ public abstract class Weapon : MonoBehaviour
     public Vector3 PickRotation;
     private DataManager dataManager;
     public Canvas iconCanvas;
-
+    public WeaponDamage weaponDamage;
     private void Awake()
     {
         dataManager=FindObjectOfType<DataManager>();
@@ -35,7 +42,21 @@ public abstract class Weapon : MonoBehaviour
     }
     private void Start()
     {
-        string json = "{\"damage\": 30}";
+        string json = "";
+
+        if(weaponDamage == WeaponDamage.Bow)
+        {
+            json= "{\"damage\": 20}";
+        }
+        if (weaponDamage == WeaponDamage.Sword)
+        {
+            json="{\"damage\": 35}";
+        }
+        if (weaponDamage == WeaponDamage.Hammer)
+        {
+            json= "{\"damage\": 50}";
+        }
+
         WeaponData weapon = JsonConvert.DeserializeObject<WeaponData>(json);
         damage = weapon.damage;
     }

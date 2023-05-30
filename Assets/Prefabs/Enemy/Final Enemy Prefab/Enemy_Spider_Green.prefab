@@ -193,6 +193,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyHealth: {fileID: 6488629616606988214}
   healthBar: {fileID: 0}
+  healthText: {fileID: 0}
 --- !u!1001 &6515376165219487865
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -201,6 +202,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 29126441530824655, guid: e1a7ae241806cbf4b92e6bdf871dfe9c, type: 3}
+      propertyPath: enemyType
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4921031248072797732, guid: e1a7ae241806cbf4b92e6bdf871dfe9c, type: 3}
       propertyPath: m_Layer
       value: 5
@@ -212,6 +217,10 @@ PrefabInstance:
     - target: {fileID: 6786936134121498313, guid: e1a7ae241806cbf4b92e6bdf871dfe9c, type: 3}
       propertyPath: m_Name
       value: Enemy_Spider_Green
+      objectReference: {fileID: 0}
+    - target: {fileID: 6788714989945010136, guid: e1a7ae241806cbf4b92e6bdf871dfe9c, type: 3}
+      propertyPath: EnemyDam
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6788714989945010136, guid: e1a7ae241806cbf4b92e6bdf871dfe9c, type: 3}
       propertyPath: itemPrefabs.Array.size

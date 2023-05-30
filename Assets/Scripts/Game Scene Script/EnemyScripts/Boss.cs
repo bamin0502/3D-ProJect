@@ -30,7 +30,8 @@ public class Boss : MonoBehaviour
     Material mat;
     NavMeshAgent nav;
     Animator anim;
-
+    private bool isTakingDamage = false;
+    public EnemyHealthBar enemy;
     public BossHealthBar bossHealth;
     private void Awake()
     {
@@ -46,8 +47,10 @@ public class Boss : MonoBehaviour
     }
     void FreezeVelocity()
     {
+
         rigid.velocity = Vector3.zero;
         rigid.angularVelocity = Vector3.zero;
+
     }
 
     void Start()
@@ -67,7 +70,6 @@ public class Boss : MonoBehaviour
     {
         if (isDead)
         {
-            anim.SetTrigger("doDie");
             StopAllCoroutines();
             return;
         }
@@ -76,6 +78,12 @@ public class Boss : MonoBehaviour
         {
             if (isLook)
             {
+                if (curHealth <= 0)
+                {
+                    isDead = true;
+                    nav.isStopped = true;
+                    StopAllCoroutines();
+                }
                 if (target != null)
                 {
                     float h = Input.GetAxisRaw("Horizontal");
@@ -86,10 +94,9 @@ public class Boss : MonoBehaviour
                 else if (target == null)
                 {
                     Debug.Log("플레이어가 사망함");
-                    StopAllCoroutines();
+                    StopAllCoroutines();                    
+                    
                     return;
-
-
                 }
             }
             else
@@ -111,25 +118,26 @@ public class Boss : MonoBehaviour
             yield return null;
         }
     }
-    IEnumerator onDamage(Vector3 reactVec)
-    {
-        mat.color = Color.red;
-        yield return new WaitForSeconds(0.1f);
 
-        if (curHealth > 0)
-        {
-            mat.color = Color.white;
-        }
-        else
-        {
-            mat.color = Color.gray;
-            gameObject.layer = 11;
-            isDead = true;
-            nav.enabled = false;
-            anim.SetTrigger("doDie");
-            StartCoroutine(DeleteSelf());
-        }
-    }
+    //IEnumerator onDamage(Vector3 reactVec)
+    //{
+    //    mat.color = Color.red;
+    //    yield return new WaitForSeconds(0.1f);
+
+    //    if (curHealth > 0)
+    //    {
+    //        mat.color = Color.white;
+    //    }
+    //    else
+    //    {
+    //        mat.color = Color.gray;
+    //        gameObject.layer = 11;
+    //        isDead = true;
+    //        nav.enabled = false;
+    //        anim.SetTrigger("doDie");
+    //        StartCoroutine(DeleteSelf());
+    //    }
+    //}
 
     IEnumerator DeleteSelf()
     {
@@ -215,7 +223,7 @@ public class Boss : MonoBehaviour
         {
             int healAmount = Mathf.Min(Healing, curHealth - maxHealth);
             maxHealth += healAmount;
-            bossHealth.UpdateHealth();
+            enemy.UpdateBossHealth();
             Debug.Log("보스의 체력이 " + healAmount + "만큼 회복됨, 현재 체력: " + maxHealth);
         }
         else

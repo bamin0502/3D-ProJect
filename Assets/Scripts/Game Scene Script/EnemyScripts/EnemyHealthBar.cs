@@ -15,6 +15,10 @@ public class EnemyHealthBar : MonoBehaviour
         _cam = Camera.main;
        
     }
+    private void Awake()
+    {
+        
+    }
     public void UpdateHealth()
     {
         healthBar.fillAmount = (float)enemyHealth.currentHealth / enemyHealth.maxHealth;

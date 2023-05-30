@@ -8,8 +8,9 @@ using Newtonsoft.Json;
 public class Boss : MonoBehaviour
 {
     public int Healing;
+
     public int maxHealth;
-    public int curHealth;
+    public int currentHealth;
 
     public Transform target;
     public BoxCollider meleeArea;
@@ -34,12 +35,12 @@ public class Boss : MonoBehaviour
     public EnemyHealth enemyHealth;
     public Rigidbody rigid;
     public BoxCollider boxCollider;
-
+    public EnemyHealthBar enemyHealthBar;
     private Material mat;
     private NavMeshAgent nav;
     private Animator anim;
     private bool isTakingDamage = false;
-    public EnemyHealthBar enemy;
+    
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
@@ -48,10 +49,10 @@ public class Boss : MonoBehaviour
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
         target = GameObject.FindGameObjectWithTag("Player").gameObject.transform;
-        enemyHealth = GetComponent<EnemyHealth>();
+        
         nav.isStopped = true;
-
-    }
+        
+}
     void FreezeVelocity()
     {
 
@@ -62,13 +63,16 @@ public class Boss : MonoBehaviour
 
     void Start()
     {
-        enemyHealth.maxHealth = curHealth;
-        enemyHealth.currentHealth = maxHealth;
+        enemyHealth = GetComponent<EnemyHealth>();
+        enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
+
         StartCoroutine(ThinkRoutine());
         string json = "{\"Heal\": 20}";
         EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
         Healing = (int)enemyStat1.Heal;
-        curHealth = maxHealth;
+
+        currentHealth = enemyHealth.maxHealth;  // 현재 체력을 최대 체력으로 초기화합니다.
+        maxHealth = currentHealth;  // 최대 체력도 현재 체력과 동일하게 설정합니다.
 
     }
 
@@ -229,20 +233,16 @@ public class Boss : MonoBehaviour
         StartCoroutine(Think());
     }
     IEnumerator Heal()
-    {
+    {        
         anim.SetTrigger("doBigShot");
 
-        if (maxHealth < curHealth)
-        {
-            int healAmount = Mathf.Min(Healing, curHealth - maxHealth);
-            maxHealth += healAmount;
-            enemy.UpdateBossHealth();
-            Debug.Log("보스의 체력이 " + healAmount + "만큼 회복됨, 현재 체력: " + maxHealth);
-        }
-        else
-        {
-            Debug.Log("더 이상 회복할 수 없습니다.");
-        }
+        int previousHealth = enemyHealth.currentHealth;
+        // 최대 체력에서 회복량을 더한 값이 300을 초과하지 않도록 조정
+        int potentialHealth = Mathf.Min(maxHealth, enemyHealth.currentHealth + Healing);
+        int healedAmount = potentialHealth - previousHealth;
+        enemyHealth.currentHealth = potentialHealth;
+        Debug.Log("보스의 체력이 " + healedAmount + "만큼 회복됨, 현재 체력: " + enemyHealth.currentHealth);
+        enemyHealthBar.UpdateBossHealth();
 
         yield return new WaitForSeconds(5f);
         StartCoroutine(Think());

@@ -23,8 +23,14 @@ public class Boss : MonoBehaviour
     Vector3 tauntVec;
     public bool isLook = true;
     public bool isDead;
+<<<<<<< Updated upstream
     public Coroutine[] coroutines = new Coroutine[6];
     public EnemyHealth enemyHealth;
+=======
+    public int missileDmg;
+    public int meleeDmg;
+
+>>>>>>> Stashed changes
     public Rigidbody rigid;
     public BoxCollider boxCollider;
     Material mat;
@@ -181,17 +187,32 @@ public class Boss : MonoBehaviour
         GameObject instantMissileA = Instantiate(missile, missilePortA.position, missilePortA.rotation);
         Bullet bossMissileA = instantMissileA.GetComponent<Bullet>();
         bossMissileA.target = target;
-        
+        bool isPlayer = target.TryGetComponent(out PlayerHealth playerHealth);
+        if (isPlayer)
+        {
+            Debug.Log("미사일 A 데미지 입힘");
+            playerHealth.TakeDamage(missileDmg);
+        }
+
 
         yield return new WaitForSeconds(0.6f);
         GameObject instantMissileB = Instantiate(missile, missilePortB.position, missilePortB.rotation);
-        Bullet bossMissileB = instantMissileA.GetComponent<Bullet>();
-        bossMissileA.target = target;
+        Bullet bossMissileB = instantMissileB.GetComponent<Bullet>();
+        bossMissileB.target = target;
+        if (isPlayer)
+        {
+            Debug.Log("미사일 B 데미지 입힘");
+            playerHealth.TakeDamage(missileDmg);
+        }
         yield return new WaitForSeconds(5f);
 
         
 
         StartCoroutine(Think());
+    }
+    public void TakeDamage(Transform target)
+    {
+       
     }
     IEnumerator Taunt()
     {
@@ -202,6 +223,12 @@ public class Boss : MonoBehaviour
         nav.isStopped = false;
         boxCollider.enabled = false;
         anim.SetTrigger("doTaunt");
+        bool isPlayer = target.TryGetComponent(out PlayerHealth playerHealth);
+        if (isPlayer)
+        {
+            Debug.Log("근접 데미지 입힘");
+            playerHealth.TakeDamage(meleeDmg);
+        }
         yield return new WaitForSeconds(1.5f);
         meleeArea.enabled = true;
         yield return new WaitForSeconds(0.5f);

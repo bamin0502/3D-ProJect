@@ -22,9 +22,7 @@ public class Boss : MonoBehaviour
     Vector3 lookVec;
     Vector3 tauntVec;
     public bool isLook = true;
-    public bool isDead;
-    public int missileDmg;
-    public int meleeDmg;
+    public bool isDead = false;
     public EnemyHealth enemyHealth;
     public Rigidbody rigid;
     public BoxCollider boxCollider;
@@ -59,12 +57,12 @@ public class Boss : MonoBehaviour
         enemyHealth.maxHealth = curHealth;
         enemyHealth.currentHealth = maxHealth;
         StartCoroutine(ThinkRoutine());
-        string json = "{\"Heal\": 20,\"damage\": 60}";
+        string json = "{\"Heal\": 20}";
         EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
         Healing = (int)enemyStat1.Heal;
         curHealth = maxHealth;
-        missileDmg = (int)enemyStat1.damage;
-        meleeDmg = (int)enemyStat1.damage;
+       
+        
     }
 
    
@@ -83,9 +81,9 @@ public class Boss : MonoBehaviour
             {
                 if (curHealth <= 0)
                 {
-                    isDead = true;
+                    
                     nav.isStopped = true;
-                    StopAllCoroutines();
+                    
                 }
                 if (target != null)
                 {
@@ -177,6 +175,7 @@ public class Boss : MonoBehaviour
         float waitTime = 5f;
         yield return new WaitForSeconds(waitTime);
     }
+    
     IEnumerator MissileShot()
     {
         anim.SetTrigger("doShot");
@@ -184,29 +183,23 @@ public class Boss : MonoBehaviour
         GameObject instantMissileA = Instantiate(missile, missilePortA.position, missilePortA.rotation);
         Bullet bossMissileA = instantMissileA.GetComponent<Bullet>();
         bossMissileA.target = target;
-        bool isPlayer = target.TryGetComponent(out PlayerHealth playerHealth);
-        if (isPlayer)
-        {
-            Debug.Log("미사일 A 데미지 입힘");
-            playerHealth.TakeDamage(missileDmg);
-        }
+        
+      
+           
+        
 
 
         yield return new WaitForSeconds(0.6f);
         GameObject instantMissileB = Instantiate(missile, missilePortB.position, missilePortB.rotation);
         Bullet bossMissileB = instantMissileB.GetComponent<Bullet>();
         bossMissileB.target = target;
-        if (isPlayer)
-        {
-            Debug.Log("미사일 B 데미지 입힘");
-            playerHealth.TakeDamage(missileDmg);
-        }
         yield return new WaitForSeconds(5f);
 
         
 
         StartCoroutine(Think());
     }
+    
     public void TakeDamage(Transform target)
     {
        
@@ -220,17 +213,36 @@ public class Boss : MonoBehaviour
         nav.isStopped = false;
         boxCollider.enabled = false;
         anim.SetTrigger("doTaunt");
-        bool isPlayer = target.TryGetComponent(out PlayerHealth playerHealth);
-        if (isPlayer)
+        BossMelee bossMelee = GetComponentInChildren<BossMelee>();
+        if (bossMelee != null && !bossMelee.isAttacking) // 공격 중이 아닌 경우에만 실행
         {
-            Debug.Log("근접 데미지 입힘");
-            playerHealth.TakeDamage(meleeDmg);
+            bossMelee.isAttacking = true; // 자식 오브젝트의 isAttacking 값을 변경합니다.
+
+            // ... 근접 공격 동작 수행 ...
+            bool isPlayer = target.TryGetComponent(out PlayerHealth playerHealth);
+            if (isPlayer)
+            {
+                Debug.Log("근접 데미지 입힘");
+                playerHealth.TakeDamage(bossMelee.meleeDamage);
+            }
+
+            bossMelee.isAttacking = false; // 공격이 끝났으므로 값을 초기화합니다.
         }
+
+        /*BossMelee bossMelee = GetComponentInChildren<BossMelee>();
+         if (bossMelee != null)
+         {
+             bossMelee.isAttacking = true; // 자식 오브젝트의 isAttacking 값을 변경합니다.
+         }*/
+        //bool isPlayer = target.TryGetComponent(out PlayerHealth playerHealth);
+
         yield return new WaitForSeconds(1.5f);
         meleeArea.enabled = true;
         yield return new WaitForSeconds(0.5f);
         meleeArea.enabled = false;
-
+        {
+            bossMelee.isAttacking = false; // 자식 오브젝트의 isAttacking 값을 변경합니다.
+        }
         yield return new WaitForSeconds(5f);
         isLook = true;
         nav.isStopped = true;

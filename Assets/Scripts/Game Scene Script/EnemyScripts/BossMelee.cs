@@ -6,20 +6,28 @@ using Newtonsoft.Json;
 
 public class BossMelee : MonoBehaviour
 {
+    public bool isAttacking = false;
     private PlayerHealth playerHealth;
+    private Transform target;
     public int meleeDamage;
-    private void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (isAttacking && other.gameObject.CompareTag("Player"))
         {
-            // 플레이어 태그를 가진 오브젝트와 충돌한 경우
 
-            playerHealth.TakeDamage(meleeDamage);
+           
+            bool isPlayer = target.TryGetComponent(out PlayerHealth playerHealth);
+            if (isPlayer)
+            {
+                Debug.Log("근접 데메지 입힘");
+                playerHealth.TakeDamage(meleeDamage);
+            }
         }
     }
     private void Start()
     {
-        string json = "{\"damage\": 50}";
+        target = GameObject.FindGameObjectWithTag("Player").gameObject.transform;
+        string json = "{\"damage\": 80}";
         EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
         meleeDamage = (int)enemyStat1.damage;
     }

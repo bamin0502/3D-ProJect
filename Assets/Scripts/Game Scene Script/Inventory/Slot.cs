@@ -65,13 +65,18 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
         {
             bool itemUsed = theItemEffectDatabase.UseItem(slots[slotIndex].item);
             
+            if(!itemUsed) return;
+
             if (slots[slotIndex].item.itemType == Item.ItemType.Used || slots[slotIndex].item.itemType == Item.ItemType.buff ||
                 slots[slotIndex].item.itemType == Item.ItemType.Throw)
             {
                 slots[slotIndex].SetSlotCount(-1);
             }
         }
-
+        else
+        {
+            Debug.Log("아이템 사용에 실패했습니다.");
+        }
     }
     private void SetColor(float _alpha)
     {

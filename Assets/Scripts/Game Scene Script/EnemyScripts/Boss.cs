@@ -31,7 +31,7 @@ public class Boss : MonoBehaviour
     Animator anim;
     private bool isTakingDamage = false;
     public EnemyHealthBar enemy;
-
+    public BossHealthBar bossHealth;
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
@@ -51,18 +51,21 @@ public class Boss : MonoBehaviour
         rigid.angularVelocity = Vector3.zero;
 
     }
+
     void Start()
     {
-        maxHealth = enemyHealth.maxHealth; 
-        curHealth = enemyHealth.currentHealth;
+        enemyHealth.maxHealth = curHealth;
+        enemyHealth.currentHealth = maxHealth;
         StartCoroutine(ThinkRoutine());
         string json = "{\"Heal\": 20}";
         EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
         Healing = (int)enemyStat1.Heal;
-        
+        curHealth = maxHealth;
        
         
-    }   
+    }
+
+   
     // Update is called once per frame
     void Update()
     {
@@ -113,15 +116,37 @@ public class Boss : MonoBehaviour
             {
                 yield return StartCoroutine(Think());
             }
-            
+            yield return null;
         }
     }
+
+    //IEnumerator onDamage(Vector3 reactVec)
+    //{
+    //    mat.color = Color.red;
+    //    yield return new WaitForSeconds(0.1f);
+
+    //    if (curHealth > 0)
+    //    {
+    //        mat.color = Color.white;
+    //    }
+    //    else
+    //    {
+    //        mat.color = Color.gray;
+    //        gameObject.layer = 11;
+    //        isDead = true;
+    //        nav.enabled = false;
+    //        anim.SetTrigger("doDie");
+    //        StartCoroutine(DeleteSelf());
+    //    }
+    //}
+
     IEnumerator DeleteSelf()
     {
         yield return new WaitForSeconds(2.5f);
         Destroy(gameObject);
 
     }
+
     IEnumerator Think()
     {
         yield return new WaitForSeconds(0.1f);
@@ -159,13 +184,25 @@ public class Boss : MonoBehaviour
         Bullet bossMissileA = instantMissileA.GetComponent<Bullet>();
         bossMissileA.target = target;
         
+      
+           
+        
+
+
         yield return new WaitForSeconds(0.6f);
         GameObject instantMissileB = Instantiate(missile, missilePortB.position, missilePortB.rotation);
         Bullet bossMissileB = instantMissileB.GetComponent<Bullet>();
         bossMissileB.target = target;
         yield return new WaitForSeconds(5f);
 
+        
+
         StartCoroutine(Think());
+    }
+    
+    public void TakeDamage(Transform target)
+    {
+       
     }
     IEnumerator Taunt()
     {
@@ -192,6 +229,13 @@ public class Boss : MonoBehaviour
             bossMelee.isAttacking = false; // 공격이 끝났으므로 값을 초기화합니다.
         }
 
+        /*BossMelee bossMelee = GetComponentInChildren<BossMelee>();
+         if (bossMelee != null)
+         {
+             bossMelee.isAttacking = true; // 자식 오브젝트의 isAttacking 값을 변경합니다.
+         }*/
+        //bool isPlayer = target.TryGetComponent(out PlayerHealth playerHealth);
+
         yield return new WaitForSeconds(1.5f);
         meleeArea.enabled = true;
         yield return new WaitForSeconds(0.5f);
@@ -204,17 +248,19 @@ public class Boss : MonoBehaviour
         nav.isStopped = true;
         boxCollider.enabled = true;
         StartCoroutine(Think());
+
+
     }
     IEnumerator Heal()
     {
         anim.SetTrigger("doBigShot");
 
-        int healAmount = Mathf.Min(Healing, maxHealth - curHealth); // 최대 체력과 현재 체력의 차이를 계산합니다.
-        if (healAmount > 0)
+        if (maxHealth < curHealth)
         {
-            curHealth += healAmount; // 현재 체력을 회복합니다.
+            int healAmount = Mathf.Min(Healing, curHealth - maxHealth);
+            maxHealth += healAmount;
             enemy.UpdateBossHealth();
-            Debug.Log("보스의 체력이 " + healAmount + "만큼 회복됨, 현재 체력: " + curHealth);
+            Debug.Log("보스의 체력이 " + healAmount + "만큼 회복됨, 현재 체력: " + maxHealth);
         }
         else
         {

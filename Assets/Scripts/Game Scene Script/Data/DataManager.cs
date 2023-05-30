@@ -317,30 +317,32 @@ namespace Data
                         healthToRestore = PlayerHealth.maxHealth - PlayerHealth.currentHealth;  // 실제로 회복 가능한 양 조정
                         totalHealth = PlayerHealth.maxHealth;
                     }
-
-                    else if (_item.cooldownTime > 0)
-                    {
-                        Debug.Log("아이템이 쿨타임 중입니다.");                        
-                        return false;
-                    }
                     PlayerHealth.currentHealth += healthToRestore;
                     StartCoroutine(DisplayItemMessage("체력을 " + healthToRestore + " 회복했습니다!"));
-                    StartCooldown(_item);
                     return true;                    
                 }                
             }
             else if (_item.itemType == Item.ItemType.buff)
             {
-                // 아이템으로 인한 공격력 증가
-                weaponData.damage += itemdata.damage;
-                Debug.Log("현재 무기 공격력: " + weaponData.damage + " 아이템으로 인한 공격력 증가량: " + itemdata.damage);
 
-                StartCoroutine(RemoveBuffAfterDuration((int)itemdata.dot));
-                StartCoroutine(DisplayItemMessage("공격력이 30 증가하였습니다!"));
+                PlayerHealth.maxHealth += 100;
+                StartCoroutine(DisplayItemMessage("최대 체력이 100 증가하였습니다!"));
 
-                StartCooldown(_item); // 아이템 쿨다운 시작
+
 
                 return true;
+                #region 일단 구현안되서 나중에 할 예정 무기 공격력 관련이 override, abstract으로 인해 상당히 데이터 교환이 힘듬..
+                //// 아이템으로 인한 공격력 증가
+                //weaponData.damage += itemdata.damage;
+                //Debug.Log("현재 무기 공격력: " + weaponData.damage + " 아이템으로 인한 공격력 증가량: " + itemdata.damage);
+
+                //StartCoroutine(RemoveBuffAfterDuration((int)itemdata.dot));
+                //StartCoroutine(DisplayItemMessage("공격력이 30 증가하였습니다!"));
+
+                //StartCooldown(_item); // 아이템 쿨다운 시작
+
+                //return true;
+                #endregion
             }
 
             else if (_item.itemType == Item.ItemType.Throw)
@@ -377,11 +379,7 @@ namespace Data
             //weaponData.damage -= itemdata.damage;
             Debug.Log("버프 지속 시간이 지나서 무기 공격력이 복구되었습니다.");
         }
-        private IEnumerator ThrowItemEffecter()
-        {
 
-            yield return new WaitForSeconds(1);
-        }
         #endregion
 
         #region var 타입에 따른 데이터저장
@@ -441,19 +439,7 @@ namespace Data
         }
         */
         #endregion
-        public void StartCooldown(Item _item)
-        {
-            _item.cooldownTime = 10; // 쿨타임 시간 설정 (예시로 10초로 설정)
-            StartCoroutine(CooldownCoroutine(_item));
-        }
-        public IEnumerator CooldownCoroutine(Item _item)
-        {
-            while (_item.cooldownTime > 0)
-            {
-                yield return new WaitForSeconds(1f); // 1초 대기
-                _item.cooldownTime--;
-            }
-        }
+
     }
 }
 

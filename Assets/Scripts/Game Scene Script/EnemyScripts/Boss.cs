@@ -24,7 +24,7 @@ public class Boss : MonoBehaviour
     public bool isLook = true;
     public bool isDead;
     public Coroutine[] coroutines = new Coroutine[6];
-
+    public EnemyHealth enemyHealth;
     public Rigidbody rigid;
     public BoxCollider boxCollider;
     Material mat;
@@ -40,7 +40,7 @@ public class Boss : MonoBehaviour
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
         target = GameObject.FindGameObjectWithTag("Player").gameObject.transform;
-
+        enemyHealth = GetComponent<EnemyHealth>();
         nav.isStopped = true;
 
     }
@@ -54,17 +54,13 @@ public class Boss : MonoBehaviour
 
     void Start()
     {
-
+        enemyHealth.maxHealth = curHealth;
+        enemyHealth.currentHealth = maxHealth;
         StartCoroutine(ThinkRoutine());
-        string json = "{\"EnemyHealth\": 10, \"Health\": 10, \"Heal\": 20}";
+        string json = "{\"Heal\": 20}";
         EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
-        maxHealth = (int)enemyStat1.EnemyHealth;
-        curHealth = (int)enemyStat1.Health;
         Healing = (int)enemyStat1.Heal;
         curHealth = maxHealth;
-
-
-
     }
 
    
@@ -73,7 +69,7 @@ public class Boss : MonoBehaviour
     {
         if (isDead)
         {
-
+            StopAllCoroutines();
             return;
         }
 
@@ -116,25 +112,25 @@ public class Boss : MonoBehaviour
             yield return null;
         }
     }
-/*    IEnumerator onDamage(Vector3 reactVec)
-    {
-        mat.color = Color.red;
-        yield return new WaitForSeconds(0.1f);
+    //IEnumerator onDamage(Vector3 reactVec)
+    //{
+    //    mat.color = Color.red;
+    //    yield return new WaitForSeconds(0.1f);
 
-        if(curHealth > 0)
-        {
-            mat.color = Color.white;
-        }
-        else
-        {
-            mat.color = Color.gray;
-            gameObject.layer = 11;
-            isDead = true;
-            nav.enabled = false;
-            anim.SetTrigger("doDie");
-            StartCoroutine(DeleteSelf());
-        }
-    }*/
+    //    if (curHealth > 0)
+    //    {
+    //        mat.color = Color.white;
+    //    }
+    //    else
+    //    {
+    //        mat.color = Color.gray;
+    //        gameObject.layer = 11;
+    //        isDead = true;
+    //        nav.enabled = false;
+    //        anim.SetTrigger("doDie");
+    //        StartCoroutine(DeleteSelf());
+    //    }
+    //}
 
     IEnumerator DeleteSelf()
     {

@@ -36,8 +36,5 @@ public class UImanager : MonoBehaviour
         //mp아직 없음
     }
 
-    public void UpdateEnemyHp(EnemyStat enemyStat)
-    {
-        hpBar.fillAmount = (float)enemyStat.EnemyHealth / enemyStat.Health;
-    }
+
 }

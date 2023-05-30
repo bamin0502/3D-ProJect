@@ -84,6 +84,7 @@ public class Boss : MonoBehaviour
         {
             StopAllCoroutines();
             return;
+
         }
 
         if (!isDead)

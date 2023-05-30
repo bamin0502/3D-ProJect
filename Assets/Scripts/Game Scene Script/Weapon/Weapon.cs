@@ -13,20 +13,13 @@ public enum WeaponType
     OneHanded,
     TwoHanded,
 }
-public enum WeaponDamage 
-{
-    Bow,
-    Hammer,
-    Sword
-}
-
 
 public abstract class Weapon : MonoBehaviour
 {
     //임성훈
     public float range;
     public string weaponName; //무기명
-    public int damage; //데미지
+    protected int damage; //데미지
     public bool isEquipped = false; //장착 여부
     public float attackInterval;
     public WeaponType weaponType;
@@ -34,31 +27,38 @@ public abstract class Weapon : MonoBehaviour
     public Vector3 PickRotation;
     private DataManager dataManager;
     public Canvas iconCanvas;
-    public WeaponDamage weaponDamage;
+    private WeaponData weaponData;
+    
     private void Awake()
     {
         dataManager=FindObjectOfType<DataManager>();
         iconCanvas = GetComponentInChildren<Canvas>();
+
     }
     private void Start()
     {
+        LoadWeaponData();
+    }
+    private void LoadWeaponData()
+    {
         string json = "";
 
-        if(weaponDamage == WeaponDamage.Bow)
+        if (weaponType == WeaponType.Bow)
         {
-            json= "{\"damage\": 20}";
+            json = "{\"damage\": 20}";
         }
-        if (weaponDamage == WeaponDamage.Sword)
+        else if (weaponType == WeaponType.OneHanded)
         {
-            json="{\"damage\": 35}";
+            json = "{\"damage\": 40}";
         }
-        if (weaponDamage == WeaponDamage.Hammer)
+        else if (weaponType == WeaponType.TwoHanded)
         {
-            json= "{\"damage\": 50}";
+            json = "{\"damage\": 60}";
         }
+        WeaponData weaponData = JsonConvert.DeserializeObject<WeaponData>(json);
+        damage = weaponData.damage;
 
-        WeaponData weapon = JsonConvert.DeserializeObject<WeaponData>(json);
-        damage = weapon.damage;
+
     }
     public abstract void Attack(Transform target);
     public void EnableCanvas()
@@ -75,4 +75,6 @@ public abstract class Weapon : MonoBehaviour
             iconCanvas.enabled = false;
         }
     }
+
+
 }

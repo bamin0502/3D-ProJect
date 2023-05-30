@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 
 public class MeleeWeapon : Weapon
 {
-   
 
     //임성훈
     public override void Attack(Transform target)

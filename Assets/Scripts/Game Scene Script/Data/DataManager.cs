@@ -87,7 +87,7 @@ namespace Data
         [SerializeField]
         private TMP_Text UseItemResultText;
         public string itemName;  // 아이템의 이름(Key값으로 사용할 것)
-
+        private Weapon weapon;
         [SerializeField] private ThrownWeaponController thrownWeaponController;
         #endregion
 
@@ -328,7 +328,7 @@ namespace Data
                     return true;                    
                 }                
             }
-            else if (_item.itemType == Item.ItemType.buff)
+            if (_item.itemType == Item.ItemType.buff)
             {
                 weaponData.damage += itemdata.damage;
                 Debug.Log("현재 무기 공격력: " + weaponData.damage + " 아이템으로 인한 공격력 증가량: " + itemdata.damage);
@@ -339,8 +339,12 @@ namespace Data
                 itemdata.damage = weaponData.damage;
                 return true;
             }
+            else
+            {
+                return false;
+            }
 
-            else if (_item.itemType == Item.ItemType.Throw)
+            if (_item.itemType == Item.ItemType.Throw)
             {
                 if (!thrownWeaponController.isGrenadeMode)
                 {

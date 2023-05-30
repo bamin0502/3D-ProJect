@@ -6,6 +6,10 @@ using Newtonsoft.Json;
 
 public class MeleeWeapon : Weapon
 {
+    public override int GetDamage()
+    {
+        return damage; // 현재 공격력 값을 반환
+    }
 
     //임성훈
     public override void Attack(Transform target)

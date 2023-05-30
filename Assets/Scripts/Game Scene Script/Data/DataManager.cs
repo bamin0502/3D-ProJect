@@ -88,6 +88,7 @@ namespace Data
         private TMP_Text UseItemResultText;
         public string itemName;  // 아이템의 이름(Key값으로 사용할 것)
         private Weapon weapon;
+        public MeleeWeapon meleeWeapon;
         [SerializeField] private ThrownWeaponController thrownWeaponController;
         #endregion
 
@@ -328,23 +329,21 @@ namespace Data
                     return true;                    
                 }                
             }
-            if (_item.itemType == Item.ItemType.buff)
+            else if (_item.itemType == Item.ItemType.buff)
             {
-                weaponData.damage += itemdata.damage;
-                Debug.Log("현재 무기 공격력: " + weaponData.damage + " 아이템으로 인한 공격력 증가량: " + itemdata.damage);
+                // 아이템으로 인한 공격력 증가
+                int originalDamage = meleeWeapon.Damage;
+                Debug.Log("현재 무기 공격력: " + meleeWeapon.Damage + " 아이템으로 인한 공격력 증가량: " + itemdata.damage);
 
-                StartCoroutine(RemoveBuffAfterDuration(itemdata.dot));
+                StartCoroutine(RemoveBuffAfterDuration((int)itemdata.dot, originalDamage));
                 StartCoroutine(DisplayItemMessage("공격력이 증가하였습니다!"));
 
-                itemdata.damage = weaponData.damage;
+                StartCooldown(_item); // 아이템 쿨다운 시작
+
                 return true;
             }
-            else
-            {
-                return false;
-            }
 
-            if (_item.itemType == Item.ItemType.Throw)
+            else if (_item.itemType == Item.ItemType.Throw)
             {
                 if (!thrownWeaponController.isGrenadeMode)
                 {
@@ -368,17 +367,14 @@ namespace Data
             yield return null;
         }
 
-        private IEnumerator RemoveBuffAfterDuration(float dot)
+        private IEnumerator RemoveBuffAfterDuration(int originalDamage, float dot)
         {
-            Itemdata itemdata = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
-            WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
-            yield return new WaitForSeconds(30);
+            //WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
+            yield return new WaitForSeconds(dot);
             UseItemResultText.text = "아이템의 효과가 사라졌습니다.";
             yield return new WaitForSeconds(2);
             UseItemResultText.text = "";
-            // 버프 지속 시간이 지나면 아이템 효과를 되돌림
-            weaponData.damage -= itemdata.damage;
-            yield return null;
+            //meleeWeapon.Damage = originalDamage;
             Debug.Log("버프 지속 시간이 지나서 무기 공격력이 복구되었습니다.");
         }
         private IEnumerator ThrowItemEffecter()

@@ -23,14 +23,9 @@ public class Boss : MonoBehaviour
     Vector3 tauntVec;
     public bool isLook = true;
     public bool isDead;
-<<<<<<< Updated upstream
-    public Coroutine[] coroutines = new Coroutine[6];
-    public EnemyHealth enemyHealth;
-=======
     public int missileDmg;
     public int meleeDmg;
-
->>>>>>> Stashed changes
+    public EnemyHealth enemyHealth;
     public Rigidbody rigid;
     public BoxCollider boxCollider;
     Material mat;

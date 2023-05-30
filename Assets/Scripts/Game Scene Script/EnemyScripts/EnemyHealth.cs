@@ -46,12 +46,14 @@ public class EnemyHealth : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        enemyHealthBar.UpdateHealth();
         
         if (currentHealth <= 0)
         {
+            currentHealth = 0;
             Die();
         }
+
+        enemyHealthBar.UpdateHealth();
     }
 
     void Die()

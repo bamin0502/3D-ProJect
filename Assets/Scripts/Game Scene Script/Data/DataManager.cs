@@ -332,11 +332,11 @@ namespace Data
             else if (_item.itemType == Item.ItemType.buff)
             {
                 // 아이템으로 인한 공격력 증가
-                int originalDamage = meleeWeapon.Damage;
-                Debug.Log("현재 무기 공격력: " + meleeWeapon.Damage + " 아이템으로 인한 공격력 증가량: " + itemdata.damage);
+                weaponData.damage += itemdata.damage;
+                Debug.Log("현재 무기 공격력: " + weaponData.damage + " 아이템으로 인한 공격력 증가량: " + itemdata.damage);
 
-                StartCoroutine(RemoveBuffAfterDuration((int)itemdata.dot, originalDamage));
-                StartCoroutine(DisplayItemMessage("공격력이 증가하였습니다!"));
+                StartCoroutine(RemoveBuffAfterDuration((int)itemdata.dot));
+                StartCoroutine(DisplayItemMessage("공격력이 30 증가하였습니다!"));
 
                 StartCooldown(_item); // 아이템 쿨다운 시작
 
@@ -367,14 +367,14 @@ namespace Data
             yield return null;
         }
 
-        private IEnumerator RemoveBuffAfterDuration(int originalDamage, float dot)
+        private IEnumerator RemoveBuffAfterDuration(float dot)
         {
-            //WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
+            
             yield return new WaitForSeconds(dot);
             UseItemResultText.text = "아이템의 효과가 사라졌습니다.";
             yield return new WaitForSeconds(2);
             UseItemResultText.text = "";
-            //meleeWeapon.Damage = originalDamage;
+            //weaponData.damage -= itemdata.damage;
             Debug.Log("버프 지속 시간이 지나서 무기 공격력이 복구되었습니다.");
         }
         private IEnumerator ThrowItemEffecter()

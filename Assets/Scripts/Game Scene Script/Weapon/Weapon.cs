@@ -28,8 +28,7 @@ public abstract class Weapon : MonoBehaviour
     private DataManager dataManager;
     public Canvas iconCanvas;
     private WeaponData weaponData;
-    public abstract int GetDamage();
-    public int Damage { get; protected set; }
+
     private void Awake()
     {
         dataManager=FindObjectOfType<DataManager>();

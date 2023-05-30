@@ -59,10 +59,12 @@ public class Boss : MonoBehaviour
         enemyHealth.maxHealth = curHealth;
         enemyHealth.currentHealth = maxHealth;
         StartCoroutine(ThinkRoutine());
-        string json = "{\"Heal\": 20}";
+        string json = "{\"Heal\": 20,\"damage\": 60}";
         EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
         Healing = (int)enemyStat1.Heal;
         curHealth = maxHealth;
+        missileDmg = (int)enemyStat1.damage;
+        meleeDmg = (int)enemyStat1.damage;
     }
 
    

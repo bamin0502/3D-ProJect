@@ -46,10 +46,8 @@ public class Boss : MonoBehaviour
     }
     void FreezeVelocity()
     {
-
         rigid.velocity = Vector3.zero;
         rigid.angularVelocity = Vector3.zero;
-
     }
 
     void Start()
@@ -69,6 +67,7 @@ public class Boss : MonoBehaviour
     {
         if (isDead)
         {
+            anim.SetTrigger("doDie");
             StopAllCoroutines();
             return;
         }
@@ -112,25 +111,25 @@ public class Boss : MonoBehaviour
             yield return null;
         }
     }
-    //IEnumerator onDamage(Vector3 reactVec)
-    //{
-    //    mat.color = Color.red;
-    //    yield return new WaitForSeconds(0.1f);
+    IEnumerator onDamage(Vector3 reactVec)
+    {
+        mat.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
 
-    //    if (curHealth > 0)
-    //    {
-    //        mat.color = Color.white;
-    //    }
-    //    else
-    //    {
-    //        mat.color = Color.gray;
-    //        gameObject.layer = 11;
-    //        isDead = true;
-    //        nav.enabled = false;
-    //        anim.SetTrigger("doDie");
-    //        StartCoroutine(DeleteSelf());
-    //    }
-    //}
+        if (curHealth > 0)
+        {
+            mat.color = Color.white;
+        }
+        else
+        {
+            mat.color = Color.gray;
+            gameObject.layer = 11;
+            isDead = true;
+            nav.enabled = false;
+            anim.SetTrigger("doDie");
+            StartCoroutine(DeleteSelf());
+        }
+    }
 
     IEnumerator DeleteSelf()
     {

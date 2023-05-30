@@ -45,7 +45,16 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        currentHealth -= damage;
+        if(enemyType == EnemyType.Default)
+        {
+            currentHealth -= damage;
+            enemyHealthBar.UpdateHealth();
+        }
+        else if(enemyType == EnemyType.Boss)
+        {
+            currentHealth -= damage;
+            enemyHealthBar.UpdateBossHealth();
+        }
         
         if (currentHealth <= 0)
         {
@@ -53,7 +62,7 @@ public class EnemyHealth : MonoBehaviour
             Die();
         }
 
-        enemyHealthBar.UpdateHealth();
+
     }
 
     void Die()
@@ -65,7 +74,6 @@ public class EnemyHealth : MonoBehaviour
         {
             enemy.isDead = true;
         }
-
         else if (isBoss) {
             boss.isDead = true;
         }

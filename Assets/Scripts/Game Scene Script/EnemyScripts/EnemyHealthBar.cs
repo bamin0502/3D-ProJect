@@ -10,19 +10,20 @@ public class EnemyHealthBar : MonoBehaviour
     public Image healthBar;
     public TMP_Text healthText;
     private Camera _cam;
-
     private void Start()
     {
         _cam = Camera.main;
+       
     }
-
     public void UpdateHealth()
     {
         healthBar.fillAmount = (float)enemyHealth.currentHealth / enemyHealth.maxHealth;
-        healthText.text = (float)enemyHealth.currentHealth + "/" + enemyHealth.maxHealth;
-
     }
-
+    public void UpdateBossHealth()
+    {
+        healthBar.fillAmount = (float)enemyHealth.currentHealth / enemyHealth.maxHealth;
+        healthText.text = (float)enemyHealth.currentHealth + "/" + enemyHealth.maxHealth;
+    }
     void Update()
     {
         Vector3 lookAtPosition = _cam.transform.position;

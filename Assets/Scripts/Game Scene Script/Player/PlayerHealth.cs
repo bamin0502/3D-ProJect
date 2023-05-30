@@ -23,7 +23,6 @@ public class PlayerHealth : MonoBehaviour
         PlayerStat playerStat = JsonConvert.DeserializeObject<PlayerStat>(json);
         maxHealth = (int)playerStat.PlayerHealth;
         currentHealth = (int)playerStat.Health;
-
     }
 
     public void TakeDamage(int damage)

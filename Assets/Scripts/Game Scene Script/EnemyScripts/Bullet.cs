@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Data;
+using Newtonsoft.Json;
 
 public class Bullet : MonoBehaviour
 {
@@ -13,6 +15,9 @@ public class Bullet : MonoBehaviour
     {
         if(target != null)
         target = GameObject.FindGameObjectWithTag("Player").transform;  // Player 태그가 달린 오브젝트를 타겟으로 설정
+        string json = "{\"damage\": 50}";
+        EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
+        damage = (int)enemyStat1.damage;
     }
 
     private void Update()
@@ -47,10 +52,11 @@ public class Bullet : MonoBehaviour
 
     private void DamagePlayer()
     {
-        // 타겟에게 데미지를 주는 로직을 구현하세요
-        // 예시로는 Player 태그가 달린 오브젝트의 Health 스크립트에 접근하여 데미지를 적용합니다
-        GameObject player = GameObject.FindGameObjectWithTag("Player");       
-
-        
+        bool isPlayer = target.TryGetComponent(out PlayerHealth playerHealth);
+        if (isPlayer)
+        {
+            Debug.Log("미사일 데메지 입힘");
+            playerHealth.TakeDamage(damage);
+        }
     }
 }

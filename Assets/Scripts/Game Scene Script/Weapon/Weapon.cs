@@ -47,7 +47,6 @@ public abstract class Weapon : MonoBehaviour
             iconCanvas.enabled = true;
         }
     }
-
     public void DisableCanvas()
     {
         if (iconCanvas != null)

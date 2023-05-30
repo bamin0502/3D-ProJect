@@ -613,6 +613,22 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 704195366, guid: 5a8d51aa1e9a9584a9d52d5b609d096b, type: 3}
+      propertyPath: m_Size.y
+      value: 4.1814237
+      objectReference: {fileID: 0}
+    - target: {fileID: 704195366, guid: 5a8d51aa1e9a9584a9d52d5b609d096b, type: 3}
+      propertyPath: m_Center.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 704195366, guid: 5a8d51aa1e9a9584a9d52d5b609d096b, type: 3}
+      propertyPath: m_Center.y
+      value: 2.060712
+      objectReference: {fileID: 0}
+    - target: {fileID: 704195366, guid: 5a8d51aa1e9a9584a9d52d5b609d096b, type: 3}
+      propertyPath: m_Center.z
+      value: 0.21000005
+      objectReference: {fileID: 0}
     - target: {fileID: 704195369, guid: 5a8d51aa1e9a9584a9d52d5b609d096b, type: 3}
       propertyPath: rigid
       value: 
@@ -687,7 +703,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7271822805406649607, guid: 5a8d51aa1e9a9584a9d52d5b609d096b, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7271822805406649607, guid: 5a8d51aa1e9a9584a9d52d5b609d096b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -731,7 +747,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8398661418746289639, guid: 5a8d51aa1e9a9584a9d52d5b609d096b, type: 3}
       propertyPath: m_Name
-      value: Boss
+      value: Boss Monster
       objectReference: {fileID: 0}
     - target: {fileID: 8398661418746289639, guid: 5a8d51aa1e9a9584a9d52d5b609d096b, type: 3}
       propertyPath: m_Layer

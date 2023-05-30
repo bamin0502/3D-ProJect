@@ -23,6 +23,7 @@ public class Boss : MonoBehaviour
     Vector3 tauntVec;
     public bool isLook = true;
     public bool isDead;
+    public Coroutine[] coroutines = new Coroutine[6];
 
     public Rigidbody rigid;
     public BoxCollider boxCollider;
@@ -55,12 +56,13 @@ public class Boss : MonoBehaviour
     {
 
         StartCoroutine(ThinkRoutine());
-        string json = "{\"EnemyHealth\": 300, \"Health\": 300, \"Heal\": 20}";
+        string json = "{\"EnemyHealth\": 10, \"Health\": 10, \"Heal\": 20}";
         EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
         maxHealth = (int)enemyStat1.EnemyHealth;
         curHealth = (int)enemyStat1.Health;
         Healing = (int)enemyStat1.Heal;
         curHealth = maxHealth;
+
 
 
     }
@@ -71,34 +73,35 @@ public class Boss : MonoBehaviour
     {
         if (isDead)
         {
-            StopAllCoroutines();
+
             return;
         }
 
-
-        if (isLook)
+        if (!isDead)
         {
-            if (target != null )
+            if (isLook)
             {
-                float h = Input.GetAxisRaw("Horizontal");
-                float v = Input.GetAxisRaw("Vertical");
-                lookVec = new Vector3(h, 0, v) * 5f;
-                transform.LookAt(target.position + lookVec);
+                if (target != null)
+                {
+                    float h = Input.GetAxisRaw("Horizontal");
+                    float v = Input.GetAxisRaw("Vertical");
+                    lookVec = new Vector3(h, 0, v) * 5f;
+                    transform.LookAt(target.position + lookVec);
+                }
+                else if (target == null)
+                {
+                    Debug.Log("플레이어가 사망함");
+                    StopAllCoroutines();
+                    return;
+
+
+                }
             }
-            else if (target == null)
+            else
             {
-                Debug.Log("플레이어가 사망함");
-                StopAllCoroutines();
-                return;
-
-
+                nav.SetDestination(tauntVec);
             }
         }
-        else
-        {
-            nav.SetDestination(tauntVec);
-        }
-        
     }
     private IEnumerator ThinkRoutine()
     {
@@ -113,7 +116,7 @@ public class Boss : MonoBehaviour
             yield return null;
         }
     }
-    IEnumerator onDamage(Vector3 reactVec)
+/*    IEnumerator onDamage(Vector3 reactVec)
     {
         mat.color = Color.red;
         yield return new WaitForSeconds(0.1f);
@@ -129,8 +132,17 @@ public class Boss : MonoBehaviour
             isDead = true;
             nav.enabled = false;
             anim.SetTrigger("doDie");
+            StartCoroutine(DeleteSelf());
         }
+    }*/
+
+    IEnumerator DeleteSelf()
+    {
+        yield return new WaitForSeconds(2.5f);
+        Destroy(gameObject);
+
     }
+
     IEnumerator Think()
     {
         yield return new WaitForSeconds(0.1f);

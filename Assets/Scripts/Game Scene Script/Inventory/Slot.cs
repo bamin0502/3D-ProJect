@@ -121,8 +121,7 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
         if (eventData.button == PointerEventData.InputButton.Right)
         {
             if (item != null)
-            {
-                
+            {                
                 bool itemUsed=theItemEffectDatabase.UseItem(item);
                 if(itemUsed)
                 {
@@ -135,12 +134,8 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
                 {
                     Debug.Log("아이템 사용에 실패했습니다.");
                 }
-                
-
             }
-        }
-        
-        
+        }        
     }
     //아이템이 있는 슬롯을 처음 드래그할때 호출할 이벤트
     public void OnBeginDrag(PointerEventData eventData)

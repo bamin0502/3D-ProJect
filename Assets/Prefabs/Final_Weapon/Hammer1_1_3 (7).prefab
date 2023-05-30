@@ -277,7 +277,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e776399180208994bbbe3b8258d35ebe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 1.5
+  range: 5
   weaponName: Hammer
   damage: 50
   isEquipped: 0
@@ -285,6 +285,7 @@ MonoBehaviour:
   weaponType: 3
   PickPosition: {x: -0.04, y: 0.083, z: 0.404}
   PickRotation: {x: 151.413, y: -103.622, z: 246.972}
+  iconCanvas: {fileID: 0}
 --- !u!65 &3503650256498993214
 BoxCollider:
   m_ObjectHideFlags: 0

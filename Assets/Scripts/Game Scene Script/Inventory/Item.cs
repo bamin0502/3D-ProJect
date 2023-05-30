@@ -17,6 +17,8 @@ public class Item : ScriptableObject
     public ItemType itemType;
     public Sprite itemImage;
     public GameObject itemPrefab;
+    public int cooldownTime=0;
 
     public string weaponType;
+    
 }

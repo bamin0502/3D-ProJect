@@ -115,6 +115,7 @@ namespace Data
         {
             SaveData();
             InitializeData();
+
         }
         #region 여기다가 var타입으로 만들고 SaveToJson방식으로 저장시킬거임
         private void InitializeData()
@@ -153,7 +154,7 @@ namespace Data
             var Item = new Itemdata
             {
                 itemName = "Potion",
-                Health = 30,
+                Health = 100,
                 damage = 30
             };
             //var adrophine = new Itemdata2 
@@ -300,28 +301,32 @@ namespace Data
             Itemdata itemdata = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
             WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
             EnemyStat enemyStat = LoadFromJsonEncrypted<EnemyStat>("EnemyStat1.json");
-
+            
             if (_item.itemType == Item.ItemType.Used)
             {
+                
                 if (PlayerHealth.currentHealth < PlayerHealth.maxHealth)  // 현재 체력이 최대 체력보다 작을 때만 회복 가능
                 {
                     int healthToRestore = (int)itemdata.Health;
                     int availableRestore = PlayerHealth.maxHealth - PlayerHealth.currentHealth;  // 회복 가능한 양
-
-                    if (healthToRestore > availableRestore)
+                    int totalHealth = PlayerHealth.maxHealth;
+                    int Health = PlayerHealth.currentHealth;
+                    if (totalHealth > PlayerHealth.maxHealth)
                     {
-                        Debug.Log("사용을 시도하였으나 플레이어의 체력이 꽉 차있어서 사용이 불가능합니다.");
-                        StartCoroutine(DisplayItemMessage("최대 체력 이상으로는 회복할수 없습니다!"));
-
-                        return false;
+                        healthToRestore = PlayerHealth.maxHealth - PlayerHealth.currentHealth;  // 실제로 회복 가능한 양 조정
+                        totalHealth = PlayerHealth.maxHealth;
                     }
 
+                    else if (_item.cooldownTime > 0)
+                    {
+                        Debug.Log("아이템이 쿨타임 중입니다.");                        
+                        return false;
+                    }
                     PlayerHealth.currentHealth += healthToRestore;
-                    StartCoroutine(DisplayItemMessage("체력을 30 회복했습니다!"));
-                    return true;
-                }
-
-                return false;
+                    StartCoroutine(DisplayItemMessage("체력을 " + healthToRestore + " 회복했습니다!"));
+                    StartCooldown(_item);
+                    return true;                    
+                }                
             }
             else if (_item.itemType == Item.ItemType.buff)
             {
@@ -436,7 +441,19 @@ namespace Data
         }
         */
         #endregion
-
+        public void StartCooldown(Item _item)
+        {
+            _item.cooldownTime = 10; // 쿨타임 시간 설정 (예시로 10초로 설정)
+            StartCoroutine(CooldownCoroutine(_item));
+        }
+        public IEnumerator CooldownCoroutine(Item _item)
+        {
+            while (_item.cooldownTime > 0)
+            {
+                yield return new WaitForSeconds(1f); // 1초 대기
+                _item.cooldownTime--;
+            }
+        }
     }
 }
 

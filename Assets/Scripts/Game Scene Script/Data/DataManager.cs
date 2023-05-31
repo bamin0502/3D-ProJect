@@ -327,12 +327,15 @@ namespace Data
                     StartCoroutine(DisplayItemMessage("체력을 " + healthToRestore + " 회복했습니다!"));
                     //StartCooldown(_item);
                     return true;                    
-                }                
+                }
+
+                return false;
             }
             else if (_item.itemType == Item.ItemType.buff)
             {
                 PlayerHealth.maxHealth += 100;
                 StartCoroutine(DisplayItemMessage("최대 체력이 100 증가하였습니다!"));
+                return true;
                 #region 일단 무기공격력에다가 연결 실패해서 일단 주석처리하고 나중에 할 예정 임시로 최대체력을 증가시키기로
                 //// 아이템으로 인한 공격력 증가
                 //weaponData.damage += itemdata.damage;

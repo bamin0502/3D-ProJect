@@ -100,6 +100,15 @@ public class WeaponController : MonoBehaviour
                 var range = GetWeaponRange();
                 float distance = Vector3.Distance(transform.position, currentTarget.position);
                 isAttack = distance <= range;
+                
+                if (currentTarget.TryGetComponent(out Boss boss))
+                {
+                    if (boss.isDead)
+                    {
+                        currentTarget = null;
+                        isAttack = false;
+                    }
+                }
             }
 
             yield return new WaitForSeconds(0.2f);

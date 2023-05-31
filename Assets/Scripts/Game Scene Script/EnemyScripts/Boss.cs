@@ -43,7 +43,7 @@ public class Boss : MonoBehaviour
     private NavMeshAgent nav;
     private Animator anim;
     private bool isTakingDamage = false;
-
+    private bool hasPlayedDieSound = false;
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
@@ -83,11 +83,12 @@ public class Boss : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isDead)
+        if (isDead && !hasPlayedDieSound)
         {
+
             SoundManager.instance.PlaySE("Die");
             StopAllCoroutines();
-
+            hasPlayedDieSound = true;
 
             return;
         }

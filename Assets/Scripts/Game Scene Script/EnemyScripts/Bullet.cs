@@ -55,7 +55,7 @@ public class Bullet : MonoBehaviour
         bool isPlayer = target.TryGetComponent(out PlayerHealth playerHealth);
         if (isPlayer)
         {
-            Debug.Log("미사일 데메지 입힘");
+            Debug.Log("미사일 데미지 입힘");
             playerHealth.TakeDamage(damage);
         }
     }

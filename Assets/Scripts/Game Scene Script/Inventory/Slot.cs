@@ -22,7 +22,10 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
     [SerializeField] private GameObject slot2;
     [SerializeField] private GameObject slot3;
     [SerializeField] private GameObject slot4;
-
+    public int GetSlotCount()
+    {
+        return ItemCount;
+    }
     void Start()
     {
         theItemEffectDatabase = FindObjectOfType<DataManager>();
@@ -64,8 +67,8 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
         if (slots[slotIndex].item != null)
         {
             bool itemUsed = theItemEffectDatabase.UseItem(slots[slotIndex].item);
-            
-            if(!itemUsed) return;
+
+            if (!itemUsed) return;
 
             if (slots[slotIndex].item.itemType == Item.ItemType.Used || slots[slotIndex].item.itemType == Item.ItemType.buff ||
                 slots[slotIndex].item.itemType == Item.ItemType.Throw)
@@ -77,6 +80,7 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
         {
             Debug.Log("아이템 사용에 실패했습니다.");
         }
+        
     }
     private void SetColor(float _alpha)
     {

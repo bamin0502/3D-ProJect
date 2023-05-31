@@ -302,37 +302,11 @@ namespace Data
             Itemdata itemdata = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
             WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
             EnemyStat enemyStat = LoadFromJsonEncrypted<EnemyStat>("EnemyStat1.json");
-            
-            if (_item.itemType == Item.ItemType.Used)
-            {
-                
-                if (PlayerHealth.currentHealth < PlayerHealth.maxHealth)  // 현재 체력이 최대 체력보다 작을 때만 회복 가능
-                {
-                    int healthToRestore = (int)itemdata.Health;
-                    int availableRestore = PlayerHealth.maxHealth - PlayerHealth.currentHealth;  // 회복 가능한 양
-                    int totalHealth = PlayerHealth.maxHealth;
-                    int Health = PlayerHealth.currentHealth;
-                    if (totalHealth > PlayerHealth.maxHealth)
-                    {
-                        healthToRestore = PlayerHealth.maxHealth - PlayerHealth.currentHealth;  // 실제로 회복 가능한 양 조정
-                        totalHealth = PlayerHealth.maxHealth;
-                    }
-
-                    //else if (_item.cooldownTime > 0)
-                    //{
-                    //    Debug.Log("아이템이 쿨타임 중입니다.");                        
-                    //    return false;
-                    //}
-                    PlayerHealth.currentHealth += healthToRestore;
-                    StartCoroutine(DisplayItemMessage("체력을 " + healthToRestore + " 회복했습니다!"));
-                    //StartCooldown(_item);
-                    return true;                    
-                }                
-            }
-            else if (_item.itemType == Item.ItemType.buff)
+            if (_item.itemType == Item.ItemType.buff)
             {
                 PlayerHealth.maxHealth += 100;
                 StartCoroutine(DisplayItemMessage("최대 체력이 100 증가하였습니다!"));
+                return true;
                 #region 일단 무기공격력에다가 연결 실패해서 일단 주석처리하고 나중에 할 예정 임시로 최대체력을 증가시키기로
                 //// 아이템으로 인한 공격력 증가
                 //weaponData.damage += itemdata.damage;
@@ -346,8 +320,31 @@ namespace Data
                 //return true;
                 #endregion
             }
+            if (_item.itemType == Item.ItemType.Used)
+            {
+                
+                if (PlayerHealth.currentHealth < PlayerHealth.maxHealth)  // 현재 체력이 최대 체력보다 작을 때만 회복 가능
+                {
+                    int healthToRestore = (int)itemdata.Health;
+                    int availableRestore = PlayerHealth.maxHealth - PlayerHealth.currentHealth;  // 회복 가능한 양
+                    int totalHealth = PlayerHealth.maxHealth;
+                    int Health = PlayerHealth.currentHealth;
+                    if (totalHealth > PlayerHealth.maxHealth)
+                    {
+                        healthToRestore = PlayerHealth.maxHealth - PlayerHealth.currentHealth;  // 실제로 회복 가능한 양 조정
+                        totalHealth = PlayerHealth.maxHealth;
 
-            else if (_item.itemType == Item.ItemType.Throw)
+                    }
+
+                    PlayerHealth.currentHealth += healthToRestore;
+                    StartCoroutine(DisplayItemMessage("체력을 " + healthToRestore + " 회복했습니다!"));
+                    //StartCooldown(_item);
+                    return true;                    
+                }
+                
+            }
+           
+            if (_item.itemType == Item.ItemType.Throw)
             {
                 if (!thrownWeaponController.isGrenadeMode)
                 {
@@ -357,9 +354,8 @@ namespace Data
                     return true;
                 }
 
-                return false;
-            }
 
+            }
             return false;
         }
         //각각 원하는 메세지를 코루틴으로 띄운다. 이러면 물약아이템을 사용하고 메세지가 사라지기 전에 사용해도 바뀐다!

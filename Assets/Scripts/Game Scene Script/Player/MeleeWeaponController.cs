@@ -77,7 +77,7 @@ public class MeleeWeaponController : MonoBehaviour
 
     private IEnumerator ArrowSpawnCoroutine(){
         yield return new WaitForSeconds(0.1f);
-
+        SoundManager.instance.PlaySE("Bow_String");
         var currnetBow = currentWeapon.GetComponent<RangedWeapon>();
         var arrow = Instantiate(currnetBow.projectilePrefab, currnetBow.arrowPos.position, Quaternion.LookRotation(currnetBow.arrowPos.forward));
         arrow.transform.parent = currnetBow.transform;

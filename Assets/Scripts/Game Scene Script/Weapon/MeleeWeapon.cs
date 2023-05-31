@@ -13,6 +13,15 @@ public class MeleeWeapon : Weapon
         bool isEnemy = target.TryGetComponent(out EnemyHealth enemy);
         if (isEnemy)
         {
+            if (weaponType == WeaponType.OneHanded)
+            {
+                SoundManager.instance.PlaySE("Sword_Attack");
+            }
+            else if (weaponType == WeaponType.TwoHanded)
+            {
+                SoundManager.instance.PlaySE("Hammer_Attack");
+            }
+            
             enemy.TakeDamage(damage);
         }
     }

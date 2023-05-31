@@ -49,7 +49,7 @@ public abstract class Weapon : MonoBehaviour
         }
         else if (weaponType == WeaponType.OneHanded)
         {
-            json = "{\"damage\": 40}";
+            json = "{\"damage\": 35}";
         }
         else if (weaponType == WeaponType.TwoHanded)
         {

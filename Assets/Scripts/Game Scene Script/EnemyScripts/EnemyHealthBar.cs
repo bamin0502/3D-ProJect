@@ -25,8 +25,18 @@ public class EnemyHealthBar : MonoBehaviour
     }
     public void UpdateBossHealth()
     {
-        healthBar.fillAmount = (float)enemyHealth.currentHealth / enemyHealth.maxHealth;
-        healthText.text = (float)enemyHealth.currentHealth + "/" + enemyHealth.maxHealth;
+        //healthBar.fillAmount = (float)enemyHealth.currentHealth / enemyHealth.maxHealth;
+        //healthText.text = (float)enemyHealth.currentHealth + "/" + enemyHealth.maxHealth;
+        if (enemyHealth.currentHealth > 0)
+        {
+            healthBar.fillAmount = (float)enemyHealth.currentHealth / enemyHealth.maxHealth;
+            healthText.text = (float)enemyHealth.currentHealth + "/" + enemyHealth.maxHealth;
+        }
+        else
+        {
+            healthBar.fillAmount = 0f;
+            healthText.text = "0/" + enemyHealth.maxHealth;
+        }
     }
     void Update()
     {

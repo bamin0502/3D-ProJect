@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.AI;
 using Data;
 using Newtonsoft.Json;
+using UnityEngine.UI;
+using TMPro;
+using DG.Tweening;
 
 public class Boss : MonoBehaviour
 {
@@ -40,7 +43,8 @@ public class Boss : MonoBehaviour
     private NavMeshAgent nav;
     private Animator anim;
     private bool isTakingDamage = false;
-    
+    public GameObject EndingImage;
+    public TMP_Text EndingText;
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
@@ -75,16 +79,21 @@ public class Boss : MonoBehaviour
         maxHealth = currentHealth;  // 최대 체력도 현재 체력과 동일하게 설정합니다.
 
     }
+    public void BossDeath()
+    {
+        EndingText.DOText("축하합니다 당신은 " + "<color=red>" + "보스" + "</color>" + "를 잡았습니다!", 3, true, ScrambleMode.None, null);
+        EndingImage.SetActive(true);
+    }
 
-   
     // Update is called once per frame
     void Update()
     {
         if (isDead)
         {
             StopAllCoroutines();
+            
+            BossDeath();
             return;
-
         }
 
         if (!isDead)
@@ -238,18 +247,34 @@ public class Boss : MonoBehaviour
         anim.SetTrigger("doBigShot");
 
         int previousHealth = enemyHealth.currentHealth;
-        // 최대 체력에서 회복량을 더한 값이 300을 초과하지 않도록 조정
-        int potentialHealth = Mathf.Min(maxHealth, enemyHealth.currentHealth + Healing);
+        int potentialHealth = Mathf.Clamp(enemyHealth.currentHealth + Healing, 0, maxHealth);
         int healedAmount = potentialHealth - previousHealth;
-        enemyHealth.currentHealth = potentialHealth;
-        Debug.Log("보스의 체력이 " + healedAmount + "만큼 회복됨, 현재 체력: " + enemyHealth.currentHealth);
-        enemyHealthBar.UpdateBossHealth();
 
-        yield return new WaitForSeconds(5f);
+        if (healedAmount > 0)
+        {
+            enemyHealth.currentHealth = potentialHealth;
+            Debug.Log("보스의 체력이 " + healedAmount + "만큼 회복됨, 현재 체력: " + enemyHealth.currentHealth);
+            enemyHealthBar.UpdateBossHealth();
+        }
+        else if (healedAmount < 0)
+        {
+            healedAmount = 0; // 음수 값이면 0으로 설정하여 출력하지 않도록 함
+        }
+        else
+        {
+            Debug.Log("보스의 체력은 이미 최대치이거나 회복할 수 없습니다.");
+        }
+
+        if (healedAmount > 0)
+        {
+            yield return new WaitForSeconds(5f);
+        }
         StartCoroutine(Think());
+
     }
     void OnDestroy()
     {
         isTargetAlive = false;
     }
+
 }

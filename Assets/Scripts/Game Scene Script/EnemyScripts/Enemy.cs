@@ -12,7 +12,13 @@ public class Enemy : MonoBehaviour
         RedSpider,
         GreenSpider
     }
-
+    public enum EnemyType
+    {  
+        //타입에 따라 오디오 재생을 다르게 하기 위한 enum 선언
+        Green,
+        Red,
+        Box
+    }
 
     public float maxHealth;
     public float curHealth;
@@ -34,6 +40,7 @@ public class Enemy : MonoBehaviour
     private Coroutine attackCoroutine;
     public float detectionRadius = 5f;
     public EnemyDamage EnemyDam;
+    public EnemyType enemyType;
     #region 아이템 드랍관련 변수 선언 - 제작자 방민호
     //아이템 드랍 관련 
     public GameObject[] itemPrefabs;
@@ -227,6 +234,18 @@ public class Enemy : MonoBehaviour
         {
             isChase = false;
             isAttack = true;
+            switch (enemyType)
+            {
+                case EnemyType.Box:
+                    SoundManager.instance.PlaySE("Red Monster");
+                    break;
+                case EnemyType.Green:
+                    SoundManager.instance.PlaySE("Green Spider");
+                    break;
+                case EnemyType.Red:
+                    SoundManager.instance.PlaySE("Red Spider");
+                    break;
+            }
             anim.SetBool("isAttack", true);
             attackArea.enabled = true;
             yield return new WaitForSeconds(0.2f);

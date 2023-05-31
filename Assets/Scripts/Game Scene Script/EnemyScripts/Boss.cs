@@ -55,7 +55,7 @@ public class Boss : MonoBehaviour
         
         nav.isStopped = true;
         
-}
+    }
     void FreezeVelocity()
     {
 
@@ -85,8 +85,9 @@ public class Boss : MonoBehaviour
     {
         if (isDead)
         {
+            SoundManager.instance.PlaySE("Die");
             StopAllCoroutines();
-            
+
 
             return;
         }
@@ -153,7 +154,7 @@ public class Boss : MonoBehaviour
 
     IEnumerator DeleteSelf()
     {
-        SoundManager.instance.PlaySE("Die");
+
         yield return new WaitForSeconds(2.5f);
         Destroy(gameObject);
 
@@ -180,8 +181,6 @@ public class Boss : MonoBehaviour
                 StartCoroutine(Taunt());
                 break;
             case 5:
-                break;
-            case 6:
                 break;
         }
         float waitTime = 5f;

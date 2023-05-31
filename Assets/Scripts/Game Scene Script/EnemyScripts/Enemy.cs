@@ -12,11 +12,7 @@ public class Enemy : MonoBehaviour
         RedSpider,
         GreenSpider
     }
-    public enum EnemyType{  //타입에 따라 오디오 재생을 다르게 하기 위한 enum 선언
-         Green,
-         Red,
-         Box
-        }
+
 
     public float maxHealth;
     public float curHealth;

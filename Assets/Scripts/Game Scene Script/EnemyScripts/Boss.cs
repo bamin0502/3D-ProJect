@@ -25,10 +25,16 @@ public class Boss : MonoBehaviour
     public float detectionRadius = 10f;
     private bool isTargetAlive = true;
     private float distance;
+<<<<<<< Updated upstream
 
     private Vector3 lookVec;
     private Vector3 tauntVec;
 
+=======
+    
+    Vector3 lookVec;
+    Vector3 tauntVec;
+>>>>>>> Stashed changes
     public bool isLook = true;
     public bool isDead;
 
@@ -38,10 +44,18 @@ public class Boss : MonoBehaviour
     public EnemyHealth enemyHealth;
     public Rigidbody rigid;
     public BoxCollider boxCollider;
+<<<<<<< Updated upstream
     public EnemyHealthBar enemyHealthBar;
     private Material mat;
     private NavMeshAgent nav;
     private Animator anim;
+=======
+    public AudioClip audioClip;
+    private SoundManager soundManager;
+    Material mat;
+    NavMeshAgent nav;
+    Animator anim;
+>>>>>>> Stashed changes
     private bool isTakingDamage = false;
 
     private void Awake()
@@ -66,9 +80,15 @@ public class Boss : MonoBehaviour
 
     void Start()
     {
+<<<<<<< Updated upstream
         enemyHealth = GetComponent<EnemyHealth>();
         enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
 
+=======
+        soundManager = SoundManager.instance;
+        enemyHealth.maxHealth = curHealth;
+        enemyHealth.currentHealth = maxHealth;
+>>>>>>> Stashed changes
         StartCoroutine(ThinkRoutine());
         string json = "{\"Heal\": 20}";
         EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
@@ -153,6 +173,7 @@ public class Boss : MonoBehaviour
 
     IEnumerator DeleteSelf()
     {
+        soundManager.PlaySE("Die");
         yield return new WaitForSeconds(2.5f);
         Destroy(gameObject);
 
@@ -192,11 +213,23 @@ public class Boss : MonoBehaviour
         yield return new WaitForSeconds(0.4f);
         GameObject instantMissileA = Instantiate(missile, missilePortA.position, missilePortA.rotation);
         Bullet bossMissileA = instantMissileA.GetComponent<Bullet>();
+<<<<<<< Updated upstream
         bossMissileA.target = target;       
+=======
+        soundManager.PlaySE("Missile");
+        bossMissileA.target = target;
+        
+      
+           
+        
+
+
+>>>>>>> Stashed changes
         yield return new WaitForSeconds(0.6f);
         GameObject instantMissileB = Instantiate(missile, missilePortB.position, missilePortB.rotation);
         Bullet bossMissileB = instantMissileB.GetComponent<Bullet>();
         bossMissileB.target = target;
+        soundManager.PlaySE("Missile");
         yield return new WaitForSeconds(5f);
         StartCoroutine(Think());
     }
@@ -218,6 +251,7 @@ public class Boss : MonoBehaviour
             bool isPlayer = target.TryGetComponent(out PlayerHealth playerHealth);
             if (isPlayer)
             {
+                soundManager.PlaySE("Taunt");
                 Debug.Log("근접 데미지 입힘");
                 playerHealth.TakeDamage(bossMelee.meleeDamage);
             }
@@ -247,6 +281,7 @@ public class Boss : MonoBehaviour
 
         if (healedAmount > 0)
         {
+<<<<<<< Updated upstream
             enemyHealth.currentHealth = potentialHealth;
             Debug.Log("보스의 체력이 " + healedAmount + "만큼 회복됨, 현재 체력: " + enemyHealth.currentHealth);
             enemyHealthBar.UpdateBossHealth();
@@ -254,6 +289,13 @@ public class Boss : MonoBehaviour
         else if (healedAmount < 0)
         {
             healedAmount = 0; // 음수 값이면 0으로 설정하여 출력하지 않도록 함
+=======
+            soundManager.PlaySE("Heal");
+            int healAmount = Mathf.Min(Healing, curHealth - maxHealth);
+            maxHealth += healAmount;
+            enemy.UpdateBossHealth();
+            Debug.Log("보스의 체력이 " + healAmount + "만큼 회복됨, 현재 체력: " + maxHealth);
+>>>>>>> Stashed changes
         }
         else
         {

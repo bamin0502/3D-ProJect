@@ -29,8 +29,6 @@ public class MeleeWeaponController : MonoBehaviour
         currentWeapon = weaponController.equippedWeapon;
         currentTarget = weaponController.currentTarget;
 
-        if (currentWeapon == null) return;
-
         if (!weaponController.isAttack && attackRoutine != null)
         {
             isAttack = false;

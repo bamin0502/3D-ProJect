@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using Data;
+using UnityEngine.UI;
+using DG.Tweening;
+using TMPro;
 
 public enum EnemyType
 {
@@ -20,7 +23,9 @@ public class EnemyHealth : MonoBehaviour
     public int currentHealth;
     public Animator anim;
     public EnemyType enemyType = EnemyType.Monster;
-    
+    public TMP_Text deathText;
+    public Image EndingImage;
+
 
     // Start is called before the first frame update
     void Start()
@@ -49,6 +54,7 @@ public class EnemyHealth : MonoBehaviour
         currentHealth = (int)enemyStat1.Health;
         currentHealth = maxHealth;
         enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
+        DOTween.SetTweensCapacity(500, 50);
     }
 
     public void TakeDamage(int damage)
@@ -67,9 +73,13 @@ public class EnemyHealth : MonoBehaviour
             currentHealth -= damage;
             enemyHealthBar.UpdateBossHealth();
         }
-        if (currentHealth <= 0)
+        if (currentHealth <= 0 )
         {
             Die();
+            if (enemyType == EnemyType.Boss)
+            {
+                BossDeath();
+            }
         }
     }
 
@@ -91,5 +101,10 @@ public class EnemyHealth : MonoBehaviour
     void EndDeath()
     {
         Destroy(gameObject);
+    }
+    void BossDeath()
+    {
+        deathText.DOText("축하합니다 당신은 " + "<color=red>" + "보스" + "</color>" + "를 잡았습니다!", 3, true, ScrambleMode.None, null);
+        EndingImage.rectTransform.gameObject.SetActive(true);
     }
 }

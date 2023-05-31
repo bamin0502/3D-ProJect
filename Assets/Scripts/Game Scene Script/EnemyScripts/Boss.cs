@@ -43,8 +43,7 @@ public class Boss : MonoBehaviour
     private NavMeshAgent nav;
     private Animator anim;
     private bool isTakingDamage = false;
-    public GameObject EndingImage;
-    public TMP_Text EndingText;
+
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
@@ -77,13 +76,9 @@ public class Boss : MonoBehaviour
 
         currentHealth = enemyHealth.maxHealth;  // 현재 체력을 최대 체력으로 초기화합니다.
         maxHealth = currentHealth;  // 최대 체력도 현재 체력과 동일하게 설정합니다.
+        
+    }
 
-    }
-    public void BossDeath()
-    {
-        EndingText.DOText("축하합니다 당신은 " + "<color=red>" + "보스" + "</color>" + "를 잡았습니다!", 3, true, ScrambleMode.None, null);
-        EndingImage.SetActive(true);
-    }
 
     // Update is called once per frame
     void Update()
@@ -92,7 +87,7 @@ public class Boss : MonoBehaviour
         {
             StopAllCoroutines();
             
-            BossDeath();
+
             return;
         }
 

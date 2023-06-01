@@ -164,6 +164,10 @@ public class WeaponController : MonoBehaviour
         if(newWeapon != null)
         {
             newWeapon.isEquipped = true;
+            if(newWeapon.TryGetComponent(out Collider collider))
+            {
+                collider.enabled = false;
+            }
             newWeapon.transform.parent = newWeapon.weaponType != WeaponType.Bow ? weaponHolder : weaponHolder2;
             newWeapon.transform.localPosition = newWeapon.PickPosition;
             newWeapon.transform.localRotation = Quaternion.Euler(newWeapon.PickRotation);
@@ -188,6 +192,9 @@ public class WeaponController : MonoBehaviour
             }
             equippedWeapon.transform.SetParent(null);
             equippedWeapon.isEquipped = false;
+            if(equippedWeapon.TryGetComponent(out Collider collider)){
+                collider.enabled = true;
+            }
             equippedWeapon.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
             equippedWeapon.transform.position = transform.position + transform.forward * 1f;
             equippedWeapon = null;

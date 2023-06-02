@@ -15,6 +15,7 @@ public class ThrownWeaponController : MonoBehaviour
     public float grenadeFlightTime = 2.0f; // 수류탄 날라가는 시간
     public float spinSpeed = 1.0f; // 수류탄 회전속도
 
+  
     void Update()
     {
         if (isGrenadeMode)
@@ -27,6 +28,7 @@ public class ThrownWeaponController : MonoBehaviour
                 isGrenadeMode = false;
                 throwRangeIndicator.SetActive(false);
                 damageRangeIndicator.SetActive(false);
+
             }
         }
         if (Time.timeScale == 0)

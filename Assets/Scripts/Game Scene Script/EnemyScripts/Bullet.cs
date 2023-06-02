@@ -40,6 +40,10 @@ public class Bullet : MonoBehaviour
         {
             HitTarget();
         }
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
     }
 
     private void HitTarget()

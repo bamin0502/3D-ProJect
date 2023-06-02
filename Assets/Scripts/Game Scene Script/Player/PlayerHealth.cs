@@ -55,8 +55,8 @@ public class PlayerHealth : MonoBehaviour
     IEnumerator DeathTitle()
     {
         KilledImage.rectTransform.gameObject.SetActive(true);
-        kill.text = "Player";
-        death.text = "Boss";       
+        kill.text = "Boss";
+        death.text = "Player";       
         yield return new WaitForSeconds(10f);
                 
         KilledImage.DOFade(0f, 1f).OnComplete(() =>

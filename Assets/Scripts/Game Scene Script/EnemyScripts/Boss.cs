@@ -46,6 +46,8 @@ public class Boss : MonoBehaviour
     private bool hasPlayedDieSound = false;
     public ParticleSystem MeleeAttack;
     public ParticleSystem Jump;
+    public ParticleSystem Healdraw;
+    public ParticleSystem draw;
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
@@ -119,6 +121,10 @@ public class Boss : MonoBehaviour
             {
                 nav.SetDestination(tauntVec);
             }
+        }
+        if (Time.timeScale == 0)
+        {
+            return;
         }
     }
     private IEnumerator ThinkRoutine()
@@ -245,7 +251,9 @@ public class Boss : MonoBehaviour
         StartCoroutine(Think());
     }
     IEnumerator Heal()
-    {        
+    {
+        Healdraw.Play();
+        draw.Play();
         anim.SetTrigger("doBigShot");
 
         int previousHealth = enemyHealth.currentHealth;

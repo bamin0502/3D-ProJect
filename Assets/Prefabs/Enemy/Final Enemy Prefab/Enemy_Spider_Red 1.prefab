@@ -881,6 +881,9 @@ MonoBehaviour:
   enemyType: 2
   deathText: {fileID: 0}
   EndingImage: {fileID: 0}
+  KilledImage: {fileID: 0}
+  kill: {fileID: 0}
+  death: {fileID: 0}
 --- !u!114 &7609403829072995137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -906,7 +909,7 @@ MonoBehaviour:
   enemyType: 0
   itemPrefabs:
   - {fileID: 1609437894853043167, guid: 8d0aabb812e0c434ebc2c37a5624d9c2, type: 3}
-  - {fileID: 7005254024495169906, guid: a2be9a7ed91393c43ab45799da8e1463, type: 3}
+  - {fileID: 2754795323997618879, guid: 35e0c0da8e5223b4cac2dd4e75d0d38d, type: 3}
   - {fileID: 517679667345461060, guid: af265e193312f7e40b241a918614f063, type: 3}
   tmpDamage: 5
 --- !u!195 &7609403829072995261

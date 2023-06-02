@@ -50,6 +50,10 @@ public class ThrownWeaponController : MonoBehaviour
         }
 
         GameObject grenade = Instantiate(grenadePrefab, transform.position, Quaternion.identity);
+        if (grenade.TryGetComponent(out ThrownWeapon thrownWeapon)) thrownWeapon.canExplode = true;
+        
+        Rigidbody rb = grenade.GetComponent<Rigidbody>();
+        rb.useGravity = true;
 
         Vector3 direction = (mousePosition - transform.position).normalized;
 
@@ -57,8 +61,7 @@ public class ThrownWeaponController : MonoBehaviour
         float velocityY = 0.5f * Mathf.Abs(Physics.gravity.y) * grenadeFlightTime;
 
         Vector3 velocity = new Vector3(direction.x * velocityXZ, velocityY, direction.z * velocityXZ);
-
-        Rigidbody rb = grenade.GetComponent<Rigidbody>();
+        
         rb.velocity = velocity;
 
         //수류탄에 랜덤으로 회전 추가

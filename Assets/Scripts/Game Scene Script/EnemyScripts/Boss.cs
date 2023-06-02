@@ -44,6 +44,8 @@ public class Boss : MonoBehaviour
     private Animator anim;
     private bool isTakingDamage = false;
     private bool hasPlayedDieSound = false;
+    public ParticleSystem MeleeAttack;
+    public ParticleSystem Jump;
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
@@ -204,7 +206,7 @@ public class Boss : MonoBehaviour
     }
     IEnumerator Taunt()
     {
-
+        Jump.Play();
         tauntVec = target.position + lookVec;
 
         isLook = false;
@@ -224,14 +226,16 @@ public class Boss : MonoBehaviour
                 Debug.Log("근접 데미지 입힘");
                 playerHealth.TakeDamage(bossMelee.meleeDamage);
             }
-
+            
             bossMelee.isAttacking = false; // 공격이 끝났으므로 값을 초기화합니다.
         }
         yield return new WaitForSeconds(1.5f);
         meleeArea.enabled = true;
+        
         yield return new WaitForSeconds(0.5f);
         meleeArea.enabled = false;
         {
+            MeleeAttack.Play();
             bossMelee.isAttacking = false; // 자식 오브젝트의 isAttacking 값을 변경합니다.
         }
         yield return new WaitForSeconds(5f);

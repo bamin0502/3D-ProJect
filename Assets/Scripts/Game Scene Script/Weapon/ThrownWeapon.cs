@@ -59,6 +59,7 @@ public class ThrownWeapon : MonoBehaviour
         }
 
         SoundManager.instance.PlaySE("Fire_Duration");
+        SoundManager.instance.PlaySE("Bottle_Break");
 
         Destroy(gameObject, fireDuration);
         Destroy(fire, fireDuration);

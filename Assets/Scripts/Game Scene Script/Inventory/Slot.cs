@@ -98,6 +98,7 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
         {
             go_CountImage.SetActive(true);
             text_Count.text = ItemCount.ToString();
+            SoundManager.instance.PlaySE("Item Drop");
         }
         SetColor(1);
     }

@@ -18,7 +18,6 @@ public class ThrownWeapon : MonoBehaviour
     public bool canExplode; //폭발할 수 있는 상태인가
     private Rigidbody _rigidbody;
 
-
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();

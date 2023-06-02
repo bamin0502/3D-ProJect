@@ -59,6 +59,8 @@ public class ThrownWeapon : MonoBehaviour
             }
         }
 
+        SoundManager.instance.PlaySE("Fire_Duration");
+
         Destroy(gameObject, fireDuration);
         Destroy(fire, fireDuration);
     }
@@ -78,5 +80,10 @@ public class ThrownWeapon : MonoBehaviour
             time += applyDamageInterval;
             yield return new WaitForSeconds(applyDamageInterval);
         }
+    }
+
+    private void OnDestroy()
+    {
+        SoundManager.instance.StopSE("Fire_Duration");
     }
 }

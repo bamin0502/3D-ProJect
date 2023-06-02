@@ -51,6 +51,8 @@ public class ThrownWeaponController : MonoBehaviour
 
         GameObject grenade = Instantiate(grenadePrefab, transform.position, Quaternion.identity);
         if (grenade.TryGetComponent(out ThrownWeapon thrownWeapon)) thrownWeapon.canExplode = true;
+        SoundManager.instance.PlaySE("Fire_shot");
+        
         
         Rigidbody rb = grenade.GetComponent<Rigidbody>();
         rb.useGravity = true;

@@ -76,6 +76,26 @@ public class SoundManager : MonoBehaviour
         {
             Debug.Log(name + " sound is not registered in SoundManager.");
         }
+    }
 
+    public void StopSE(string name)
+    {
+        Sound effectSound = System.Array.Find(effectSounds, sound => sound.name == name);
+        if (effectSound != null)
+        {
+            foreach (AudioSource effectAudioSource in effectAudioSources)
+            {
+                if (effectAudioSource.isPlaying)
+                {
+                    effectAudioSource.clip = effectSound.clip;
+                    effectAudioSource.Stop();
+                    break;
+                }
+            }
+        }
+        else
+        {
+            Debug.Log(name + " sound is not registered in SoundManager.");
+        }
     }
 }

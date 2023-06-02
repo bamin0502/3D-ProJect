@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2796797569883826095}
   - component: {fileID: 2796797569883826000}
   - component: {fileID: 3349339667278004579}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Canvas (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 2796797570297296070}
   - component: {fileID: 2796797570297296068}
   - component: {fileID: 2796797570297296069}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: Front (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -16,6 +16,10 @@ public class PlayerHealth : MonoBehaviour
     public TMP_Text deathText;
     public Image EndingImage;
 
+    public Image KilledImage;
+    public TMP_Text kill;
+    public TMP_Text death;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,16 +27,19 @@ public class PlayerHealth : MonoBehaviour
         PlayerStat playerStat = JsonConvert.DeserializeObject<PlayerStat>(json);
         maxHealth = (int)playerStat.PlayerHealth;
         currentHealth = (int)playerStat.Health;
+        FindObjectOfType<PlayerHealthBar>().UpdatePlayerHp();
     }
 
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
         HealthBar.UpdatePlayerHp();
-        FindObjectOfType<PlayerHealthBar>().UpdatePlayerHp();
+        //FindObjectOfType<PlayerHealthBar>().UpdatePlayerHp();
         if (currentHealth <= 0)
         {
+
             Die();
+            StartCoroutine(DeathTitle());
         }
     }
 
@@ -45,7 +52,19 @@ public class PlayerHealth : MonoBehaviour
 
         EndDeath();
     }
+    IEnumerator DeathTitle()
+    {
+        KilledImage.rectTransform.gameObject.SetActive(true);
+        kill.text = "Player";
+        death.text = "Boss";       
+        yield return new WaitForSeconds(10f);
+                
+        KilledImage.DOFade(0f, 1f).OnComplete(() =>
+        {
+            KilledImage.rectTransform.gameObject.SetActive(false);
+        });
 
+    }
     void EndDeath()
     {
         Destroy(gameObject);

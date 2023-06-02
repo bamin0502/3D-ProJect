@@ -29,6 +29,11 @@ public class UImanager : MonoBehaviour
     {
         hpBar.fillAmount = (float)PlayerHealth.currentHealth / PlayerHealth.maxHealth;
         playerHp.text = PlayerHealth.currentHealth + "/" + PlayerHealth.maxHealth;
+
+        if (PlayerHealth.currentHealth <=0)
+        {
+            playerHp.text=0 +"/"+ PlayerHealth.maxHealth;
+        }
     }
 
     public void UpdatePlayerMp(PlayerStat playerStat)

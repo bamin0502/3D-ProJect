@@ -25,8 +25,9 @@ public class EnemyHealth : MonoBehaviour
     public EnemyType enemyType = EnemyType.Monster;
     public TMP_Text deathText;
     public Image EndingImage;
-
-
+    public Image KilledImage;
+    public TMP_Text kill;
+    public TMP_Text death;
     // Start is called before the first frame update
     void Start()
     {
@@ -55,6 +56,7 @@ public class EnemyHealth : MonoBehaviour
         currentHealth = maxHealth;
         enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
         DOTween.SetTweensCapacity(500, 50);
+        
     }
 
     public void TakeDamage(int damage)
@@ -77,8 +79,8 @@ public class EnemyHealth : MonoBehaviour
         {
             Die();
             if (enemyType == EnemyType.Boss)
-            {
-                BossDeath();
+            {               
+                StartCoroutine(BossKill());                
             }
         }
     }
@@ -106,5 +108,21 @@ public class EnemyHealth : MonoBehaviour
     {
         deathText.DOText("축하합니다 당신은 " + "<color=red>" + "보스" + "</color>" + "를 잡았습니다!", 3, true, ScrambleMode.None, null);
         EndingImage.rectTransform.gameObject.SetActive(true);
+        
+    }
+    IEnumerator BossKill()
+    {
+        KilledImage.rectTransform.gameObject.SetActive(true);
+        kill.text = "Player";
+        death.text = "Boss";
+        BossDeath();
+
+        yield return new WaitForSeconds(10f);
+        
+        KilledImage.DOFade(0f, 1f).OnComplete(() =>
+        {
+            KilledImage.rectTransform.gameObject.SetActive(false);
+        });
+       
     }
 }

@@ -80,6 +80,7 @@ public class ThrownWeapon : MonoBehaviour
             time += applyDamageInterval;
             yield return new WaitForSeconds(applyDamageInterval);
         }
+        SoundManager.instance.StopSE("Fire_Duration");
     }
 
     private void OnDestroy()

@@ -19,7 +19,8 @@ public class PlayerHealth : MonoBehaviour
     public Image KilledImage;
     public TMP_Text kill;
     public TMP_Text death;
-
+    public ParticleSystem DeathParticle;
+    public ParticleSystem DeathBloodParticle;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,10 +35,11 @@ public class PlayerHealth : MonoBehaviour
     {
         currentHealth -= damage;
         HealthBar.UpdatePlayerHp();
+       
         //FindObjectOfType<PlayerHealthBar>().UpdatePlayerHp();
         if (currentHealth <= 0)
         {
-
+           
             Die();
             StartCoroutine(DeathTitle());
         }
@@ -45,18 +47,20 @@ public class PlayerHealth : MonoBehaviour
 
     public void Die()
     {
+        DeathParticle.Play();
+        DeathBloodParticle.Play();
         anim.SetTrigger("doDie");
         deathText.DOText("당신은 "+ "<color=red>" + "몬스터"+ "</color>" + "에게 죽었습니다.", 3, true, ScrambleMode.None, null);
-
         EndingImage.rectTransform.gameObject.SetActive(true);
 
-        EndDeath();
+        //EndDeath();
     }
     IEnumerator DeathTitle()
     {
         KilledImage.rectTransform.gameObject.SetActive(true);
-        kill.text = "Boss";
-        death.text = "Player";       
+        kill.text = "Monster";
+        death.text = "Player";
+       
         yield return new WaitForSeconds(10f);
                 
         KilledImage.DOFade(0f, 1f).OnComplete(() =>

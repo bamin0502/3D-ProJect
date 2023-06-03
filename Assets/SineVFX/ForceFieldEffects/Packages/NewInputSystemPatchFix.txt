@@ -1,0 +1,1 @@
+This package just updates some scripts to make DemoScene controls work properly with the new Unity Input System Package.

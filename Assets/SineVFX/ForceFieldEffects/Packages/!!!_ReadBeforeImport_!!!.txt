@@ -1,0 +1,9 @@
+HOW TO INSTALL AND USE THE PACKAGES:
+
+- For HDRP you simply can unpack the right package and open the new DemoSceneHDRP. It will also create new prefabs in "Prefabs/HDRP" folder
+- For URP/LWRP you need to do the same with some additional changes in the URP/LWRP Asset file. Enable Opaque, Depth textures, and HDR. Also, enable PostProcessing in your Camera.
+- When using HDRP or URP you can delete the old "PostProcessingV2" folder completely.
+
+
+
+Support email: sinevfx@gmail.com

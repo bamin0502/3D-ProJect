@@ -276,9 +276,17 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 3274450549029296133}
     m_Modifications:
+    - target: {fileID: 1244101797883756, guid: c3039019fa1c65840b1b35eed158363c, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 1648978194837340, guid: c3039019fa1c65840b1b35eed158363c, type: 3}
       propertyPath: m_Name
       value: FX_Fire_Small_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1648978194837340, guid: c3039019fa1c65840b1b35eed158363c, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4313797110543784, guid: c3039019fa1c65840b1b35eed158363c, type: 3}
       propertyPath: m_RootOrder

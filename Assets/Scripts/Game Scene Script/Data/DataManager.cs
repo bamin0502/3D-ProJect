@@ -302,6 +302,16 @@ namespace Data
             Itemdata itemdata = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
             WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
             EnemyStat enemyStat = LoadFromJsonEncrypted<EnemyStat>("EnemyStat1.json");
+            if (_item.itemType == Item.ItemType.Throw)
+            {
+                if (!thrownWeaponController.isGrenadeMode)
+                {
+                    thrownWeaponController.isGrenadeMode = true;
+                    thrownWeaponController.throwRangeIndicator.SetActive(true);
+                    thrownWeaponController.damageRangeIndicator.SetActive(true);
+                    return true;
+                }
+            }
             if (_item.itemType == Item.ItemType.buff)
             {
                 PlayerHealth.maxHealth += 100;
@@ -342,20 +352,7 @@ namespace Data
                     return true;                    
                 }
                 
-            }
-           
-            if (_item.itemType == Item.ItemType.Throw)
-            {
-                if (!thrownWeaponController.isGrenadeMode)
-                {
-                    thrownWeaponController.isGrenadeMode = true;
-                    thrownWeaponController.throwRangeIndicator.SetActive(true);
-                    thrownWeaponController.damageRangeIndicator.SetActive(true);
-                    return true;
-                }
-
-
-            }
+            }            
             return false;
         }
         //각각 원하는 메세지를 코루틴으로 띄운다. 이러면 물약아이템을 사용하고 메세지가 사라지기 전에 사용해도 바뀐다!

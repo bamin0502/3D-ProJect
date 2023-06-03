@@ -98,8 +98,13 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
         {
             go_CountImage.SetActive(true);
             text_Count.text = ItemCount.ToString();
+            
+        }
+        if(item.itemType == Item.ItemType.Throw)
+        {
             SoundManager.instance.PlaySE("Item Drop");
         }
+
         SetColor(1);
     }
     public void SetSlotCount(int _count)
@@ -165,6 +170,7 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
     {
         DragSlot.inst.SetColor(0);
         DragSlot.inst.dragSlot = null;
+        SoundManager.instance.StopSE("Item Drop");
     }
     //해당 빈 슬롯에 무언가가 마우스 드롭 되었을때 발생할 이벤트
     public void OnDrop(PointerEventData eventData)
@@ -177,7 +183,7 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
     {
         Item _tempItem = item;
         int _tempItemCount = ItemCount;
-
+       
         AddItem(DragSlot.inst.dragSlot.item, DragSlot.inst.dragSlot.ItemCount);
 
         if (_tempItem != null)

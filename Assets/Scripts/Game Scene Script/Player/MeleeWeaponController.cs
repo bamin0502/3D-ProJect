@@ -83,9 +83,4 @@ public class MeleeWeaponController : MonoBehaviour
         arrow.transform.parent = currnetBow.transform;
         StartCoroutine(arrow.GetComponent<Projectile>().ShotCoroutine(currentTarget));
     }
-
-    private bool IsTargetInRange()
-    {
-        return Vector3.Distance(transform.position, currentTarget.position) <= currentWeapon.range;
-    }
 }

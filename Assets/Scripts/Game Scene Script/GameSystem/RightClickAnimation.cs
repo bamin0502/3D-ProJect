@@ -59,7 +59,7 @@ public class RightClickAnimation : MonoBehaviour
             clickAnimation = Instantiate(clickAnimationPrefab);
         }
 
-        position.y += 0.01f;
+        position.y += 0.3f;
         clickAnimation.transform.position = position;
         clickAnimation.SetActive(true);
 

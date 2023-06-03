@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    private float speed = 25f;
-    private int damage = 10;
+    public float speed = 25f;
+    public int damage = 10;
 
     private void Start(){
         StartCoroutine(DeleteCoroutine());

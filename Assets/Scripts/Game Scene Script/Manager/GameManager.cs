@@ -66,7 +66,7 @@ public class GameManager : SerializedMonoBehaviour
     public void YouTubeButtonClicked()
     {
         //뒤에 영상 작업하고 올릴링크 지정
-        Application.OpenURL("");
+        Application.OpenURL("https://youtu.be/yMu0XA16A-E");
     }
     public void BackMainMenu()
     {

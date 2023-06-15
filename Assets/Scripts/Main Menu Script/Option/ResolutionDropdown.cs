@@ -1,9 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Sirenix.OdinInspector;
 
-public class ResolutionDropdown : SerializedMonoBehaviour
+public class ResolutionDropdown : MonoBehaviour
 {
     public TMP_Dropdown resolutionDropdown;
     public Toggle fullscreenToggle;

@@ -5,12 +5,11 @@ using TMPro;
 using UnityEngine.UI;
 using System.Data.Common;
 using UnityEngine.SceneManagement;
-using Sirenix.OdinInspector;
 
-public class GameManager : SerializedMonoBehaviour
+public class GameManager : MonoBehaviour
 {
     public static GameManager Inst;
-    [Title ("관리 오브젝트 설정")]
+    [Header ("관리 오브젝트 설정")]
     //리스트배열 형태로 이미지를 관리함
     [SerializeField]
     private GameObject MainMenuImage;
@@ -64,14 +63,16 @@ public class GameManager : SerializedMonoBehaviour
         Application.Quit();
         Debug.Log("게임 종료 확인용");
     }
+    //일단은 클릭해도 안보이게 해둠 프로젝트가 private이여서 링크가 없다고 하는게 맞음
     public void GitButtonClicked()
     {
         Application.OpenURL("https://github.com/bamin0502/3D-ProJect");
     }
+    //클릭하면 플레이 영상이 출력되도록 설정
     public void YouTubeButtonClicked()
     {
         //뒤에 영상 작업하고 올릴링크 지정
-        Application.OpenURL("https://youtu.be/yMu0XA16A-E");
+        Application.OpenURL("https://youtu.be/_XES0PxRQM0");
     }
     public void BackMainMenu()
     {

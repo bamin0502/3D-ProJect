@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
-using Sirenix.OdinInspector;
-public class AudioManagerUI : SerializedMonoBehaviour
+
+public class AudioManagerUI : MonoBehaviour
 {
     public Slider bgmSlider;
     public Slider sfxSlider;

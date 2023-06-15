@@ -8,7 +8,6 @@ using UnityEngine.Events;
 using System.Security.Cryptography;
 using System.Text;
 using System;
-using Sirenix.OdinInspector;
 using TMPro;
 #endregion
 
@@ -65,10 +64,9 @@ namespace Data
     }
     #endregion
 
-    public class DataManager : SerializedMonoBehaviour
+    public class DataManager : MonoBehaviour
     {
         #region 변수지정
-        [Title("메소드 지정")]
         public bool isDead { get; set; }
         [System.NonSerialized]
         public UnityEvent deadEvent = new UnityEvent();

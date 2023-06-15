@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
-using Sirenix.OdinInspector;
-
 
 public class Inventory : MonoBehaviour
 {

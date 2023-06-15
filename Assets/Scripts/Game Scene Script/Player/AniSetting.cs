@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Sirenix.OdinInspector;
 
 //제작자 방민호
 namespace mino 
@@ -21,7 +20,7 @@ namespace mino
         GetHit //10 맞았을때 나오게할 애니메이션
     }
 
-    public class AniSetting : SerializedMonoBehaviour
+    public class AniSetting : MonoBehaviour
     {
         
         public Animator ani;

@@ -5091,9 +5091,17 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 6016701591039444861}
     m_Modifications:
+    - target: {fileID: 1603755771572580155, guid: 970b1519e695da34f93a30d5ccaa5c1a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4402882314072528855, guid: 970b1519e695da34f93a30d5ccaa5c1a, type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 4402882314072528855, guid: 970b1519e695da34f93a30d5ccaa5c1a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8375631699023813956, guid: 970b1519e695da34f93a30d5ccaa5c1a, type: 3}
       propertyPath: m_Pivot.x

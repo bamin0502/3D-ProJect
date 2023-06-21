@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -42,6 +42,7 @@ public class ForceFieldController : MonoBehaviour {
     private float openCloseValue;
     private float openCloseCurve;
 
+
     // Use this for initialization
     void Start () {
         psmain = controlParticleSystem.main;
@@ -54,7 +55,8 @@ public class ForceFieldController : MonoBehaviour {
         if (procedrualGradientEnabled == true)
         {
             UpdateRampTexture();
-        }        
+        }
+
     }
 
     // For Better Effects Change in DemoScene
@@ -118,7 +120,9 @@ public class ForceFieldController : MonoBehaviour {
         if (openAutoAnimation == true)
         {
             OpenCloseProgress();
-        }        
+        }
+
+
     }
 
     private void GetNumberOfSpheres()

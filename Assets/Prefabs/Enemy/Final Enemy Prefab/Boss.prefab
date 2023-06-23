@@ -1710,6 +1710,10 @@ MonoBehaviour:
   rigid: {fileID: 1007756039046700560}
   boxCollider: {fileID: 1007756039046700563}
   enemyHealthBar: {fileID: 7356964391053617370}
+  MeleeAttack: {fileID: 0}
+  Jump: {fileID: 0}
+  Healdraw: {fileID: 0}
+  draw: {fileID: 0}
 --- !u!195 &1007756039046700574
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1762,9 +1766,21 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 287496040882896316}
     m_Modifications:
+    - target: {fileID: 1134074908284650, guid: e7473d9620ab29341b98bf21b400e598, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1159970587636746, guid: e7473d9620ab29341b98bf21b400e598, type: 3}
       propertyPath: m_Name
       value: FX_GroundCrack_Blast_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1159970587636746, guid: e7473d9620ab29341b98bf21b400e598, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1371921061084154, guid: e7473d9620ab29341b98bf21b400e598, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4053854050577488, guid: e7473d9620ab29341b98bf21b400e598, type: 3}
       propertyPath: m_RootOrder

@@ -183,8 +183,7 @@ public class Enemy : MonoBehaviour
     void Returning()
     {
         anim.SetBool("isWalk", false);
-        nav.SetDestination(origninalPosition);
-        
+        nav.SetDestination(origninalPosition);        
     }
     #region 랜덤 아이템 스폰 -제작자 방민호
     private void DropRandomItem()

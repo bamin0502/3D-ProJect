@@ -2,21 +2,31 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: ForceFieldBasicTriplanar02LWRP
   m_Shader: {fileID: 4800000, guid: b71e6c3285f54a545bd1cada84ef4f15, type: 3}
-  m_ShaderKeywords: _LOCALNOISEPOSITION_ON _MASKAPPEARINVERT_ON _MASKAPPEARNOISETRIPLANAR_ON
-    _MASKDEPTHFADEENABLED_ON _NOISEDISTORTIONENABLED_ON _RAMPOFPROCEDRUAL_ON _RAMPORPROCEDRUAL_ON
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _LOCALNOISEPOSITION_ON
+  - _MASKAPPEARINVERT_ON
+  - _MASKAPPEARNOISETRIPLANAR_ON
+  - _MASKDEPTHFADEENABLED_ON
+  - _NOISEDISTORTIONENABLED_ON
+  m_InvalidKeywords:
+  - _RAMPOFPROCEDRUAL_ON
+  - _RAMPORPROCEDRUAL_ON
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -88,6 +98,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _AlphaCutoff: 0.5
     - _AppearMaskRemapLocalY: 0.5
@@ -120,7 +131,7 @@ Material:
     - _MaskAppearNoiseTriplanar: 1
     - _MaskAppearNoiseTriplanarTiling: 0.1
     - _MaskAppearPower: 0.5
-    - _MaskAppearProgress: -1.0929942
+    - _MaskAppearProgress: -1.1122905
     - _MaskAppearRemapLocalY: 0.5
     - _MaskAppearSubtract: 0.25
     - _MaskAppearUseWorldPosition: 0
@@ -159,3 +170,4 @@ Material:
     - _ProvedrualColorEnd: {r: 1, g: 0.7306288, b: 0.3897058, a: 1}
     - _ProvedrualColorStart: {r: 1, g: 0.24604455, b: 0.07352937, a: 1}
     - _RampColorTint: {r: 1, g: 0.53676474, b: 0.53676474, a: 1}
+  m_BuildTextureStacks: []

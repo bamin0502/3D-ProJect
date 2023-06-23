@@ -85,10 +85,18 @@ public class MonsterSpawner : MonoBehaviour
 
         // 해당 스폰 위치에 몬스터가 있는지 검사
         // 예시에서는 monsterPool 리스트를 사용하여 해당 위치의 몬스터 유무를 판단
-        GameObject monster = monsterPool.Find(m => m != null && m.activeSelf && m.transform.position == spawnPoints[spawnPointIndex].position);
-        if (monster == null)
+        int monsterCount = 0;
+        foreach (GameObject monster in monsterPool)
         {
-            hasMonster = true;
+            if (monster != null && monster.activeSelf && monster.transform.position == spawnPoints[spawnPointIndex].position)
+            {
+                monsterCount++;
+                if (monsterCount >= 2)
+                {
+                    hasMonster = true;
+                    break;
+                }
+            }
         }
 
         return hasMonster;

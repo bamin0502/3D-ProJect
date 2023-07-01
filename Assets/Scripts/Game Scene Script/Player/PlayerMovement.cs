@@ -10,10 +10,11 @@ using System.Timers;
 using TMPro;
 using System.Collections.Generic;
 using System.Collections;
+using Sirenix.OdinInspector;
 using Data;
 
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : SerializedMonoBehaviour
 {
     //만든이: 임성훈
     [SerializeField] private WeaponController weaponController;

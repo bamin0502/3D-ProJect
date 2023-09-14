@@ -1710,10 +1710,6 @@ MonoBehaviour:
   rigid: {fileID: 1007756039046700560}
   boxCollider: {fileID: 1007756039046700563}
   enemyHealthBar: {fileID: 7356964391053617370}
-  MeleeAttack: {fileID: 0}
-  Jump: {fileID: 0}
-  Healdraw: {fileID: 0}
-  draw: {fileID: 0}
 --- !u!195 &1007756039046700574
 NavMeshAgent:
   m_ObjectHideFlags: 0

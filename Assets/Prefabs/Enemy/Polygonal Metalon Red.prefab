@@ -269,7 +269,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyHealth: {fileID: 3756319893037006347}
   healthBar: {fileID: 0}
-  healthText: {fileID: 0}
 --- !u!1 &1793645584460619056
 GameObject:
   m_ObjectHideFlags: 0
@@ -464,7 +463,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyHealth: {fileID: 3756319893037006347}
   healthBar: {fileID: 1793645584460619058}
-  healthText: {fileID: 0}
 --- !u!1 &8952239391803053549
 GameObject:
   m_ObjectHideFlags: 0
@@ -870,40 +868,6 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 100
   anim: {fileID: 6426985946033993125}
-  enemyType: 1
-  deathText: {fileID: 0}
-  EndingImage: {fileID: 0}
-  KilledImage: {fileID: 0}
-  kill: {fileID: 0}
-  death: {fileID: 0}
---- !u!114 &8952239390965754372
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6369398431274180259}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 060608e1d8a18e744b2f000ffb79bfa7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 0
-  curHealth: 0
-  attackArea: {fileID: 8952239391803053551}
-  target: {fileID: 0}
-  isChase: 0
-  isAttack: 0
-  origninalPosition: {x: 0, y: 0, z: 0}
-  isDead: 0
-  detectionRadius: 5
-  EnemyDam: 0
-  enemyType: 0
-  itemPrefabs:
-  - {fileID: 1609437894853043167, guid: 8d0aabb812e0c434ebc2c37a5624d9c2, type: 3}
-  - {fileID: 7005254024495169906, guid: a2be9a7ed91393c43ab45799da8e1463, type: 3}
-  - {fileID: 517679667345461060, guid: af265e193312f7e40b241a918614f063, type: 3}
-  tmpDamage: 5
 --- !u!195 &8952239390965754616
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -944,6 +908,32 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &8952239390965754372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6369398431274180259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 060608e1d8a18e744b2f000ffb79bfa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 0
+  curHealth: 0
+  attackArea: {fileID: 8952239391803053551}
+  target: {fileID: 0}
+  isChase: 0
+  isAttack: 0
+  origninalPosition: {x: 0, y: 0, z: 0}
+  isDead: 0
+  detectionRadius: 5
+  itemPrefabs:
+  - {fileID: 1609437894853043167, guid: 8d0aabb812e0c434ebc2c37a5624d9c2, type: 3}
+  - {fileID: 7005254024495169906, guid: a2be9a7ed91393c43ab45799da8e1463, type: 3}
+  - {fileID: 517679667345461060, guid: af265e193312f7e40b241a918614f063, type: 3}
+  tmpDamage: 5
 --- !u!4 &6372433858050982257 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4444695180855720, guid: f88c6ad57910d8648807bcf0c131f49d, type: 3}

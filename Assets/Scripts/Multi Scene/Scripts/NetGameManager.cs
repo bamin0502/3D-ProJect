@@ -36,6 +36,19 @@ public class NetGameManager : KWSingleton<NetGameManager>
 		return null;
 	}
 
+    //방에서 특정유저 강제퇴장
+    public void RoomUserForcedOut(string userID)
+    {
+        for (int i = 0; i < m_roomSession.m_userList.Count; i++)
+        {
+            if (m_roomSession.m_userList[i].m_szUserID == userID)
+            {
+                m_roomSession.m_userList.RemoveAt(i);
+                break;
+            }
+        }
+    }
+
 	//본인 방입장
 	public void Recv_ROOM_ENTER(BinaryReader br)
 	{

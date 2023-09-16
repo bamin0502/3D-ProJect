@@ -113,7 +113,29 @@ public class LobbyScene : MonoBehaviour
 	{
         //로그인 결과
         if (usResult == 0) loginPanel.SetActive(false);
-        else loginAlertText.text = "로그인에 실패했습니다.";
+        else if (usResult == 125) loginAlertText.text = "이미 존재하는 아이디입니다.";
+        else loginAlertText.text = "로그인에 실패했습니다." + usResult;
+    }
+
+    private bool CanEnterRoom(string userID)
+    {
+        RoomSession roomSession = NetGameManager.instance.m_roomSession;
+        int userCount = roomSession.m_userList.Count;
+        GameObject toDestroy = GameObject.Find(userID);
+        
+        if (toDestroy != null)
+        {
+            NetGameManager.instance.RoomUserForcedOut(userID);
+            return false;
+        }
+
+        if (userCount > MaxUserAmount)
+        {
+            NetGameManager.instance.RoomUserForcedOut(userID);
+            return false;
+        }
+
+        return true;
     }
 
     public void RoomEnter()
@@ -124,6 +146,13 @@ public class LobbyScene : MonoBehaviour
         int userCount = roomSession.m_userList.Count;
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(NetGameManager.instance.m_userHandle.m_szUserID);
         lobbyAlertText.text = "알림 : " + userSession.m_szUserID + " 님이 입장하셨습니다.";
+
+        if (!CanEnterRoom(userSession.m_szUserID))
+        {
+            loginPanel.SetActive(true);
+            loginAlertText.text = "로그인에 실패했습니다.";
+            return;
+        }
         
         if (userCount == 1) //해당 로비에 유저가 본인 뿐이면 방의 방장으로 설정
         {
@@ -148,6 +177,8 @@ public class LobbyScene : MonoBehaviour
 	{
         //기존 유저들에게 새로운 유저 들어옴 알림
         //RoomUpdate도 실행됨
+
+        if (!CanEnterRoom(user.m_szUserID)) return;
         
         lobbyAlertText.text = "알림 : " + user.m_szUserID + " 님이 입장하셨습니다.";
         RoomOneUserAdd(user);
@@ -162,6 +193,7 @@ public class LobbyScene : MonoBehaviour
         
         if (toDestroy != null)
         {
+            lobbyAlertText.text = "알림 : " + user.m_szUserID + " 님이 퇴장하셨습니다.";
             int index = _characters.IndexOf(toDestroy);
             if (index < 0) return;
 
@@ -184,6 +216,7 @@ public class LobbyScene : MonoBehaviour
         //TODO 해당 유저 정보 받아와서 방장, 준비 상태 표시
         
         if (_characters.Count > MaxUserAmount) return;
+        if (!CanEnterRoom(user.m_szUserID)) return;
 
         GameObject newCharacter = Instantiate(playerPrefab);
         

@@ -123,6 +123,7 @@ public class LobbyScene : MonoBehaviour
         RoomSession roomSession = NetGameManager.instance.m_roomSession;
         int userCount = roomSession.m_userList.Count;
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(NetGameManager.instance.m_userHandle.m_szUserID);
+        lobbyAlertText.text = "알림 : " + userSession.m_szUserID + " 님이 입장하셨습니다.";
         
         if (userCount == 1) //해당 로비에 유저가 본인 뿐이면 방의 방장으로 설정
         {
@@ -148,7 +149,7 @@ public class LobbyScene : MonoBehaviour
         //기존 유저들에게 새로운 유저 들어옴 알림
         //RoomUpdate도 실행됨
         
-        lobbyAlertText.text = user.m_szUserID + " 님이 입장하셨습니다.";
+        lobbyAlertText.text = "알림 : " + user.m_szUserID + " 님이 입장하셨습니다.";
         RoomOneUserAdd(user);
 	}
 

@@ -9,8 +9,8 @@ using MNF;
 
 public class NetGameManager : KWSingleton<NetGameManager>
 {
-	public UserHandle m_userHandle = new UserHandle();    // ¿Ø¿˙∞≥¿Œ¡§∫∏
-	public RoomSession m_roomSession = new RoomSession(); // πÊ¡§∫∏
+	public UserHandle m_userHandle = new UserHandle();    // Ïú†Ï†ÄÍ∞úÏù∏Ï†ïÎ≥¥
+	public RoomSession m_roomSession = new RoomSession(); // Î∞©Ï†ïÎ≥¥
 
 	override public void Awake()
 	{
@@ -22,7 +22,7 @@ public class NetGameManager : KWSingleton<NetGameManager>
 		NetManager.instance.Init(szIP, nPort, isIntranet);	
 	}
 
-	//πÊø°º≠ ∆Ø¡§¿Ø¿˙¡§∫∏ ∞°¡Æø¿±‚
+	//Î∞©ÏóêÏÑú ÌäπÏ†ïÏú†Ï†ÄÏ†ïÎ≥¥ Í∞ÄÏ†∏Ïò§Í∏∞
 	public UserSession GetRoomUserSession(string szUserID)
 	{
 		for(int i = 0; i < m_roomSession.m_userList.Count; i++)
@@ -36,17 +36,17 @@ public class NetGameManager : KWSingleton<NetGameManager>
 		return null;
 	}
 
-	//∫ª¿Œ πÊ¿‘¿Â
+	//Î≥∏Ïù∏ Î∞©ÏûÖÏû•
 	public void Recv_ROOM_ENTER(BinaryReader br)
 	{
 		m_roomSession.ReadBin(br);
 
 		Debug.Log("Recv_ROOM_ENTER : " + m_roomSession.m_RoomNo.ToString() );
 
-		SceneSample.s.RoomEnter();
+		LobbyScene.Instance.RoomEnter();
 	}
 
-	//¥Ÿ∏• ¿Ø¿˙ πÊ¿‘¿Â
+	//Îã§Î•∏ Ïú†Ï†Ä Î∞©ÏûÖÏû•
 	public void Recv_ROOM_MAN_IN(BinaryReader br)
 	{
 		UserSession userSession = new UserSession();
@@ -56,10 +56,10 @@ public class NetGameManager : KWSingleton<NetGameManager>
 
 		Debug.Log("Recv_ROOM_MAN_IN : " + userSession.m_szUserID );
 
-		SceneSample.s.RoomUserAdd(userSession);
+		LobbyScene.Instance.RoomUserAdd(userSession);
 	}
 
-	//¥Ÿ∏•¿Ø¿˙ πÊ ≈¿Â
+	//Îã§Î•∏Ïú†Ï†Ä Î∞© Ìá¥Ïû•
 	public void Recv_ROOM_MAN_OUT(BinaryReader br)
 	{
 		UserSession userSession = new UserSession();
@@ -74,12 +74,12 @@ public class NetGameManager : KWSingleton<NetGameManager>
 			}
 		}
 
-		SceneSample.s.RoomUserDel(userSession);
+		LobbyScene.Instance.RoomUserDel(userSession);
 
 		Debug.Log("Recv_ROOM_MAN_OUT : " + userSession.m_szUserID );
 	}
 
-	//πÊø°º≠ ∆–≈∂ ¡÷∞Ì πﬁ±‚
+	//Î∞©ÏóêÏÑú Ìå®ÌÇ∑ Ï£ºÍ≥† Î∞õÍ∏∞
 	public void Recv_ROOM_BROADCAST(BinaryReader br)
 	{
 		string szData = "";
@@ -87,10 +87,10 @@ public class NetGameManager : KWSingleton<NetGameManager>
 
 		Debug.Log("Recv_ROOM_BROADCAST" + szData);
 
-		SceneSample.s.RoomBroadcast(szData);
+		LobbyScene.Instance.RoomBroadcast(szData);
 	}
 
-	//πÊø°º≠ ∫ª¿Œ¡§∫∏ æ˜µ•¿Ã∆Æ
+	//Î∞©ÏóêÏÑú Î≥∏Ïù∏Ï†ïÎ≥¥ ÏóÖÎç∞Ïù¥Ìä∏
 	public void Recv_ROOM_USER_DATA_UPDATE(BinaryReader br)
 	{
 		UserSession userSession = new UserSession();
@@ -107,7 +107,7 @@ public class NetGameManager : KWSingleton<NetGameManager>
 
 		Debug.Log("Recv_ROOM_USER_DATA_UPDATE" + userSession.m_szUserID);
 
-		SceneSample.s.RoomUserDataUpdate(userSession);
+		LobbyScene.Instance.RoomUserDataUpdate(userSession);
 	}
     public void Recv_ROOM_USER_MOVE_DIRECT(BinaryReader br)
     {
@@ -125,7 +125,7 @@ public class NetGameManager : KWSingleton<NetGameManager>
 
         Debug.Log("Recv_ROOM_USER_MOVE_DIRECT" + userSession.m_szUserID);
 
-        SceneSample.s.RoomUserMoveDirect(userSession);
+        LobbyScene.Instance.RoomUserMoveDirect(userSession);
     }
     public void Recv_ROOM_USER_ITEM_UPDATE(BinaryReader br)
     {
@@ -143,7 +143,7 @@ public class NetGameManager : KWSingleton<NetGameManager>
 
         Debug.Log("Recv_ROOM_USER_ITEM_UPDATE" + userSession.m_szUserID);
 
-        SceneSample.s.RoomUserItemUpdate(userSession);
+        LobbyScene.Instance.RoomUserItemUpdate(userSession);
     }
     public void Recv_ROOM_DATA_UPDATE(BinaryReader br)
     {
@@ -155,7 +155,7 @@ public class NetGameManager : KWSingleton<NetGameManager>
 		m_roomSession.ReadBin(br);
 		Debug.Log("Recv_ROOM_UPDATE : " + m_roomSession.m_RoomNo.ToString() );
 
-		SceneSample.s.RoomUpdate();
+		LobbyScene.Instance.RoomUpdate();
 	}
 
 	public void UserLogin(string szID, byte byGroup)
@@ -168,7 +168,7 @@ public class NetGameManager : KWSingleton<NetGameManager>
 		ushort usResult = br.ReadUInt16();
 		m_userHandle.ReadBin(br);
 
-		SceneSample.s.UserLoginResult(usResult);
+		LobbyScene.Instance.UserLoginResult(usResult);
 
         Debug.Log("OnRecvWaitLogin");
     }

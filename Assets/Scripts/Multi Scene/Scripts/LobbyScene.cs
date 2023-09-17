@@ -42,6 +42,7 @@ public class LobbyScene : MonoBehaviour
 
     private readonly Regex _regex = new ("^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]*$");
     private readonly List<GameObject> _characters = new();
+    private const int MinUserToStart = 2;
     private const int MaxUserAmount = 5;
     private string _userId;
     private bool _isAdmin;
@@ -141,7 +142,14 @@ public class LobbyScene : MonoBehaviour
                 }
             }
 
-            //TODO: 게임 시작
+            if (roomSession.m_userList.Count < MinUserToStart)
+            {
+                string chatText = "<#4FB7FF><b>알림 : 시작에 필요한 최소 인원이 부족합니다.</b></color>";
+                AddChatting(chatText);
+                return;
+            }
+            
+            LoadingSceneManager.LoadScene("Game Scene");
         }
         else
         {

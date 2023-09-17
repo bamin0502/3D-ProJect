@@ -32,7 +32,9 @@ public class LobbyScene : MonoBehaviour
     [Header("채팅")]
     public TextMeshProUGUI chatPrefab;
     public TMP_InputField inputChat;
-    public Transform chatParent;
+    public Transform chatViewParent;
+    public RectTransform chatRoot;
+    public Transform chatBox;
     
     [Header("그외")]
     public GameObject playerPrefab;
@@ -56,6 +58,20 @@ public class LobbyScene : MonoBehaviour
         //NetGameManager.instance.ConnectServer("3.34.116.91", 3650); 
         //NetGameManager.instance.ConnectServer("192.168.0.43", 3650, true);
     }
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector2 localMousePosition = chatRoot.InverseTransformPoint(Input.mousePosition);
+            if (!chatRoot.rect.Contains(localMousePosition)) chatBox.gameObject.SetActive(false);
+        }
+    }
+
+    private void AddChatting(string text)
+    {
+        var spawnedText = Instantiate(chatPrefab, chatViewParent.transform, false);
+        spawnedText.text = text;
+    }
     private void SendChatting(string text)
     {
         if (string.IsNullOrWhiteSpace(inputChat.text)) return;
@@ -65,6 +81,7 @@ public class LobbyScene : MonoBehaviour
             string chatText = $"{_userId} : {text}";
             BroadcastChat(chatText);
             inputChat.text = "";
+            inputChat.ActivateInputField();
         }
     }
     private void BroadcastChat(string chat)
@@ -119,7 +136,7 @@ public class LobbyScene : MonoBehaviour
                 {
                     //한명이라도 준비를 안했으면
                     string chatText = "<#4FB7FF><b>알림 : 준비 되지 않은 사람이 있습니다.</b></color>";
-                    BroadcastChat(chatText);
+                    AddChatting(chatText);
                     return;
                 }
             }
@@ -178,7 +195,7 @@ public class LobbyScene : MonoBehaviour
         int userCount = roomSession.m_userList.Count;
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(NetGameManager.instance.m_userHandle.m_szUserID);
         string chatText = $"<#4FB7FF><b>알림 : {userSession.m_szUserID} 님이 입장하셨습니다.</b></color>";
-        BroadcastChat(chatText);
+        AddChatting(chatText);
 
         if (!CanEnterRoom(userSession.m_szUserID))
         {
@@ -216,7 +233,6 @@ public class LobbyScene : MonoBehaviour
         if (!CanEnterRoom(user.m_szUserID)) return;
         RoomOneUserAdd(user);
 	}
-
     public void RoomUserDel(UserSession user)
 	{
         //유저 삭제 및 기존 유저 재정렬
@@ -228,7 +244,7 @@ public class LobbyScene : MonoBehaviour
         if (toDestroy != null)
         {
             string chatText = $"<#4FB7FF><b>알림 : {user.m_szUserID} 님이 퇴장하셨습니다.</b></color>";
-            BroadcastChat(chatText);
+            AddChatting(chatText);
             
             int index = _characters.IndexOf(toDestroy);
             if (index < 0) return;
@@ -256,7 +272,6 @@ public class LobbyScene : MonoBehaviour
             }
         }
 	}
-
     void RoomOneUserAdd(UserSession user)
 	{
         //유저 추가
@@ -292,7 +307,6 @@ public class LobbyScene : MonoBehaviour
             }
         }
 	}
-
     public void RoomBroadcast(string szData)
 	{
         //모든 유저에게 정보 전달
@@ -319,7 +333,7 @@ public class LobbyScene : MonoBehaviour
                 }
                 break;
             case 3:
-                var spawnedText = Instantiate(chatPrefab, chatParent.transform, false);
+                var spawnedText = Instantiate(chatPrefab, chatViewParent.transform, false);
                 spawnedText.text = jData["CHAT"].ToString();
                 break;
         }

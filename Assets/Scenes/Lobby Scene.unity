@@ -588,7 +588,9 @@ MonoBehaviour:
   lobbyButton: {fileID: 1142227437}
   chatPrefab: {fileID: 3570807908617881685, guid: cd2c4361e98d78d4ca353603042595d7, type: 3}
   inputChat: {fileID: 2040764717}
-  chatParent: {fileID: 819003945}
+  chatViewParent: {fileID: 819003945}
+  chatRoot: {fileID: 1743950634}
+  chatBox: {fileID: 671404263}
   playerPrefab: {fileID: 6638752181728094646, guid: 354295f80bc3c4c4bbd02aa08864ee55, type: 3}
   positions:
   - {fileID: 1330074698}
@@ -630,7 +632,7 @@ RectTransform:
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -690,7 +692,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &671404263
 RectTransform:
   m_ObjectHideFlags: 0
@@ -710,8 +712,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 8.5, y: 37}
-  m_SizeDelta: {x: -27, y: 200}
+  m_AnchoredPosition: {x: 1.3753967, y: 37}
+  m_SizeDelta: {x: -12.7507, y: 200}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &671404264
 MonoBehaviour:
@@ -726,13 +728,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 819003945}
-  m_Horizontal: 1
+  m_Horizontal: 0
   m_Vertical: 1
   m_MovementType: 1
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 10
   m_Viewport: {fileID: 1284281905}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 1982699884}
@@ -1067,7 +1069,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: -0.0007324219, y: 0}
-  m_SizeDelta: {x: -19, y: 10}
+  m_SizeDelta: {x: -19, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &819003946
 MonoBehaviour:
@@ -1611,9 +1613,9 @@ RectTransform:
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -4, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1284281906
 MonoBehaviour:
@@ -1994,11 +1996,11 @@ RectTransform:
   m_Father: {fileID: 1743950634}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -177.87, y: -195.29999}
-  m_SizeDelta: {x: 30.268, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: -191.58441, y: 4.3}
+  m_SizeDelta: {x: 31.3382, y: 30}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1573093178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2458,7 +2460,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 430, y: 430}
+  m_SizeDelta: {x: 430, y: 248.4178}
   m_Pivot: {x: 1, y: 0}
 --- !u!1 &1755910664
 GameObject:
@@ -3208,11 +3210,11 @@ RectTransform:
   m_Father: {fileID: 1743950634}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 23.634155, y: -195.29999}
-  m_SizeDelta: {x: 372.7318, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 17.0445, y: 4.299988}
+  m_SizeDelta: {x: 385.9109, y: 30}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &2040764717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3307,19 +3309,7 @@ MonoBehaviour:
         m_CallState: 2
   m_OnDeselect:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 671404262}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_OnTextSelection:
     m_PersistentCalls:
       m_Calls: []

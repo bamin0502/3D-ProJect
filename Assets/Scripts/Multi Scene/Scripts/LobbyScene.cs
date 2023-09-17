@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using MNF;
 using TMPro;
+using Random = UnityEngine.Random;
 
 public enum Lobby_State //플레이어 상태 0:방장 1:준비됨
 {
@@ -37,6 +38,8 @@ public class LobbyScene : MonoBehaviour
     private readonly List<GameObject> _characters = new();
     private const int MaxUserAmount = 5;
     private string _userId;
+    private bool _isAdmin;
+    private bool _isReady;
     
     
 	private void Start()
@@ -68,7 +71,6 @@ public class LobbyScene : MonoBehaviour
         
         NetGameManager.instance.UserLogin(userID, 1);
 	}
-
     private void OnClick_LobbyButton()
 	{
         //준비, 시작버튼 클릭시
@@ -80,6 +82,9 @@ public class LobbyScene : MonoBehaviour
         
         if (userSession.m_nUserData[(int)Lobby_State.IsAdmin] == 1)
         {
+            userSession.m_nUserData[(int)Lobby_State.IsReady] = 1;
+            NetGameManager.instance.RoomUserDataUpdate(userSession);
+            
             for (int i = 0; i < roomSession.m_userList.Count; i++)
             {
                 if (roomSession.m_userList[i].m_nUserData[(int)Lobby_State.IsReady] == 0)
@@ -94,21 +99,14 @@ public class LobbyScene : MonoBehaviour
         }
         else
         {
+            //TODO: 이미 준비 중이면 준비 취소
+            
             userSession.m_nUserData[(int)Lobby_State.IsReady] = 1;
-
-            //TODO: 유저 정보 업데이트 및 모든 유저에게 알림.
+            NetGameManager.instance.RoomUserDataUpdate(userSession);
+            _isReady = true;
+            PlayerReady();
         }
-        
-        // var data = new GAME_START
-        // { 
-        //     USER = NetGameManager.instance.m_userHandle.m_szUserID, 
-        //     DATA = 1
-        // };
-        //
-        // string sendData = LitJson.JsonMapper.ToJson(data);
-        // NetGameManager.instance.RoomBroadcast(sendData);
 	}
-
     public void UserLoginResult(ushort usResult)
 	{
         //로그인 결과
@@ -116,7 +114,6 @@ public class LobbyScene : MonoBehaviour
         else if (usResult == 125) loginAlertText.text = "이미 존재하는 아이디입니다.";
         else loginAlertText.text = "로그인에 실패했습니다." + usResult;
     }
-
     private bool CanEnterRoom(string userID)
     {
         RoomSession roomSession = NetGameManager.instance.m_roomSession;
@@ -137,7 +134,6 @@ public class LobbyScene : MonoBehaviour
 
         return true;
     }
-
     public void RoomEnter()
 	{
         // 새로 들어왔을때
@@ -156,15 +152,18 @@ public class LobbyScene : MonoBehaviour
         
         if (userCount == 1) //해당 로비에 유저가 본인 뿐이면 방의 방장으로 설정
         {
+            _isAdmin = true;
             lobbyButtonText.text = "게임 시작";
             userSession.m_nUserData[(int)Lobby_State.IsAdmin] = 1;
             userSession.m_nUserData[(int)Lobby_State.IsReady] = 1;
+            NetGameManager.instance.RoomUserDataUpdate(userSession);
         }
         else
         {
             lobbyButtonText.text = "준비";
             userSession.m_nUserData[(int)Lobby_State.IsAdmin] = 0;
             userSession.m_nUserData[(int)Lobby_State.IsReady] = 0;
+            NetGameManager.instance.RoomUserDataUpdate(userSession);
         }
         
 		for(int i = 0; i < userCount; i++)
@@ -172,7 +171,6 @@ public class LobbyScene : MonoBehaviour
             RoomOneUserAdd(roomSession.m_userList[i]);
 		}
 	}
-
     public void RoomUserAdd(UserSession user)
 	{
         //기존 유저들에게 새로운 유저 들어옴 알림
@@ -187,9 +185,10 @@ public class LobbyScene : MonoBehaviour
     public void RoomUserDel(UserSession user)
 	{
         //유저 삭제 및 기존 유저 재정렬
-        //TODO : 방장이 나가면 다른 유저에게 방장 넘김
         
         GameObject toDestroy = GameObject.Find(user.m_szUserID);
+        
+        bool isAdmin = user.m_nUserData[(int)Lobby_State.IsAdmin] == 1;
         
         if (toDestroy != null)
         {
@@ -207,13 +206,23 @@ public class LobbyScene : MonoBehaviour
                     _characters[i].transform.position = positions[i].position;
                 }
             }
+
+            if (isAdmin && _characters.Count > 0)
+            {
+                int randomIndex = Random.Range(0, _characters.Count);
+                GameObject selectedObject = _characters[randomIndex];
+                UserSession userSession = NetGameManager.instance.GetRoomUserSession(selectedObject.gameObject.name);
+                userSession.m_nUserData[(int)Lobby_State.IsAdmin] = 1;
+                userSession.m_nUserData[(int)Lobby_State.IsReady] = 1;
+                NetGameManager.instance.RoomUserDataUpdate(userSession);
+                selectedObject.GetComponent<Lobby_Player>().ChangeIcon(true, true);
+            }
         }
 	}
 
     void RoomOneUserAdd(UserSession user)
 	{
         //유저 추가
-        //TODO 해당 유저 정보 받아와서 방장, 준비 상태 표시
         
         if (_characters.Count > MaxUserAmount) return;
         if (!CanEnterRoom(user.m_szUserID)) return;
@@ -224,10 +233,15 @@ public class LobbyScene : MonoBehaviour
         {
             if (_characters.Count <= i || _characters[i] == null)
             {
+                bool isAdmin = user.m_nUserData[(int)Lobby_State.IsAdmin] == 1;
+                bool isReady = user.m_nUserData[(int)Lobby_State.IsReady] == 1;
+                
                 newCharacter.transform.position = positions[i].position;
                 newCharacter.transform.rotation = Quaternion.Euler(0,180,0);
+                newCharacter.TryGetComponent(out Lobby_Player player);
+                player.Init(user);
+                player.ChangeIcon(isAdmin, isReady);
 
-                newCharacter.GetComponent<Lobby_Player>().Init(user);
                 if (_characters.Count <= i)
                 {
                     _characters.Add(newCharacter);
@@ -249,17 +263,48 @@ public class LobbyScene : MonoBehaviour
         string userID = jData["USER"].ToString();
         int    dataID = Convert.ToInt32(jData["DATA"].ToString());
 
-        Debug.Log("RoomBroadcast : " + userID + " , " + dataID.ToString() );
-        if (dataID == 1)//���ӽ���
-		{
-            InvokeRepeating("UserMove", 0, 0.05f);
-		}
-        else if (dataID == 2)//�Ѿ˹߻�
-		{
-            string power = jData["Power"].ToString();
-            string pos = jData["Position"].ToString();
-		}
 
+        switch (dataID)
+        {
+            case 1:
+                InvokeRepeating("UserMove", 0, 0.1f);
+                break;
+            case 2:
+                bool isAdmin = bool.Parse(jData["ISADMIN"].ToString());
+                bool isReady = bool.Parse(jData["ISREADY"].ToString());
+
+                GameObject toUpdate = GameObject.Find(userID);
+
+                if (toUpdate != null)
+                {
+                    toUpdate.TryGetComponent(out Lobby_Player player);
+                    player.ChangeIcon(isAdmin, isReady);
+                }
+                
+                break;
+        }
+    }
+    
+    private void PlayerReady()
+    {
+        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+            NetGameManager.instance.m_userHandle.m_szUserID);
+        
+        var data = new LOBBY_STATE
+        {
+            USER = userSession.m_szUserID,
+            DATA = 2,
+            ISADMIN = _isAdmin,
+            ISREADY = _isReady
+        };
+
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
+    }
+
+    public void OnConnectFail()
+    {
+        loginAlertText.text = "서버와의 연결에 실패했습니다.";
     }
 
     public void RoomUpdate()
@@ -280,27 +325,29 @@ public class LobbyScene : MonoBehaviour
         // }
     }
 
-    #region 해당씬에서 안쓰는 거
-
     public void RoomUserDataUpdate(UserSession user)
     {
-        RoomSession roomSession = NetGameManager.instance.m_roomSession;
-        for (int i = 0; i < roomSession.m_userList.Count; i++)
-        {
-            if (roomSession.m_userList[i].m_szUserID == user.m_szUserID)
-            {
-                GameObject playerObj = GameObject.Find(roomSession.m_userList[i].m_szUserID);
-                if (playerObj)
-                {
-                    Destroy(playerObj, 0);
-                }
+        //NetGameManager에서 RoomUserDataUpdate사용하면 호출됨
 
-                RoomOneUserAdd(user);
-                return;
-            }
-        }
+        // RoomSession roomSession = NetGameManager.instance.m_roomSession;
+        // for (int i = 0; i < roomSession.m_userList.Count; i++)
+        // {
+        //     if (roomSession.m_userList[i].m_szUserID == user.m_szUserID)
+        //     {
+        //         GameObject playerObj = GameObject.Find(roomSession.m_userList[i].m_szUserID);
+        //         if (playerObj)
+        //         {
+        //             Destroy(playerObj, 0);
+        //         }
+        //
+        //         RoomOneUserAdd(user);
+        //         return;
+        //     }
+        // }
     }
-
+    
+    #region 해당씬에서 안쓰는 거
+    
     public void RoomUserMoveDirect(UserSession user)
     {
         RoomSession roomSession = NetGameManager.instance.m_roomSession;

@@ -130,6 +130,7 @@ namespace MNF
 
 		public void OnNetConnectFail(int nRet)
 		{
+            LobbyScene.Instance.OnConnectFail();
 			Debug.Log("OnNetConnectFail : " + nRet.ToString());
 		}
 

@@ -589,7 +589,6 @@ MonoBehaviour:
   chatPrefab: {fileID: 3570807908617881685, guid: cd2c4361e98d78d4ca353603042595d7, type: 3}
   inputChat: {fileID: 2040764717}
   chatParent: {fileID: 819003945}
-  chatPanel: {fileID: 671404262}
   playerPrefab: {fileID: 6638752181728094646, guid: 354295f80bc3c4c4bbd02aa08864ee55, type: 3}
   positions:
   - {fileID: 1330074698}

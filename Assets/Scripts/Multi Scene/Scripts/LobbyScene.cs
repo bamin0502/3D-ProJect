@@ -24,12 +24,16 @@ public class LobbyScene : MonoBehaviour
     public TMP_InputField inputUserID;
     public GameObject loginPanel;
     public Button loginButton;
-    
+
     [Header("로비 패널")]
     public TextMeshProUGUI lobbyButtonText;
-    public TextMeshProUGUI lobbyAlertText;
     public Button lobbyButton;
 
+    [Header("채팅")]
+    public TextMeshProUGUI chatPrefab;
+    public TMP_InputField inputChat;
+    public Transform chatParent;
+    
     [Header("그외")]
     public GameObject playerPrefab;
     public Transform[] positions;
@@ -54,22 +58,44 @@ public class LobbyScene : MonoBehaviour
         //NetGameManager.instance.ConnectServer("192.168.0.43", 3650, true);
     }
 
+    public void SendChatting()
+    {
+        if (string.IsNullOrWhiteSpace(inputChat.text)) return;
+        string chatText = $"{_userId} : {inputChat.text}";
+        InputChatting(chatText);
+        inputChat.text = "";
+    }
+    private void InputChatting(string chat)
+    {
+        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+            NetGameManager.instance.m_userHandle.m_szUserID);
+
+        var data = new GAME_CHAT
+        {
+            USER = userSession.m_szUserID,
+            DATA = 3,
+            CHAT = chat,
+        };
+
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
+    }
     private void OnClick_Login()
 	{
         //로그인 버튼 클릭시
-        string userID = inputUserID.text;
-        if (userID.Length is < 1 or > 10)
+        _userId = inputUserID.text;
+        if (_userId.Length is < 1 or > 10)
         {
             loginAlertText.text = "아이디의 길이를 1자 이상, 10자 이하로 맞춰주세요";
             return;
         }
-        if (!_regex.IsMatch(userID))
+        if (!_regex.IsMatch(_userId))
         {
             loginAlertText.text = "아이디에 특수문자는 사용할 수 없습니다.";
             return;
         }
         
-        NetGameManager.instance.UserLogin(userID, 1);
+        NetGameManager.instance.UserLogin(_userId, 1);
 	}
     private void OnClick_LobbyButton()
 	{
@@ -90,7 +116,8 @@ public class LobbyScene : MonoBehaviour
                 if (roomSession.m_userList[i].m_nUserData[(int)Lobby_State.IsReady] == 0)
                 {
                     //한명이라도 준비를 안했으면
-                    lobbyAlertText.text = "준비 되지 않은 사람이 있습니다.";
+                    string chatText = "<#4FB7FF><b>알림 : 준비 되지 않은 사람이 있습니다.</b></color>";
+                    InputChatting(chatText);
                     return;
                 }
             }
@@ -141,7 +168,8 @@ public class LobbyScene : MonoBehaviour
         RoomSession roomSession = NetGameManager.instance.m_roomSession;
         int userCount = roomSession.m_userList.Count;
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(NetGameManager.instance.m_userHandle.m_szUserID);
-        lobbyAlertText.text = "알림 : " + userSession.m_szUserID + " 님이 입장하셨습니다.";
+        string chatText = $"<#4FB7FF><b>알림 : {userSession.m_szUserID} 님이 입장하셨습니다.</b></color>";
+        InputChatting(chatText);
 
         if (!CanEnterRoom(userSession.m_szUserID))
         {
@@ -177,8 +205,6 @@ public class LobbyScene : MonoBehaviour
         //RoomUpdate도 실행됨
 
         if (!CanEnterRoom(user.m_szUserID)) return;
-        
-        lobbyAlertText.text = "알림 : " + user.m_szUserID + " 님이 입장하셨습니다.";
         RoomOneUserAdd(user);
 	}
 
@@ -192,7 +218,9 @@ public class LobbyScene : MonoBehaviour
         
         if (toDestroy != null)
         {
-            lobbyAlertText.text = "알림 : " + user.m_szUserID + " 님이 퇴장하셨습니다.";
+            string chatText = $"<#4FB7FF><b>알림 : {user.m_szUserID} 님이 퇴장하셨습니다.</b></color>";
+            InputChatting(chatText);
+            
             int index = _characters.IndexOf(toDestroy);
             if (index < 0) return;
 
@@ -280,7 +308,10 @@ public class LobbyScene : MonoBehaviour
                     toUpdate.TryGetComponent(out Lobby_Player player);
                     player.ChangeIcon(isAdmin, isReady);
                 }
-                
+                break;
+            case 3:
+                var spawnedText = Instantiate(chatPrefab, chatParent.transform, false);
+                spawnedText.text = jData["CHAT"].ToString();
                 break;
         }
     }

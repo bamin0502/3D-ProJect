@@ -20,3 +20,12 @@ public class LOBBY_STATE
     public bool ISREADY = false;
 }
 
+
+[Serializable]
+public class GAME_CHAT
+{
+    public string USER = "";
+    public int DATA = 0;
+    public string CHAT = "";
+}
+

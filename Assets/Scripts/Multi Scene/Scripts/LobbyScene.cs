@@ -45,27 +45,29 @@ public class LobbyScene : MonoBehaviour
     private bool _isAdmin;
     private bool _isReady;
     
-    
-	private void Start()
+    private void Start()
     {
         //로컬에서 테스트
-        
         NetGameManager.instance.ConnectServer("127.0.0.1", 3650, true);
         lobbyButton.onClick.AddListener(OnClick_LobbyButton);
         loginButton.onClick.AddListener(OnClick_Login);
+        inputChat.onSubmit.AddListener(SendChatting);
         Instance = this;
         //NetGameManager.instance.ConnectServer("3.34.116.91", 3650); 
         //NetGameManager.instance.ConnectServer("192.168.0.43", 3650, true);
     }
-
-    public void SendChatting()
+    private void SendChatting(string text)
     {
         if (string.IsNullOrWhiteSpace(inputChat.text)) return;
-        string chatText = $"{_userId} : {inputChat.text}";
-        InputChatting(chatText);
-        inputChat.text = "";
+
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            string chatText = $"{_userId} : {text}";
+            BroadcastChat(chatText);
+            inputChat.text = "";
+        }
     }
-    private void InputChatting(string chat)
+    private void BroadcastChat(string chat)
     {
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(
             NetGameManager.instance.m_userHandle.m_szUserID);
@@ -117,7 +119,7 @@ public class LobbyScene : MonoBehaviour
                 {
                     //한명이라도 준비를 안했으면
                     string chatText = "<#4FB7FF><b>알림 : 준비 되지 않은 사람이 있습니다.</b></color>";
-                    InputChatting(chatText);
+                    BroadcastChat(chatText);
                     return;
                 }
             }
@@ -126,11 +128,18 @@ public class LobbyScene : MonoBehaviour
         }
         else
         {
-            //TODO: 이미 준비 중이면 준비 취소
-            
-            userSession.m_nUserData[(int)Lobby_State.IsReady] = 1;
+            if (_isReady)
+            {
+                userSession.m_nUserData[(int)Lobby_State.IsReady] = 0;
+                _isReady = false;
+            }
+            else 
+            {
+                userSession.m_nUserData[(int)Lobby_State.IsReady] = 1;
+                _isReady = true;
+            }
+
             NetGameManager.instance.RoomUserDataUpdate(userSession);
-            _isReady = true;
             PlayerReady();
         }
 	}
@@ -169,7 +178,7 @@ public class LobbyScene : MonoBehaviour
         int userCount = roomSession.m_userList.Count;
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(NetGameManager.instance.m_userHandle.m_szUserID);
         string chatText = $"<#4FB7FF><b>알림 : {userSession.m_szUserID} 님이 입장하셨습니다.</b></color>";
-        InputChatting(chatText);
+        BroadcastChat(chatText);
 
         if (!CanEnterRoom(userSession.m_szUserID))
         {
@@ -219,7 +228,7 @@ public class LobbyScene : MonoBehaviour
         if (toDestroy != null)
         {
             string chatText = $"<#4FB7FF><b>알림 : {user.m_szUserID} 님이 퇴장하셨습니다.</b></color>";
-            InputChatting(chatText);
+            BroadcastChat(chatText);
             
             int index = _characters.IndexOf(toDestroy);
             if (index < 0) return;

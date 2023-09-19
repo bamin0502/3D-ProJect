@@ -11,6 +11,7 @@ using TMPro;
 using System.Collections.Generic;
 using System.Collections;
 using Data;
+using Image = UnityEngine.UIElements.Image;
 
 
 public class PlayerMovement : MonoBehaviour
@@ -40,7 +41,11 @@ public class PlayerMovement : MonoBehaviour
         //만든이 : 임성훈
         _navAgent = GetComponent<NavMeshAgent>();
         _camera = Camera.main;
-        //만든이 : 방민호        
+        //만든이 : 방민호
+        coolText= GameObject.Find("Spacebar Image").transform.Find("Spacebar Text").GetComponent<TMP_Text>();
+        SpaceUI= GameObject.Find("Spacebar Image");
+        fill= GameObject.Find("Spacebar Image").GetComponent<UnityEngine.UI.Image>();
+       
         ani =GetComponent<AniSetting>();
         SpaceUI.SetActive(false);//스페이스바 UI 비활성화
         ChangedState(PlayerState.Idle);//플레이어 기본상태를 Idle로 지정
@@ -98,10 +103,6 @@ public class PlayerMovement : MonoBehaviour
                 isCoolingDown = false;
                 coolText.text = "";
             }
-        }
-        if (Time.timeScale == 0)
-        {
-            return;
         }
         #endregion
 
@@ -161,8 +162,6 @@ public class PlayerMovement : MonoBehaviour
                 break;
             case PlayerState.GetHit:
                 PlayerStateGetHit();
-                break;
-            default:
                 break;
         }
 

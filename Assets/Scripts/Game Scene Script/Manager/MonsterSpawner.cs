@@ -28,7 +28,7 @@ public class MonsterSpawner : MonoBehaviour
         }
 
         // 초기 스폰 지연 시간 후 몬스터 스폰 시작
-        Invoke("StartSpawning", initialSpawnDelay);
+        Invoke(nameof(StartSpawning), initialSpawnDelay);
     }
 
     private void StartSpawning()

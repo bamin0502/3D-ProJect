@@ -39,18 +39,12 @@ public class RightClickAnimation : MonoBehaviour
                 }
             }
         }
-        if (Time.timeScale == 0)
-        {
-            return;
-        }
     }
 
     private IEnumerator PlayClickAnimation(Vector3 position)
     {
         //풀에서 오브젝트 생성 및 해제
-        GameObject clickAnimation;
-
-        clickAnimation = _clickAnimationPool.Count > 0 ? _clickAnimationPool.Dequeue() : Instantiate(clickAnimationPrefab);
+        var clickAnimation = _clickAnimationPool.Count > 0 ? _clickAnimationPool.Dequeue() : Instantiate(clickAnimationPrefab);
 
         position.y += 0.3f;
         clickAnimation.transform.position = position;

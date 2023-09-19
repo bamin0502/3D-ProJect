@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using Data;
@@ -28,6 +27,9 @@ public class EnemyHealth : MonoBehaviour
     public Image KilledImage;
     public TMP_Text kill;
     public TMP_Text death;
+
+    private static readonly int DoDie = Animator.StringToHash("doDie");
+
     // Start is called before the first frame update
     void Start()
     {
@@ -97,7 +99,7 @@ public class EnemyHealth : MonoBehaviour
         else if (isBoss) {
             boss.isDead = true;
         }
-        anim.SetTrigger("doDie");
+        anim.SetTrigger(DoDie);
     }
     
     void EndDeath()

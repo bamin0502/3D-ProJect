@@ -17,7 +17,7 @@ public class OptionManager : MonoBehaviour
     //프레임 변수 지정
     private int framerate;
     //해상도 관련 리스트배열 선언
-    List<Resolution> resolutions = new List<Resolution>();
+    readonly List<Resolution> resolutions = new List<Resolution>();
     //드롭다운 변수 선언
     public TMP_Dropdown resolutionDropdown;
     //해상도를 변경할수 있게 해주는 변수 선언
@@ -46,38 +46,22 @@ public class OptionManager : MonoBehaviour
         //image[1].transform.gameObject.SetActive(false);
         ChangeSize();
     }
-    void Awake()
-    {
-        //if (instance == null)//instance가 null. 즉 시스템상에 존재하고 있지 않은 상태라면
-        //{
-        //    instance = this;//내 자신을 instance에 넣어준다
-        //    DontDestroyOnLoad(gameObject);//OnLoad(씬이 로드 되었을때) 자신을 파괴하지않고 유지한다.
-
-        //}
-        //else
-        //{
-        //    if(instance != this)//instance가 내가 아니라면 이미 instance가 존재하고 있다는 뜻이고
-        //    {
-        //        Destroy(this.gameObject);//둘이상 존재할시 안되기 때문에 방금전에 만들어진 본인을 파괴함
-        //    }
-        //}
-    }
-    //옵션 버튼을 눌렀을때 옵션창을 열게 만들 메서드를 지정
-    //사이즈를 조절할 메서드 선언
     public void ChangeSize()
     {
-        for (int i = 0; i < Screen.resolutions.Length; i++)
+        foreach (var t in Screen.resolutions)
         {
-            if (Screen.resolutions[i].refreshRate == 60 || Screen.resolutions[i].refreshRate == 165 || Screen.resolutions[i].refreshRate == 144)
-                resolutions.Add(Screen.resolutions[i]);
+            if (t.refreshRate == 60 || t.refreshRate == 165 || t.refreshRate == 144)
+                resolutions.Add(t);
         }
         resolutionDropdown.options.Clear();
         //초기 설정값 지정
         int optionNum = 0;
         foreach (Resolution item in resolutions)
         {
-            TMP_Dropdown.OptionData option = new TMP_Dropdown.OptionData();
-            option.text = item.width + "X" + item.height + " " + item.refreshRate + "hz" + "(BETA)";
+            TMP_Dropdown.OptionData option = new TMP_Dropdown.OptionData
+            {
+                text = item.width + "X" + item.height + " " + item.refreshRate + "hz" + "(BETA)"
+            };
             resolutionDropdown.options.Add(option);
 
             if (item.width == Screen.width && item.height == Screen.height)
@@ -86,7 +70,7 @@ public class OptionManager : MonoBehaviour
         }
         resolutionDropdown.RefreshShownValue();
         //풀스크린 버튼의 클릭여부를 반환함(눌린 상태면 true 아니면 false 반환)
-        fullscreenBtn.isOn = Screen.fullScreenMode.Equals(FullScreenMode.FullScreenWindow) ? true : false;
+        fullscreenBtn.isOn = Screen.fullScreenMode.Equals(FullScreenMode.FullScreenWindow);
     }
     //해당 드롭다운 value 번호에 맞게 변경하게 해주는 메서드 생성
     public void DropboxOptionChange(int x)

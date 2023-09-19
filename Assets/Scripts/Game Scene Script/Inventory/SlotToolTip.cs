@@ -26,10 +26,7 @@ public class SlotToolTip : MonoBehaviour
         txt_ItemName.text = _item.itemName;
         txt_ItemDesc.text = _item.itemDesc;
 
-        if (_item.itemType == Item.ItemType.Used)
-            txt_ItemHowtoUsed.text = "우 클릭시 해당 아이템 사용";
-        else
-            txt_ItemHowtoUsed.text = "";
+        txt_ItemHowtoUsed.text = _item.itemType == Item.ItemType.Used ? "우 클릭시 해당 아이템 사용" : "";
     }
     public void HideToolTip()
     {

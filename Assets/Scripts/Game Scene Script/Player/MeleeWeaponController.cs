@@ -14,14 +14,14 @@ public class MeleeWeaponController : MonoBehaviour
     private Transform currentTarget;
     private Weapon currentWeapon;
     private Coroutine attackRoutine;
+    private static readonly int BowAttack = Animator.StringToHash("BowAttack");
+    private static readonly int GunAttack = Animator.StringToHash("GunAttack");
+    private static readonly int OneHandedAttack = Animator.StringToHash("OneHandedAttack");
+    private static readonly int TwoHandedAttack = Animator.StringToHash("TwoHandedAttack");
 
     void Update()
     {
         TryAttack();
-        if (Time.timeScale == 0)
-        {
-            return;
-        }
     }
 
     private void TryAttack()
@@ -57,17 +57,17 @@ public class MeleeWeaponController : MonoBehaviour
             switch (weaponType)
             {
                 case WeaponType.Bow:
-                    playerMovement.ani.ani.SetTrigger("BowAttack");
+                    playerMovement.ani.ani.SetTrigger(BowAttack);
                     StartCoroutine(ArrowSpawnCoroutine());
                     break;
                 case WeaponType.Gun:
-                    playerMovement.ani.ani.SetTrigger("GunAttack");
+                    playerMovement.ani.ani.SetTrigger(GunAttack);
                     break;
                 case WeaponType.OneHanded:
-                    playerMovement.ani.ani.SetTrigger("OneHandedAttack");
+                    playerMovement.ani.ani.SetTrigger(OneHandedAttack);
                     break;
                 case WeaponType.TwoHanded:
-                    playerMovement.ani.ani.SetTrigger("TwoHandedAttack");
+                    playerMovement.ani.ani.SetTrigger(TwoHandedAttack);
                     break;
             }
 

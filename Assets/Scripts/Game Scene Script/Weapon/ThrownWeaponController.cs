@@ -31,10 +31,6 @@ public class ThrownWeaponController : MonoBehaviour
 
             }
         }
-        if (Time.timeScale == 0)
-        {
-            return;
-        }
     }
 
     void ThrowGrenade()
@@ -44,8 +40,9 @@ public class ThrownWeaponController : MonoBehaviour
         
         if (distanceToMouse > maxThrowRange)
         {
-            Vector3 directionToMouse = (mousePosition - transform.position).normalized;
-            mousePosition = transform.position + directionToMouse * maxThrowRange;
+            var position = transform.position;
+            Vector3 directionToMouse = (mousePosition - position).normalized;
+            mousePosition = position + directionToMouse * maxThrowRange;
             distanceToMouse = maxThrowRange;
         }
 
@@ -79,12 +76,15 @@ public class ThrownWeaponController : MonoBehaviour
         
         if (distanceToMouse > maxThrowRange)
         {
-            Vector3 directionToMouse = (mousePosition - transform.position).normalized;
-            mousePosition = transform.position + directionToMouse * maxThrowRange;
+            var position = transform.position;
+            Vector3 directionToMouse = (mousePosition - position).normalized;
+            mousePosition = position + directionToMouse * maxThrowRange;
         }
-        
+
+        var transform1 = transform;
+        var position1 = transform1.position;
         throwRangeIndicator.transform.position =
-            new Vector3(transform.position.x, 0.01f, transform.position.z);
+            new Vector3(position1.x, 0.01f, position1.z);
         throwRangeIndicator.transform.localScale =
             new Vector3(maxThrowRange * 2, 0.001f,
                 maxThrowRange * 2);

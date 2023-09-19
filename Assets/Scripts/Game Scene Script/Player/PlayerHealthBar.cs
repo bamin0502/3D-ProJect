@@ -20,10 +20,6 @@ public class PlayerHealthBar : MonoBehaviour
         Vector3 lookAtPosition = _cam.transform.position;
         lookAtPosition.x = transform.position.x;
         transform.LookAt(lookAtPosition);
-        if (Time.timeScale == 0)
-        {
-            return;
-        }
     }
     
 

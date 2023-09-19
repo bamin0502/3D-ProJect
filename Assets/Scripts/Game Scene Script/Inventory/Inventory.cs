@@ -27,27 +27,26 @@ public class Inventory : MonoBehaviour
         // 이미 아이템이 있는데 그 아이템 타입이 Used나 Throw형일경우
         if (Item.ItemType.Used == _item.itemType || Item.ItemType.Throw == _item.itemType || Item.ItemType.buff ==_item.itemType)
         {
-            for (int i = 0; i < slots.Length; i++)
+            foreach (var t in slots)
             {
-                if (slots[i].item != null)
+                if (t.item != null)
                 {
-                    if (slots[i].item.itemName == _item.itemName)
+                    if (t.item.itemName == _item.itemName)
                     {
-                        slots[i].SetSlotCount(_count);
+                        t.SetSlotCount(_count);
                         return;
                     }
                 }
             }
         }
         //아이템이 없다면
-        for (int i = 0; i < slots.Length; i++)
+        foreach (var t in slots)
         {
-            if (slots[i].item == null)
+            if (t.item == null)
             {
-                slots[i].AddItem(_item, _count);
+                t.AddItem(_item, _count);
                 return;
             }
         }
-        
     }
 }

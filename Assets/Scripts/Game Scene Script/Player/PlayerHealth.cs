@@ -21,6 +21,9 @@ public class PlayerHealth : MonoBehaviour
     public TMP_Text death;
     public ParticleSystem DeathParticle;
     public ParticleSystem DeathBloodParticle;
+
+    private static readonly int DoDie = Animator.StringToHash("doDie");
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,7 +52,7 @@ public class PlayerHealth : MonoBehaviour
     {
         DeathParticle.Play();
         DeathBloodParticle.Play();
-        anim.SetTrigger("doDie");
+        anim.SetTrigger(DoDie);
         deathText.DOText("당신은 "+ "<color=red>" + "몬스터"+ "</color>" + "에게 죽었습니다.", 3, true, ScrambleMode.None, null);
         EndingImage.rectTransform.gameObject.SetActive(true);
 

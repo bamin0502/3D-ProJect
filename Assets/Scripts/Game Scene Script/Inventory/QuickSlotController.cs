@@ -38,9 +38,9 @@ public class QuickSlotController : MonoBehaviour
         {
             currentCoolTime -= Time.deltaTime;
 
-            for(int i=0; i<img_coolTime.Length; i++)
+            foreach (var t in img_coolTime)
             {
-                img_coolTime[i].fillAmount = currentCoolTime / coolTime;
+                t.fillAmount = currentCoolTime / coolTime;
 
                 if (currentCoolTime <= 0)
                 {

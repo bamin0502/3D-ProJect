@@ -13,8 +13,9 @@ public class IconlookAt : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 lookAtPosition = _cam.transform.position;
+        var transform1 = _cam.transform;
+        Vector3 lookAtPosition = transform1.position;
         lookAtPosition.x = transform.position.x;
-        transform.LookAt(lookAtPosition,_cam.transform.up);
+        transform.LookAt(lookAtPosition,transform1.up);
     }
 }

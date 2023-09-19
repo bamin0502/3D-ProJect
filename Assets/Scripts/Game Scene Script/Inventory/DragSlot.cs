@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class DragSlot : MonoBehaviour
 {
     //자기 자신을 인스턴스화함 
-    static public DragSlot inst;
+    public static DragSlot inst;
     public Slot dragSlot;
 
     [SerializeField]

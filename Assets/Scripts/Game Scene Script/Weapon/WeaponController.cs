@@ -10,16 +10,16 @@ public class WeaponController : MonoBehaviour
     public Transform weaponHolder;
     public Transform weaponHolder2;
     public NavMeshAgent agent;
-    private float weaponPickupRange = 2f;
+    private readonly float weaponPickupRange = 2f;
     private Weapon targetedWeapon;
     public Weapon equippedWeapon;
     public Transform currentTarget;
     private float attackTimer;
     public bool isAttack;
     public Canvas IconCanvas;
-    //김하겸
-    //private Weapon targetedWeapon;
-    //private Weapon equippedWeapon;
+
+    private static readonly int Pickup = Animator.StringToHash("ItemPickup");
+    
     private void Update()
     {
         HandleInput();
@@ -33,10 +33,6 @@ public class WeaponController : MonoBehaviour
         {
             MoveTowardsTarget();
             AttackTarget();
-        }
-        if (Time.timeScale == 0)
-        {
-            return;
         }
     }
 
@@ -58,22 +54,25 @@ public class WeaponController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            LayerMask layerMask = ~LayerMask.GetMask("Player");
-
-            if (Physics.Raycast(ray, out var hit, Mathf.Infinity, layerMask))
+            if (Camera.main != null)
             {
-                if (hit.collider.CompareTag("Enemy"))
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                LayerMask layerMask = ~LayerMask.GetMask("Player");
+
+                if (Physics.Raycast(ray, out var hit, Mathf.Infinity, layerMask))
                 {
-                    SetTarget(hit.transform);
-                }
-                else if (hit.collider.TryGetComponent(out targetedWeapon))
-                {
-                    return;
-                }
-                else
-                {
-                    ClearTarget();
+                    if (hit.collider.CompareTag("Enemy"))
+                    {
+                        SetTarget(hit.transform);
+                    }
+                    else if (hit.collider.TryGetComponent(out targetedWeapon))
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        ClearTarget();
+                    }
                 }
             }
         }
@@ -124,7 +123,7 @@ public class WeaponController : MonoBehaviour
         float distance = Vector3.Distance(transform.position, targetedWeapon.transform.position);
         if (distance <= weaponPickupRange)
         {
-            playerMovement.ani.ani.SetTrigger("ItemPickup");
+            playerMovement.ani.ani.SetTrigger(Pickup);
             StartCoroutine(EquipWeaponAfterDelay(targetedWeapon, 0.1f));
         }
     }
@@ -168,8 +167,10 @@ public class WeaponController : MonoBehaviour
             {
                 collider.enabled = false;
             }
-            newWeapon.transform.parent = newWeapon.weaponType != WeaponType.Bow ? weaponHolder : weaponHolder2;
-            newWeapon.transform.localPosition = newWeapon.PickPosition;
+
+            var transform1 = newWeapon.transform;
+            transform1.parent = newWeapon.weaponType != WeaponType.Bow ? weaponHolder : weaponHolder2;
+            transform1.localPosition = newWeapon.PickPosition;
             newWeapon.transform.localRotation = Quaternion.Euler(newWeapon.PickRotation);
             equippedWeapon = newWeapon;
             if (equippedWeapon.iconCanvas != null)
@@ -195,8 +196,11 @@ public class WeaponController : MonoBehaviour
             if(equippedWeapon.TryGetComponent(out Collider collider)){
                 collider.enabled = true;
             }
-            equippedWeapon.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-            equippedWeapon.transform.position = transform.position + transform.forward * 1f;
+
+            Transform transform1;
+            (transform1 = equippedWeapon.transform).rotation = Quaternion.Euler(90f, 0f, 0f);
+            var transform2 = transform;
+            transform1.position = transform2.position + transform2.forward * 1f;
             equippedWeapon = null;
         }
 

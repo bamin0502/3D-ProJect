@@ -1,12 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Data;
 using Newtonsoft.Json;
-using UnityEngine.UI;
-using TMPro;
-using DG.Tweening;
 
 public class Boss : MonoBehaviour
 {
@@ -48,6 +44,10 @@ public class Boss : MonoBehaviour
     public ParticleSystem Jump;
     public ParticleSystem Healdraw;
     public ParticleSystem draw;
+    private static readonly int DoShot = Animator.StringToHash("doShot");
+    private static readonly int DoTaunt = Animator.StringToHash("doTaunt");
+    private static readonly int DoBigShot = Animator.StringToHash("doBigShot");
+
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
@@ -132,7 +132,7 @@ public class Boss : MonoBehaviour
         while (true)
         {
             if(isTargetAlive && target != null)
-            distance = Vector3.Distance(transform.position, target.position);
+                distance = Vector3.Distance(transform.position, target.position);
             if (distance < detectionRadius)
             {
                 yield return StartCoroutine(Think());
@@ -197,7 +197,7 @@ public class Boss : MonoBehaviour
     }
     IEnumerator MissileShot()
     {
-        anim.SetTrigger("doShot");
+        anim.SetTrigger(DoShot);
         yield return new WaitForSeconds(0.4f);
         GameObject instantMissileA = Instantiate(missile, missilePortA.position, missilePortA.rotation);
         Bullet bossMissileA = instantMissileA.GetComponent<Bullet>();
@@ -218,7 +218,7 @@ public class Boss : MonoBehaviour
         isLook = false;
         nav.isStopped = false;
         boxCollider.enabled = false;
-        anim.SetTrigger("doTaunt");
+        anim.SetTrigger(DoTaunt);
         BossMelee bossMelee = GetComponentInChildren<BossMelee>();
         if (bossMelee != null && !bossMelee.isAttacking)
         {
@@ -236,10 +236,11 @@ public class Boss : MonoBehaviour
             bossMelee.isAttacking = false; // 공격이 끝났으므로 값을 초기화합니다.
         }
         yield return new WaitForSeconds(1.5f);
-        meleeArea.enabled = true;
-        
+        bool enabled1;
+
         yield return new WaitForSeconds(0.5f);
-        meleeArea.enabled = false;
+        enabled1 = false;
+        meleeArea.enabled = enabled1;
         {
             MeleeAttack.Play();
             bossMelee.isAttacking = false; // 자식 오브젝트의 isAttacking 값을 변경합니다.
@@ -254,7 +255,7 @@ public class Boss : MonoBehaviour
     {
         Healdraw.Play();
         draw.Play();
-        anim.SetTrigger("doBigShot");
+        anim.SetTrigger(DoBigShot);
 
         int previousHealth = enemyHealth.currentHealth;
         int potentialHealth = Mathf.Clamp(enemyHealth.currentHealth + Healing, 0, maxHealth);

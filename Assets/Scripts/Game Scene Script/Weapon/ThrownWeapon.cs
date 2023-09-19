@@ -12,7 +12,7 @@ public class ThrownWeapon : MonoBehaviour
     public LayerMask enemyLayer;  //적 레이어
     public int damage; //데미지
     public float fireDuration = 3f;  //화염 지속시간
-    private Collider[] enemies = new Collider[20]; //최대 20마리까지 데미지 줌
+    private readonly Collider[] enemies = new Collider[20]; //최대 20마리까지 데미지 줌
     [SerializeField] private GameObject fireEffect;  //화염 이펙트
     [SerializeField] private GameObject explosionEffect;  //폭발 이펙트
     public bool canExplode; //폭발할 수 있는 상태인가
@@ -42,11 +42,12 @@ public class ThrownWeapon : MonoBehaviour
 
     void Explode()
     {
-        Instantiate(explosionEffect, transform.position, Quaternion.identity);
-        GameObject fire = Instantiate(fireEffect, transform.position, Quaternion.identity);
+        var position = transform.position;
+        Instantiate(explosionEffect, position, Quaternion.identity);
+        GameObject fire = Instantiate(fireEffect, position, Quaternion.identity);
         fire.transform.localScale = new Vector3(explosionRadius, 1, explosionRadius);
 
-        int numColliders = Physics.OverlapSphereNonAlloc(transform.position, explosionRadius, enemies, enemyLayer);
+        int numColliders = Physics.OverlapSphereNonAlloc(position, explosionRadius, enemies, enemyLayer);
 
         for (int i = 0; i < numColliders; i++)
         {

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -37,9 +35,5 @@ public class EnemyHealthBar : MonoBehaviour
         Vector3 lookAtPosition = _cam.transform.position;
         lookAtPosition.x = transform.position.x;
         transform.LookAt(lookAtPosition);
-        if (Time.timeScale == 0)
-        {
-            return;
-        }
     }
 }

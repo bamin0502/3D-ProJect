@@ -49,6 +49,9 @@ public class Enemy : MonoBehaviour
     
 
     public int tmpDamage; //일단 테스트용 나중에 json이랑 연결해야됨
+    private static readonly int DoDie = Animator.StringToHash("doDie");
+    private static readonly int IsWalk = Animator.StringToHash("isWalk");
+    private static readonly int IsAttack = Animator.StringToHash("isAttack");
 
     private void Awake()
     {
@@ -108,7 +111,7 @@ public class Enemy : MonoBehaviour
             gameObject.layer = 7;
             isChase = false;
             nav.enabled = false;
-            anim.SetTrigger("doDie");
+            anim.SetTrigger(DoDie);
 
         }
     }
@@ -123,7 +126,7 @@ public class Enemy : MonoBehaviour
     void ChaseStart()
     {
         isChase = true;
-        anim.SetBool("isWalk", true);
+        anim.SetBool(IsWalk, true);
     }
    
     void FixedUpdate()
@@ -148,7 +151,7 @@ public class Enemy : MonoBehaviour
         {
             if (attackCoroutine != null)
             {
-                anim.SetBool("isAttack", false);
+                anim.SetBool(IsAttack, false);
                 StopCoroutine(attackCoroutine);
                 DropRandomItem();
 
@@ -175,14 +178,10 @@ public class Enemy : MonoBehaviour
         {
             Returning();
         }
-        if (Time.timeScale == 0)
-        {
-            return;
-        }
     }
     void Returning()
     {
-        anim.SetBool("isWalk", false);
+        anim.SetBool(IsWalk, false);
         nav.SetDestination(origninalPosition);
         
     }
@@ -221,8 +220,9 @@ public class Enemy : MonoBehaviour
     {
         float targetRadius = 1f;
         float targetRange = 1f;
-       
-        RaycastHit[] rayHits = Physics.SphereCastAll(transform.position, targetRadius, transform.forward, targetRange, LayerMask.GetMask("Player"));
+
+        var transform1 = transform;
+        RaycastHit[] rayHits = Physics.SphereCastAll(transform1.position, targetRadius, transform1.forward, targetRange, LayerMask.GetMask("Player"));
         if (rayHits.Length > 0 && !isAttack)
         {
             attackCoroutine = StartCoroutine(Attack());
@@ -246,7 +246,7 @@ public class Enemy : MonoBehaviour
                     SoundManager.instance.PlaySE("Red Spider");
                     break;
             }
-            anim.SetBool("isAttack", true);
+            anim.SetBool(IsAttack, true);
             attackArea.enabled = true;
             yield return new WaitForSeconds(0.2f);
             attackArea.enabled = true;
@@ -264,7 +264,7 @@ public class Enemy : MonoBehaviour
             yield return new WaitForSeconds(1f);
             isChase = true;
             isAttack = false;
-            anim.SetBool("isAttack", false);
+            anim.SetBool(IsAttack, false);
         }
     }
 }

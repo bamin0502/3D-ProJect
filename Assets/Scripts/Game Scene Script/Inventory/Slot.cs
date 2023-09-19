@@ -38,10 +38,6 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
     void Update()
     {
         TryInputNumber();
-        if (Time.timeScale == 0)
-        {
-            return;
-        }
     }
     private void TryInputNumber()
     {
@@ -209,7 +205,10 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
         // 예시: 아이템의 던지는 동작을 애니메이션으로 표현하거나, 특정 위치에 아이템을 생성하는 등의 처리
         Vector3 mousePosition = Input.mousePosition;
         // 마우스 포인트를 월드 좌표로 변환
-        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
+        if (Camera.main != null)
+        {
+            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
+        }
         // 아이템을 해당 위치에 던지는 동작 수행
         //_item.ThrowItem(worldPosition);
     }

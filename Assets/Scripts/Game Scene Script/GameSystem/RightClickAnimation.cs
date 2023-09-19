@@ -50,14 +50,7 @@ public class RightClickAnimation : MonoBehaviour
         //풀에서 오브젝트 생성 및 해제
         GameObject clickAnimation;
 
-        if (_clickAnimationPool.Count > 0)
-        {
-            clickAnimation = _clickAnimationPool.Dequeue();
-        }
-        else
-        {
-            clickAnimation = Instantiate(clickAnimationPrefab);
-        }
+        clickAnimation = _clickAnimationPool.Count > 0 ? _clickAnimationPool.Dequeue() : Instantiate(clickAnimationPrefab);
 
         position.y += 0.3f;
         clickAnimation.transform.position = position;

@@ -6,59 +6,68 @@ using TMPro;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-
 public class ItemDropController : MonoBehaviour
 {
     [SerializeField]
-    private float range;  // 아이템 습득이 가능한 최대 거리
+    private float pickupRadius;  // 아이템 습득이 가능한 최대 반경
 
-    private bool pickupActivated = false;  // 아이템 습득 가능할시 True 
+    private bool pickupActivated = false;  // 아이템 습득 가능할 시 True 
 
-    private RaycastHit hitInfo;  // 충돌체 정보 저장
+    private Collider[] itemColliders;  // 아이템 콜라이더 배열
 
     [SerializeField]
-    private LayerMask layerMask;  // 특정 레이어를 가진 오브젝트에 대해서만 습득할 수 있어야 한다.
+    private LayerMask layerMask;  // 특정 레이어를 가진 오브젝트에 대해서만 습득할 수 있어야 합니다.
 
     [SerializeField]
     private TMP_Text actionText;  // 행동을 보여 줄 텍스트
     [SerializeField]
     private Inventory theInventory;
+
     void FixedUpdate()
     {
         CheckItem();
-        TryAction();        
+        TryAction();
     }
-    private void OnGUI()
-    {
-        OnDrawGizmos();
-    }
+
     private void TryAction()
     {
-        if (Input.GetKeyDown(KeyCode.G))
+        if (pickupActivated && Input.GetKeyDown(KeyCode.G))
         {
-            CheckItem();
-            CanPickUp();
+            PickUpItem();
         }
     }
 
     private void CheckItem()
     {
-        if (Physics.Raycast(transform.position, transform.forward, out hitInfo, range, layerMask))
+        // 아이템 콜라이더 배열에 충돌된 콜라이더를 넣어줍니다.
+        itemColliders = new Collider[10];  // 적절한 크기로 조정하세요.
+
+        // 메모리 할당 없이 아이템을 감지합니다.
+        int itemCount = Physics.OverlapSphereNonAlloc(transform.position, pickupRadius, itemColliders, layerMask);
+
+        if (itemCount > 0)
         {
-            if (hitInfo.transform.tag == "Item")
+            for (int i = 0; i < itemCount; i++)
             {
-                ItemInfoAppear();
+                if (itemColliders[i].CompareTag("Item"))
+                {
+                    ItemInfoAppear();
+                    return; // 가장 가까운 아이템만 처리하도록 리턴
+                }
             }
         }
         else
+        {
+            itemColliders = null;
             ItemInfoDisappear();
+        }
     }
 
     private void ItemInfoAppear()
     {
         pickupActivated = true;
         actionText.gameObject.SetActive(true);
-        actionText.text = hitInfo.transform.GetComponent<ItemPickup>().item.itemName + " 획득 " + "<color=yellow>" + "(G)" + "</color>";
+        actionText.text = "아이템 획득 " + "<color=yellow>" + "(G)" + "</color>";
     }
 
     private void ItemInfoDisappear()
@@ -67,28 +76,31 @@ public class ItemDropController : MonoBehaviour
         actionText.gameObject.SetActive(false);
     }
 
-    private void CanPickUp()
+    private void PickUpItem()
     {
-        if (pickupActivated)
+        if (pickupActivated && itemColliders != null)
         {
-            if (hitInfo.transform != null)
+            foreach (var t in itemColliders)
             {
-                Debug.Log(hitInfo.transform.GetComponent<ItemPickup>().item.itemName + " 획득 했습니다.");  // 인벤토리 넣기
-                theInventory.AcquireItem(hitInfo.transform.GetComponent<ItemPickup>().item);
-                Destroy(hitInfo.transform.gameObject);
-                SoundManager.instance.PlaySE("Item Drop");
-                ItemInfoDisappear();
+                if (t != null && t.CompareTag("Item"))
+                {
+                    Debug.Log(t.GetComponent<ItemPickup>().item.itemName + " 획득 했습니다.");  // 인벤토리 넣기
+                    theInventory.AcquireItem(t.GetComponent<ItemPickup>().item);
+                    Destroy(t.gameObject);
+                    SoundManager.instance.PlaySE("Item Drop");
+                    ItemInfoDisappear();
+                }
             }
         }
     }
+
     private void OnDrawGizmos()
     {
-#if UNITY_EDITOR
+        #if UNITY_EDITOR    
         // 현재 설정된 layerMask 값을 시각적으로 표시합니다.
-        Handles.Label(transform.position, "아이템을 먹을 수 있는 선 발사 확인용: " + LayerMask.LayerToName(layerMask));
-
-        // 정면으로 레이를 그려서 레이어가 앞으로 나가는지 여부를 확인합니다.
-        Debug.DrawRay(transform.position, transform.forward * range, Color.red);
-#endif
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, pickupRadius);
+        #endif
     }
+
 }

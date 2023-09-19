@@ -29,3 +29,11 @@ public class GAME_CHAT
     public string CHAT = "";
 }
 
+[Serializable]
+public class PLAYER_ANIMATION
+{
+    public string USER = "";
+    public int DATA = 0;
+    public int ANI_NUM = 0;
+}
+

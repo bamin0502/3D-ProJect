@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using System.IO;
 using System.Net;
+using UnityEngine.SceneManagement;
 
 using MNF;
 
@@ -100,7 +101,14 @@ public class NetGameManager : KWSingleton<NetGameManager>
 
 		Debug.Log("Recv_ROOM_BROADCAST" + szData);
 
-		LobbyScene.Instance.RoomBroadcast(szData);
+        if (SceneManager.GetActiveScene().name == "Lobby Scene")
+        {
+            LobbyScene.Instance.RoomBroadcast(szData);
+        }
+        else
+        {
+            MultiScene.Instance.RoomBroadcast(szData);
+        }
 	}
 
 	//방에서 본인정보 업데이트

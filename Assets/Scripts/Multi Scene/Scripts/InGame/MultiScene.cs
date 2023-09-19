@@ -96,17 +96,17 @@ public class MultiScene : MonoBehaviour
         //테스트 용
         if (testCount == 0)
         {
-            BroadCastingAnimation(10);
+            BroadCastingAnimation(0);
         }
 
         else if (testCount == 1)
         {
-            BroadCastingAnimation(8);
+            BroadCastingAnimation(1);
         }
 
         else if (testCount == 2)
         {
-            BroadCastingAnimation(4);
+            BroadCastingAnimation(8);
         }
         else if (testCount == 3)
         {

@@ -18,17 +18,17 @@ public class Lobby_Player : MonoBehaviour
         userID.text = user.m_szUserID;
     }
 
-    public void ChangeIcon(bool isAdmin = false, bool isReady = false)
+    public void ChangeIcon(int state)
     {
         topHeadIconImage.enabled = true;
         
-        if (isAdmin) //어드민이면
+        if (state == (int)LobbyUserState.Admin) //어드민이면
         {
             topHeadIconImage.sprite = topHeadIconSprites[0];
             return;
         }
 
-        if (isReady) //준비 완료
+        if ((int)LobbyUserState.Ready == state) //준비 완료
         {
             topHeadIconImage.sprite = topHeadIconSprites[1];
         }

@@ -87,22 +87,6 @@ public class MultiScene : MonoBehaviour
         NetGameManager.instance.RoomBroadcast(sendData);
     }
 
-    public void BroadCastingForcedMovement(Vector3 destination)
-    {
-        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
-            NetGameManager.instance.m_userHandle.m_szUserID);
-
-        var data = new PLAYER_MOVE
-        {
-            USER = userSession.m_szUserID,
-            DATA = 3,
-            POSITION = VectorToString(destination),
-        };
-
-        string sendData = LitJson.JsonMapper.ToJson(data);
-        NetGameManager.instance.RoomBroadcast(sendData);
-    }
-    
     private string VectorToString(Vector3 position)
     {
         string result = $"{position.x},{position.y},{position.z}";

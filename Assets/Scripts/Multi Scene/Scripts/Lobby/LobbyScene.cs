@@ -106,8 +106,6 @@ public class LobbyScene : MonoBehaviour
             NetGameManager.instance.RoomUserDataUpdate(userSession);
         }
 	}
-    
-    
     public void RoomEnter()
 	{
         // 새로 들어왔을때

@@ -42,19 +42,17 @@ public class MultiPlayerMovement : MonoBehaviour
     void Start()
     {
         //만든이 : 임성훈
-       // _navAgent = GetComponent<NavMeshAgent>();
         //만든이 : 방민호        
         ani =GetComponent<AniSetting>();
-    //    SpaceUI.SetActive(false);//스페이스바 UI 비활성화
-        ChangedState(PlayerState.Idle);//플레이어 기본상태를 Idle로 지정
+        //    SpaceUI.SetActive(false);//스페이스바 UI 비활성화
+        ChangedState(PlayerState.Idle); //플레이어 기본상태를 Idle로 지정
         MultiScene.Instance.BroadCastingAnimation((int)PlayerState.Idle);
         
     }
     private void Update()
     {
        // #region 플레이어 이동관련
-        if(_camera != null)
-        //만든이 : 임성훈 
+       //만든이 : 임성훈 
         if (Input.GetMouseButtonDown(1)) // 오른쪽 클릭
         {
             Ray ray = _camera.ScreenPointToRay(Input.mousePosition);

@@ -2,7 +2,10 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-
+using TMPro;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 public class WeaponController : MonoBehaviour
 {
     //임성훈
@@ -17,9 +20,11 @@ public class WeaponController : MonoBehaviour
     private float attackTimer;
     public bool isAttack;
     public Canvas IconCanvas;
-
+    [SerializeField]
+    public TMP_Text WeaponText;
     private static readonly int Pickup = Animator.StringToHash("ItemPickup");
-    
+    private bool isInRangeToPickup = false;
+    private bool isPickingUpWeapon = false;
     private void Update()
     {
         HandleInput();
@@ -34,6 +39,15 @@ public class WeaponController : MonoBehaviour
             MoveTowardsTarget();
             AttackTarget();
         }
+
+        if (!isPickingUpWeapon && isInRangeToPickup)
+        {
+            ShowPickupText();
+        }
+        else
+        {
+            HidePickupText();
+        }
     }
 
     private void Start()
@@ -41,17 +55,49 @@ public class WeaponController : MonoBehaviour
         StartCoroutine(CheckAttackCoroutine());
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
-        if (equippedWeapon != null)
+        #if UNITY_EDITOR
+        // 무기 주울 수 있는 범위를 시각적으로 표시합니다.
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, weaponPickupRange);
+        #endif
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Weapon"))
         {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, equippedWeapon.range);
+            isInRangeToPickup = true;
         }
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Weapon"))
+        {
+            isInRangeToPickup = false;
+            HidePickupText();
+        }
+    }
+    private void ShowPickupText()
+    {
+        WeaponText.gameObject.SetActive(true);
+        WeaponText.text = "무기 줍기" + "<color=yellow>" + "(G)" + "</color>";
+    }
+
+    private void HidePickupText()
+    {
+        WeaponText.text = "";
+        WeaponText.gameObject.SetActive(false);
+    }
     private void HandleInput()
     {
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            TryPickupWeapon();
+        }
+        // 오른쪽 마우스 클릭을 확인합니다.
         if (Input.GetMouseButtonDown(1))
         {
             if (Camera.main != null)
@@ -63,15 +109,8 @@ public class WeaponController : MonoBehaviour
                 {
                     if (hit.collider.CompareTag("Enemy"))
                     {
+                        // 오른쪽 마우스 클릭 시 타겟을 설정합니다.
                         SetTarget(hit.transform);
-                    }
-                    else if (hit.collider.TryGetComponent(out targetedWeapon))
-                    {
-                        return;
-                    }
-                    else
-                    {
-                        ClearTarget();
                     }
                 }
             }
@@ -120,12 +159,27 @@ public class WeaponController : MonoBehaviour
 
     private void TryPickupWeapon()
     {
-        float distance = Vector3.Distance(transform.position, targetedWeapon.transform.position);
-        if (distance <= weaponPickupRange)
+        //무기 콜라이더 배열 
+        Collider[] itemColliders = new Collider[1];
+
+        int weaponCount = Physics.OverlapSphereNonAlloc(transform.position, weaponPickupRange, itemColliders);
+        
+        //만약 무기를 찾았다면
+        if (weaponCount > 0)
         {
-            playerMovement.ani.ani.SetTrigger(Pickup);
-            StartCoroutine(EquipWeaponAfterDelay(targetedWeapon, 0.1f));
+            for (int i = 0; i < weaponCount; i++)
+            {
+                Collider collider = itemColliders[i];
+               
+                if (collider.CompareTag("Weapon"))
+                {
+                    playerMovement.ani.ani.SetTrigger(Pickup);
+                    StartCoroutine(EquipWeaponAfterDelay(collider.GetComponent<Weapon>(), 0.1f));
+                    HidePickupText();
+                }
+            }
         }
+        
     }
 
     private IEnumerator EquipWeaponAfterDelay(Weapon newWeapon, float delay)
@@ -133,6 +187,8 @@ public class WeaponController : MonoBehaviour
         yield return new WaitForSeconds(delay);
         EquipWeapon(newWeapon);
         targetedWeapon = null;
+        isPickingUpWeapon = false;
+        HidePickupText();
     }
     
     private void MoveTowardsTarget()

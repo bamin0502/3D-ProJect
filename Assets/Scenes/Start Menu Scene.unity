@@ -417,8 +417,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uC804\uCCB4\uD654\uBA74"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6fbb33002ba2e634abd5e7eb759d7c33, type: 2}
-  m_sharedMaterial: {fileID: 6168419851254541293, guid: 6fbb33002ba2e634abd5e7eb759d7c33, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6bec80a320b44074c96e97df7bff189c, type: 2}
+  m_sharedMaterial: {fileID: 5049333743693506051, guid: 6bec80a320b44074c96e97df7bff189c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -442,7 +442,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 33.1
+  m_fontSize: 35.6
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -573,15 +573,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ffd967fdbc6e214cab07549803eb664, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   MainMenuImage: {fileID: 0}
   MainOptionImage: {fileID: 0}
   NoticeImage: {fileID: 0}
@@ -2100,8 +2091,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uD655\uC778"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6fbb33002ba2e634abd5e7eb759d7c33, type: 2}
-  m_sharedMaterial: {fileID: 6168419851254541293, guid: 6fbb33002ba2e634abd5e7eb759d7c33, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6bec80a320b44074c96e97df7bff189c, type: 2}
+  m_sharedMaterial: {fileID: 5049333743693506051, guid: 6bec80a320b44074c96e97df7bff189c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3140,8 +3131,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uC74C\uD5A5 \uC124\uC815"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6fbb33002ba2e634abd5e7eb759d7c33, type: 2}
-  m_sharedMaterial: {fileID: 6168419851254541293, guid: 6fbb33002ba2e634abd5e7eb759d7c33, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6bec80a320b44074c96e97df7bff189c, type: 2}
+  m_sharedMaterial: {fileID: 5049333743693506051, guid: 6bec80a320b44074c96e97df7bff189c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3779,15 +3770,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8282caf792cd4ee44831779529c556a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   resolutionDropdown: {fileID: 996634905}
   fullscreenToggle: {fileID: 38337764}
 --- !u!114 &1173366703
@@ -3802,15 +3784,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65451e4c29dad834faf1292004893d60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   bgmSlider: {fileID: 1910355721}
   sfxSlider: {fileID: 996290219}
 --- !u!1 &1195947527
@@ -4463,8 +4436,8 @@ MonoBehaviour:
     \uC800\uC791\uAD8C \uAC71\uC815\uC5C6\uB294 \uC720\uD29C\uBE0C\uC6A9 \uC74C\uC6D0
     & \uBB34\uB8CC \uD6A8\uACFC\uC74C \uC11C\uBE44\uC2A4 \u2018\uBBA4\uD31F\u2019\r\nhttps://www.mewpot.com\n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 12258540578775e4ca0ff88fc970b2b5, type: 2}
-  m_sharedMaterial: {fileID: -5427446623521589976, guid: 12258540578775e4ca0ff88fc970b2b5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6bec80a320b44074c96e97df7bff189c, type: 2}
+  m_sharedMaterial: {fileID: 5049333743693506051, guid: 6bec80a320b44074c96e97df7bff189c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4488,7 +4461,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 33.4
+  m_fontSize: 34
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -6331,8 +6304,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uD654\uBA74 \uC124\uC815"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6fbb33002ba2e634abd5e7eb759d7c33, type: 2}
-  m_sharedMaterial: {fileID: 6168419851254541293, guid: 6fbb33002ba2e634abd5e7eb759d7c33, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6bec80a320b44074c96e97df7bff189c, type: 2}
+  m_sharedMaterial: {fileID: 5049333743693506051, guid: 6bec80a320b44074c96e97df7bff189c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6356,7 +6329,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 43.45
+  m_fontSize: 44.2
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

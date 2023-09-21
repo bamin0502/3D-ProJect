@@ -67,7 +67,9 @@ public class ItemDropController : MonoBehaviour
     {
         pickupActivated = true;
         actionText.gameObject.SetActive(true);
-        actionText.text = "아이템 획득 " + "<color=yellow>" + "(G)" + "</color>";
+
+        string itemName = itemColliders[0].GetComponent<ItemPickup>().item.itemName;
+        actionText.text = itemName+" 아이템 획득 " + "<color=yellow>" + "(G)" + "</color>";
     }
 
     private void ItemInfoDisappear()

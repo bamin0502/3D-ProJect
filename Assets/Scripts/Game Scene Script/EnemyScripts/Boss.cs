@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 public class Boss : MonoBehaviour
 {
     public int Healing;
-
     public int maxHealth;
     public int currentHealth;
 

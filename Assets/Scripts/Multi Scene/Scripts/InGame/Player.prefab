@@ -450,6 +450,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 716cdf9428a229b43b08d71278688f89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _navAgent: {fileID: 1970835488249192253}
   _camera: {fileID: 0}
   currentState: 0
   ani: {fileID: 1970835488249192247}

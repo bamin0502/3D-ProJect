@@ -21,7 +21,7 @@ public class MultiPlayerMovement : MonoBehaviour
     
     
     //[SerializeField] private WeaponController weaponController;
-    //private NavMeshAgent _navAgent;
+    public NavMeshAgent _navAgent;
     public Camera _camera;
     //private float rotAnglePerSecond = 360f;
     //private Vector3 curTargetPos;
@@ -62,7 +62,11 @@ public class MultiPlayerMovement : MonoBehaviour
 
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity, layerMask))
             {
-                MultiScene.Instance.BroadCastingAnimation((int)PlayerState.HammerAttackIdle);
+                
+                ChangedState(PlayerState.RunForward);
+                MultiScene.Instance.BroadCastingAnimation((int)PlayerState.RunForward);
+                MultiScene.Instance.BroadCastingMovement(hit.point);
+                _navAgent.SetDestination(hit.point);
                 // if (!weaponController.isAttack)
                 // {
                 //  //   _navAgent.SetDestination(hit.point);
@@ -74,15 +78,18 @@ public class MultiPlayerMovement : MonoBehaviour
                 //     ChangedState(PlayerState.HammerAttackIdle);
                 //     MultiScene.Instance.BroadCastingAnimation((int)PlayerState.HammerAttackIdle);
                 // }
-                
+
             }
         }
         //만약 플레이어가 목적지에 도착하였을때! 다시 애니메이션을 기본상태로 되돌림 , 만든이:방민호
-        // if (!_navAgent.pathPending && _navAgent.remainingDistance <= _navAgent.stoppingDistance && !_navAgent.hasPath)
-        // {
-        //     ChangedState(PlayerState.Idle);
-        //     MultiScene.Instance.BroadCastingAnimation((int)PlayerState.Idle);
-        // }
+        if (!_navAgent.pathPending && _navAgent.remainingDistance <= _navAgent.stoppingDistance && !_navAgent.hasPath)
+        {
+            if (currentState == PlayerState.RunForward)
+            {
+                ChangedState(PlayerState.Idle);
+                MultiScene.Instance.BroadCastingAnimation((int)PlayerState.Idle);
+            }
+        }
         // if (!isCoolingDown && Input.GetKeyDown(KeyCode.Space))
         // {
         //     ChangedState(PlayerState.SpaceMove);

@@ -88,7 +88,15 @@ public class NetGameManager : KWSingleton<NetGameManager>
 			}
 		}
 
-		LobbyScene.Instance.RoomUserDel(userSession);
+        if (SceneManager.GetActiveScene().name == "Lobby Scene")
+        {
+            LobbyScene.Instance.RoomUserDel(userSession);
+        }
+        else
+        {
+            MultiScene.Instance.RoomUserDel(userSession);
+        }
+		
 
 		Debug.Log("Recv_ROOM_MAN_OUT : " + userSession.m_szUserID );
 	}

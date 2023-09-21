@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using mino;
 using MNF;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class MultiScene : MonoBehaviour
     
     private Dictionary<string, GameObject> _players = new ();
 
+    public CinemachineFreeLook cineCam;
     public CameraController playerCamera;
     public Transform[] positions; //유저 찍어낼 위치
     public GameObject playerPrefab; //찍어낼 유저 프리팹
@@ -43,16 +45,17 @@ public class MultiScene : MonoBehaviour
                 playerCamera.player = newPlayer.transform;
                 multiPlayer._camera = playerCamera.mainCamera;
                 currnetUser = newPlayer;
+                cineCam.Follow = newPlayer.transform;
+                cineCam.LookAt = newPlayer.transform;
+                cineCam.GetRig(1).LookAt = newPlayer.transform;
             }
         }
     }
 
     public void BroadCastingAnimation(int animationNumber)
     {
-        if (currentState == animationNumber)
-            return;
-
-        currentState = animationNumber;
+        //if (currentState == animationNumber) return;
+        // currentState = animationNumber;
         
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(
             NetGameManager.instance.m_userHandle.m_szUserID);
@@ -67,6 +70,52 @@ public class MultiScene : MonoBehaviour
         string sendData = LitJson.JsonMapper.ToJson(data);
         NetGameManager.instance.RoomBroadcast(sendData);
     }
+    
+    public void BroadCastingMovement(Vector3 destination)
+    {
+        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+            NetGameManager.instance.m_userHandle.m_szUserID);
+
+        var data = new PLAYER_MOVE
+        {
+            USER = userSession.m_szUserID,
+            DATA = 2,
+            POSITION = VectorToString(destination),
+        };
+
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
+    }
+
+    public void BroadCastingForcedMovement(Vector3 destination)
+    {
+        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+            NetGameManager.instance.m_userHandle.m_szUserID);
+
+        var data = new PLAYER_MOVE
+        {
+            USER = userSession.m_szUserID,
+            DATA = 3,
+            POSITION = VectorToString(destination),
+        };
+
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
+    }
+    
+    private string VectorToString(Vector3 position)
+    {
+        string result = $"{position.x},{position.y},{position.z}";
+        return result;
+    }
+    
+    private Vector3 StringToVector(string position)
+    {
+        string[] posString = position.Split(",");
+        Vector3 result = new Vector3(float.Parse(posString[0]), float.Parse(posString[1]), float.Parse(posString[2]));
+        return result;
+    }
+    
 
     public void RoomBroadcast(string szData)
     {
@@ -75,19 +124,36 @@ public class MultiScene : MonoBehaviour
         string userID = jData["USER"].ToString();
         int dataID = Convert.ToInt32(jData["DATA"].ToString());
 
-
+        if(_currentUser.Equals(userID)) return;
+        
         switch (dataID)
         {
             case 1:
                 int aniNum = Convert.ToInt32(jData["ANI_NUM"].ToString());
-                
                 _players.TryGetValue(userID, out var user);
-                user.TryGetComponent<MultiPlayerMovement>(out var movement);
-                movement.ChangedState((PlayerState)aniNum);
+                user.GetComponent<MultiPlayerMovement>().ChangedState((PlayerState)aniNum);
+                break;
+            
+            case 2:
+                _players.TryGetValue(userID, out var userMove);
+                userMove.TryGetComponent<MultiPlayerMovement>(out var userMove2);
+                userMove2._navAgent.SetDestination(StringToVector(jData["POSITION"].ToString()));
                 break;
         }
     }
 
+    public void RoomUserDel(UserSession user)
+    {
+        //유저 삭제 및 기존 유저 재정렬
+        
+        _players.TryGetValue(user.m_szUserID, out GameObject toDestroy);
+        
+        if (toDestroy != null)
+        {
+            _players.Remove(user.m_szUserID);
+            Destroy(toDestroy);
+        }
+    }
 
     private int testCount = 0;
     public void OnClickTest()

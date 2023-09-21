@@ -37,3 +37,12 @@ public class PLAYER_ANIMATION
     public int ANI_NUM = 0;
 }
 
+
+[Serializable]
+public class PLAYER_MOVE
+{
+    public string USER = "";
+    public int DATA = 0;
+    public string POSITION = "";
+}
+

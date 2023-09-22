@@ -54,8 +54,9 @@ public class LobbyScene : MonoBehaviour
         loginButton.onClick.AddListener(OnClick_Login);
         inputChat.onSubmit.AddListener(SendChatting);
         Instance = this;
-        NetGameManager.instance.ConnectServer("3.34.116.91", 3650); 
+        //NetGameManager.instance.ConnectServer("3.34.116.91", 3650); 
         //NetGameManager.instance.ConnectServer("192.168.0.43", 3650, true);
+        NetGameManager.instance.ConnectServer("192.168.0.122", 3650, true);
     }
     private void Update()
     {

@@ -125,14 +125,28 @@ public class MultiScene : MonoBehaviour
                 userMove.TryGetComponent<MultiPlayerMovement>(out var userMove2);
                 userMove2._navAgent.SetDestination(StringToVector(jData["POSITION"].ToString()));
                 break;
+            //플레이어 아이템 드랍 관련 테스트 필요
             case 3:
-                _players.TryGetValue(userID, out var userItem);
-                userItem.TryGetComponent<ItemPickup>(out var userItem2);
-                userItem.GetComponent<ItemPickup>().item = userItem2.item;
+                _players.TryGetValue(userID,out var userItem);
+                userItem.TryGetComponent<Slot>(out var userItem2);
+                userItem2.UseItemInSlot(Convert.ToInt32(jData["ITEM"].ToString()));
                 break;
-
+            //플레이어 공격 관련 테스트 필요
+            case 4:
+                _players.TryGetValue(userID, out var userAttack);
+                userAttack.TryGetComponent<WeaponController>(out var userAttack2);
+                userAttack2.isAttack = true;
+                break;
+            //플레이어 체력 관련 테스트 필요
+            case 5:
+                Data.PlayerStat playerStat = new Data.PlayerStat();
+                playerStat.Health = Convert.ToInt32(jData["HEALTH"].ToString());
+                playerStat.PlayerHealth = Convert.ToInt32(jData["PlayerHealth"].ToString());
+                break;
                 
         }
+
+        
     }
 
     public void RoomUserDel(UserSession user)

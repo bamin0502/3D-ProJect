@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Data;
 using UnityEngine;
+using mino;
 
 [Serializable]
 public class GAME_START
@@ -19,8 +21,6 @@ public class LOBBY_STATE
     public bool ISADMIN = false;
     public bool ISREADY = false;
 }
-
-
 [Serializable]
 public class GAME_CHAT
 {
@@ -46,3 +46,10 @@ public class PLAYER_MOVE
     public string POSITION = "";
 }
 
+public class PLAYER_STATUS
+{
+    public string USER = "";
+    public int Health = 0;
+    public int Damage = 0;
+
+}

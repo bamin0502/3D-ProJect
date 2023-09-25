@@ -58,7 +58,8 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
             UseItemInSlot(3);
         }
     }
-    private void UseItemInSlot(int slotIndex)
+
+    internal void UseItemInSlot(int slotIndex)
     {
         if (slots[slotIndex].item != null)
         {

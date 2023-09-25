@@ -23,7 +23,7 @@ public class MKWNetwork : KWSingleton<MKWNetwork>
 	public	NetHead_Equal	m_eqSJNetHead	= new NetHead_Equal();
 	public	Dictionary<NetHead,NetRecvCallBack> 	m_dicRecvCallBack;
 
-	override public void Awake()
+	public override void Awake()
 	{
 		base.Awake();
 

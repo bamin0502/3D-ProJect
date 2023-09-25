@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using Data;
 using mino;
 using MNF;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MultiScene : MonoBehaviour
@@ -19,7 +21,7 @@ public class MultiScene : MonoBehaviour
     private string _currentUser = "";
     private int currentState = -99;
 
-    private GameObject currnetUser;
+    private GameObject currentUser;
     private void Start()
     {
         Instance = this;
@@ -44,7 +46,7 @@ public class MultiScene : MonoBehaviour
                 //만약 현재 유저일경우
                 playerCamera.player = newPlayer.transform;
                 multiPlayer._camera = playerCamera.mainCamera;
-                currnetUser = newPlayer;
+                currentUser = newPlayer;
                 cineCam.Follow = newPlayer.transform;
                 cineCam.LookAt = newPlayer.transform;
                 cineCam.GetRig(1).LookAt = newPlayer.transform;
@@ -115,7 +117,7 @@ public class MultiScene : MonoBehaviour
             case 1:
                 int aniNum = Convert.ToInt32(jData["ANI_NUM"].ToString());
                 _players.TryGetValue(userID, out var user);
-                user.GetComponent<MultiPlayerMovement>().ChangedState((PlayerState)aniNum);
+                if (user != null) user.GetComponent<MultiPlayerMovement>().ChangedState((PlayerState)aniNum);
                 break;
             
             case 2:
@@ -123,6 +125,13 @@ public class MultiScene : MonoBehaviour
                 userMove.TryGetComponent<MultiPlayerMovement>(out var userMove2);
                 userMove2._navAgent.SetDestination(StringToVector(jData["POSITION"].ToString()));
                 break;
+            case 3:
+                _players.TryGetValue(userID, out var userItem);
+                userItem.TryGetComponent<ItemPickup>(out var userItem2);
+                userItem.GetComponent<ItemPickup>().item = userItem2.item;
+                break;
+
+                
         }
     }
 
@@ -172,4 +181,5 @@ public class MultiScene : MonoBehaviour
         
         Debug.Log($"유저 수 : {roomSession.m_userList.Count} 현재 유저 : {user}");
     }
+    
 }

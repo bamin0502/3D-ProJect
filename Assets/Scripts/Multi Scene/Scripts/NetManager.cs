@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using System.IO;
 using System.Net;
+using Data;
 using LitJson;
 using MNF.Message;
 
@@ -143,9 +144,9 @@ namespace MNF
 		{
             MKWNetwork.instance.Disconnect();
 		}
-
+        // 전체유저에게 전송되는 패킷 처리
 		public void OnPrcNetRecvPacket(NetHead head, BinaryReader br)
-		{// 전체유저에게 전송되는 패킷 처리
+		{
 			if (head.m_Class == HeadClass.SOCK_MENU)
 			{
 			}
@@ -218,5 +219,6 @@ namespace MNF
 			user.WriteBin(bw);
             MKWNetwork.instance.SendData(HeadClass.SOCK_ROOM, HeadEvent.ROOM_USER_MOVE);
 		}
+        
     }
 }

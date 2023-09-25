@@ -591,7 +591,7 @@ MonoBehaviour:
   chatViewParent: {fileID: 819003945}
   chatRoot: {fileID: 1743950634}
   chatBox: {fileID: 671404263}
-  playerPrefab: {fileID: 6638752181728094646, guid: 354295f80bc3c4c4bbd02aa08864ee55, type: 3}
+  playerPrefab: {fileID: 8930843545797792963, guid: 5328689130bb6c643b82c3b40c6078bc, type: 3}
   positions:
   - {fileID: 1330074698}
   - {fileID: 416406230}
@@ -2363,7 +2363,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 6143
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0

@@ -321,6 +321,7 @@ GameObject:
   - component: {fileID: 1970835488249192249}
   - component: {fileID: -5060593587990306387}
   - component: {fileID: 1970835488249192247}
+  - component: {fileID: -4653240900866589764}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -450,7 +451,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 716cdf9428a229b43b08d71278688f89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _navAgent: {fileID: 1970835488249192253}
+  navAgent: {fileID: 1970835488249192253}
   _camera: {fileID: 0}
   currentState: 0
   ani: {fileID: 1970835488249192247}
@@ -467,6 +468,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ani: {fileID: 5600785495034316102}
+--- !u!114 &-4653240900866589764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1157988895353456006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c178e1b709720045a2ce04fde3e20f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponHolder: {fileID: 4226704151474906141}
+  weaponHolder2: {fileID: 6116782813749849173}
+  equippedWeapon: {fileID: 0}
+  currentTarget: {fileID: 0}
+  isAttack: 0
+  IconCanvas: {fileID: 0}
 --- !u!1 &1178666365210230095
 GameObject:
   m_ObjectHideFlags: 0

@@ -38,6 +38,11 @@ namespace mino
             //에니메이션의 값을 aniPlayer에서 번호에 따라서 가져오게 할것임!
             ani.SetInteger(AniPlayer, (int)aniNumber);
         }
+
+        public void SetTrigger(int aniNumber)
+        {
+            ani.SetTrigger(aniNumber);
+        }
     }
 }
 

@@ -11,6 +11,7 @@ using TMPro;
 using System.Collections.Generic;
 using System.Collections;
 using Data;
+using UnityEngine.Serialization;
 
 
 public class MultiPlayerMovement : MonoBehaviour
@@ -21,7 +22,7 @@ public class MultiPlayerMovement : MonoBehaviour
     
     
     //[SerializeField] private WeaponController weaponController;
-    public NavMeshAgent _navAgent;
+    public NavMeshAgent navAgent;
     public Camera _camera;
     //private float rotAnglePerSecond = 360f;
     //private Vector3 curTargetPos;
@@ -64,7 +65,7 @@ public class MultiPlayerMovement : MonoBehaviour
                 ChangedState(PlayerState.RunForward);
                 MultiScene.Instance.BroadCastingAnimation((int)PlayerState.RunForward);
                 MultiScene.Instance.BroadCastingMovement(hit.point);
-                _navAgent.SetDestination(hit.point);
+                navAgent.SetDestination(hit.point);
                 // if (!weaponController.isAttack)
                 // {
                 //  //   _navAgent.SetDestination(hit.point);
@@ -80,7 +81,7 @@ public class MultiPlayerMovement : MonoBehaviour
             }
         }
         //만약 플레이어가 목적지에 도착하였을때! 다시 애니메이션을 기본상태로 되돌림 , 만든이:방민호
-        if (!_navAgent.pathPending && _navAgent.remainingDistance <= _navAgent.stoppingDistance && !_navAgent.hasPath)
+        if (!navAgent.pathPending && navAgent.remainingDistance <= navAgent.stoppingDistance && !navAgent.hasPath)
         {
             if (currentState == PlayerState.RunForward)
             {
@@ -212,12 +213,16 @@ public class MultiPlayerMovement : MonoBehaviour
     }
     public void ChangedState(PlayerState newState)
     {
-        if (currentState == newState)
-            return;
+        if (currentState == newState) return;
         ani.ChangeAnimation(newState);
         currentState = newState;
-
     }
+
+    public void SetAnimationTrigger(int aniNum)
+    {
+        ani.SetTrigger(aniNum);
+    }
+    
     #endregion
 
 

@@ -35,6 +35,7 @@ public class PLAYER_ANIMATION
     public string USER = "";
     public int DATA = 0;
     public int ANI_NUM = 0;
+    public bool ANI_TYPE = false;
 }
 
 

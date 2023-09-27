@@ -49,14 +49,13 @@ public class LobbyScene : MonoBehaviour
     private void Start()
     {
         //로컬에서 테스트
-        //NetGameManager.instance.ConnectServer("127.0.0.1", 3650, true);
+        NetGameManager.instance.ConnectServer("127.0.0.1", 3650, true);
         lobbyButton.onClick.AddListener(OnClick_LobbyButton);
         loginButton.onClick.AddListener(OnClick_Login);
         inputChat.onSubmit.AddListener(SendChatting);
         Instance = this;
         //NetGameManager.instance.ConnectServer("3.34.116.91", 3650); 
         //NetGameManager.instance.ConnectServer("192.168.0.43", 3650, true);
-        NetGameManager.instance.ConnectServer("192.168.0.122", 3650, true);
     }
     private void Update()
     {

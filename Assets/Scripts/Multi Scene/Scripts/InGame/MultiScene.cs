@@ -5,56 +5,77 @@ using Cinemachine;
 using Data;
 using mino;
 using MNF;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class MultiScene : MonoBehaviour
 {
     public static MultiScene Instance;
     
     private Dictionary<string, GameObject> _players = new ();
+    [HideInInspector] public List<GameObject> weaponsList; //무기 객체들
+    public Transform weaponsListParent; //무기 객체들이 있는 부모 객체
+    
+    
+    public TextMeshProUGUI noticeText;
 
     public CinemachineFreeLook cineCam;
     public CameraController playerCamera;
     public Transform[] positions; //유저 찍어낼 위치
     public GameObject playerPrefab; //찍어낼 유저 프리팹
-    private string _currentUser = "";
+    public string currentUser = "";
     private int currentState = -99;
-
-    private GameObject currentUser;
     private void Start()
     {
-        Instance = this;
-        RoomSession roomSession = NetGameManager.instance.m_roomSession;
-        _currentUser = NetGameManager.instance.m_userHandle.m_szUserID;
         
+        Instance = this;
+        SetWeaponList();
+        SetUsers();
+    }
+
+    private void SetUsers()
+    {
+        RoomSession roomSession = NetGameManager.instance.m_roomSession;
+        currentUser = NetGameManager.instance.m_userHandle.m_szUserID;
+
         for (int i = 0; i < roomSession.m_userList.Count; i++)
         {
             GameObject newPlayer = Instantiate(playerPrefab);
             string newPlayerName = roomSession.m_userList[i].m_szUserID;
             newPlayer.name = newPlayerName;
             newPlayer.transform.position = positions[i].position;
-            
+
             Debug.Log($"{newPlayerName} {newPlayer} {i}");
 
             _players.Add(newPlayerName, newPlayer);
-            
+
             newPlayer.TryGetComponent<MultiPlayerMovement>(out var multiPlayer);
-            
-            if (newPlayerName.Equals(_currentUser))
+
+            if (newPlayerName.Equals(currentUser))
             {
                 //만약 현재 유저일경우
                 playerCamera.player = newPlayer.transform;
                 multiPlayer._camera = playerCamera.mainCamera;
-                currentUser = newPlayer;
                 cineCam.Follow = newPlayer.transform;
                 cineCam.LookAt = newPlayer.transform;
                 cineCam.GetRig(1).LookAt = newPlayer.transform;
             }
         }
     }
+    private void SetWeaponList()
+    {
+        weaponsList.Capacity = weaponsListParent.childCount;
 
-    public void BroadCastingAnimation(int animationNumber)
+        for (int i = 0; i < weaponsListParent.childCount; i++)
+        {
+            Transform child = weaponsListParent.GetChild(i);
+            weaponsList.Add(child.gameObject);
+        }
+    }
+
+    public void BroadCastingAnimation(int animationNumber, bool isTrigger = false)
     {
         //if (currentState == animationNumber) return;
         // currentState = animationNumber;
@@ -67,6 +88,7 @@ public class MultiScene : MonoBehaviour
             USER = userSession.m_szUserID,
             DATA = 1,
             ANI_NUM = animationNumber,
+            ANI_TYPE = isTrigger,
         };
 
         string sendData = LitJson.JsonMapper.ToJson(data);
@@ -101,8 +123,6 @@ public class MultiScene : MonoBehaviour
         Vector3 result = new Vector3(float.Parse(posString[0]), float.Parse(posString[1]), float.Parse(posString[2]));
         return result;
     }
-    
-
     public void RoomBroadcast(string szData)
     {
         //모든 유저에게 정보 전달
@@ -110,20 +130,32 @@ public class MultiScene : MonoBehaviour
         string userID = jData["USER"].ToString();
         int dataID = Convert.ToInt32(jData["DATA"].ToString());
 
-        if(_currentUser.Equals(userID)) return;
+        if(currentUser.Equals(userID)) return;
         
         switch (dataID)
         {
             case 1:
                 int aniNum = Convert.ToInt32(jData["ANI_NUM"].ToString());
+                bool aniType = Convert.ToBoolean(jData["ANI_TYPE"].ToString());
                 _players.TryGetValue(userID, out var user);
-                if (user != null) user.GetComponent<MultiPlayerMovement>().ChangedState((PlayerState)aniNum);
+
+                if (user != null)
+                {
+                    if (aniType == false)
+                    {
+                        user.GetComponent<MultiPlayerMovement>().ChangedState((PlayerState)aniNum);
+                    }
+                    else
+                    {
+                        user.GetComponent<MultiPlayerMovement>().SetAnimationTrigger(aniNum);
+                    }
+                }
                 break;
             
             case 2:
                 _players.TryGetValue(userID, out var userMove);
                 userMove.TryGetComponent<MultiPlayerMovement>(out var userMove2);
-                userMove2._navAgent.SetDestination(StringToVector(jData["POSITION"].ToString()));
+                userMove2.navAgent.SetDestination(StringToVector(jData["POSITION"].ToString()));
                 break;
             //플레이어 아이템 드랍 관련 테스트 필요
             case 3:
@@ -160,40 +192,6 @@ public class MultiScene : MonoBehaviour
             _players.Remove(user.m_szUserID);
             Destroy(toDestroy);
         }
-    }
-
-    private int testCount = 0;
-    public void OnClickTest()
-    {
-        
-        //테스트 용
-        if (testCount == 0)
-        {
-            BroadCastingAnimation(0);
-        }
-
-        else if (testCount == 1)
-        {
-            BroadCastingAnimation(1);
-        }
-
-        else if (testCount == 2)
-        {
-            BroadCastingAnimation(8);
-        }
-        else if (testCount == 3)
-        {
-            BroadCastingAnimation(4);
-            testCount = 0;
-        }
-
-        testCount += 1;
-        
-        
-        RoomSession roomSession = NetGameManager.instance.m_roomSession;
-        string user = NetGameManager.instance.m_userHandle.m_szUserID;
-        
-        Debug.Log($"유저 수 : {roomSession.m_userList.Count} 현재 유저 : {user}");
     }
     
 }

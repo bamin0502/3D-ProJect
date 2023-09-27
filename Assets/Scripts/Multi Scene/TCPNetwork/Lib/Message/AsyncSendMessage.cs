@@ -6,10 +6,9 @@ namespace MNF.Message
     {
         private int id = 0;
 
-        public AsyncSendMessage(int id, object session, Delegate dispatcher, object messageData)
-            : base(session, dispatcher, messageData)
+        public AsyncSendMessage( object session, Delegate dispatcher)
+            : base(session, dispatcher)
         {
-            this.id = id;
         }
 
         public override int execute()

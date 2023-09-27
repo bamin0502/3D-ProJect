@@ -6,6 +6,7 @@ using System.Text;
 
 using UnityEngine;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 public	class StreamBin
 {
@@ -54,37 +55,45 @@ public	class StreamBin
 namespace MNF.Message
 {
 	[System.Serializable]
+	public class BinData
+	{
+        public byte[] writeBuffer = new byte[5192];
+        public MemoryStream ms;
+        public BinaryWriter bw;
+        public NetHead head = new NetHead();
+        public int GetSize_Data() { return (int)ms.Position; }
+		public byte[] GetBuff() { return writeBuffer; }
+    }
+    [System.Serializable]
 	public	class	StreamBinData
 	{
-		static	public byte[] 	writeBuffer = new byte[10240];
+		static	public List<BinData> listBinData = new List<BinData> { };
 
-		static	public MemoryStream 	ms;
-		static	public BinaryWriter 	bw;
-
-		static	public	NetHead 	m_Head = new NetHead();
-
-		static	public	int		GetSize_Data() {return (int)ms.Position; }
-
-		static	public	byte[]	GetBuff()
+		static	public BinData GetBinData()
 		{
-			return writeBuffer;
+            return listBinData[0];
 		}
 
+        static public void WriteEnd()
+        {
+			listBinData.RemoveAt(0);
+        }
 
-		static	public	BinaryWriter WriteStart()
+
+        static	public	BinaryWriter WriteStart(byte byClass, byte byEvent)
 		{
-			if( ms == null )
+            BinData data = new BinData();
+			data.head.MakeHead(byClass, byEvent);
+
+            listBinData.Add(data);
+			if(data.ms == null )
 			{
-				ms = new MemoryStream(writeBuffer,true); 
-				bw = new BinaryWriter(ms);
+                data.ms = new MemoryStream(data.writeBuffer, true);
+                data.bw = new BinaryWriter(data.ms);
 			}
-			ms.Seek(0,SeekOrigin.Begin);
-			return bw;
-		}
+            data.ms.Seek(0,SeekOrigin.Begin);
 
-		static public	void  SetHeader( NetHead head )
-		{
-			m_Head = head.Copy();
+            return data.bw;
 		}
 	}
 
@@ -114,7 +123,6 @@ namespace MNF.Message
 		}
 	}
 
-	// StreamBin
     public static class StreamBinMessageBuffer
     {
         public static int MaxMessageSize()
@@ -162,15 +170,22 @@ namespace MNF.Message
 			MemoryStream	ms = new MemoryStream(GetSerializedBuffer(),true); 
 			BinaryWriter	bw = new BinaryWriter(ms);
 
-			int total_size = StreamBinData.GetSize_Data() + SerializedHeaderSize;
-			StreamBinData.m_Head.WriteBin(bw);
-			bw.Write( total_size );
-			bw.Write( StreamBinData.GetBuff() , 0 , total_size - SerializedHeaderSize );
+			BinData binData = StreamBinData.GetBinData();
 
-			bw.Close();
+            int total_size = binData.GetSize_Data() + SerializedHeaderSize;
+            binData.head.WriteBin(bw);
+			bw.Write( total_size );
+			bw.Write(binData.GetBuff() , 0 , total_size - SerializedHeaderSize );
+
+//			string szLog = string.Format("SERIALIZE {0} {1} {2} {3}", total_size, SerializedHeaderSize, binData.head.m_Class, binData.head.m_Event);
+//			Debug.Log(szLog);
+
+            bw.Close();
 			ms.Close();
 
 			SerializedLength = total_size;
+
+			StreamBinData.WriteEnd();
         }
     }
 

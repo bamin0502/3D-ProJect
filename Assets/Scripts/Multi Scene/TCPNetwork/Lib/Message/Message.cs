@@ -11,17 +11,17 @@ namespace MNF
         public Delegate Dispatcher { get; set; }
 
         [System.ComponentModel.DefaultValue(null)]
+
         public object MessageData { get; set; }
 
         public IMessage()
         {
         }
 
-        public IMessage(object session, Delegate dispatcher, object messageData)
+        public IMessage(object session, Delegate dispatcher)
         {
             Session = session;
             Dispatcher = dispatcher;
-            MessageData = messageData;
         }
 
         public override string ToString()
@@ -32,10 +32,7 @@ namespace MNF
             if (Dispatcher == null)
                 return Session.ToString();
 
-            if (MessageData == null)
-                return string.Format("{0}:{1}", Session, Dispatcher);
-
-            return string.Format("{0}:{1}:{2}", Session, Dispatcher, MessageData);
+            return string.Format("{0}:{1}", Session, Dispatcher);
         }
 
         public abstract int execute();
@@ -47,7 +44,7 @@ namespace MNF
         {
         }
 
-        public IMessage(object session, Delegate dispatcher, object messageData) : base(session, dispatcher, messageData)
+        public IMessage(object session, Delegate dispatcher) : base(session, dispatcher)
         {
         }
     }
@@ -59,7 +56,7 @@ namespace MNF
         {
         }
 
-        public DefaultMessage(object session, Delegate dispatcher, object messageData) : base(session, dispatcher, messageData)
+        public DefaultMessage(object session, Delegate dispatcher) : base(session, dispatcher)
         {
         }
 
@@ -77,7 +74,7 @@ namespace MNF
         {
         }
 
-        public CustomMessage(object session, Delegate dispatcher, object messageData) : base(session, dispatcher, messageData)
+        public CustomMessage(object session, Delegate dispatcher) : base(session, dispatcher)
         {
         }
 

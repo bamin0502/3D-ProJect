@@ -23,7 +23,7 @@ public class MKWNetwork : KWSingleton<MKWNetwork>
 	public	NetHead_Equal	m_eqSJNetHead	= new NetHead_Equal();
 	public	Dictionary<NetHead,NetRecvCallBack> 	m_dicRecvCallBack;
 
-	public override void Awake()
+    override public void Awake()
 	{
 		base.Awake();
 
@@ -65,9 +65,9 @@ public class MKWNetwork : KWSingleton<MKWNetwork>
         if (IsInit == false)
             return;
 
-		// The message received by Basic_1_ClientSession is managed as a queue inside the MNF,
+        // The message received by Basic_1_ClientSession is managed as a queue inside the MNF,
         // and it is necessary to call the dipatchNetworkInterMessage () function to process the message loaded in the queue.
-		TcpHelper.Instance.DipatchNetworkInterMessage();
+        TcpHelper.Instance.DipatchNetworkInterMessage();
 	}
 
 
@@ -119,7 +119,7 @@ public class MKWNetwork : KWSingleton<MKWNetwork>
 
 	public	void	SendData(byte byClass, byte byEvent, GameObject goFunction = null, string szRecvFunc = "")
 	{
-		NetHead head = new NetHead();
+        NetHead head = new NetHead();
 		head.MakeHead(byClass, byEvent);
 
 		if( goFunction != null )
@@ -140,10 +140,7 @@ public class MKWNetwork : KWSingleton<MKWNetwork>
 			}
 		}
 
-		StreamBinData.SetHeader( head );
-
-		_SendDummy _dummy = new _SendDummy();
-        m_nowSession.AsyncSend(0, _dummy);
+        m_nowSession.AsyncSend();
 	}
 
 	public void SetRecvCallBack(byte uClass, byte uEvent, GameObject goFunction, string szRecvFunc)

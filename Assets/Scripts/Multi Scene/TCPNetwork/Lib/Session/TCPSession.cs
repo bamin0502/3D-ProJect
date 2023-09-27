@@ -100,9 +100,9 @@ namespace MNF
          * @param message The data of the message to be sent. The message to be sent must be a class.
          * @return Returns true if successful, false if failed.
          */
-        public bool AsyncSend<T>(int id, T message) where T : new()
+        public bool AsyncSend()
         {
-            return AsyncIO.AsyncSend(this, id, message);
+            return AsyncIO.AsyncSend(this);
         }
 
         protected abstract IMessageFactory AllocMessageFactory();

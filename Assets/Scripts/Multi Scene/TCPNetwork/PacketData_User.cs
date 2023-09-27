@@ -42,9 +42,9 @@ namespace MNF
     [System.Serializable]
     public class UserBase
     {
-        public byte m_byMainNo = 0; // ë©”ì¸ì„œë²„ ë²ˆí˜¸
-        public Int64 m_nUserNo = 0;     // ìœ ì €ë²ˆí˜¸
-        public string m_szUserID = "";   // ìœ ì €ì•„ì´ë””
+        public byte m_byMainNo = 0; // ¸ŞÀÎ¼­¹ö ¹øÈ£
+        public Int64 m_nUserNo = 0;     // À¯Àú¹øÈ£
+        public string m_szUserID = "";   // À¯Àú¾ÆÀÌµğ
 
         virtual public void ReadBin(BinaryReader br)
         {

@@ -4,7 +4,6 @@ using UnityEngine;
 using System;
 using System.IO;
 using System.Net;
-using Data;
 using LitJson;
 using MNF.Message;
 
@@ -87,7 +86,7 @@ namespace MNF
 
             if (head.m_Class == 255 && head.m_Event == 254)
             {
-                BinaryWriter bw = StreamBinData.WriteStart();
+                BinaryWriter bw = StreamBinData.WriteStart((byte)255, (byte)253);
                 MKWNetwork.instance.SendData((byte)255, (byte)253);
 
                 m_dtConnectionTest = DateTime.Now;
@@ -144,9 +143,9 @@ namespace MNF
 		{
             MKWNetwork.instance.Disconnect();
 		}
-        // 전체유저에게 전송되는 패킷 처리
+
 		public void OnPrcNetRecvPacket(NetHead head, BinaryReader br)
-		{
+		{// 전체유저에게 전송되는 패킷 처리
 			if (head.m_Class == HeadClass.SOCK_MENU)
 			{
 			}
@@ -174,7 +173,7 @@ namespace MNF
 		}
 		public void Send_WAIT_LOGIN(string szUserID, byte uGroup, GameObject objCallback)
 		{
-			BinaryWriter bw = StreamBinData.WriteStart();
+			BinaryWriter bw = StreamBinData.WriteStart(HeadClass.SOCK_WAIT, HeadEvent.WAIT_LOGIN);
 			bw.Write(NetSetting.NET_PROTOCOL_VER);
 			NetString.WriteString(bw, szUserID);
 			bw.Write((byte)uGroup);
@@ -184,41 +183,40 @@ namespace MNF
 
 		public void Send_ROOM_BROADCAST( string szData)
 		{
-			BinaryWriter bw = StreamBinData.WriteStart();
+			BinaryWriter bw = StreamBinData.WriteStart(HeadClass.SOCK_ROOM, HeadEvent.ROOM_BROADCAST);
 			NetString.WriteString(bw, szData);
             MKWNetwork.instance.SendData(HeadClass.SOCK_ROOM, HeadEvent.ROOM_BROADCAST);
 		}
 		public void Send_ROOM_USER_DATA_UPDATE( UserSession user)
 		{
-			BinaryWriter bw = StreamBinData.WriteStart();
+			BinaryWriter bw = StreamBinData.WriteStart(HeadClass.SOCK_ROOM, HeadEvent.ROOM_USER_DATA_UPDATE);
 			user.WriteBin(bw);
             MKWNetwork.instance.SendData(HeadClass.SOCK_ROOM, HeadEvent.ROOM_USER_DATA_UPDATE);
 		}
         public void Send_ROOM_USER_MOVE_DIRECT(UserSession user)
         {
-            BinaryWriter bw = StreamBinData.WriteStart();
+            BinaryWriter bw = StreamBinData.WriteStart(HeadClass.SOCK_ROOM, HeadEvent.ROOM_USER_MOVE_DIRECT);
             user.WriteBin(bw);
             MKWNetwork.instance.SendData(HeadClass.SOCK_ROOM, HeadEvent.ROOM_USER_MOVE_DIRECT);
         }
         public void Send_ROOM_USER_ITEM_UPDATE(UserSession user)
         {
-            BinaryWriter bw = StreamBinData.WriteStart();
+            BinaryWriter bw = StreamBinData.WriteStart(HeadClass.SOCK_ROOM, HeadEvent.ROOM_USER_ITEM_UPDATE);
             user.WriteBin(bw);
             MKWNetwork.instance.SendData(HeadClass.SOCK_ROOM, HeadEvent.ROOM_USER_ITEM_UPDATE);
         }
         public void Send_ROOM_DATA_UPDATE(RoomSession room)
         {
-            BinaryWriter bw = StreamBinData.WriteStart();
+            BinaryWriter bw = StreamBinData.WriteStart(HeadClass.SOCK_ROOM, HeadEvent.ROOM_DATA_UPDATE);
 			for (int i = 0; i < NetConst.SIZE_ROOM_DATA; i++)
 				bw.Write((int)room.m_nRoomData[i]);            
             MKWNetwork.instance.SendData(HeadClass.SOCK_ROOM, HeadEvent.ROOM_DATA_UPDATE);
         }
         public void Send_ROOM_USER_MOVE( UserSession user)
 		{
-			BinaryWriter bw = StreamBinData.WriteStart();
+			BinaryWriter bw = StreamBinData.WriteStart(HeadClass.SOCK_ROOM, HeadEvent.ROOM_USER_MOVE);
 			user.WriteBin(bw);
             MKWNetwork.instance.SendData(HeadClass.SOCK_ROOM, HeadEvent.ROOM_USER_MOVE);
 		}
-        
     }
 }

@@ -8,6 +8,7 @@ using MNF;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class MultiScene : MonoBehaviour
 {
@@ -16,7 +17,8 @@ public class MultiScene : MonoBehaviour
     private readonly Dictionary<string, GameObject> _players = new ();
     [HideInInspector] public List<GameObject> weaponsList; //무기 객체들
     public Transform weaponsListParent; //무기 객체들이 있는 부모 객체
-    
+    [HideInInspector] public List<GameObject> itemsList; //아이템 객체들
+    public GameObject itemsListParent; //아이템 객체들이 있는 부모 객체
     
     public TextMeshProUGUI noticeText;
 
@@ -30,6 +32,7 @@ public class MultiScene : MonoBehaviour
         Instance = this;
         SetUsers();
         SetWeaponList();
+        SetItemList();
     }
 
     private void SetUsers()
@@ -71,7 +74,17 @@ public class MultiScene : MonoBehaviour
             weaponsList.Add(child.gameObject);
         }
     }
-    
+
+    private void SetItemList()
+    {
+        itemsList.Capacity = itemsListParent.transform.childCount;
+
+        for (int i = 0; i < itemsListParent.transform.childCount; i++)
+        {
+            Transform child = itemsListParent.transform.GetChild(i);
+            itemsList.Add(child.gameObject);
+        }
+    }
     private string VectorToString(Vector3 position)
     {
         string result = $"{position.x},{position.y},{position.z}";
@@ -115,8 +128,8 @@ public class MultiScene : MonoBehaviour
                 break;
             //플레이어 아이템 드랍 관련 테스트 필요
             case 3:
-                user.TryGetComponent<Slot>(out var userItem2);
-                userItem2.UseItemInSlot(Convert.ToInt32(jData["ITEM"].ToString()));
+                string itemIndex = Convert.ToString(jData["ITEM_INDEX"].ToString());
+                user.GetComponent<ItemPickup>().name = itemIndex;
                 break;
             //플레이어 공격 관련 테스트 필요
             case 4:
@@ -125,9 +138,11 @@ public class MultiScene : MonoBehaviour
                 break;
             //플레이어 체력 관련 테스트 필요
             case 5:
-                Data.PlayerStat playerStat = new Data.PlayerStat();
-                playerStat.Health = Convert.ToInt32(jData["HEALTH"].ToString());
-                playerStat.PlayerHealth = Convert.ToInt32(jData["PlayerHealth"].ToString());
+                Data.PlayerStat playerStat = new Data.PlayerStat
+                {
+                    Health = Convert.ToInt32(jData["HEALTH"].ToString()),
+                    PlayerHealth = Convert.ToInt32(jData["PlayerHealth"].ToString())
+                };
                 break;
             case 6:
                 int weaponIndex = Convert.ToInt32(jData["WEAPON_INDEX"].ToString());
@@ -200,5 +215,20 @@ public class MultiScene : MonoBehaviour
             Destroy(toDestroy);
         }
     }
-    
+
+    public void BroadCastingPickItem(int index, int _count)
+    {
+          UserSession userSession= NetGameManager.instance.GetRoomUserSession(
+            NetGameManager.instance.m_userHandle.m_szUserID);
+
+          var data = new PLAYER_ITEM
+          {
+              USER = userSession.m_szUserID,
+              DATA = 3,
+              ITEM_INDEX = index, 
+          };
+          
+          string sendData = LitJson.JsonMapper.ToJson(data);
+          NetGameManager.instance.RoomBroadcast(sendData);
+    }
 }

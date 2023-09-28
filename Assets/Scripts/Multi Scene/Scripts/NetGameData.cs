@@ -55,6 +55,13 @@ public class PLAYER_WEAPON
     public int WEAPON_INDEX = 0;
 }
 
+[Serializable]
+public class PLAYER_ITEM
+{
+    public string USER = "";
+    public int DATA = 0;
+    public int ITEM_INDEX = 0;
+}
 public class PLAYER_STATUS
 {
     public string USER = "";

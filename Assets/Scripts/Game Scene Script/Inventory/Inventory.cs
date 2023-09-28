@@ -18,9 +18,14 @@ public class Inventory : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        
         //부모의 자식값을 가져옴
         slots = go_SlotsParent.GetComponentsInChildren<Slot>();
+    }
+
+    void Update()
+    {
+        if(!MultiScene.Instance.currentUser.Equals(gameObject.name)) return;
     }
     public void AcquireItem(Item _item, int _count = 1)
     {

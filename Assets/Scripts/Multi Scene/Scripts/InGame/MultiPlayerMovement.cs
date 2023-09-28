@@ -21,7 +21,7 @@ public class MultiPlayerMovement : MonoBehaviour
     //일단 테스트용
     
     
-    //[SerializeField] private WeaponController weaponController;
+    private MultiWeaponController _weaponController;
     public NavMeshAgent navAgent;
     public Camera _camera;
     //private float rotAnglePerSecond = 360f;
@@ -29,31 +29,30 @@ public class MultiPlayerMovement : MonoBehaviour
     //만든이: 방민호
     public PlayerState currentState = PlayerState.Idle;
     public AniSetting ani;
+    
    // public Action OnDead;//죽었을때 호출할 이벤트
-   // bool isCoolingDown = false;
-   // float cooldownEndTime = 0f;
-   // float cooldownTime = 10f;
     //public SpacebarCooldownUI cooldownUI;
   //  public TMP_Text coolText;
   //  public GameObject SpaceUI;
    // public UnityEngine.UI.Image fill;
-  //  private float MaxCooldown = 10f;
-  //  private float currentCooldown = 10f;
 
+    private bool _isCoolingDown;
+    private float _cooldownEndTime;
+    private readonly float _cooldownTime = 10f;
+    private float _currentCooldown = 10f;
+    private float _maxCooldown = 10f;
     void Start()
     {
-        //만든이 : 임성훈
-        //만든이 : 방민호        
-        ani =GetComponent<AniSetting>();
-        //    SpaceUI.SetActive(false);//스페이스바 UI 비활성화
-        ChangedState(PlayerState.Idle); //플레이어 기본상태를 Idle로 지정
+        ChangedState(PlayerState.Idle);
+        ani = GetComponent<AniSetting>();
+        _weaponController = GetComponent<MultiWeaponController>();
         MultiScene.Instance.BroadCastingAnimation((int)PlayerState.Idle);
-        
+        //    SpaceUI.SetActive(false);//스페이스바 UI 비활성화
     }
     private void Update()
     {
-       // #region 플레이어 이동관련
-       //만든이 : 임성훈 
+        if(!MultiScene.Instance.currentUser.Equals(gameObject.name)) return;
+        
         if (Input.GetMouseButtonDown(1)) // 오른쪽 클릭
         {
             Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
@@ -61,25 +60,23 @@ public class MultiPlayerMovement : MonoBehaviour
 
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity, layerMask))
             {
-                
-                ChangedState(PlayerState.RunForward);
-                MultiScene.Instance.BroadCastingAnimation((int)PlayerState.RunForward);
-                MultiScene.Instance.BroadCastingMovement(hit.point);
-                navAgent.SetDestination(hit.point);
-                // if (!weaponController.isAttack)
-                // {
-                //  //   _navAgent.SetDestination(hit.point);
-                //     ChangedState(PlayerState.RunForward);
-                //     MultiScene.Instance.BroadCastingAnimation((int)PlayerState.RunForward);
-                // }
-                // else
-                // {
-                //     ChangedState(PlayerState.HammerAttackIdle);
-                //     MultiScene.Instance.BroadCastingAnimation((int)PlayerState.HammerAttackIdle);
-                // }
+                if (!_weaponController.isAttack)
+                {
+                    navAgent.SetDestination(hit.point);
+                    ChangedState(PlayerState.RunForward);
+
+                    MultiScene.Instance.BroadCastingMovement(hit.point);
+                    MultiScene.Instance.BroadCastingAnimation((int)PlayerState.RunForward);
+                }
+                else
+                {
+                    ChangedState(PlayerState.HammerAttackIdle);
+                    MultiScene.Instance.BroadCastingAnimation((int)PlayerState.HammerAttackIdle);
+                }
 
             }
         }
+        
         //만약 플레이어가 목적지에 도착하였을때! 다시 애니메이션을 기본상태로 되돌림 , 만든이:방민호
         if (!navAgent.pathPending && navAgent.remainingDistance <= navAgent.stoppingDistance && !navAgent.hasPath)
         {
@@ -89,38 +86,33 @@ public class MultiPlayerMovement : MonoBehaviour
                 MultiScene.Instance.BroadCastingAnimation((int)PlayerState.Idle);
             }
         }
-        // if (!isCoolingDown && Input.GetKeyDown(KeyCode.Space))
-        // {
-        //     ChangedState(PlayerState.SpaceMove);
-        //     MultiScene.Instance.BroadCastingAnimation((int)PlayerState.SpaceMove);
-        //     SpaceUI.SetActive(true);
-        //     isCoolingDown = true;
-        //
-        //     cooldownEndTime = Time.time + cooldownTime;                           
-        //
-        // }
-        // if (isCoolingDown)
-        // {
-        //     float remainingTime = Mathf.Max(0, cooldownEndTime - Time.time);
-        //
-        //     if (remainingTime > 0)
-        //     {
-        //         SpaceBarUI();//시간이 남아있는동안 실행시킬거임
-        //         coolText.text = Mathf.CeilToInt(remainingTime).ToString();
-        //     }
-        //     else
-        //     {
-        //         SpaceUI.SetActive(false);
-        //         isCoolingDown = false;
-        //         coolText.text = "";
-        //     }
-        // }
-        // if (Time.timeScale == 0)
-        // {
-        //     return;
-        // }
-        // #endregion
-
+        
+        if (!_isCoolingDown && Input.GetKeyDown(KeyCode.Space))
+        {
+            ChangedState(PlayerState.SpaceMove);
+            MultiScene.Instance.BroadCastingAnimation((int)PlayerState.SpaceMove);
+            //SpaceUI.SetActive(true);
+            _isCoolingDown = true;
+        
+            _cooldownEndTime = Time.time + _cooldownTime;                           
+        
+        }
+        if (_isCoolingDown)
+        {
+            float remainingTime = Mathf.Max(0, _cooldownEndTime - Time.time);
+        
+            if (remainingTime > 0)
+            {
+                //SpaceBarUI();//시간이 남아있는동안 실행시킬거임
+                //coolText.text = Mathf.CeilToInt(remainingTime).ToString();
+            }
+            else
+            {
+                //SpaceUI.SetActive(false);
+                _isCoolingDown = false;
+                //coolText.text = "";
+            }
+        }
     }
 
     // #region 플레이어 회전관련
@@ -139,20 +131,20 @@ public class MultiPlayerMovement : MonoBehaviour
     
     public void Attack()
     {
-        // if (weaponController.currentTarget != null)
-        // {
-        //     weaponController.equippedWeapon.Attack(weaponController.currentTarget);
-        //     
-        //     if (weaponController.currentTarget.TryGetComponent(out Enemy enemy))
-        //     {
-        //         if (enemy.isDead) weaponController.currentTarget = null;
-        //     }
-        //
-        //     else if (weaponController.currentTarget.TryGetComponent(out Boss boss))
-        //     {
-        //         if (boss.isDead) weaponController.currentTarget = null;
-        //     }
-        // }
+        if (_weaponController.currentTarget != null)
+        {
+            _weaponController.equippedWeapon.Attack(_weaponController.currentTarget);
+            
+            if (_weaponController.currentTarget.TryGetComponent(out Enemy enemy))
+            {
+                if (enemy.isDead) _weaponController.currentTarget = null;
+            }
+        
+            else if (_weaponController.currentTarget.TryGetComponent(out Boss boss))
+            {
+                if (boss.isDead) _weaponController.currentTarget = null;
+            }
+        }
     }
 
     #region 플레이어 애니메이션 관련 -제작자 방민호
@@ -204,7 +196,7 @@ public class MultiPlayerMovement : MonoBehaviour
     void PlayerStateSpaceMoveIdle()
     {
        // TurnToDestination();
-       // isCoolingDown = false;
+       _isCoolingDown = false;
         
     }
     void PlayerStateDead()
@@ -217,7 +209,6 @@ public class MultiPlayerMovement : MonoBehaviour
         ani.ChangeAnimation(newState);
         currentState = newState;
     }
-
     public void SetAnimationTrigger(int aniNum)
     {
         ani.SetTrigger(aniNum);

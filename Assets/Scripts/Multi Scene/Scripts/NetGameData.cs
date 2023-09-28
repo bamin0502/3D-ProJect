@@ -47,6 +47,14 @@ public class PLAYER_MOVE
     public string POSITION = "";
 }
 
+[Serializable]
+public class PLAYER_WEAPON
+{
+    public string USER = "";
+    public int DATA = 0;
+    public int WEAPON_INDEX = 0;
+}
+
 public class PLAYER_STATUS
 {
     public string USER = "";

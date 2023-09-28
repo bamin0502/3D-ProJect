@@ -6,7 +6,6 @@ using Data;
 using mino;
 using MNF;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -14,7 +13,7 @@ public class MultiScene : MonoBehaviour
 {
     public static MultiScene Instance;
     
-    private Dictionary<string, GameObject> _players = new ();
+    private readonly Dictionary<string, GameObject> _players = new ();
     [HideInInspector] public List<GameObject> weaponsList; //무기 객체들
     public Transform weaponsListParent; //무기 객체들이 있는 부모 객체
     
@@ -26,13 +25,11 @@ public class MultiScene : MonoBehaviour
     public Transform[] positions; //유저 찍어낼 위치
     public GameObject playerPrefab; //찍어낼 유저 프리팹
     public string currentUser = "";
-    private int currentState = -99;
     private void Start()
     {
-        
         Instance = this;
-        SetWeaponList();
         SetUsers();
+        SetWeaponList();
     }
 
     private void SetUsers()
@@ -74,12 +71,76 @@ public class MultiScene : MonoBehaviour
             weaponsList.Add(child.gameObject);
         }
     }
+    
+    private string VectorToString(Vector3 position)
+    {
+        string result = $"{position.x},{position.y},{position.z}";
+        return result;
+    }
+    private Vector3 StringToVector(string position)
+    {
+        string[] posString = position.Split(",");
+        Vector3 result = new Vector3(float.Parse(posString[0]), float.Parse(posString[1]), float.Parse(posString[2]));
+        return result;
+    }
+    public void RoomBroadcast(string szData)
+    {
+        //모든 유저에게 정보 전달
+        LitJson.JsonData jData = LitJson.JsonMapper.ToObject(szData);
+        string userID = jData["USER"].ToString();
+        int dataID = Convert.ToInt32(jData["DATA"].ToString());
+
+        if(currentUser.Equals(userID)) return;
+        _players.TryGetValue(userID, out var user);
+        if (user == null) return;
+        
+        switch (dataID)
+        {
+            case 1:
+                int aniNum = Convert.ToInt32(jData["ANI_NUM"].ToString());
+                bool aniType = Convert.ToBoolean(jData["ANI_TYPE"].ToString());
+
+                if (aniType == false)
+                {
+                    user.GetComponent<MultiPlayerMovement>().ChangedState((PlayerState)aniNum);
+                }
+                else
+                {
+                    user.GetComponent<MultiPlayerMovement>().SetAnimationTrigger(aniNum);
+                }
+                break;
+            case 2:
+                user.TryGetComponent<MultiPlayerMovement>(out var userMove2);
+                userMove2.navAgent.SetDestination(StringToVector(jData["POSITION"].ToString()));
+                break;
+            //플레이어 아이템 드랍 관련 테스트 필요
+            case 3:
+                user.TryGetComponent<Slot>(out var userItem2);
+                userItem2.UseItemInSlot(Convert.ToInt32(jData["ITEM"].ToString()));
+                break;
+            //플레이어 공격 관련 테스트 필요
+            case 4:
+                user.TryGetComponent<WeaponController>(out var userAttack2);
+                userAttack2.isAttack = true;
+                break;
+            //플레이어 체력 관련 테스트 필요
+            case 5:
+                Data.PlayerStat playerStat = new Data.PlayerStat();
+                playerStat.Health = Convert.ToInt32(jData["HEALTH"].ToString());
+                playerStat.PlayerHealth = Convert.ToInt32(jData["PlayerHealth"].ToString());
+                break;
+            case 6:
+                int weaponIndex = Convert.ToInt32(jData["WEAPON_INDEX"].ToString());
+                user.GetComponent<MultiWeaponController>().PickWeapon(weaponIndex);
+                break;
+                
+        }
+    }
+
+    #region 브로드캐스팅 관련
 
     public void BroadCastingAnimation(int animationNumber, bool isTrigger = false)
     {
-        //if (currentState == animationNumber) return;
-        // currentState = animationNumber;
-        
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(
             NetGameManager.instance.m_userHandle.m_szUserID);
 
@@ -94,7 +155,7 @@ public class MultiScene : MonoBehaviour
         string sendData = LitJson.JsonMapper.ToJson(data);
         NetGameManager.instance.RoomBroadcast(sendData);
     }
-    
+
     public void BroadCastingMovement(Vector3 destination)
     {
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(
@@ -111,80 +172,26 @@ public class MultiScene : MonoBehaviour
         NetGameManager.instance.RoomBroadcast(sendData);
     }
 
-    private string VectorToString(Vector3 position)
+    public void BroadCastingPickWeapon(int index)
     {
-        string result = $"{position.x},{position.y},{position.z}";
-        return result;
-    }
-    
-    private Vector3 StringToVector(string position)
-    {
-        string[] posString = position.Split(",");
-        Vector3 result = new Vector3(float.Parse(posString[0]), float.Parse(posString[1]), float.Parse(posString[2]));
-        return result;
-    }
-    public void RoomBroadcast(string szData)
-    {
-        //모든 유저에게 정보 전달
-        LitJson.JsonData jData = LitJson.JsonMapper.ToObject(szData);
-        string userID = jData["USER"].ToString();
-        int dataID = Convert.ToInt32(jData["DATA"].ToString());
+        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+            NetGameManager.instance.m_userHandle.m_szUserID);
 
-        if(currentUser.Equals(userID)) return;
-        
-        switch (dataID)
+        var data = new PLAYER_WEAPON
         {
-            case 1:
-                int aniNum = Convert.ToInt32(jData["ANI_NUM"].ToString());
-                bool aniType = Convert.ToBoolean(jData["ANI_TYPE"].ToString());
-                _players.TryGetValue(userID, out var user);
+            USER = userSession.m_szUserID,
+            DATA = 6,
+            WEAPON_INDEX = index,
+        };
 
-                if (user != null)
-                {
-                    if (aniType == false)
-                    {
-                        user.GetComponent<MultiPlayerMovement>().ChangedState((PlayerState)aniNum);
-                    }
-                    else
-                    {
-                        user.GetComponent<MultiPlayerMovement>().SetAnimationTrigger(aniNum);
-                    }
-                }
-                break;
-            
-            case 2:
-                _players.TryGetValue(userID, out var userMove);
-                userMove.TryGetComponent<MultiPlayerMovement>(out var userMove2);
-                userMove2.navAgent.SetDestination(StringToVector(jData["POSITION"].ToString()));
-                break;
-            //플레이어 아이템 드랍 관련 테스트 필요
-            case 3:
-                _players.TryGetValue(userID,out var userItem);
-                userItem.TryGetComponent<Slot>(out var userItem2);
-                userItem2.UseItemInSlot(Convert.ToInt32(jData["ITEM"].ToString()));
-                break;
-            //플레이어 공격 관련 테스트 필요
-            case 4:
-                _players.TryGetValue(userID, out var userAttack);
-                userAttack.TryGetComponent<WeaponController>(out var userAttack2);
-                userAttack2.isAttack = true;
-                break;
-            //플레이어 체력 관련 테스트 필요
-            case 5:
-                Data.PlayerStat playerStat = new Data.PlayerStat();
-                playerStat.Health = Convert.ToInt32(jData["HEALTH"].ToString());
-                playerStat.PlayerHealth = Convert.ToInt32(jData["PlayerHealth"].ToString());
-                break;
-                
-        }
-
-        
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
     }
+
+    #endregion
 
     public void RoomUserDel(UserSession user)
     {
-        //유저 삭제 및 기존 유저 재정렬
-        
         _players.TryGetValue(user.m_szUserID, out GameObject toDestroy);
         
         if (toDestroy != null)

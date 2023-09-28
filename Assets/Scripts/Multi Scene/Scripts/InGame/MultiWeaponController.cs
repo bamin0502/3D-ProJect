@@ -218,6 +218,7 @@ public class MultiWeaponController : MonoBehaviour
     private void MoveTowardsTarget()
     {
         _agent.SetDestination(currentTarget.position);
+        MultiScene.Instance.BroadCastingMovement(currentTarget.position);
     }
 
     private void AttackTarget()

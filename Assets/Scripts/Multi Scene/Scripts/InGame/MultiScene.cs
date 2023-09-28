@@ -6,7 +6,6 @@ using Data;
 using mino;
 using MNF;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -14,7 +13,7 @@ public class MultiScene : MonoBehaviour
 {
     public static MultiScene Instance;
     
-    private Dictionary<string, GameObject> _players = new ();
+    private readonly Dictionary<string, GameObject> _players = new ();
     [HideInInspector] public List<GameObject> weaponsList; //무기 객체들
     public Transform weaponsListParent; //무기 객체들이 있는 부모 객체
     
@@ -26,13 +25,11 @@ public class MultiScene : MonoBehaviour
     public Transform[] positions; //유저 찍어낼 위치
     public GameObject playerPrefab; //찍어낼 유저 프리팹
     public string currentUser = "";
-    private int currentState = -99;
     private void Start()
     {
-        
         Instance = this;
-        SetWeaponList();
         SetUsers();
+        SetWeaponList();
     }
 
     private void SetUsers()
@@ -74,65 +71,12 @@ public class MultiScene : MonoBehaviour
             weaponsList.Add(child.gameObject);
         }
     }
-
-    public void BroadCastingPickWeapon(int index)
-    {
-        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
-            NetGameManager.instance.m_userHandle.m_szUserID);
-
-        var data = new PLAYER_WEAPON
-        {
-            USER = userSession.m_szUserID,
-            DATA = 6,
-            WEAPON_INDEX = index,
-        };
-
-        string sendData = LitJson.JsonMapper.ToJson(data);
-        NetGameManager.instance.RoomBroadcast(sendData);
-    }
-
-    public void BroadCastingAnimation(int animationNumber, bool isTrigger = false)
-    {
-        //if (currentState == animationNumber) return;
-        // currentState = animationNumber;
-        
-        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
-            NetGameManager.instance.m_userHandle.m_szUserID);
-
-        var data = new PLAYER_ANIMATION
-        {
-            USER = userSession.m_szUserID,
-            DATA = 1,
-            ANI_NUM = animationNumber,
-            ANI_TYPE = isTrigger,
-        };
-
-        string sendData = LitJson.JsonMapper.ToJson(data);
-        NetGameManager.instance.RoomBroadcast(sendData);
-    }
     
-    public void BroadCastingMovement(Vector3 destination)
-    {
-        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
-            NetGameManager.instance.m_userHandle.m_szUserID);
-
-        var data = new PLAYER_MOVE
-        {
-            USER = userSession.m_szUserID,
-            DATA = 2,
-            POSITION = VectorToString(destination),
-        };
-
-        string sendData = LitJson.JsonMapper.ToJson(data);
-        NetGameManager.instance.RoomBroadcast(sendData);
-    }
-
     private string VectorToString(Vector3 position)
     {
         string result = $"{position.x},{position.y},{position.z}";
         return result;
     }
-    
     private Vector3 StringToVector(string position)
     {
         string[] posString = position.Split(",");
@@ -148,6 +92,7 @@ public class MultiScene : MonoBehaviour
 
         if(currentUser.Equals(userID)) return;
         _players.TryGetValue(userID, out var user);
+        if (user == null) return;
         
         switch (dataID)
         {
@@ -190,14 +135,63 @@ public class MultiScene : MonoBehaviour
                 break;
                 
         }
-
-        
     }
+
+    #region 브로드캐스팅 관련
+
+    public void BroadCastingAnimation(int animationNumber, bool isTrigger = false)
+    {
+        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+            NetGameManager.instance.m_userHandle.m_szUserID);
+
+        var data = new PLAYER_ANIMATION
+        {
+            USER = userSession.m_szUserID,
+            DATA = 1,
+            ANI_NUM = animationNumber,
+            ANI_TYPE = isTrigger,
+        };
+
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
+    }
+
+    public void BroadCastingMovement(Vector3 destination)
+    {
+        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+            NetGameManager.instance.m_userHandle.m_szUserID);
+
+        var data = new PLAYER_MOVE
+        {
+            USER = userSession.m_szUserID,
+            DATA = 2,
+            POSITION = VectorToString(destination),
+        };
+
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
+    }
+
+    public void BroadCastingPickWeapon(int index)
+    {
+        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+            NetGameManager.instance.m_userHandle.m_szUserID);
+
+        var data = new PLAYER_WEAPON
+        {
+            USER = userSession.m_szUserID,
+            DATA = 6,
+            WEAPON_INDEX = index,
+        };
+
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
+    }
+
+    #endregion
 
     public void RoomUserDel(UserSession user)
     {
-        //유저 삭제 및 기존 유저 재정렬
-        
         _players.TryGetValue(user.m_szUserID, out GameObject toDestroy);
         
         if (toDestroy != null)

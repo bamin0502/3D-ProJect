@@ -188,12 +188,22 @@ public class MultiWeaponController : MonoBehaviour
                 {
                     _playerMovement.SetAnimationTrigger(Pickup);
                     MultiScene.Instance.BroadCastingAnimation(Pickup, true);
-                    StartCoroutine(EquipWeaponAfterDelay(collider.GetComponent<Weapon>(), 0.1f));
+
+                    int index = MultiScene.Instance.weaponsList.IndexOf(collider.gameObject);
+
+                    PickWeapon(index);
+                    MultiScene.Instance.BroadCastingPickWeapon(index);
+                    
                     HidePickupText();
                 }
             }
         }
-        
+    }
+
+    public void PickWeapon(int index)
+    {
+        Weapon obj = MultiScene.Instance.weaponsList[index].GetComponent<Weapon>();
+        StartCoroutine(EquipWeaponAfterDelay(obj, 0.1f));
     }
 
     private IEnumerator EquipWeaponAfterDelay(Weapon newWeapon, float delay)

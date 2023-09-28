@@ -75,6 +75,22 @@ public class MultiScene : MonoBehaviour
         }
     }
 
+    public void BroadCastingPickWeapon(int index)
+    {
+        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+            NetGameManager.instance.m_userHandle.m_szUserID);
+
+        var data = new PLAYER_WEAPON
+        {
+            USER = userSession.m_szUserID,
+            DATA = 6,
+            WEAPON_INDEX = index,
+        };
+
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
+    }
+
     public void BroadCastingAnimation(int animationNumber, bool isTrigger = false)
     {
         //if (currentState == animationNumber) return;
@@ -131,42 +147,35 @@ public class MultiScene : MonoBehaviour
         int dataID = Convert.ToInt32(jData["DATA"].ToString());
 
         if(currentUser.Equals(userID)) return;
+        _players.TryGetValue(userID, out var user);
         
         switch (dataID)
         {
             case 1:
                 int aniNum = Convert.ToInt32(jData["ANI_NUM"].ToString());
                 bool aniType = Convert.ToBoolean(jData["ANI_TYPE"].ToString());
-                _players.TryGetValue(userID, out var user);
 
-                if (user != null)
+                if (aniType == false)
                 {
-                    if (aniType == false)
-                    {
-                        user.GetComponent<MultiPlayerMovement>().ChangedState((PlayerState)aniNum);
-                    }
-                    else
-                    {
-                        user.GetComponent<MultiPlayerMovement>().SetAnimationTrigger(aniNum);
-                    }
+                    user.GetComponent<MultiPlayerMovement>().ChangedState((PlayerState)aniNum);
+                }
+                else
+                {
+                    user.GetComponent<MultiPlayerMovement>().SetAnimationTrigger(aniNum);
                 }
                 break;
-            
             case 2:
-                _players.TryGetValue(userID, out var userMove);
-                userMove.TryGetComponent<MultiPlayerMovement>(out var userMove2);
+                user.TryGetComponent<MultiPlayerMovement>(out var userMove2);
                 userMove2.navAgent.SetDestination(StringToVector(jData["POSITION"].ToString()));
                 break;
             //플레이어 아이템 드랍 관련 테스트 필요
             case 3:
-                _players.TryGetValue(userID,out var userItem);
-                userItem.TryGetComponent<Slot>(out var userItem2);
+                user.TryGetComponent<Slot>(out var userItem2);
                 userItem2.UseItemInSlot(Convert.ToInt32(jData["ITEM"].ToString()));
                 break;
             //플레이어 공격 관련 테스트 필요
             case 4:
-                _players.TryGetValue(userID, out var userAttack);
-                userAttack.TryGetComponent<WeaponController>(out var userAttack2);
+                user.TryGetComponent<WeaponController>(out var userAttack2);
                 userAttack2.isAttack = true;
                 break;
             //플레이어 체력 관련 테스트 필요
@@ -174,6 +183,10 @@ public class MultiScene : MonoBehaviour
                 Data.PlayerStat playerStat = new Data.PlayerStat();
                 playerStat.Health = Convert.ToInt32(jData["HEALTH"].ToString());
                 playerStat.PlayerHealth = Convert.ToInt32(jData["PlayerHealth"].ToString());
+                break;
+            case 6:
+                int weaponIndex = Convert.ToInt32(jData["WEAPON_INDEX"].ToString());
+                user.GetComponent<MultiWeaponController>().PickWeapon(weaponIndex);
                 break;
                 
         }

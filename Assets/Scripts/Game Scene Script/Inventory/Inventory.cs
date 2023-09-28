@@ -30,7 +30,7 @@ public class Inventory : MonoBehaviour
     public void AcquireItem(Item _item, int _count = 1)
     {
         // 이미 아이템이 있는데 그 아이템 타입이 Used나 Throw형일경우
-        if (Item.ItemType.Used == _item.itemType || Item.ItemType.Throw == _item.itemType || Item.ItemType.buff ==_item.itemType)
+        if (Item.ItemType.Used == _item.itemType || Item.ItemType.Throw == _item.itemType || Item.ItemType.Buff ==_item.itemType)
         {
             foreach (var t in slots)
             {

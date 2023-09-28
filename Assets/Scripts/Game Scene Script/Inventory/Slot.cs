@@ -67,7 +67,7 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
 
             if (!itemUsed) return;
 
-            if (slots[slotIndex].item.itemType == Item.ItemType.Used || slots[slotIndex].item.itemType == Item.ItemType.buff ||
+            if (slots[slotIndex].item.itemType == Item.ItemType.Used || slots[slotIndex].item.itemType == Item.ItemType.Buff ||
                 slots[slotIndex].item.itemType == Item.ItemType.Throw)
             {
                 slots[slotIndex].SetSlotCount(-1);
@@ -91,7 +91,7 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
         ItemCount = _count;
         itemImage.sprite = item.itemImage;
         //아이템의 타입이 사용할수 있는 타입이거나 던질수 있는 타입이면
-        if (item.itemType == Item.ItemType.Used || item.itemType == Item.ItemType.Throw || item.itemType ==Item.ItemType.buff)
+        if (item.itemType == Item.ItemType.Used || item.itemType == Item.ItemType.Throw || item.itemType ==Item.ItemType.Buff)
         {
             go_CountImage.SetActive(true);
             text_Count.text = ItemCount.ToString();
@@ -132,7 +132,7 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
                 bool itemUsed=theItemEffectDatabase.UseItem(item);
                 if(itemUsed)
                 {
-                    if (item.itemType == Item.ItemType.Used || item.itemType == Item.ItemType.buff || item.itemType==Item.ItemType.Throw)
+                    if (item.itemType == Item.ItemType.Used || item.itemType == Item.ItemType.Buff || item.itemType==Item.ItemType.Throw)
                     {
                         SetSlotCount(-1);
                     }

@@ -87,7 +87,7 @@ public class QuickSlotController : MonoBehaviour
         if (quickSlots[selectedSlot].item != null)
         {
             if (quickSlots[selectedSlot].item.itemType==Item.ItemType.Used 
-                || quickSlots[selectedSlot].item.itemType == Item.ItemType.buff 
+                || quickSlots[selectedSlot].item.itemType == Item.ItemType.Buff 
                 || quickSlots[selectedSlot].item.itemType == Item.ItemType.Throw)
             {
                 EatItem();

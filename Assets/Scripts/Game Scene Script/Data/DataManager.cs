@@ -310,7 +310,7 @@ namespace Data
                     return true;
                 }
             }
-            if (_item.itemType == Item.ItemType.buff)
+            if (_item.itemType == Item.ItemType.Buff)
             {
                 PlayerHealth.maxHealth += 100;
                 StartCoroutine(DisplayItemMessage("최대 체력이 100 증가하였습니다!"));

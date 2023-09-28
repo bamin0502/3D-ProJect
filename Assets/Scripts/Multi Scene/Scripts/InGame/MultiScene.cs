@@ -6,6 +6,7 @@ using Data;
 using mino;
 using MNF;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -15,10 +16,10 @@ public class MultiScene : MonoBehaviour
     public static MultiScene Instance;
     
     private readonly Dictionary<string, GameObject> _players = new ();
-    [HideInInspector] public List<GameObject> weaponsList; //무기 객체들
+    public List<GameObject> weaponsList; //무기 객체들
     public Transform weaponsListParent; //무기 객체들이 있는 부모 객체
-    [HideInInspector] public List<GameObject> itemsList; //아이템 객체들
-    public GameObject itemsListParent; //아이템 객체들이 있는 부모 객체
+    public List<GameObject> itemsList; //아이템 객체들
+   
     
     public TextMeshProUGUI noticeText;
 
@@ -32,7 +33,7 @@ public class MultiScene : MonoBehaviour
         Instance = this;
         SetUsers();
         SetWeaponList();
-        SetItemList();
+        
     }
 
     private void SetUsers()
@@ -74,17 +75,7 @@ public class MultiScene : MonoBehaviour
             weaponsList.Add(child.gameObject);
         }
     }
-
-    private void SetItemList()
-    {
-        itemsList.Capacity = itemsListParent.transform.childCount;
-
-        for (int i = 0; i < itemsListParent.transform.childCount; i++)
-        {
-            Transform child = itemsListParent.transform.GetChild(i);
-            itemsList.Add(child.gameObject);
-        }
-    }
+    
     private string VectorToString(Vector3 position)
     {
         string result = $"{position.x},{position.y},{position.z}";
@@ -216,17 +207,44 @@ public class MultiScene : MonoBehaviour
         }
     }
 
-    public void BroadCastingPickItem(int index, int _count)
+    public void BroadCastingPickItem(int index)
     {
           UserSession userSession= NetGameManager.instance.GetRoomUserSession(
             NetGameManager.instance.m_userHandle.m_szUserID);
+                        
+          List<ItemProperty> itemProperties = new List<ItemProperty>();
 
+          ItemProperty UsedItem = new ItemProperty
+          {
+              itemType = Item.ItemType.Used,
+              ITEM_IMAGE = itemsList[index].GetComponent<ItemPickup>().item.itemImage,
+              ITEM_NAME = "",
+              ITEM_PREFAB = itemsList[index].GetComponent<ItemPickup>().item.GameObject(),
+              
+          };
+          itemProperties.Add(UsedItem);
+          ItemProperty BuffItem = new ItemProperty
+          {
+              itemType = Item.ItemType.Buff,
+              ITEM_IMAGE = itemsList[index].GetComponent<ItemPickup>().item.itemImage,
+              ITEM_NAME = "",
+              ITEM_PREFAB = itemsList[index].GetComponent<ItemPickup>().item.GameObject(),
+          };
+          itemProperties.Add(BuffItem);
+          ItemProperty ThrowItem = new ItemProperty
+          {
+              itemType = Item.ItemType.Throw,
+              ITEM_IMAGE = itemsList[index].GetComponent<ItemPickup>().item.itemImage,
+              ITEM_NAME = "",
+              ITEM_PREFAB = itemsList[index].GetComponent<ItemPickup>().item.GameObject(),
+          };
           var data = new PLAYER_ITEM
           {
               USER = userSession.m_szUserID,
               DATA = 3,
-              ITEM_INDEX = index, 
+              ItemProperties = itemProperties
           };
+
           
           string sendData = LitJson.JsonMapper.ToJson(data);
           NetGameManager.instance.RoomBroadcast(sendData);

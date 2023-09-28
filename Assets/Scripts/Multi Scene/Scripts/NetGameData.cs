@@ -60,8 +60,18 @@ public class PLAYER_ITEM
 {
     public string USER = "";
     public int DATA = 0;
-    public int ITEM_INDEX = 0;
+    public List<ItemProperty> ItemProperties;
 }
+
+[System.Serializable]
+public class ItemProperty
+{
+    public Sprite ITEM_IMAGE;
+    public GameObject ITEM_PREFAB;
+    public Item.ItemType itemType;
+    public string ITEM_NAME;
+}
+[Serializable]
 public class PLAYER_STATUS
 {
     public string USER = "";

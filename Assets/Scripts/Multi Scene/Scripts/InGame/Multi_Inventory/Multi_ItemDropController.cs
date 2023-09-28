@@ -8,10 +8,6 @@ using Unity.VisualScripting;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-
-
-//일단 테스트용... 너무 많아서 막막함... 나중에 수정
-[RequireComponent(typeof(MultiPlayerMovement))]
 public class Multi_ItemDropController : MonoBehaviour
 {
     [SerializeField]
@@ -29,21 +25,17 @@ public class Multi_ItemDropController : MonoBehaviour
     private Multi_Inventory theInventory;
     private void Awake()
     {
-        theInventory = FindObjectOfType<Multi_Inventory>();
+        theInventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Multi_Inventory>();
         pickupRadius = 3;
     }
     private void Start()
     {
-        _playerMovement = GetComponent<MultiPlayerMovement>();
     }
     void FixedUpdate()
     {
         if(MultiScene.Instance.currentUser != transform.gameObject.name) return;
-        
         CheckItem();
         TryAction();
-        
-        
     }
 
     private void TryAction()
@@ -84,7 +76,7 @@ public class Multi_ItemDropController : MonoBehaviour
     private void ItemInfoAppear()
     {
         pickupActivated = true;
-
+        
         string itemName = itemColliders[0].GetComponent<ItemPickup>().item.itemName;
         MultiScene.Instance.noticeText.gameObject.SetActive(true);
         MultiScene.Instance.noticeText.text = itemName+" 아이템 획득 " + "<color=yellow>" + "(G)" + "</color>";
@@ -112,45 +104,18 @@ public class Multi_ItemDropController : MonoBehaviour
                     
                     if(index>=0 &&index<MultiScene.Instance.itemsList.Count)
                     {
-                        PickItem(index,1);
+                       
                         itemsToDestroy.Add(t.gameObject);
                     }
-                    
-                    MultiScene.Instance.BroadCastingPickItem(index,_count:1);
+                    MultiScene.Instance.BroadCastingPickItem(index);
                     SoundManager.instance.PlaySE("Item Drop");
                 }
             }
-
             foreach (var itemToDestroy in itemsToDestroy)
             {
                 Destroy(itemToDestroy);
             }
         }
-    }
-    public void PickItem(long index,int _count)
-    {
-        GameObject itemObject=MultiScene.Instance.itemsList[(Index)index];
-
-        if (itemObject.CompareTag("Item"))
-        {
-            Item obj = itemObject.GetComponent<ItemPickup>().item;
-
-            if (obj != null)
-            {
-                theInventory.AcquireItem(obj);
-                Destroy(itemObject);
-            }
-            else
-            {
-                Debug.LogError("Item script가 없습니다.");
-                
-            }
-        }
-        else
-        {
-            Debug.LogError("Item 태그가 없습니다.");
-        }
-
     }
     private void OnDrawGizmos()
     {

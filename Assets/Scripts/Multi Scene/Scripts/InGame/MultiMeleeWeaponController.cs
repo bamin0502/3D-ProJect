@@ -46,6 +46,8 @@ public class MultiMeleeWeaponController : MonoBehaviour
     }
     private IEnumerator AttackCoroutine()
     {
+        if (MultiScene.Instance.currentUser != transform.gameObject.name) yield break;
+        
         _isAttack = true;
 
         _playerMovement.ChangedState(PlayerState.HammerAttackIdle);
@@ -61,7 +63,7 @@ public class MultiMeleeWeaponController : MonoBehaviour
                 case WeaponType.Bow:
                     _playerMovement.SetAnimationTrigger(BowAttack);
                     MultiScene.Instance.BroadCastingAnimation(BowAttack, true);
-                    StartCoroutine(ArrowSpawnCoroutine());
+                    CoroutineArrow();
                     break;
                 case WeaponType.OneHanded:
                     _playerMovement.SetAnimationTrigger(OneHandedAttack);
@@ -79,9 +81,14 @@ public class MultiMeleeWeaponController : MonoBehaviour
         }
     }
 
+    public void CoroutineArrow()
+    {
+        StartCoroutine(ArrowSpawnCoroutine());
+    }
+
     private IEnumerator ArrowSpawnCoroutine(){
         yield return new WaitForSeconds(0.1f);
-        SoundManager.instance.PlaySE("Bow_String");
+        //SoundManager.instance.PlaySE("Bow_String");
         var currentBow = currentWeapon.GetComponent<RangedWeapon>();
         var arrow = Instantiate(currentBow.projectilePrefab, currentBow.arrowPos.position, Quaternion.LookRotation(currentBow.arrowPos.forward));
         arrow.transform.parent = currentBow.transform;

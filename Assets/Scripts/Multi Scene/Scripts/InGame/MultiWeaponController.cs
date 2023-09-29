@@ -31,6 +31,8 @@ public class MultiWeaponController : MonoBehaviour
     private bool isInRangeToPickup = false;
     private bool isPickingUpWeapon = false;
 
+    public bool goToTarget;
+
     private void Start()
     {
         _playerMovement = GetComponent<MultiPlayerMovement>();
@@ -50,7 +52,7 @@ public class MultiWeaponController : MonoBehaviour
             TryPickupWeapon();
         }
 
-        if (currentTarget != null)
+        if (currentTarget != null && !goToTarget)
         {
             MoveTowardsTarget();
             AttackTarget();
@@ -148,7 +150,7 @@ public class MultiWeaponController : MonoBehaviour
         {
             if (currentTarget == null || equippedWeapon == null)
             {
-                isAttack = false;
+                ClearTarget();
             }
             else
             {
@@ -167,7 +169,7 @@ public class MultiWeaponController : MonoBehaviour
         return equippedWeapon is RangedWeapon weapon ? weapon.range : ((MeleeWeapon)equippedWeapon).range;
     }
 
-    private void ClearTarget()
+    public void ClearTarget()
     {
         currentTarget = null;
         isAttack = false;
@@ -221,6 +223,7 @@ public class MultiWeaponController : MonoBehaviour
     
     private void MoveTowardsTarget()
     {
+        goToTarget = true;
         _agent.SetDestination(currentTarget.position);
         MultiScene.Instance.BroadCastingMovement(currentTarget.position);
     }

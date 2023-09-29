@@ -17,7 +17,7 @@ public class MultiScene : MonoBehaviour
     
     private readonly Dictionary<string, GameObject> _players = new ();
     [HideInInspector] public List<GameObject> weaponsList; //무기 객체들
-    [HideInInspector] public List<GameObject> enemyList; //적 객체들
+    public List<GameObject> enemyList; //적 객체들
     public Transform weaponsListParent; //무기 객체들이 있는 부모 객체
     public Transform enemyListParent; //적 객체들이 있는 부모 객체
     
@@ -119,6 +119,9 @@ public class MultiScene : MonoBehaviour
                 }
                 else
                 {
+                    int BowAttack = Animator.StringToHash("BowAttack");
+                    user.TryGetComponent<MultiMeleeWeaponController>(out var userBowAttack);
+                    if (aniNum == BowAttack) userBowAttack.CoroutineArrow();
                     user.GetComponent<MultiPlayerMovement>().SetAnimationTrigger(aniNum);
                 }
                 break;
@@ -129,6 +132,7 @@ public class MultiScene : MonoBehaviour
 
                 if (target <= -1)
                 {
+                    userAttack.ClearTarget();
                     userMove2.navAgent.SetDestination(StringToVector(jData["POSITION"].ToString()));
                 }
                 else

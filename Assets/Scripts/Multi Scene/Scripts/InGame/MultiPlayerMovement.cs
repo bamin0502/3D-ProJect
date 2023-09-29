@@ -17,20 +17,19 @@ using UnityEngine.Serialization;
 public class MultiPlayerMovement : MonoBehaviour
 {
     //만든이: 임성훈
-    
-    //일단 테스트용
-    
+
+    private const float RotAnglePerSecond = 360f;
+    private Vector3 _curTargetPos;
     
     private MultiWeaponController _weaponController;
     public NavMeshAgent navAgent;
     public Camera _camera;
-    //private float rotAnglePerSecond = 360f;
-    //private Vector3 curTargetPos;
+    
     //만든이: 방민호
     public PlayerState currentState = PlayerState.Idle;
     public AniSetting ani;
     
-   // public Action OnDead;//죽었을때 호출할 이벤트
+    public Action OnDead; //죽었을때 호출할 이벤트
     //public SpacebarCooldownUI cooldownUI;
   //  public TMP_Text coolText;
   //  public GameObject SpaceUI;
@@ -60,6 +59,9 @@ public class MultiPlayerMovement : MonoBehaviour
 
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity, layerMask))
             {
+                _weaponController.goToTarget = false;
+                _weaponController.ClearTarget();
+                
                 if (!_weaponController.isAttack)
                 {
                     navAgent.SetDestination(hit.point);
@@ -116,12 +118,12 @@ public class MultiPlayerMovement : MonoBehaviour
     }
 
     // #region 플레이어 회전관련
-    // public void TurnToDestination()
-    // {
-    //     //회전
-    //     Quaternion lookRotation = Quaternion.LookRotation(curTargetPos - transform.position);
-    //     transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, Time.deltaTime * rotAnglePerSecond);
-    // }
+    public void TurnToDestination()
+    {
+        //회전
+        Quaternion lookRotation = Quaternion.LookRotation(_curTargetPos - transform.position);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, Time.deltaTime * RotAnglePerSecond);
+    }
     // #endregion
 
     public void Dead()
@@ -185,23 +187,23 @@ public class MultiPlayerMovement : MonoBehaviour
     }
     void PlayerStateRunForward()
     {
-       // TurnToDestination();
+       TurnToDestination();
         
     }
     void PlayerStateBowAttackIdle()
     {
-      //  TurnToDestination();
+        TurnToDestination();
         
     }
     void PlayerStateSpaceMoveIdle()
     {
-       // TurnToDestination();
+       TurnToDestination();
        _isCoolingDown = false;
         
     }
     void PlayerStateDead()
     {
-       // OnDead += Dead;      
+       OnDead += Dead;      
     }
     public void ChangedState(PlayerState newState)
     {

@@ -26,7 +26,7 @@ public class Projectile : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.3f);
-        SoundManager.instance.PlaySE("Bow_Attack");
+        //SoundManager.instance.PlaySE("Bow_Attack");
 
         while(target != null && Vector3.Distance(transform.position, target.position) > 0.1f){
             transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);

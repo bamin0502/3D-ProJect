@@ -45,6 +45,7 @@ public class PLAYER_MOVE
     public string USER = "";
     public int DATA = 0;
     public string POSITION = "";
+    public int TARGET = -99;
 }
 
 [Serializable]

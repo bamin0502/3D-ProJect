@@ -113,9 +113,9 @@ public class MultiWeaponController : MonoBehaviour
         // 오른쪽 마우스 클릭을 확인합니다.
         if (Input.GetMouseButtonDown(1))
         {
-            if (Camera.main != null)
+            if (_playerMovement._camera != null)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                Ray ray = _playerMovement._camera.ScreenPointToRay(Input.mousePosition);
                 LayerMask layerMask = ~LayerMask.GetMask("Player");
 
                 if (Physics.Raycast(ray, out var hit, Mathf.Infinity, layerMask))
@@ -123,17 +123,21 @@ public class MultiWeaponController : MonoBehaviour
                     if (hit.collider.CompareTag("Enemy"))
                     {
                         // 오른쪽 마우스 클릭 시 타겟을 설정합니다.
-                        SetTarget(hit.transform);
+                        int enemy = MultiScene.Instance.enemyList.IndexOf(hit.transform.gameObject);
+                        SetTarget(enemy);
+                        MultiScene.Instance.BroadCastingMovement(hit.transform.position, enemy);
                     }
                 }
             }
         }
     }
 
-    private void SetTarget(Transform target)
+    public void SetTarget(int enemy)
     {
+        GameObject target = MultiScene.Instance.enemyList[enemy];
+        
         if(equippedWeapon == null) return;
-        currentTarget = target;
+        currentTarget = target.transform;
         _agent.stoppingDistance = GetWeaponRange();
         attackTimer = 0f;
     }

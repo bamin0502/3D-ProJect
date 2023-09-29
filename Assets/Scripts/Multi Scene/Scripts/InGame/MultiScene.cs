@@ -16,8 +16,11 @@ public class MultiScene : MonoBehaviour
     public static MultiScene Instance;
     
     private readonly Dictionary<string, GameObject> _players = new ();
-    public List<GameObject> weaponsList; //무기 객체들
+    [HideInInspector] public List<GameObject> weaponsList; //무기 객체들
+    [HideInInspector] public List<GameObject> enemyList; //적 객체들
     public Transform weaponsListParent; //무기 객체들이 있는 부모 객체
+    public Transform enemyListParent; //적 객체들이 있는 부모 객체
+    
     public List<GameObject> itemsList; //아이템 객체들
    
     
@@ -32,8 +35,7 @@ public class MultiScene : MonoBehaviour
     {
         Instance = this;
         SetUsers();
-        SetWeaponList();
-        
+        SetWeaponAndEnemyList();
     }
 
     private void SetUsers()
@@ -65,14 +67,21 @@ public class MultiScene : MonoBehaviour
             }
         }
     }
-    private void SetWeaponList()
+    private void SetWeaponAndEnemyList()
     {
         weaponsList.Capacity = weaponsListParent.childCount;
-
+        enemyList.Capacity = enemyListParent.childCount;
+        
         for (int i = 0; i < weaponsListParent.childCount; i++)
         {
             Transform child = weaponsListParent.GetChild(i);
             weaponsList.Add(child.gameObject);
+        }
+
+        for (int i = 0; i < enemyListParent.childCount; i++)
+        {
+            Transform child = enemyListParent.GetChild(i);
+            enemyList.Add(child.gameObject);
         }
     }
     
@@ -115,7 +124,17 @@ public class MultiScene : MonoBehaviour
                 break;
             case 2:
                 user.TryGetComponent<MultiPlayerMovement>(out var userMove2);
-                userMove2.navAgent.SetDestination(StringToVector(jData["POSITION"].ToString()));
+                user.TryGetComponent<MultiWeaponController>(out var userAttack);
+                int target = Convert.ToInt32(jData["TARGET"].ToString());
+
+                if (target <= -1)
+                {
+                    userMove2.navAgent.SetDestination(StringToVector(jData["POSITION"].ToString()));
+                }
+                else
+                {
+                    userAttack.SetTarget(target);
+                }
                 break;
             //플레이어 아이템 드랍 관련 테스트 필요
             case 3:
@@ -162,7 +181,7 @@ public class MultiScene : MonoBehaviour
         NetGameManager.instance.RoomBroadcast(sendData);
     }
 
-    public void BroadCastingMovement(Vector3 destination)
+    public void BroadCastingMovement(Vector3 destination, int target = -99)
     {
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(
             NetGameManager.instance.m_userHandle.m_szUserID);
@@ -172,6 +191,7 @@ public class MultiScene : MonoBehaviour
             USER = userSession.m_szUserID,
             DATA = 2,
             POSITION = VectorToString(destination),
+            TARGET = target,
         };
 
         string sendData = LitJson.JsonMapper.ToJson(data);

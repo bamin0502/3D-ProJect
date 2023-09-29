@@ -41,6 +41,11 @@ public class MultiWeaponController : MonoBehaviour
     
     private void Update()
     {
+        if (currentTarget != null)
+        {
+            AttackTarget();
+        }
+        
         if(MultiScene.Instance.currentUser != transform.gameObject.name) return;
         
         HandleInput();
@@ -49,11 +54,7 @@ public class MultiWeaponController : MonoBehaviour
         {
             TryPickupWeapon();
         }
-
-        if (currentTarget != null)
-        {
-            AttackTarget();
-        }
+        
 
         if (!isPickingUpWeapon && isInRangeToPickup)
         {
@@ -222,14 +223,9 @@ public class MultiWeaponController : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, currentTarget.position) <= _agent.stoppingDistance)
         {
-            FaceTarget();
+            Quaternion targetRotation = Quaternion.LookRotation(currentTarget.position - transform.position);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
         }
-    }
-
-    private void FaceTarget()
-    {
-        Quaternion targetRotation = Quaternion.LookRotation(currentTarget.position - transform.position);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
     }
     
     private void EquipWeapon(Weapon newWeapon)

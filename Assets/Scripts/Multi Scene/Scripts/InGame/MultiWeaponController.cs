@@ -113,20 +113,21 @@ public class MultiWeaponController : MonoBehaviour
         // 오른쪽 마우스 클릭을 확인합니다.
         if (Input.GetMouseButtonDown(1))
         {
-            if (_playerMovement._camera != null)
-            {
-                Ray ray = _playerMovement._camera.ScreenPointToRay(Input.mousePosition);
-                LayerMask layerMask = ~LayerMask.GetMask("Ground");
+            Ray ray = _playerMovement._camera.ScreenPointToRay(Input.mousePosition);
 
-                if (Physics.Raycast(ray, out var hit, Mathf.Infinity, layerMask))
+            LayerMask playerMask = LayerMask.GetMask("Player");
+            LayerMask enemyMask = LayerMask.GetMask("Ground");
+            LayerMask combinedMask = playerMask | enemyMask;
+            LayerMask layerMask = ~combinedMask;
+
+            if (Physics.Raycast(ray, out var hit, Mathf.Infinity, layerMask))
+            {
+                if (hit.collider.CompareTag("Enemy"))
                 {
-                    if (hit.collider.CompareTag("Enemy"))
-                    {
-                        // 오른쪽 마우스 클릭 시 타겟을 설정합니다.
-                        int enemy = MultiScene.Instance.enemyList.IndexOf(hit.transform.gameObject);
-                        SetTarget(enemy);
-                        MultiScene.Instance.BroadCastingMovement(hit.transform.position, enemy);
-                    }
+                    // 오른쪽 마우스 클릭 시 타겟을 설정합니다.
+                    int enemy = MultiScene.Instance.enemyList.IndexOf(hit.transform.gameObject);
+                    SetTarget(enemy);
+                    MultiScene.Instance.BroadCastingMovement(hit.transform.position, enemy);
                 }
             }
         }

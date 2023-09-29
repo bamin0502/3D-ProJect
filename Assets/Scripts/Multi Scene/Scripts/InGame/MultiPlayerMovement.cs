@@ -55,7 +55,11 @@ public class MultiPlayerMovement : MonoBehaviour
         if (Input.GetMouseButtonDown(1)) // 오른쪽 클릭
         {
             Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-            LayerMask layerMask = ~LayerMask.GetMask("Player");
+            
+            LayerMask playerMask = LayerMask.GetMask("Player");
+            LayerMask enemyMask = LayerMask.GetMask("Enemy");
+            LayerMask combinedMask = playerMask | enemyMask;
+            LayerMask layerMask = ~combinedMask;
 
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity, layerMask))
             {

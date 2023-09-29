@@ -48,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 25
   damage: 30
+  rotationSpeed: 5
 --- !u!1 &6491225712752495106
 GameObject:
   m_ObjectHideFlags: 0

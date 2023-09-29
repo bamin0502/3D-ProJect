@@ -31,8 +31,6 @@ public class MultiWeaponController : MonoBehaviour
     private bool isInRangeToPickup = false;
     private bool isPickingUpWeapon = false;
 
-    public bool goToTarget;
-
     private void Start()
     {
         _playerMovement = GetComponent<MultiPlayerMovement>();
@@ -52,9 +50,8 @@ public class MultiWeaponController : MonoBehaviour
             TryPickupWeapon();
         }
 
-        if (currentTarget != null && !goToTarget)
+        if (currentTarget != null)
         {
-            MoveTowardsTarget();
             AttackTarget();
         }
 
@@ -118,7 +115,7 @@ public class MultiWeaponController : MonoBehaviour
             if (_playerMovement._camera != null)
             {
                 Ray ray = _playerMovement._camera.ScreenPointToRay(Input.mousePosition);
-                LayerMask layerMask = ~LayerMask.GetMask("Player");
+                LayerMask layerMask = ~LayerMask.GetMask("Ground");
 
                 if (Physics.Raycast(ray, out var hit, Mathf.Infinity, layerMask))
                 {
@@ -219,13 +216,6 @@ public class MultiWeaponController : MonoBehaviour
         targetedWeapon = null;
         isPickingUpWeapon = false;
         HidePickupText();
-    }
-    
-    private void MoveTowardsTarget()
-    {
-        goToTarget = true;
-        _agent.SetDestination(currentTarget.position);
-        MultiScene.Instance.BroadCastingMovement(currentTarget.position);
     }
 
     private void AttackTarget()

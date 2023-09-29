@@ -138,6 +138,7 @@ public class MultiScene : MonoBehaviour
                 else
                 {
                     userAttack.SetTarget(target);
+                    userMove2.navAgent.SetDestination(StringToVector(jData["POSITION"].ToString()));
                 }
                 break;
             //플레이어 아이템 드랍 관련 테스트 필요

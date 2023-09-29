@@ -59,7 +59,6 @@ public class MultiPlayerMovement : MonoBehaviour
 
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity, layerMask))
             {
-                _weaponController.goToTarget = false;
                 _weaponController.ClearTarget();
                 
                 if (!_weaponController.isAttack)

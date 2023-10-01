@@ -26,7 +26,8 @@ public class MultiScene : MonoBehaviour
     public Inventory inventory;
     
     public TextMeshProUGUI noticeText;
-
+    public TextMeshProUGUI itemUsedText;
+    
     public CinemachineFreeLook cineCam;
     public CameraController playerCamera;
     public Transform[] positions; //유저 찍어낼 위치
@@ -61,7 +62,7 @@ public class MultiScene : MonoBehaviour
             {
                 //만약 현재 유저일경우
                 newPlayer.TryGetComponent(out MultiItemDropController pickItem);
-                pickItem.actionText = noticeText;
+                pickItem.actionText = itemUsedText;
                 pickItem.inventory = inventory;
                 playerCamera.player = newPlayer.transform;
                 multiPlayer._camera = playerCamera.mainCamera;

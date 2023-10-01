@@ -6,6 +6,7 @@ using MNF;
 using TMPro;
 using UnityEngine;
 using Data;
+using UnityEngine.UI;
 
 public class MultiScene : MonoBehaviour
 {
@@ -65,7 +66,7 @@ public class MultiScene : MonoBehaviour
             {
                 //만약 현재 유저일경우
                 newPlayer.TryGetComponent(out MultiItemDropController pickItem);
-                newPlayer.TryGetComponent(out MultiTeamstatus teamStatus);
+                
                 pickItem.actionText = itemUsedText;
                 pickItem.inventory = inventory;
                 playerCamera.player = newPlayer.transform;
@@ -76,6 +77,19 @@ public class MultiScene : MonoBehaviour
                 cineCam.Follow = newPlayer.transform;
                 cineCam.LookAt = newPlayer.transform;
                 cineCam.GetRig(1).LookAt = newPlayer.transform;
+                
+                // MultiTeamstatus 스크립트를 가져와서 설정함
+                if (newPlayerName.Equals(currentUser))
+                {
+                    MultiTeamstatus teamStatus = newPlayer.GetComponent<MultiTeamstatus>();
+                    
+                    if (teamStatus != null)
+                    {
+                        teamStatus.playerName = newPlayerName;
+                        
+                    }
+                }
+
             }
         }
     }

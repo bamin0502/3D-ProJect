@@ -1,31 +1,36 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+
 public class MultiTeamstatus : MonoBehaviour
 {
-    public TMP_Text textName;
-    public GameObject statusbar;
+    public string playerName="";
+    [SerializeField]
+    private TextMeshProUGUI nameText;
+    [SerializeField]
+    private GameObject statusbar;
+    [SerializeField]
     private GridLayoutGroup gridLayoutGroup;
     public Image playerHpImage;
     void Start()
     {
+        
+    }
+
+    void Awake()
+    {
+        nameText = GetComponentInChildren<TextMeshProUGUI>();
         gridLayoutGroup = GetComponent<GridLayoutGroup>();
-        if (MultiScene.Instance.currentUser.Equals(gameObject.name))
-        {
-            statusbar.SetActive(true);
-            textName.text = gameObject.name;
-        }
-        else
-        {
-            gameObject.SetActive(false);
-        }    
     }
 
     void Update()
     {
-        
+        nameText.text = playerName;
+        //playerHpImage.fillAmount = MultiScene.Instance.currentHp / MultiScene.Instance.maxHp;
+  
     }
 }

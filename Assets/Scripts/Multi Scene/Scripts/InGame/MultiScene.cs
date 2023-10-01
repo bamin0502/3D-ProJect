@@ -5,6 +5,7 @@ using mino;
 using MNF;
 using TMPro;
 using UnityEngine;
+using Data;
 
 public class MultiScene : MonoBehaviour
 {
@@ -64,6 +65,7 @@ public class MultiScene : MonoBehaviour
             {
                 //만약 현재 유저일경우
                 newPlayer.TryGetComponent(out MultiItemDropController pickItem);
+                newPlayer.TryGetComponent(out MultiTeamstatus teamStatus);
                 pickItem.actionText = itemUsedText;
                 pickItem.inventory = inventory;
                 playerCamera.player = newPlayer.transform;

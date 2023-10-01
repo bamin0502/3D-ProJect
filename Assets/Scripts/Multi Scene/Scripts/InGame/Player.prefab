@@ -457,6 +457,9 @@ MonoBehaviour:
   _camera: {fileID: 0}
   currentState: 0
   ani: {fileID: 1970835488249192247}
+  coolText: {fileID: 0}
+  spaceUI: {fileID: 0}
+  fill: {fileID: 0}
 --- !u!114 &1970835488249192247
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -21,8 +21,9 @@ public class MultiScene : MonoBehaviour
     public Transform weaponsListParent; //무기 객체들이 있는 부모 객체
     public Transform enemyListParent; //적 객체들이 있는 부모 객체
     
+    public Transform itemListParent; //아이템 객체들이 있는 부모 객체
     public List<GameObject> itemsList; //아이템 객체들
-   
+    public Inventory inventory;
     
     public TextMeshProUGUI noticeText;
 
@@ -35,7 +36,7 @@ public class MultiScene : MonoBehaviour
     {
         Instance = this;
         SetUsers();
-        SetWeaponAndEnemyList();
+        SetAllList();
     }
 
     private void SetUsers()
@@ -59,6 +60,9 @@ public class MultiScene : MonoBehaviour
             if (newPlayerName.Equals(currentUser))
             {
                 //만약 현재 유저일경우
+                newPlayer.TryGetComponent(out MultiItemDropController pickItem);
+                pickItem.actionText = noticeText;
+                pickItem.inventory = inventory;
                 playerCamera.player = newPlayer.transform;
                 multiPlayer._camera = playerCamera.mainCamera;
                 cineCam.Follow = newPlayer.transform;
@@ -67,7 +71,7 @@ public class MultiScene : MonoBehaviour
             }
         }
     }
-    private void SetWeaponAndEnemyList()
+    private void SetAllList()
     {
         weaponsList.Capacity = weaponsListParent.childCount;
         enemyList.Capacity = enemyListParent.childCount;
@@ -82,6 +86,12 @@ public class MultiScene : MonoBehaviour
         {
             Transform child = enemyListParent.GetChild(i);
             enemyList.Add(child.gameObject);
+        }
+
+        for (int i = 0; i < itemListParent.childCount; i++)
+        {
+            Transform child = itemListParent.GetChild(i);
+            itemsList.Add(child.gameObject);
         }
     }
     
@@ -143,8 +153,8 @@ public class MultiScene : MonoBehaviour
                 break;
             //플레이어 아이템 드랍 관련 테스트 필요
             case 3:
-                string itemIndex = Convert.ToString(jData["ITEM_INDEX"].ToString());
-                user.GetComponent<ItemPickup>().name = itemIndex;
+                int index = Convert.ToInt32(jData["ITEM_INDEX"].ToString());
+                Destroy(itemsList[index]);
                 break;
             //플레이어 공격 관련 테스트 필요
             case 4:
@@ -236,38 +246,12 @@ public class MultiScene : MonoBehaviour
     {
           UserSession userSession= NetGameManager.instance.GetRoomUserSession(
             NetGameManager.instance.m_userHandle.m_szUserID);
-                        
-          List<ItemProperty> itemProperties = new List<ItemProperty>();
-
-          ItemProperty UsedItem = new ItemProperty
-          {
-              itemType = Item.ItemType.Used,
-              ITEM_IMAGE = itemsList[index].GetComponent<ItemPickup>().item.itemImage,
-              ITEM_NAME = "",
-              ITEM_PREFAB = itemsList[index].GetComponent<ItemPickup>().item.GameObject(),
-              
-          };
-          itemProperties.Add(UsedItem);
-          ItemProperty BuffItem = new ItemProperty
-          {
-              itemType = Item.ItemType.Buff,
-              ITEM_IMAGE = itemsList[index].GetComponent<ItemPickup>().item.itemImage,
-              ITEM_NAME = "",
-              ITEM_PREFAB = itemsList[index].GetComponent<ItemPickup>().item.GameObject(),
-          };
-          itemProperties.Add(BuffItem);
-          ItemProperty ThrowItem = new ItemProperty
-          {
-              itemType = Item.ItemType.Throw,
-              ITEM_IMAGE = itemsList[index].GetComponent<ItemPickup>().item.itemImage,
-              ITEM_NAME = "",
-              ITEM_PREFAB = itemsList[index].GetComponent<ItemPickup>().item.GameObject(),
-          };
+          
           var data = new PLAYER_ITEM
           {
               USER = userSession.m_szUserID,
               DATA = 3,
-              ItemProperties = itemProperties
+              ITEM_INDEX = index
           };
 
           

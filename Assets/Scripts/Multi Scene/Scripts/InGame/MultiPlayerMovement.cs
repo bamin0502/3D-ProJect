@@ -1,18 +1,9 @@
 using mino;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
-using Newtonsoft.Json;
-using System.IO;
 using System;
-using UnityEngine.UI;
-using System.Timers;
 using TMPro;
-using System.Collections.Generic;
-using System.Collections;
-using Data;
-using UnityEngine.Serialization;
-
+using UnityEngine.UI;
 
 public class MultiPlayerMovement : MonoBehaviour
 {
@@ -30,10 +21,9 @@ public class MultiPlayerMovement : MonoBehaviour
     public AniSetting ani;
     
     public Action OnDead; //죽었을때 호출할 이벤트
-    //public SpacebarCooldownUI cooldownUI;
-  //  public TMP_Text coolText;
-  //  public GameObject SpaceUI;
-   // public UnityEngine.UI.Image fill;
+    public TMP_Text coolText;
+    public GameObject spaceUI;
+    public Image fill;
 
     private bool _isCoolingDown;
     private float _cooldownEndTime;
@@ -46,7 +36,7 @@ public class MultiPlayerMovement : MonoBehaviour
         ani = GetComponent<AniSetting>();
         _weaponController = GetComponent<MultiWeaponController>();
         MultiScene.Instance.BroadCastingAnimation((int)PlayerState.Idle);
-        //    SpaceUI.SetActive(false);//스페이스바 UI 비활성화
+        spaceUI.SetActive(false);//스페이스바 UI 비활성화
     }
     private void Update()
     {
@@ -96,7 +86,7 @@ public class MultiPlayerMovement : MonoBehaviour
         {
             ChangedState(PlayerState.SpaceMove);
             MultiScene.Instance.BroadCastingAnimation((int)PlayerState.SpaceMove);
-            //SpaceUI.SetActive(true);
+            spaceUI.SetActive(true);
             _isCoolingDown = true;
         
             _cooldownEndTime = Time.time + _cooldownTime;                           
@@ -108,14 +98,14 @@ public class MultiPlayerMovement : MonoBehaviour
         
             if (remainingTime > 0)
             {
-                //SpaceBarUI();//시간이 남아있는동안 실행시킬거임
-                //coolText.text = Mathf.CeilToInt(remainingTime).ToString();
+                SpaceBarUI();//시간이 남아있는동안 실행시킬거임
+                coolText.text = Mathf.CeilToInt(remainingTime).ToString();
             }
             else
             {
-                //SpaceUI.SetActive(false);
+                spaceUI.SetActive(false);
                 _isCoolingDown = false;
-                //coolText.text = "";
+                coolText.text = "";
             }
         }
     }
@@ -220,32 +210,29 @@ public class MultiPlayerMovement : MonoBehaviour
     }
     
     #endregion
-
-
-    // #region 스킬 쿨타임 전용 UI제작 Methods
-    // public void SpaceBarUI()
-    // {
-    //     SetCurrentCooldown(currentCooldown - Time.deltaTime);
-    //
-    //     if (currentCooldown < 0f)
-    //         currentCooldown = MaxCooldown;
-    // }
-    // private void UpdateFillAmount()
-    // {
-    //     fill.fillAmount = currentCooldown / MaxCooldown;
-    // }
-    // public void SetMaxCooldown(in float value)
-    // {
-    //     MaxCooldown = value;
-    //     UpdateFillAmount();
-    // }
-    //
-    // public void SetCurrentCooldown(in float value)
-    // {
-    //     currentCooldown = value;
-    //     UpdateFillAmount();
-    // }
-    // #endregion-제작자 방민호
+    
+    public void SpaceBarUI()
+    {
+        SetCurrentCooldown(_currentCooldown - Time.deltaTime);
+    
+        if (_currentCooldown < 0f)
+            _currentCooldown = _maxCooldown;
+    }
+    private void UpdateFillAmount()
+    {
+        fill.fillAmount = _currentCooldown / _maxCooldown;
+    }
+    public void SetMaxCooldown(in float value)
+    {
+        _maxCooldown = value;
+        UpdateFillAmount();
+    }
+    
+    public void SetCurrentCooldown(in float value)
+    {
+        _currentCooldown = value;
+        UpdateFillAmount();
+    }
 
 
 }

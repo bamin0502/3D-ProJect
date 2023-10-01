@@ -1,15 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
-using Data;
 using mino;
 using MNF;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 
 public class MultiScene : MonoBehaviour
 {
@@ -17,22 +12,29 @@ public class MultiScene : MonoBehaviour
     
     private readonly Dictionary<string, GameObject> _players = new ();
     [HideInInspector] public List<GameObject> weaponsList; //무기 객체들
-    public List<GameObject> enemyList; //적 객체들
+    [HideInInspector] public List<GameObject> enemyList; //적 객체들
+    [HideInInspector] public List<GameObject> itemsList; //아이템 객체들
+    
     public Transform weaponsListParent; //무기 객체들이 있는 부모 객체
     public Transform enemyListParent; //적 객체들이 있는 부모 객체
-    
     public Transform itemListParent; //아이템 객체들이 있는 부모 객체
-    public List<GameObject> itemsList; //아이템 객체들
+    
     public Inventory inventory;
     
-    public TextMeshProUGUI noticeText;
     public TextMeshProUGUI itemUsedText;
+    public TextMeshProUGUI noticeText;
+    public TextMeshProUGUI coolText;
+    
+    public GameObject spaceUI;
     
     public CinemachineFreeLook cineCam;
     public CameraController playerCamera;
     public Transform[] positions; //유저 찍어낼 위치
     public GameObject playerPrefab; //찍어낼 유저 프리팹
     public string currentUser = "";
+    
+    
+    
     private void Start()
     {
         Instance = this;
@@ -66,6 +68,9 @@ public class MultiScene : MonoBehaviour
                 pickItem.inventory = inventory;
                 playerCamera.player = newPlayer.transform;
                 multiPlayer._camera = playerCamera.mainCamera;
+                multiPlayer.coolText = coolText;
+                multiPlayer.spaceUI = spaceUI;
+                multiPlayer.fill = spaceUI.GetComponent<UnityEngine.UI.Image>();
                 cineCam.Follow = newPlayer.transform;
                 cineCam.LookAt = newPlayer.transform;
                 cineCam.GetRig(1).LookAt = newPlayer.transform;
@@ -157,12 +162,10 @@ public class MultiScene : MonoBehaviour
                 int index = Convert.ToInt32(jData["ITEM_INDEX"].ToString());
                 Destroy(itemsList[index]);
                 break;
-            //플레이어 공격 관련 테스트 필요
             case 4:
-                user.TryGetComponent<WeaponController>(out var userAttack2);
-                userAttack2.isAttack = true;
+                int weaponIndex = Convert.ToInt32(jData["WEAPON_INDEX"].ToString());
+                user.GetComponent<MultiWeaponController>().PickWeapon(weaponIndex);
                 break;
-            //플레이어 체력 관련 테스트 필요
             case 5:
                 Data.PlayerStat playerStat = new Data.PlayerStat
                 {
@@ -170,11 +173,6 @@ public class MultiScene : MonoBehaviour
                     PlayerHealth = Convert.ToInt32(jData["PlayerHealth"].ToString())
                 };
                 break;
-            case 6:
-                int weaponIndex = Convert.ToInt32(jData["WEAPON_INDEX"].ToString());
-                user.GetComponent<MultiWeaponController>().PickWeapon(weaponIndex);
-                break;
-                
         }
     }
 
@@ -214,6 +212,22 @@ public class MultiScene : MonoBehaviour
         NetGameManager.instance.RoomBroadcast(sendData);
     }
 
+    public void BroadCastingPickItem(int index)
+    {
+        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+            NetGameManager.instance.m_userHandle.m_szUserID);
+
+        var data = new PLAYER_ITEM
+        {
+            USER = userSession.m_szUserID,
+            DATA = 3,
+            ITEM_INDEX = index
+        };
+
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
+    }
+
     public void BroadCastingPickWeapon(int index)
     {
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(
@@ -222,7 +236,7 @@ public class MultiScene : MonoBehaviour
         var data = new PLAYER_WEAPON
         {
             USER = userSession.m_szUserID,
-            DATA = 6,
+            DATA = 4,
             WEAPON_INDEX = index,
         };
 
@@ -241,22 +255,5 @@ public class MultiScene : MonoBehaviour
             _players.Remove(user.m_szUserID);
             Destroy(toDestroy);
         }
-    }
-
-    public void BroadCastingPickItem(int index)
-    {
-          UserSession userSession= NetGameManager.instance.GetRoomUserSession(
-            NetGameManager.instance.m_userHandle.m_szUserID);
-          
-          var data = new PLAYER_ITEM
-          {
-              USER = userSession.m_szUserID,
-              DATA = 3,
-              ITEM_INDEX = index
-          };
-
-          
-          string sendData = LitJson.JsonMapper.ToJson(data);
-          NetGameManager.instance.RoomBroadcast(sendData);
     }
 }

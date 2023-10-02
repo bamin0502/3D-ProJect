@@ -8,29 +8,25 @@ using TMPro;
 
 public class MultiTeamstatus : MonoBehaviour
 {
-    public string playerName="";
-    [SerializeField]
-    private TextMeshProUGUI nameText;
-    [SerializeField]
-    private GameObject statusbar;
-    [SerializeField]
-    private GridLayoutGroup gridLayoutGroup;
+    public string playerName = "";
+    public TextMeshProUGUI nameText;
+    public GridLayoutGroup gridLayoutGroup;
     public Image playerHpImage;
-    void Start()
+    public GameObject statusbar;
+    public void CreateTeamStatus(string PlayerName)
     {
+        GameObject teamStatusObject = Instantiate(statusbar, gridLayoutGroup.transform);
+        MultiTeamstatus teamStatus = teamStatusObject.GetComponent<MultiTeamstatus>();
+
+        teamStatus.playerName = playerName;
+        teamStatus.nameText.text = playerName;
+        
+
         
     }
 
-    void Awake()
+    public void Awake()
     {
-        nameText = GetComponentInChildren<TextMeshProUGUI>();
-        gridLayoutGroup = GetComponent<GridLayoutGroup>();
-    }
-
-    void Update()
-    {
-        nameText.text = playerName;
-        //playerHpImage.fillAmount = MultiScene.Instance.currentHp / MultiScene.Instance.maxHp;
-  
+        gridLayoutGroup = GameObject.Find("Team Status Image").GetComponent<GridLayoutGroup>();
     }
 }

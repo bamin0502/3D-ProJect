@@ -26,7 +26,7 @@ public class MultiScene : MonoBehaviour
     public TextMeshProUGUI itemUsedText;
     public TextMeshProUGUI noticeText;
     public TextMeshProUGUI coolText;
-    
+   
     public GameObject spaceUI;
     
     public CinemachineFreeLook cineCam;
@@ -35,8 +35,9 @@ public class MultiScene : MonoBehaviour
     public GameObject playerPrefab; //찍어낼 유저 프리팹
     public string currentUser = "";
     
-    
-    
+    public TextMeshProUGUI playerNameText;
+    public GridLayoutGroup gridLayoutGroup;
+    public GameObject statusbar;
     private void Start()
     {
         Instance = this;
@@ -60,37 +61,36 @@ public class MultiScene : MonoBehaviour
 
             _players.Add(newPlayerName, newPlayer);
 
+            newPlayer.TryGetComponent(out MultiTeamstatus teamStatus);
             newPlayer.TryGetComponent<MultiPlayerMovement>(out var multiPlayer);
-
+            //팀 상태창관련 나만이 아닌 다른 사람도 보여야 하므로 여기다가 작성
+            teamStatus.playerName = newPlayer.name;
+            teamStatus.gridLayoutGroup= gridLayoutGroup;
+            teamStatus.statusbar = statusbar;
+            teamStatus.nameText = playerNameText;
+            teamStatus.CreateTeamStatus(newPlayerName);
             if (newPlayerName.Equals(currentUser))
             {
-                //만약 현재 유저일경우
+                //만약 현재 유저일경우 실행시킬 것들
                 newPlayer.TryGetComponent(out MultiItemDropController pickItem);
                 
+                //아이템 드랍 관련
                 pickItem.actionText = itemUsedText;
                 pickItem.inventory = inventory;
-                playerCamera.player = newPlayer.transform;
-                multiPlayer._camera = playerCamera.mainCamera;
+                
+                //스페이스바 관련
                 multiPlayer.coolText = coolText;
                 multiPlayer.spaceUI = spaceUI;
                 multiPlayer.fill = spaceUI.GetComponent<UnityEngine.UI.Image>();
+                //카메라 관련
                 cineCam.Follow = newPlayer.transform;
                 cineCam.LookAt = newPlayer.transform;
                 cineCam.GetRig(1).LookAt = newPlayer.transform;
-                
-                // MultiTeamstatus 스크립트를 가져와서 설정함
-                if (newPlayerName.Equals(currentUser))
-                {
-                    MultiTeamstatus teamStatus = newPlayer.GetComponent<MultiTeamstatus>();
-                    
-                    if (teamStatus != null)
-                    {
-                        teamStatus.playerName = newPlayerName;
-                        
-                    }
-                }
+                playerCamera.player = newPlayer.transform;
+                multiPlayer._camera = playerCamera.mainCamera;
 
             }
+
         }
     }
     private void SetAllList()

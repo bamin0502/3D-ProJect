@@ -84,6 +84,7 @@ public class NetGameManager : KWSingleton<NetGameManager>
 			if (m_roomSession.m_userList[i].m_szUserID == userSession.m_szUserID)
 			{
 				m_roomSession.m_userList.RemoveAt(i);
+                
 				break;
 			}
 		}

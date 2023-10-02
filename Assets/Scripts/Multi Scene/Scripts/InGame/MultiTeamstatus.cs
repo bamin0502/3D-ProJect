@@ -13,6 +13,8 @@ public class MultiTeamstatus : MonoBehaviour
     public GridLayoutGroup gridLayoutGroup;
     public Image playerHpImage;
     public GameObject statusbar;
+    
+
     public void CreateTeamStatus(string PlayerName)
     {
         GameObject teamStatusObject = Instantiate(statusbar, gridLayoutGroup.transform);
@@ -20,11 +22,20 @@ public class MultiTeamstatus : MonoBehaviour
 
         teamStatus.playerName = playerName;
         teamStatus.nameText.text = playerName;
-        
-
-        
     }
 
+    public void DeastroyTeamStatus(string PlayerName)
+    {
+        GameObject[] teamStatusObjects = GameObject.FindGameObjectsWithTag("TeamStatus");
+        foreach (GameObject teamStatusObject in teamStatusObjects)
+        {
+            MultiTeamstatus teamStatus = teamStatusObject.GetComponent<MultiTeamstatus>();
+            if (teamStatus.playerName.Equals(PlayerName))
+            {
+                Destroy(teamStatusObject);
+            }
+        }
+    }
     public void Awake()
     {
         gridLayoutGroup = GameObject.Find("Team Status Image").GetComponent<GridLayoutGroup>();

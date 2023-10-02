@@ -69,6 +69,7 @@ public class MultiScene : MonoBehaviour
             teamStatus.statusbar = statusbar;
             teamStatus.nameText = playerNameText;
             teamStatus.CreateTeamStatus(newPlayerName);
+            
             if (newPlayerName.Equals(currentUser))
             {
                 //만약 현재 유저일경우 실행시킬 것들
@@ -89,7 +90,10 @@ public class MultiScene : MonoBehaviour
                 playerCamera.player = newPlayer.transform;
                 multiPlayer._camera = playerCamera.mainCamera;
 
+                
+                
             }
+            
 
         }
     }
@@ -264,12 +268,25 @@ public class MultiScene : MonoBehaviour
 
     public void RoomUserDel(UserSession user)
     {
-        _players.TryGetValue(user.m_szUserID, out GameObject toDestroy);
+        // _players.TryGetValue(user.m_szUserID, out GameObject toDestroy);
+        //
+        // if (toDestroy != null)
+        // {
+        //     _players.Remove(user.m_szUserID);
+        //     Destroy(toDestroy);
+        //
+        // }
         
-        if (toDestroy != null)
+        if (_players.TryGetValue(user.m_szUserID, out GameObject toDestroy))
         {
             _players.Remove(user.m_szUserID);
             Destroy(toDestroy);
+            MultiTeamstatus teamStatus = statusbar.GetComponent<MultiTeamstatus>();
+            teamStatus.DeastroyTeamStatus(user.m_szUserID);
+     
         }
+
+
+
     }
 }

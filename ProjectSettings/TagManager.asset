@@ -24,6 +24,9 @@ TagManager:
   - Quit
   - Ending Image
   - MiniMap Camera
+  - Weapon
+  - TeamStatus
+  - MyStatus
   layers:
   - Default
   - TransparentFX

@@ -24,7 +24,7 @@ public class MultiTeamstatus : MonoBehaviour
         teamStatus.nameText.text = playerName;
     }
 
-    public void DeastroyTeamStatus(string PlayerName)
+    public void DestroyTeamStatus(string PlayerName)
     {
         GameObject[] teamStatusObjects = GameObject.FindGameObjectsWithTag("TeamStatus");
         foreach (GameObject teamStatusObject in teamStatusObjects)

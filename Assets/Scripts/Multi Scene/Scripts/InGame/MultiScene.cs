@@ -35,9 +35,12 @@ public class MultiScene : MonoBehaviour
     public GameObject playerPrefab; //찍어낼 유저 프리팹
     public string currentUser = "";
     
-    public TextMeshProUGUI playerNameText;
-    public GridLayoutGroup gridLayoutGroup;
-    public GameObject statusbar;
+    public TextMeshProUGUI playerNameText; //팀상태창 전용 닉네임 텍스트
+    public GridLayoutGroup gridLayoutGroup; //팀상태창 전용 그룹
+    public GameObject statusbar; //팀상태창 전용 프리팹
+    
+    public TextMeshProUGUI playerMyNameText; //자신 머리위에 닉네임 표시할거 전용 닉네임 텍스트
+    public GameObject playerMyStatus; //자신 머리위에 닉네임 표시할거 전용 프리팹
     private void Start()
     {
         Instance = this;
@@ -69,7 +72,11 @@ public class MultiScene : MonoBehaviour
             teamStatus.statusbar = statusbar;
             teamStatus.nameText = playerNameText;
             teamStatus.CreateTeamStatus(newPlayerName);
-            
+            //자신 머리위에 닉네임과 뒤에는 체력 표시할거 관련
+            newPlayer.TryGetComponent(out MultiMyStatus myStatus);
+            myStatus.myplayerName = newPlayer.name;
+            myStatus.mynameText = playerMyNameText;
+            myStatus.mynameStatusPrefab = playerMyStatus;
             if (newPlayerName.Equals(currentUser))
             {
                 //만약 현재 유저일경우 실행시킬 것들
@@ -89,12 +96,8 @@ public class MultiScene : MonoBehaviour
                 cineCam.GetRig(1).LookAt = newPlayer.transform;
                 playerCamera.player = newPlayer.transform;
                 multiPlayer._camera = playerCamera.mainCamera;
-
-                
-                
+                myStatus.CreateMyStatus(currentUser);
             }
-            
-
         }
     }
     private void SetAllList()
@@ -282,7 +285,7 @@ public class MultiScene : MonoBehaviour
             _players.Remove(user.m_szUserID);
             Destroy(toDestroy);
             MultiTeamstatus teamStatus = statusbar.GetComponent<MultiTeamstatus>();
-            teamStatus.DeastroyTeamStatus(user.m_szUserID);
+            teamStatus.DestroyTeamStatus(user.m_szUserID);
      
         }
 

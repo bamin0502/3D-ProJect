@@ -29,6 +29,7 @@ namespace MNF
 		{
             ConnectServer(ip, port, isIntranet);
         }
+        
 
         public IPAddress GetIP(string serverIP)
         {

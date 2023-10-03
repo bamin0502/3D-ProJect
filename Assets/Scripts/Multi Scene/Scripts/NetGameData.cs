@@ -69,7 +69,19 @@ public class PLAYER_ITEM
 public class PLAYER_STATUS
 {
     public string USER = "";
-    public int Health = 0;
-    public int Damage = 0;
+    public int DATA = 0;
+    public int Health = -99;
+    public int PlayerHealth = -99;
 
+    public int HEALTH { get; set; }
 }
+[Serializable]
+public class WEAPON_DAMAGE
+{ 
+    WeaponType weaponType;
+    public string USER = "";
+    public int DATA = 0;
+    public int WEAPON_INDEX = 0; 
+    public int DAMAGE { get; set; }
+}
+

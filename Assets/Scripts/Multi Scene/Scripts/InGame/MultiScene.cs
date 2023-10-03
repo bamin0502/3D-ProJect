@@ -77,6 +77,8 @@ public class MultiScene : MonoBehaviour
             myStatus.myplayerName = newPlayer.name;
             myStatus.mynameText = playerMyNameText;
             myStatus.mynameStatusPrefab = playerMyStatus;
+            //개인 상태창 관련
+            myStatus.CreateMyStatus(newPlayerName);
             if (newPlayerName.Equals(currentUser))
             {
                 //만약 현재 유저일경우 실행시킬 것들
@@ -96,7 +98,7 @@ public class MultiScene : MonoBehaviour
                 cineCam.GetRig(1).LookAt = newPlayer.transform;
                 playerCamera.player = newPlayer.transform;
                 multiPlayer._camera = playerCamera.mainCamera;
-                myStatus.CreateMyStatus(currentUser);
+               
             }
         }
     }
@@ -196,6 +198,14 @@ public class MultiScene : MonoBehaviour
                     PlayerHealth = Convert.ToInt32(jData["PlayerHealth"].ToString())
                 };
                 break;
+            case 6:
+                Data.EnemyStat enemyStat = new Data.EnemyStat
+                {
+                    Health = Convert.ToInt32(jData["HEALTH"].ToString()),
+                    EnemyHealth = Convert.ToInt32(jData["EnemyHealth"].ToString())
+                };
+                break;
+            
         }
     }
 
@@ -266,7 +276,22 @@ public class MultiScene : MonoBehaviour
         string sendData = LitJson.JsonMapper.ToJson(data);
         NetGameManager.instance.RoomBroadcast(sendData);
     }
+    public void BroadCastingHpPlayer(int index,int health=2000,int playerHealth=2000)
+    {
+        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+            NetGameManager.instance.m_userHandle.m_szUserID);
 
+        var data = new PLAYER_STATUS
+        {
+            USER = userSession.m_szUserID,
+            DATA = 5,
+            HEALTH = health,
+            PlayerHealth = playerHealth,
+        };
+
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
+    }
     #endregion
 
     public void RoomUserDel(UserSession user)

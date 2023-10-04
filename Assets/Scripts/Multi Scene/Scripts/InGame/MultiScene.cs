@@ -41,6 +41,7 @@ public class MultiScene : MonoBehaviour
     
     public TextMeshProUGUI playerMyNameText; //자신 머리위에 닉네임 표시할거 전용 닉네임 텍스트
     public GameObject playerMyStatus; //자신 머리위에 닉네임 표시할거 전용 프리팹
+    public Canvas playerMyCanvas; //자신 머리위에 닉네임 표시할거 전용 캔버스
     private void Start()
     {
         Instance = this;
@@ -55,7 +56,7 @@ public class MultiScene : MonoBehaviour
 
         for (int i = 0; i < roomSession.m_userList.Count; i++)
         {
-            GameObject newPlayer = Instantiate(playerPrefab);
+            GameObject newPlayer = Instantiate(playerPrefab, transform);
             string newPlayerName = roomSession.m_userList[i].m_szUserID;
             newPlayer.name = newPlayerName;
             newPlayer.transform.position = positions[i].position;
@@ -74,11 +75,14 @@ public class MultiScene : MonoBehaviour
             teamStatus.CreateTeamStatus(newPlayerName);
             //자신 머리위에 닉네임과 뒤에는 체력 표시할거 관련
             newPlayer.TryGetComponent(out MultiMyStatus myStatus);
+            playerMyCanvas = GameObject.FindGameObjectsWithTag("MyStatus")[i].GetComponent<Canvas>();
             myStatus.myplayerName = newPlayer.name;
             myStatus.mynameText = playerMyNameText;
             myStatus.mynameStatusPrefab = playerMyStatus;
+            myStatus.mystatus = playerMyCanvas;
+            
             //개인 상태창 관련
-            myStatus.CreateMyStatus(newPlayerName);
+            myStatus.CreateMyStatus(newPlayerName,playerMyCanvas.transform.position);
             if (newPlayerName.Equals(currentUser))
             {
                 //만약 현재 유저일경우 실행시킬 것들

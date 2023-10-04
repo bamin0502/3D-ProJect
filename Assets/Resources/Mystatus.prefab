@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 688574046355094011}
   - component: {fileID: 988336041934778036}
   - component: {fileID: 6630305406453156782}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Myname
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -224,7 +224,7 @@ GameObject:
   - component: {fileID: 3959745699984944992}
   m_Layer: 7
   m_Name: Mystatus
-  m_TagString: Untagged
+  m_TagString: Status
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

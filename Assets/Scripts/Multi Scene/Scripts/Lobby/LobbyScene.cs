@@ -48,16 +48,12 @@ public class LobbyScene : MonoBehaviour
     
     private void Start()
     {
-        //로컬에서 테스트
-        
         NetGameManager.instance.ConnectServer("127.0.0.1", 3650, true);
         lobbyButton.onClick.AddListener(OnClick_LobbyButton);
         loginButton.onClick.AddListener(OnClick_Login);
         inputChat.onSubmit.AddListener(SendChatting);
         Instance = this;
         NetGameManager.instance.ConnectServer("192.168.246.212", 3650, true);
-
-        
         //나중에 각자 집에서 단체로 AWS서버로 테스트해야해서 이건 지우지말것
         //NetGameManager.instance.ConnectServer("3.34.116.91", 3650); 
         

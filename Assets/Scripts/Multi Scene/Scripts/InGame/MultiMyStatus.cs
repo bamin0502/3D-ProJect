@@ -27,11 +27,11 @@ public class MultiMyStatus : MonoBehaviour
 
         // 상태창의 회전을 고정,캔버스도 회전을 막아야 함 
         teamStatus.transform.rotation = new Quaternion(0, 180, 0, 0);
-        mystatus.transform.rotation = new Quaternion(0, 0, 0, 0);
+        mystatus.transform.rotation = new Quaternion(0, 180, 0, 0);
         
         // mystatus Canvas의 자식으로 추가
         nameStatus.transform.SetParent(mystatus.transform);
-        nameStatus.transform.rotation = new Quaternion(0, 0, 0, 0);
+        nameStatus.transform.rotation = new Quaternion(0, 180, 0, 0);
 
     }
 

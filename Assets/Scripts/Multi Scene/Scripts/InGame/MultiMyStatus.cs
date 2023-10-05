@@ -13,6 +13,8 @@ public class MultiMyStatus : MonoBehaviour
     public Canvas mystatus;
     public GameObject mynameStatusPrefab;
     private Camera _cam;
+
+    private Quaternion rotation = new (0, 0, 0, 0);
     public void CreateMyStatus(string myPlayerName, Vector3 playerPosition)
     {
         // 각 캐릭터마다 자신만의 UI 요소를 생성하고 위치를 조정
@@ -30,11 +32,18 @@ public class MultiMyStatus : MonoBehaviour
         // mystatus Canvas의 자식으로 추가
         nameStatus.transform.SetParent(mystatus.transform);
         nameStatus.transform.rotation = new Quaternion(0, 0, 0, 0);
+
     }
 
     void Start()
     {
         _cam = Camera.main;
+        rotation = mystatus.transform.rotation;
+    }
+
+    private void Update()
+    {
+        mystatus.transform.rotation = rotation;
     }
 
     void Awake()

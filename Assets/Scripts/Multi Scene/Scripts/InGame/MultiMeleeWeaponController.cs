@@ -88,7 +88,7 @@ public class MultiMeleeWeaponController : MonoBehaviour
 
     private IEnumerator ArrowSpawnCoroutine(){
         yield return new WaitForSeconds(0.1f);
-        //SoundManager.instance.PlaySE("Bow_String");
+        SoundManager.instance.PlaySE("Bow_String");
         var currentBow = currentWeapon.GetComponent<RangedWeapon>();
         var arrow = Instantiate(currentBow.projectilePrefab, currentBow.arrowPos.position, Quaternion.LookRotation(currentBow.arrowPos.forward));
         arrow.transform.parent = currentBow.transform;

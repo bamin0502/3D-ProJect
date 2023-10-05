@@ -12,7 +12,9 @@ using UnityEditor;
 public class MultiWeaponController : MonoBehaviour
 {
     //임성훈
+    
     private static readonly int Pickup = Animator.StringToHash("ItemPickup");
+    private MultiPlayerSkill _playerSkill;
     private const float WeaponPickupRange = 2f;
     
     private MultiPlayerMovement _playerMovement;
@@ -33,6 +35,7 @@ public class MultiWeaponController : MonoBehaviour
 
     private void Start()
     {
+        _playerSkill = GetComponent<MultiPlayerSkill>();
         _playerMovement = GetComponent<MultiPlayerMovement>();
         _agent = _playerMovement.navAgent;
         
@@ -197,6 +200,7 @@ public class MultiWeaponController : MonoBehaviour
                     int index = MultiScene.Instance.weaponsList.IndexOf(collider.gameObject);
 
                     PickWeapon(index);
+                    _playerSkill.ChangeWeapon(index);
                     MultiScene.Instance.BroadCastingPickWeapon(index);
                     
                     HidePickupText();
@@ -208,6 +212,10 @@ public class MultiWeaponController : MonoBehaviour
     public void PickWeapon(int index)
     {
         Weapon obj = MultiScene.Instance.weaponsList[index].GetComponent<Weapon>();
+        
+        
+        
+        
         StartCoroutine(EquipWeaponAfterDelay(obj, 0.1f));
     }
 

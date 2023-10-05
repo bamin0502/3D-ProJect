@@ -327,6 +327,7 @@ GameObject:
   - component: {fileID: 4590761233065030696}
   - component: {fileID: -7003272008903750786}
   - component: {fileID: 9009733820406593763}
+  - component: {fileID: -7735151206589249757}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -578,6 +579,18 @@ MonoBehaviour:
   death: {fileID: 0}
   deathParticle: {fileID: 0}
   deathBloodParticle: {fileID: 0}
+--- !u!114 &-7735151206589249757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1157988895353456006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2e61324f78140a3b7c92c2551f3e358, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1178666365210230095
 GameObject:
   m_ObjectHideFlags: 0

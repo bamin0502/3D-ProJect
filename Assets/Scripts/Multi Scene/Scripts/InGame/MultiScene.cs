@@ -45,6 +45,8 @@ public class MultiScene : MonoBehaviour
     
     public Image playerHpImage; //팀상태창 전용 체력 이미지
     public TextMeshProUGUI playerHpText; //팀상태창 전용 체력 텍스트
+
+    public Image[] skillImages;
     
     private void Start()
     {

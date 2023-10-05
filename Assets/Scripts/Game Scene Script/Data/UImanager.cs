@@ -1,29 +1,19 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Data;
 
-public class UImanager : MonoBehaviour
+public class UiManager : MonoBehaviour
 {
-
-
     [SerializeField] private TMP_Text playerHp;
-    [SerializeField] private TMP_Text playerMp;
     [SerializeField] private Image hpBar;
-    [SerializeField] private Image mpBar;
+    
+    public TMP_Text playerLevel;
+    public TMP_Text playerExp;
 
-    public TMP_Text PlayerLevel;
-    public TMP_Text PlayerExp;
-    private void Update()
+    public void Update()
     {
         UpdatePlayerHp();
-        if (Time.timeScale == 0)
-        {
-            return;
-        }
     }
     public void UpdatePlayerHp()
     {

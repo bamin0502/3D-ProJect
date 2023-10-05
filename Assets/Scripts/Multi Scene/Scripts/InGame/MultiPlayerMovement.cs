@@ -88,9 +88,7 @@ public class MultiPlayerMovement : MonoBehaviour
             MultiScene.Instance.BroadCastingAnimation((int)PlayerState.SpaceMove);
             spaceUI.SetActive(true);
             _isCoolingDown = true;
-        
             _cooldownEndTime = Time.time + _cooldownTime;                           
-        
         }
         if (_isCoolingDown)
         {

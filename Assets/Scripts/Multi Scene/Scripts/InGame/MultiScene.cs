@@ -42,6 +42,10 @@ public class MultiScene : MonoBehaviour
     public TextMeshProUGUI playerMyNameText; //자신 머리위에 닉네임 표시할거 전용 닉네임 텍스트
     public GameObject playerMyStatus; //자신 머리위에 닉네임 표시할거 전용 프리팹
     public Canvas playerMyCanvas; //자신 머리위에 닉네임 표시할거 전용 캔버스
+    
+    public Image playerHpImage; //팀상태창 전용 체력 이미지
+    public TextMeshProUGUI playerHpText; //팀상태창 전용 체력 텍스트
+    
     private void Start()
     {
         Instance = this;
@@ -64,7 +68,6 @@ public class MultiScene : MonoBehaviour
             Debug.Log($"{newPlayerName} {newPlayer} {i}");
 
             _players.Add(newPlayerName, newPlayer);
-
             newPlayer.TryGetComponent(out MultiTeamstatus teamStatus);
             newPlayer.TryGetComponent<MultiPlayerMovement>(out var multiPlayer);
             //팀 상태창관련 나만이 아닌 다른 사람도 보여야 하므로 여기다가 작성
@@ -81,16 +84,16 @@ public class MultiScene : MonoBehaviour
             myStatus.mynameStatusPrefab = playerMyStatus;
             myStatus.mystatus = playerMyCanvas;
             
-            //개인 상태창 관련
             myStatus.CreateMyStatus(newPlayerName,playerMyCanvas.transform.position);
             if (newPlayerName.Equals(currentUser))
             {
                 //만약 현재 유저일경우 실행시킬 것들
                 newPlayer.TryGetComponent(out MultiItemDropController pickItem);
-                
+                newPlayer.TryGetComponent(out MultiPlayerHealth playerHealth);
                 //아이템 드랍 관련
                 pickItem.actionText = itemUsedText;
                 pickItem.inventory = inventory;
+                //개인 체력 관련 
                 
                 //스페이스바 관련
                 multiPlayer.coolText = coolText;
@@ -300,14 +303,6 @@ public class MultiScene : MonoBehaviour
 
     public void RoomUserDel(UserSession user)
     {
-        // _players.TryGetValue(user.m_szUserID, out GameObject toDestroy);
-        //
-        // if (toDestroy != null)
-        // {
-        //     _players.Remove(user.m_szUserID);
-        //     Destroy(toDestroy);
-        //
-        // }
         
         if (_players.TryGetValue(user.m_szUserID, out GameObject toDestroy))
         {

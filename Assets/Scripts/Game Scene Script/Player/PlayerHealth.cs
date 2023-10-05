@@ -38,8 +38,7 @@ public class PlayerHealth : MonoBehaviour
     {
         currentHealth -= damage;
         HealthBar.UpdatePlayerHp();
-       
-        //FindObjectOfType<PlayerHealthBar>().UpdatePlayerHp();
+        
         if (currentHealth <= 0)
         {
            
@@ -55,8 +54,7 @@ public class PlayerHealth : MonoBehaviour
         anim.SetTrigger(DoDie);
         deathText.DOText("당신은 "+ "<color=red>" + "몬스터"+ "</color>" + "에게 죽었습니다.", 3, true, ScrambleMode.None, null);
         EndingImage.rectTransform.gameObject.SetActive(true);
-
-        //EndDeath();
+        
     }
     IEnumerator DeathTitle()
     {

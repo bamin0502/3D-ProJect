@@ -19,9 +19,10 @@ public class MultiTeamstatus : MonoBehaviour
     {
         GameObject teamStatusObject = Instantiate(statusbar, gridLayoutGroup.transform);
         MultiTeamstatus teamStatus = teamStatusObject.GetComponent<MultiTeamstatus>();
-
+        
         teamStatus.playerName = playerName;
         teamStatus.nameText.text = playerName;
+        
     }
 
     public void DestroyTeamStatus(string PlayerName)

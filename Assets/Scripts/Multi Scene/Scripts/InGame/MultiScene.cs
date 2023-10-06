@@ -6,8 +6,9 @@ using MNF;
 using TMPro;
 using UnityEngine;
 using Data;
+using UnityEngine.Playables;
 using UnityEngine.UI;
-
+using UnityEngine.Timeline;
 public class MultiScene : MonoBehaviour
 {
     public static MultiScene Instance;
@@ -16,7 +17,6 @@ public class MultiScene : MonoBehaviour
     [HideInInspector] public List<GameObject> weaponsList; //무기 객체들
     [HideInInspector] public List<GameObject> enemyList; //적 객체들
     [HideInInspector] public List<GameObject> itemsList; //아이템 객체들
-    
     public Transform weaponsListParent; //무기 객체들이 있는 부모 객체
     public Transform enemyListParent; //적 객체들이 있는 부모 객체
     public Transform itemListParent; //아이템 객체들이 있는 부모 객체
@@ -55,6 +55,11 @@ public class MultiScene : MonoBehaviour
         SetAllList();
     }
 
+
+    private void Awake()
+    {
+        
+    }
     private void SetUsers()
     {
         RoomSession roomSession = NetGameManager.instance.m_roomSession;

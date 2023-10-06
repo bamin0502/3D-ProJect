@@ -5,10 +5,7 @@ using mino;
 using MNF;
 using TMPro;
 using UnityEngine;
-using Data;
-using UnityEngine.Playables;
 using UnityEngine.UI;
-using UnityEngine.Timeline;
 public class MultiScene : MonoBehaviour
 {
     public static MultiScene Instance;
@@ -204,20 +201,6 @@ public class MultiScene : MonoBehaviour
             case 4:
                 int weaponIndex = Convert.ToInt32(jData["WEAPON_INDEX"].ToString());
                 user.GetComponent<MultiWeaponController>().PickWeapon(weaponIndex);
-                break;
-            case 5:
-                Data.PlayerStat playerStat = new Data.PlayerStat
-                {
-                    Health = Convert.ToInt32(jData["HEALTH"].ToString()),
-                    PlayerHealth = Convert.ToInt32(jData["PlayerHealth"].ToString())
-                };
-                break;
-            case 6:
-                Data.EnemyStat enemyStat = new Data.EnemyStat
-                {
-                    Health = Convert.ToInt32(jData["HEALTH"].ToString()),
-                    EnemyHealth = Convert.ToInt32(jData["EnemyHealth"].ToString())
-                };
                 break;
             
         }

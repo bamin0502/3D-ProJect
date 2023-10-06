@@ -1,16 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Data;
 
 public class UiManager : MonoBehaviour
 {
     [SerializeField] private TMP_Text playerHp;
     [SerializeField] private Image hpBar;
-    
-    public TMP_Text playerLevel;
-    public TMP_Text playerExp;
-
     public void Update()
     {
         UpdatePlayerHp();
@@ -25,11 +20,4 @@ public class UiManager : MonoBehaviour
             playerHp.text=0 +"/"+ PlayerHealth.maxHealth;
         }
     }
-
-    public void UpdatePlayerMp(PlayerStat playerStat)
-    {
-        //mp아직 없음
-    }
-
-
 }

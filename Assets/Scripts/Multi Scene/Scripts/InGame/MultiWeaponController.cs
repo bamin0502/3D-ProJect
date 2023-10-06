@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-using TMPro;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif

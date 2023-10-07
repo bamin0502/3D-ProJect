@@ -1,0 +1,147 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: M_VFX_SmokeDarknessTransition_01
+  m_Shader: {fileID: 4800000, guid: 89bac1ee52a2f694c8ab26ffca9bd86c, type: 3}
+  m_ValidKeywords:
+  - _ENABLE_FOG_ON_TRANSPARENT
+  - _SURFACE_TYPE_TRANSPARENT
+  m_InvalidKeywords:
+  - _ADD_PRECOMPUTED_VELOCITY
+  - _DOUBLESIDED_ON
+  m_LightmapFlags: 0
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 1
+  m_CustomRenderQueue: 3000
+  stringTagMap:
+    MotionVector: User
+    RenderType: Transparent
+  disabledShaderPasses:
+  - DistortionVectors
+  - TransparentBackface
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MaskMove_Texture:
+        m_Texture: {fileID: 2800000, guid: d1fac33dcc8d31d4493bbba37693893f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Mask_Texture:
+        m_Texture: {fileID: 2800000, guid: aec8e2bfbdcee26438fbb6683a32bb44, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseDistortion_Texture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Noise_01_Texture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Noise_02_Texture:
+        m_Texture: {fileID: 2800000, guid: bd2a188e11c0c2145b7428bc4aa7efec, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture:
+        m_Texture: {fileID: 2800000, guid: 2b03b59c1f786984297d70163e795d57, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AddPrecomputedVelocity: 1
+    - _AlphaCutoff: 0.5
+    - _AlphaCutoffEnable: 0
+    - _AlphaDstBlend: 10
+    - _AlphaSrcBlend: 1
+    - _BlendMode: 0
+    - _CamOffSet: 0
+    - _Color_Min: 0.2
+    - _Color_Step: 0.15
+    - _Color_StepMin: 0
+    - _CullMode: 0
+    - _CullModeForward: 0
+    - _DepthFade_Distance: 0.4
+    - _Dissolve: 0
+    - _Distortion: 1
+    - _DistortionEnable: 0
+    - _DistortionMask: 0
+    - _DistortionOnly: 0
+    - _DoubleSidedEnable: 1
+    - _DoubleSidedNormalMode: 2
+    - _DstBlend: 10
+    - _Emissive: 5
+    - _EmissiveBack_Intensity: 0
+    - _EmissiveNoise_Boost: 1
+    - _EmissiveNoise_Power: 1
+    - _EmissiveNoise_StepMax: 0.21
+    - _EmissiveNoise_StepMin: 0
+    - _Emissive_Amount: 400
+    - _Emissive_Intensity: 0
+    - _EnableFogOnTransparent: 1
+    - _Fresnel_Power: 4
+    - _Fresnel_Scale: 3
+    - _Global_Speed: 1.5
+    - _Global_Speed2: 1
+    - _MaskMove_Multiply: 1
+    - _MaskMove_Power: 2
+    - _Mask_Multiply: 1
+    - _Mask_Power: 1
+    - _Mask_Speed: 0
+    - _NoiseDistortion_Intensity: 0.5
+    - _Noises_Multiply: 1
+    - _Noises_Power: 1.5
+    - _Opacity_Boost: 2
+    - _Opacity_DepthDistance: 1
+    - _Opacity_DepthFade: 1
+    - _Opacity_DepthFade_Intensity: 0.1
+    - _Opacity_Power: 0.6
+    - _ReceivesSSR: 0
+    - _RenderQueueType: 4
+    - _RequireSplitLighting: 0
+    - _SrcBlend: 1
+    - _StencilRef: 0
+    - _StencilRefDepth: 0
+    - _StencilRefDistortionVec: 4
+    - _StencilRefGBuffer: 2
+    - _StencilRefMV: 32
+    - _StencilWriteMask: 6
+    - _StencilWriteMaskDepth: 8
+    - _StencilWriteMaskDistortionVec: 4
+    - _StencilWriteMaskGBuffer: 14
+    - _StencilWriteMaskMV: 40
+    - _SurfaceType: 1
+    - _TransparentBackfaceEnable: 0
+    - _TransparentCullMode: 2
+    - _TransparentSortPriority: 0
+    - _TransparentZWrite: 0
+    - _UseShadowThreshold: 0
+    - _ZTestDepthEqualForOpaque: 4
+    - _ZTestGBuffer: 4
+    - _ZTestTransparent: 4
+    - _ZWrite: 0
+    - __dirty: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 0}
+    - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Emissive_Color: {r: 0, g: 0.5921568, b: 0.7490196, a: 1}
+    - _MaskMove_Scale: {r: 1, g: 1, b: 0, a: 0}
+    - _Mask_Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Mask_Scale: {r: 1, g: 1, b: 0, a: 0}
+    - _NoiseDistortion_Scale: {r: 1, g: 1, b: 0, a: 0}
+    - _NoiseDistortion_Speed: {r: 0.5, g: -0.3, b: 0, a: 0}
+    - _Noise_01_Scale: {r: 1, g: 1, b: 0, a: 0}
+    - _Noise_01_Speed: {r: 0.3, g: 0.3, b: 0, a: 0}
+    - _Noise_02_Scale: {r: 2, g: 5, b: 0, a: 0}
+    - _Noise_02_Speed: {r: -0.5, g: -0.5, b: 0, a: 0}
+  m_BuildTextureStacks: []

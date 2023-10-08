@@ -62,6 +62,7 @@ public class PLAYER_ITEM
     public string USER = "";
     public int DATA = 0;
     public int ITEM_INDEX = -99;
+    public int ITEM_COUNT = -99;
 }
 
 

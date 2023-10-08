@@ -242,7 +242,7 @@ public class MultiScene : MonoBehaviour
         NetGameManager.instance.RoomBroadcast(sendData);
     }
 
-    public void BroadCastingPickItem(int index)
+    public void BroadCastingPickItem(int index,int itemCount=1)
     {
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(
             NetGameManager.instance.m_userHandle.m_szUserID);
@@ -251,7 +251,8 @@ public class MultiScene : MonoBehaviour
         {
             USER = userSession.m_szUserID,
             DATA = 3,
-            ITEM_INDEX = index
+            ITEM_INDEX = index,
+            ITEM_COUNT = itemCount,
         };
 
         string sendData = LitJson.JsonMapper.ToJson(data);

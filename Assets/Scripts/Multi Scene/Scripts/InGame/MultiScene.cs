@@ -5,6 +5,7 @@ using mino;
 using MNF;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 public class MultiScene : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class MultiScene : MonoBehaviour
     public Transform itemListParent; //아이템 객체들이 있는 부모 객체
     
     public Inventory inventory;
-    
+    public MultiUiManager multiUiManager;
     public TextMeshProUGUI itemUsedText;
     public TextMeshProUGUI noticeText;
     public TextMeshProUGUI coolText;
@@ -40,9 +41,6 @@ public class MultiScene : MonoBehaviour
     public GameObject playerMyStatus; //자신 머리위에 닉네임 표시할거 전용 프리팹
     public Canvas playerMyCanvas; //자신 머리위에 닉네임 표시할거 전용 캔버스
     
-    public Image playerHpImage; //팀상태창 전용 체력 이미지
-    public TextMeshProUGUI playerHpText; //팀상태창 전용 체력 텍스트
-
     public Image[] skillImages;
     
     private void Start()

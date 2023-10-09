@@ -21,7 +21,6 @@ public class MultiPlayerHealthBar : MonoBehaviour
         if (displayedHealth <= 0f)
         {
             healthBar.fillAmount = 0 / maxHealth;
-
         }
         else if(displayedHealth>0f)
         {

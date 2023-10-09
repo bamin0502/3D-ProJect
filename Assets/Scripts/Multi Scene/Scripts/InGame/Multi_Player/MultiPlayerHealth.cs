@@ -35,7 +35,6 @@ public class MultiPlayerHealth : MonoBehaviour
 
     void Awake()
     {
-        healthBar = FindObjectOfType<MultiPlayerHealthBar>();
         endingImage.rectTransform.gameObject.SetActive(false);
         killedImage.rectTransform.gameObject.SetActive(false);
     }
@@ -56,7 +55,7 @@ public class MultiPlayerHealth : MonoBehaviour
     {
         deathParticle.Play();
         deathBloodParticle.Play(); 
-        MultiScene.Instance.BroadCastingAnimation((int)PlayerState.Dead,true);
+        MultiScene.Instance.BroadCastingAnimation((int)PlayerState.Dead);
         deathText.DOText("당신은 "+ "<color=red>" + "몬스터"+ "</color>" + "에게 죽었습니다.", 3, true, ScrambleMode.None, null);
         endingImage.rectTransform.gameObject.SetActive(true);
     }

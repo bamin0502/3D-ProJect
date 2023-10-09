@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 
 public class MultiTeamstatus : MonoBehaviour
@@ -10,7 +11,7 @@ public class MultiTeamstatus : MonoBehaviour
     public GridLayoutGroup gridLayoutGroup;
     public Image playerHpImage;
     public GameObject statusbar;
-    
+    public MultiUiManager MultiUiManager;
 
     public void CreateTeamStatus(string PlayerName)
     {
@@ -19,7 +20,6 @@ public class MultiTeamstatus : MonoBehaviour
         
         teamStatus.playerName = playerName;
         teamStatus.nameText.text = playerName;
-        
     }
 
     public void DestroyTeamStatus(string PlayerName)

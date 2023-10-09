@@ -61,7 +61,6 @@ public class Enemy : MonoBehaviour
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
         
-       
         target = GameObject.FindGameObjectWithTag("Player").gameObject.transform;
         
     }

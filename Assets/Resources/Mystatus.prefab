@@ -263,6 +263,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74bb1f5545c4007498902d08b855f8e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerHpImage: {fileID: 0}
   myplayerName: 
   mynameText: {fileID: 6630305406453156782}
   mystatus: {fileID: 0}
@@ -278,7 +279,6 @@ GameObject:
   - component: {fileID: 8457964746656479703}
   - component: {fileID: 5131922680811604187}
   - component: {fileID: 7634274180650970132}
-  - component: {fileID: 5422155644775100808}
   m_Layer: 7
   m_Name: Hp Image
   m_TagString: MultiPlayerHealthBar
@@ -344,17 +344,3 @@ MonoBehaviour:
   m_FillOrigin: 1
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5422155644775100808
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6188227571606514915}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58be00802ea2a304dac9275477518770, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthBar: {fileID: 7634274180650970132}
-  healthText: {fileID: 0}

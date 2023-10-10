@@ -107,7 +107,6 @@ public class MultiScene : MonoBehaviour
                 cineCam.GetRig(1).LookAt = newPlayer.transform;
                 playerCamera.player = newPlayer.transform;
                 multiPlayer._camera = playerCamera.mainCamera;
-               
             }
         }
     }

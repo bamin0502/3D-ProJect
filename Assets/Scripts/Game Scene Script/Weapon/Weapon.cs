@@ -20,6 +20,7 @@ public abstract class Weapon : MonoBehaviour
     public float range;
     public string weaponName; //무기명
     protected int damage; //데미지
+    protected int skillDamage;
     public bool isEquipped = false; //장착 여부
     public float attackInterval;
     public WeaponType weaponType;
@@ -45,22 +46,21 @@ public abstract class Weapon : MonoBehaviour
 
         if (weaponType == WeaponType.Bow)
         {
-            json = "{\"damage\": 20}";
+            json = "{\"damage\": 20, \"skillDamage\": 60}";
         }
         else if (weaponType == WeaponType.OneHanded)
         {
-            json = "{\"damage\": 35}";
+            json = "{\"damage\": 35, \"skillDamage\": 80}";
         }
         else if (weaponType == WeaponType.TwoHanded)
         {
-            json = "{\"damage\": 60}";
+            json = "{\"damage\": 60, \"skillDamage\": 120}";
         }
         WeaponData weaponData = JsonConvert.DeserializeObject<WeaponData>(json);
         damage = weaponData.damage;
-
-
+        skillDamage = weaponData.skillDamage;
     }
-    public abstract void Attack(Transform target);
+    public abstract void Attack(Transform target, int isSkill);
     public void EnableCanvas()
     {
         if (iconCanvas != null)

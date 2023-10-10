@@ -122,11 +122,11 @@ public class PlayerMovement : MonoBehaviour
         Destroy(gameObject);
     }
     
-    public void Attack()
+    public void Attack(int isSkill)
     {
         if (weaponController.currentTarget != null)
         {
-            weaponController.equippedWeapon.Attack(weaponController.currentTarget);
+            weaponController.equippedWeapon.Attack(weaponController.currentTarget, isSkill);
             
             if (weaponController.currentTarget.TryGetComponent(out Enemy enemy))
             {
@@ -150,9 +150,6 @@ public class PlayerMovement : MonoBehaviour
                 break;
             case PlayerState.RunForward:
                 PlayerStateRunForward();
-                break;
-            case PlayerState.BowAttackIdle:
-                PlayerStateBowAttackIdle();
                 break;
             case PlayerState.SpaceMove:
                 PlayerStateSpaceMoveIdle();

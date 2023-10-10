@@ -60,6 +60,7 @@ namespace Data
     public class WeaponData
     {
         public int damage = 0;
+        public int skillDamage = 0;
     }
     #endregion
 

@@ -9,15 +9,11 @@ namespace mino
     {
         Idle,   //0 가만히 있는 상태 지정할거
         RunForward,   //1 마우스로 클릭해서 이동할때 실행할 애니메이션
-        LongAttack, //2 원거리 무기 공격모션 애니메이션
-        GunAttackIdle, //3 무기: 총 공격 애니메이션
-        BowAttackIdle,  //4 무기 : 활 공격 애니메이션
-        ShortAttack,   //5  근접 무기 애니메이션 지정 
-        HammerAttackIdle,   //6 무기 : 해머 공격 애니메이션
-        Dead, //7 죽었을때
-        SpaceMove, //8 스페이스바를 눌렀을 때 나가게 할 애니메이션
-        ItemUse, //9 아이템을 사용중일때 실행시킬 애니메이션 
-        GetHit //10 맞았을때 나오게할 애니메이션
+        HammerAttackIdle,   //2 무기 : 해머 공격 애니메이션
+        Dead, //3 죽었을때
+        SpaceMove, //4 스페이스바를 눌렀을 때 나가게 할 애니메이션
+        ItemUse, //5 아이템을 사용중일때 실행시킬 애니메이션 
+        GetHit //6 맞았을때 나오게할 애니메이션
     }
 
     public class AniSetting : MonoBehaviour

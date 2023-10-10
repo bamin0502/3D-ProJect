@@ -41,8 +41,9 @@ public class MultiPlayerMovement : MonoBehaviour
     private void Update()
     {
         if(!MultiScene.Instance.currentUser.Equals(gameObject.name)) return;
-        
-        if (Input.GetMouseButtonDown(1)) // 오른쪽 클릭
+
+        // 오른쪽 마우스 클릭을 확인합니다.
+        if (Input.GetMouseButtonDown(1))
         {
             Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
             
@@ -51,10 +52,21 @@ public class MultiPlayerMovement : MonoBehaviour
             LayerMask combinedMask = playerMask | enemyMask;
             LayerMask layerMask = ~combinedMask;
 
-            if (Physics.Raycast(ray, out var hit, Mathf.Infinity, layerMask))
+            if (Physics.Raycast(ray, out var hit, Mathf.Infinity, enemyMask))
+            {
+                if (hit.collider.CompareTag("Enemy"))
+                {
+                    // 오른쪽 마우스 클릭 시 타겟을 설정합니다.
+                    int enemy = MultiScene.Instance.enemyList.IndexOf(hit.transform.gameObject);
+                    _weaponController.SetTarget(enemy);
+                    MultiScene.Instance.BroadCastingMovement(hit.transform.position, enemy);
+                }
+            }
+            
+            else if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
             {
                 _weaponController.ClearTarget();
-                
+
                 if (!_weaponController.isAttack)
                 {
                     navAgent.SetDestination(hit.point);
@@ -68,7 +80,6 @@ public class MultiPlayerMovement : MonoBehaviour
                     ChangedState(PlayerState.HammerAttackIdle);
                     MultiScene.Instance.BroadCastingAnimation((int)PlayerState.HammerAttackIdle);
                 }
-
             }
         }
         

@@ -36,8 +36,6 @@ public class MultiWeaponController : MonoBehaviour
         _playerSkill = GetComponent<MultiPlayerSkill>();
         _playerMovement = GetComponent<MultiPlayerMovement>();
         _agent = _playerMovement.navAgent;
-        
-        StartCoroutine(CheckAttackCoroutine());
     }
     
     private void Update()
@@ -111,27 +109,6 @@ public class MultiWeaponController : MonoBehaviour
         {
             TryPickupWeapon();
         }
-        // 오른쪽 마우스 클릭을 확인합니다.
-        if (Input.GetMouseButtonDown(1))
-        {
-            Ray ray = _playerMovement._camera.ScreenPointToRay(Input.mousePosition);
-
-            LayerMask playerMask = LayerMask.GetMask("Player");
-            LayerMask enemyMask = LayerMask.GetMask("Ground");
-            LayerMask combinedMask = playerMask | enemyMask;
-            LayerMask layerMask = ~combinedMask;
-
-            if (Physics.Raycast(ray, out var hit, Mathf.Infinity, layerMask))
-            {
-                if (hit.collider.CompareTag("Enemy"))
-                {
-                    // 오른쪽 마우스 클릭 시 타겟을 설정합니다.
-                    int enemy = MultiScene.Instance.enemyList.IndexOf(hit.transform.gameObject);
-                    SetTarget(enemy);
-                    MultiScene.Instance.BroadCastingMovement(hit.transform.position, enemy);
-                }
-            }
-        }
     }
 
     public void SetTarget(int enemy)
@@ -141,26 +118,12 @@ public class MultiWeaponController : MonoBehaviour
         if(equippedWeapon == null) return;
         currentTarget = target.transform;
         _agent.stoppingDistance = GetWeaponRange();
+        _agent.SetDestination(currentTarget.position);
         attackTimer = 0f;
-    }
-
-    private IEnumerator CheckAttackCoroutine()
-    {
-        while (true)
-        {
-            if (currentTarget == null || equippedWeapon == null)
-            {
-                ClearTarget();
-            }
-            else
-            {
-                var range = GetWeaponRange();
-                float distance = Vector3.Distance(transform.position, currentTarget.position);
-                isAttack = distance <= range;
-            }
-
-            yield return new WaitForSeconds(0.2f);
-        }
+        
+        var range = GetWeaponRange();
+        float distance = Vector3.Distance(transform.position, currentTarget.position);
+        isAttack = distance <= range;
     }
 
     private float GetWeaponRange()

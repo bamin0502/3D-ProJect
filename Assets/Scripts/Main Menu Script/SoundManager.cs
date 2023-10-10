@@ -14,7 +14,7 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private Sound[] effectSounds;
     [SerializeField] private Sound[] bgmSounds;
 
-    [SerializeField] private AudioSource bgmAudioSource;
+    public AudioSource bgmAudioSource;
     [SerializeField] private AudioSource[] effectAudioSources;
 
     private float bgmVolume = 1f;

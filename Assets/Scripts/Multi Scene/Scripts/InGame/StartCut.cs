@@ -12,7 +12,6 @@ public class StartCut : MonoBehaviour
     {
         _playableDirector = GetComponent<PlayableDirector>();
     }
-    // Start is called before the first frame update
     void Start()
     {
         if (_playableDirector.playableAsset == FirstCut)

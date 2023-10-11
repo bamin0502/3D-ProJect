@@ -53,6 +53,10 @@ public class MultiMyStatus : MonoBehaviour
     private void Update()
     {
         mystatus.transform.rotation = rotation;
+        if (mynameStatusPrefab == null)
+        {
+            return;
+        }
     }
 
     public static void UpdatePlayerHp()

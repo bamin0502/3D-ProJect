@@ -11,32 +11,8 @@ public class MultiPlayerHealthBar : MonoBehaviour
     public string myPlayerName = "";
     public void Awake()
     {
-        // GameObject player = GameObject.Find(myPlayerName);
-        // _playerHealth = player.GetComponent<MultiPlayerHealth>();
-        // if (player != null)
-        // {
-        //     _playerHealth = player.GetComponent<MultiPlayerHealth>();
-        //     if (_playerHealth != null)
-        //     {
-        //         Debug.Log(myPlayerName + "의 체력바 생성");
-        //     }
-        //     else
-        //     {
-        //         Debug.LogError(myPlayerName + "의 체력바 생성에 실패했습니다.");
-        //     }
-        // }
-        // else
-        // {
-        //     Debug.LogError("플레이어를 찾을 수 없습니다: " + myPlayerName);
-        // }
-        // healthText.text=MultiPlayerHealth.CurrentHealth + "/" + MultiPlayerHealth.MaxHealth;
-        // healthBar = GameObject.FindGameObjectsWithTag("HpBar")[0].GetComponent<Image>();
-        // healthText = GameObject.FindGameObjectsWithTag("HpText")[0].GetComponent<TextMeshProUGUI>();
         // myPlayerName 초기화
-        myPlayerName = ""; // 여기에 원하는 플레이어의 이름을 설정
-        // myPlayerName 초기화
-        myPlayerName = "플레이어의 이름"; // 여기에 원하는 플레이어의 이름을 설정
-
+        myPlayerName = "";
         // 플레이어 GameObject를 찾기
         GameObject player = GameObject.Find(myPlayerName);
 

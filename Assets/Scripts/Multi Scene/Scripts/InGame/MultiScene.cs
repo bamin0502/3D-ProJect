@@ -20,11 +20,9 @@ public class MultiScene : MonoBehaviour
     public Transform itemListParent; //아이템 객체들이 있는 부모 객체
     
     public Inventory inventory;
-    public MultiUiManager multiUiManager;
     public TextMeshProUGUI itemUsedText;
     public TextMeshProUGUI noticeText;
     public TextMeshProUGUI coolText;
-   
     public GameObject spaceUI;
     
     public CinemachineFreeLook cineCam;
@@ -41,6 +39,8 @@ public class MultiScene : MonoBehaviour
     public GameObject playerMyStatus; //자신 머리위에 닉네임 표시할거 전용 프리팹
     public Canvas playerMyCanvas; //자신 머리위에 닉네임 표시할거 전용 캔버스
     
+    
+        
     public Image[] skillImages;
     
     private void Start()
@@ -48,12 +48,6 @@ public class MultiScene : MonoBehaviour
         Instance = this;
         SetUsers();
         SetAllList();
-    }
-
-
-    private void Awake()
-    {
-        
     }
     private void SetUsers()
     {
@@ -95,8 +89,8 @@ public class MultiScene : MonoBehaviour
                 //아이템 드랍 관련
                 pickItem.actionText = itemUsedText;
                 pickItem.inventory = inventory;
-                //개인 체력 관련 
-                
+                //개인 체력바 관련
+
                 //스페이스바 관련
                 multiPlayer.coolText = coolText;
                 multiPlayer.spaceUI = spaceUI;
@@ -108,8 +102,10 @@ public class MultiScene : MonoBehaviour
                 playerCamera.player = newPlayer.transform;
                 multiPlayer._camera = playerCamera.mainCamera;
             }
+
         }
     }
+    
     private void SetAllList()
     {
         weaponsList.Capacity = weaponsListParent.childCount;

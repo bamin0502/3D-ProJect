@@ -9,15 +9,25 @@ public class MultiTeamstatus : MonoBehaviour
     public string playerName = "";
     public TextMeshProUGUI nameText;
     public GridLayoutGroup gridLayoutGroup;
-    public Image playerHpImage;
+    public static Image playerHpImage;
     public GameObject statusbar;
-    public MultiUiManager MultiUiManager;
+
+    private MultiPlayerHealth _playerHealth;
 
     public void CreateTeamStatus(string PlayerName)
     {
         GameObject teamStatusObject = Instantiate(statusbar, gridLayoutGroup.transform);
         MultiTeamstatus teamStatus = teamStatusObject.GetComponent<MultiTeamstatus>();
-        
+        GameObject player = GameObject.Find(playerName);
+        _playerHealth = player.GetComponent<MultiPlayerHealth>();
+        if (_playerHealth != null)
+        {
+            Debug.Log(PlayerName+ " 체력바 생성");
+        }
+        else
+        {
+            Debug.LogError(PlayerName + "체력바 생성에 실패했습니다.");
+        }
         teamStatus.playerName = playerName;
         teamStatus.nameText.text = playerName;
     }
@@ -34,8 +44,13 @@ public class MultiTeamstatus : MonoBehaviour
             }
         }
     }
-    public void Awake()
+    public static void UpdatePlayerHp()
     {
+        playerHpImage.fillAmount = (float)MultiPlayerHealth.CurrentHealth / MultiPlayerHealth.MaxHealth;    
+    }
+    public void Awake()
+    {   
         gridLayoutGroup = GameObject.Find("Team Status Image").GetComponent<GridLayoutGroup>();
+
     }
 }

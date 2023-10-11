@@ -5,13 +5,14 @@ using UnityEngine.UI;
 
 public class MultiMyStatus : MonoBehaviour
 {
-    public Image playerHpImage;
+    public static Image playerHpImage;
     public string myplayerName = "";
     public TextMeshProUGUI mynameText;
     public Canvas mystatus;
     public GameObject mynameStatusPrefab;
     private Camera _cam;
-    private MultiUiManager MultiUiManager;
+
+    private MultiPlayerHealth _playerHealth;
     private Quaternion rotation = new (0, 0, 0, 0);
     public void CreateMyStatus(string myPlayerName, Vector3 playerPosition)
     {
@@ -22,6 +23,17 @@ public class MultiMyStatus : MonoBehaviour
         teamStatus.myplayerName = myplayerName;
         teamStatus.mynameText = nameStatus.GetComponentInChildren<TextMeshProUGUI>();
         teamStatus.mynameText.text = myplayerName;
+        //플레이어 체력 관련
+        GameObject player = GameObject.Find(myPlayerName);
+        _playerHealth = player.GetComponent<MultiPlayerHealth>();
+        if (_playerHealth != null)
+        {
+            Debug.Log(myPlayerName+ " 체력바 생성");
+        }
+        else
+        {
+            Debug.LogError(myPlayerName + "체력바 생성에 실패했습니다.");
+        }
         // 상태창의 회전을 고정,캔버스도 회전을 막아야 함 
         teamStatus.transform.rotation = new Quaternion(0, 180, 0, 0);
         mystatus.transform.rotation = new Quaternion(0, 180, 0, 0);
@@ -43,6 +55,10 @@ public class MultiMyStatus : MonoBehaviour
         mystatus.transform.rotation = rotation;
     }
 
+    public static void UpdatePlayerHp()
+    {
+        playerHpImage.fillAmount = (float)MultiPlayerHealth.CurrentHealth / MultiPlayerHealth.MaxHealth;    
+    }
     void Awake()
     {
         mystatus = GameObject.FindGameObjectWithTag("MyStatus").GetComponent<Canvas>();

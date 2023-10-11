@@ -11,7 +11,7 @@ public class MultiPlayerHealth : MonoBehaviour
 {
     public static int MaxHealth;
     public static int CurrentHealth;
-    public MultiPlayerHealthBar healthBar;
+   
     public TMP_Text deathText;
     public Image endingImage;
 
@@ -30,7 +30,6 @@ public class MultiPlayerHealth : MonoBehaviour
         PlayerStat playerStat = JsonConvert.DeserializeObject<PlayerStat>(json);
         MaxHealth = (int)playerStat.PlayerHealth;
         CurrentHealth = (int)playerStat.Health;
-        FindObjectOfType<MultiPlayerHealthBar>().UpdatePlayerHp();
     }
 
     void Awake()
@@ -42,8 +41,12 @@ public class MultiPlayerHealth : MonoBehaviour
     public void TakeDamage(int damage)
     {
         CurrentHealth -= damage;
-        healthBar.UpdatePlayerHp();
-        
+        //자기 머리위에 보일 체력 상태창
+        MultiMyStatus.UpdatePlayerHp();
+        //팀 체력 상태창
+        MultiTeamstatus.UpdatePlayerHp();
+        //자신 체력 메인 UI 체력상태창
+        MultiPlayerHealthBar.UpdatePlayerHp();
         if (CurrentHealth <= 0)
         {
             Die();

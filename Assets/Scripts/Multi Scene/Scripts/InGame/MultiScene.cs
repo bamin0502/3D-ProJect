@@ -7,6 +7,19 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+
+public enum DataType
+{
+    PlayerAnimation = 1,
+    PlayerMovement = 2,
+    PlayerPickItem = 3,
+    PlayerPickWeapon = 4,
+    PlayerHpPlayer = 5,
+    PlayerThrownWeapon = 6,
+}
+
+
+
 public class MultiScene : MonoBehaviour
 {
     public static MultiScene Instance;
@@ -159,7 +172,7 @@ public class MultiScene : MonoBehaviour
         
         switch (dataID)
         {
-            case 1:
+            case (int)DataType.PlayerAnimation:
                 int aniNum = Convert.ToInt32(jData["ANI_NUM"].ToString());
                 bool aniType = Convert.ToBoolean(jData["ANI_TYPE"].ToString());
 
@@ -175,7 +188,7 @@ public class MultiScene : MonoBehaviour
                     user.GetComponent<MultiPlayerMovement>().SetAnimationTrigger(aniNum);
                 }
                 break;
-            case 2:
+            case (int)DataType.PlayerMovement:
                 user.TryGetComponent<MultiPlayerMovement>(out var userMove2);
                 user.TryGetComponent<MultiWeaponController>(out var userAttack);
                 int target = Convert.ToInt32(jData["TARGET"].ToString());
@@ -192,15 +205,15 @@ public class MultiScene : MonoBehaviour
                 }
                 break;
             //플레이어 아이템 드랍 관련 테스트 필요
-            case 3:
+            case (int)DataType.PlayerPickItem:
                 int index = Convert.ToInt32(jData["ITEM_INDEX"].ToString());
                 Destroy(itemsList[index]);
                 break;
-            case 4:
+            case (int)DataType.PlayerPickWeapon:
                 int weaponIndex = Convert.ToInt32(jData["WEAPON_INDEX"].ToString());
                 user.GetComponent<MultiWeaponController>().PickWeapon(weaponIndex);
                 break;
-            case 6:
+            case (int)DataType.PlayerThrownWeapon:
                 string playerPosition = jData["PLAYER_POSITION"].ToString();
                 string mousePosition = jData["MOUSE_POSITION"].ToString();
                 user.GetComponent<ThrownWeaponController>().ThrowGrenade(StringToVector(mousePosition),StringToVector(playerPosition));
@@ -219,7 +232,7 @@ public class MultiScene : MonoBehaviour
         var data = new PLAYER_ANIMATION
         {
             USER = userSession.m_szUserID,
-            DATA = 1,
+            DATA = (int)DataType.PlayerAnimation,
             ANI_NUM = animationNumber,
             ANI_TYPE = isTrigger,
         };
@@ -236,7 +249,7 @@ public class MultiScene : MonoBehaviour
         var data = new PLAYER_MOVE
         {
             USER = userSession.m_szUserID,
-            DATA = 2,
+            DATA = (int)DataType.PlayerMovement,
             POSITION = VectorToString(destination),
             TARGET = target,
         };
@@ -253,7 +266,7 @@ public class MultiScene : MonoBehaviour
         var data = new PLAYER_ITEM
         {
             USER = userSession.m_szUserID,
-            DATA = 3,
+            DATA = (int)DataType.PlayerPickItem,
             ITEM_INDEX = index,
             ITEM_COUNT = itemCount,
         };
@@ -270,7 +283,7 @@ public class MultiScene : MonoBehaviour
         var data = new PLAYER_WEAPON
         {
             USER = userSession.m_szUserID,
-            DATA = 4,
+            DATA = (int)DataType.PlayerPickWeapon,
             WEAPON_INDEX = index,
         };
 
@@ -285,7 +298,7 @@ public class MultiScene : MonoBehaviour
         var data = new PLAYER_STATUS
         {
             USER = userSession.m_szUserID,
-            DATA = 5,
+            DATA = (int)DataType.PlayerHpPlayer,
             HEALTH = health,
             PlayerHealth = playerHealth,
         };
@@ -302,7 +315,7 @@ public class MultiScene : MonoBehaviour
         var data = new THROW_ATTACK
         {
             USER = userSession.m_szUserID,
-            DATA = 6,
+            DATA = (int)DataType.PlayerThrownWeapon,
             PLAYER_POSITION = VectorToString(playerPos),
             MOUSE_POSITION = VectorToString(mousePos),
         };

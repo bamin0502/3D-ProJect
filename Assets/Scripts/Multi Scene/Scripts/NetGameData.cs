@@ -85,6 +85,24 @@ public class WEAPON_DAMAGE
     public int WEAPON_INDEX = 0; 
     public int DAMAGE { get; set; }
 }
+// box=0,green=1,red=2
+[Serializable]
+public class MONSTER_SPAWN
+{ 
+    
+    public int DATA = 0;
+    public int MONSTER_CODE = 0;
+    public string POSITION = "";
+}
+[Serializable]
+public class ENEMY_ANIMATION
+{
+    public string USER = "";
+    public int DATA = 0;
+    public int MONSTER_INDEX = 0;
+    public int ANI_NUM = 0;
+    public bool ANI_TYPE = false;
+}
 
 [Serializable]
 public class THROW_ATTACK //활 공격, 수류탄 공격에 사용

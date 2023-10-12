@@ -1,11 +1,13 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using Data;
 using Newtonsoft.Json;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
-public class Enemy : MonoBehaviour
+public class EnemyTest : MonoBehaviour
 {
     public enum EnemyDamage
     {
@@ -27,7 +29,7 @@ public class Enemy : MonoBehaviour
     public LayerMask targetLayer;
     public float radius = 1.0f;
     public float maxDistance = 100.0f;
-    public Transform origin;
+    private Transform origin;
     private GameObject closestPrefab;
     
    
@@ -52,11 +54,14 @@ public class Enemy : MonoBehaviour
     //아이템 드랍 관련 
     public GameObject[] itemPrefabs;
     private bool hasDroppedItem = false; // 아이템이 이미 떨어진 상태인지 여부를 나타내는 변수
+    
+    Collider[] hits = new Collider[5]; 
+    
     #endregion
-
-    private Coroutine _playerDetect;
+    
 
     private int _index;
+    private float closestDistance = Mathf.Infinity;
 
     public int tmpDamage; //일단 테스트용 나중에 json이랑 연결해야됨
     private static readonly int DoDie = Animator.StringToHash("doDie");
@@ -75,7 +80,8 @@ public class Enemy : MonoBehaviour
     }
     private void Start()
     {
-        _index = MultiScene.Instance.enemyList.IndexOf(this.gameObject);
+        origin = this.gameObject.transform;
+        
         origninalPosition = transform.position;
         DataManager dataManager = FindObjectOfType<DataManager>();
         EnemyStat enemyStat = dataManager.LoadFromJsonEncrypted<EnemyStat>("Enemystat1.json");
@@ -98,38 +104,36 @@ public class Enemy : MonoBehaviour
         }
         EnemyStat enemy = JsonConvert.DeserializeObject<EnemyStat>(json);
         tmpDamage = (int)enemy.damage;
-        _playerDetect = StartCoroutine(PlayerDetect());
     }
    
     private IEnumerator PlayerDetect()
     {
-        WaitForSeconds wait = new WaitForSeconds(0.3f);
+        WaitForSeconds wait = new WaitForSeconds(1f);
         while (true)
-        {   
-            RaycastHit[] hits = new RaycastHit[10]; 
-
-           
-            int hitCount = Physics.SphereCastNonAlloc(origin.position, radius, origin.forward, hits, maxDistance, targetLayer);
-
-            float closestDistance = Mathf.Infinity;
-        
-            for (int i = 0; i < hitCount; i++)
+        {
+            Physics.OverlapSphereNonAlloc(origin.position, radius, hits, targetLayer);
+            
+            foreach (var t in hits)
             {
-                if (hits[i].collider.CompareTag("Player"))
-                {
-                    float distance = Vector3.Distance(origin.position, hits[i].point);
+                if(t == null) continue;
+                
+                float distance = Vector3.Distance(origin.position, t.transform.position);
 
-                    if (distance < closestDistance)
-                    {
-                        closestDistance = distance;
-                        closestPrefab = hits[i].collider.gameObject;
-                    }
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestPrefab = t.gameObject;
                 }
             }
 
             if (closestPrefab != null)
             {
                 target = closestPrefab.transform;
+                Debug.Log(target.name);
+            }
+            else if (closestPrefab == null)
+            {
+                Debug.Log("널");
             }
             yield return wait;
         }
@@ -145,14 +149,17 @@ public class Enemy : MonoBehaviour
     void ChaseStart()
     {
         isChase = true;
-        anim.SetBool(IsWalk, true);
-        MultiScene.Instance.BroadCastingMonsterAnimation(_index,IsWalk, true);
+        anim.SetBool(IsWalk, 
+            
+            
+            
+            true);
+        //MultiScene.Instance.BroadCastingMonsterAnimation(_index,IsWalk, true);
     }
-   
+
     void FixedUpdate()
     {
-        if(isDead) return;
-        Targetting();
+        if (isDead) return;
         FreezeVelocity();
 
         
@@ -165,19 +172,20 @@ public class Enemy : MonoBehaviour
 
     }
     // Update is called once per frame
+
+
+    public void StartDetect()
+    {
+        StartCoroutine(PlayerDetect());
+    }
     void Update()
     {
-        if (_playerDetect == null)
-        {
-            _playerDetect = StartCoroutine(PlayerDetect());
-        }
-        
         if (isDead)
         {
             if (attackCoroutine != null)
             {
                 anim.SetBool(IsAttack, false);
-                MultiScene.Instance.BroadCastingMonsterAnimation(_index,IsAttack, false);
+                //MultiScene.Instance.BroadCastingMonsterAnimation(_index,IsAttack, false);
                 StopCoroutine(attackCoroutine);
                 DropRandomItem();
 
@@ -208,7 +216,7 @@ public class Enemy : MonoBehaviour
     void Returning()
     {
         anim.SetBool(IsWalk, false);
-        MultiScene.Instance.BroadCastingMonsterAnimation(_index,IsWalk, false);
+        //MultiScene.Instance.BroadCastingMonsterAnimation(_index,IsWalk, false);
         nav.SetDestination(origninalPosition);
         
     }
@@ -243,10 +251,7 @@ public class Enemy : MonoBehaviour
          nav.SetDestination(target.position);       
     }
     
-    void Targetting()
-    {
-       
-    }
+  
     
     
     
@@ -273,7 +278,7 @@ public class Enemy : MonoBehaviour
             
             
             anim.SetBool(IsAttack, true);
-            MultiScene.Instance.BroadCastingMonsterAnimation(_index, IsAttack, true);
+            //MultiScene.Instance.BroadCastingMonsterAnimation(_index, IsAttack, true);
             
             
             attackArea.enabled = true;
@@ -294,9 +299,7 @@ public class Enemy : MonoBehaviour
             isChase = true;
             isAttack = false;
             anim.SetBool(IsAttack, false);
-            MultiScene.Instance.BroadCastingMonsterAnimation(_index,IsAttack, false);
+            //MultiScene.Instance.BroadCastingMonsterAnimation(_index,IsAttack, false);
         }
     }
 }
-
-

@@ -41,6 +41,12 @@ public class StartCut : MonoBehaviour
     {
         // BGM을 다시 재생
         SoundManager.instance.bgmAudioSource.Play();
+        foreach (GameObject enemy in MultiScene.Instance.enemyList)
+        {
+            enemy.TryGetComponent<EnemyTest>(out var e);
+            if(e != null) e.StartDetect();
+        }
+        
     }
 
     public void PlayEffect(PlayableDirector director)

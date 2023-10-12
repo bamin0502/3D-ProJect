@@ -9,8 +9,6 @@ public class MultiPlayerHealthBar : MonoBehaviour
     public TextMeshProUGUI healthText;
     private MultiPlayerHealth _playerHealth;
     private GameObject player;
-
-
     public void CreateUiStatus()
     {
         MultiScene.Instance._players.TryGetValue(MultiScene.Instance.currentUser, out var player);

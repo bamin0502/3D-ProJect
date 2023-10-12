@@ -24,6 +24,7 @@ public class MultiTeamstatus : MonoBehaviour
     {   
         GameObject teamStatusObject = Instantiate(statusbar, gridLayoutGroup.transform);
         MultiTeamstatus teamStatus = teamStatusObject.GetComponent<MultiTeamstatus>();
+        
         MultiScene.Instance._players.TryGetValue(MultiScene.Instance.currentUser, out var player);
         _playerHealth = player.GetComponent<MultiPlayerHealth>();
         if (_playerHealth != null)

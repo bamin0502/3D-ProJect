@@ -18,7 +18,6 @@ public class MultiMyStatus : MonoBehaviour
     public void CreateMyStatus(string myPlayerName, Vector3 playerPosition)
     {
         // 각 캐릭터마다 자신만의 UI 요소를 생성하고 위치를 조정
-        
         GameObject nameStatus = Instantiate(mynameStatusPrefab, playerPosition + new Vector3(0, 1, 0), Quaternion.identity);
         MultiMyStatus teamStatus = nameStatus.GetComponent<MultiMyStatus>();
         teamStatus.myplayerName = myplayerName;

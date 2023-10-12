@@ -24,7 +24,6 @@ public class MultiPlayerHealth : MonoBehaviour
     private static readonly int DoDie = Animator.StringToHash("doDie");
 
     private MultiMyStatus _multiMyStatus;
-
     private MultiTeamstatus _multiTeamstatus;
     // Start is called before the first frame update
     void Start()
@@ -49,8 +48,7 @@ public class MultiPlayerHealth : MonoBehaviour
         CurrentHealth -= damage;
         //자기 머리위에 보일 체력 상태창
         _multiMyStatus.UpdatePlayerHp();
-        //팀 체력 상태창       
-        
+        //팀 체력 상태창      
         _multiTeamstatus.UpdatePlayerHp();
         //자신 체력 메인 UI 체력상태창
         MultiScene.Instance.multiPlayerHealthBar.UpdatePlayerHp();

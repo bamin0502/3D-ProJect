@@ -48,8 +48,8 @@ public class MultiMeleeWeaponController : MonoBehaviour
         
         _isAttack = true;
 
-        _playerMovement.ChangedState(PlayerState.HammerAttackIdle);
-        MultiScene.Instance.BroadCastingAnimation((int)PlayerState.HammerAttackIdle);
+        _playerMovement.ChangedState(PlayerState.Idle);
+        MultiScene.Instance.BroadCastingAnimation((int)PlayerState.Idle);
 
         var weaponInterval = currentWeapon.attackInterval;
         var weaponType = currentWeapon.weaponType;

@@ -24,7 +24,7 @@ public class MultiScene : MonoBehaviour
 {
     public static MultiScene Instance;
     
-    private readonly Dictionary<string, GameObject> _players = new ();
+    public readonly Dictionary<string, GameObject> _players = new ();
     [HideInInspector] public List<GameObject> weaponsList; //무기 객체들
     [HideInInspector] public List<GameObject> enemyList; //적 객체들
     [HideInInspector] public List<GameObject> itemsList; //아이템 객체들
@@ -51,13 +51,24 @@ public class MultiScene : MonoBehaviour
     public TextMeshProUGUI playerMyNameText; //자신 머리위에 닉네임 표시할거 전용 닉네임 텍스트
     public GameObject playerMyStatus; //자신 머리위에 닉네임 표시할거 전용 프리팹
     public Canvas playerMyCanvas; //자신 머리위에 닉네임 표시할거 전용 캔버스
-
     [HideInInspector] public ThrownWeaponController currentThrownWeaponController;
+    public MultiPlayerHealthBar multiPlayerHealthBar;
+    //스폰시킬 위치 지정
+    public GameObject myuiHpCanvas;
+    //스폰시킬 체력 프리팹 
+    public GameObject myuiHpPrefab;
     
-    
-        
     public Image[] skillImages;
-    
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            
+        }
+    }
+
     private void Start()
     {
         Instance = this;
@@ -106,7 +117,7 @@ public class MultiScene : MonoBehaviour
                 pickItem.actionText = itemUsedText;
                 pickItem.inventory = inventory;
                 //개인 체력바 관련
-
+                multiPlayerHealthBar.CreateUiStatus();
                 //스페이스바 관련
                 multiPlayer.coolText = coolText;
                 multiPlayer.spaceUI = spaceUI;

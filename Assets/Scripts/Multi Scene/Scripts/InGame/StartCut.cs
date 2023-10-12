@@ -8,6 +8,7 @@ public class StartCut : MonoBehaviour
 {
     public PlayableDirector _playableDirector;
     public TimelineAsset FirstCut;
+    public ParticleSystem BossEffect;
     private void Awake()
     {
         _playableDirector = GetComponent<PlayableDirector>();
@@ -23,6 +24,8 @@ public class StartCut : MonoBehaviour
 
         // 컷신 종료 이벤트 핸들러 등록
         _playableDirector.stopped += OnCutsceneEnd;
+        _playableDirector.paused += PlayEffect;
+        _playableDirector.played += StopEffect;
     }
 
     void Update()
@@ -38,5 +41,14 @@ public class StartCut : MonoBehaviour
     {
         // BGM을 다시 재생
         SoundManager.instance.bgmAudioSource.Play();
+    }
+
+    public void PlayEffect(PlayableDirector director)
+    {
+        BossEffect.Play();
+    }
+    public void StopEffect(PlayableDirector director)
+    {
+        BossEffect.Stop();
     }
 }

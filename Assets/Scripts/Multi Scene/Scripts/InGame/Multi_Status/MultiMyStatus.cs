@@ -14,6 +14,7 @@ public class MultiMyStatus : MonoBehaviour
 
     private MultiPlayerHealth _playerHealth;
     private Quaternion rotation = new (0, 0, 0, 0);
+    
     public void CreateMyStatus(string myPlayerName, Vector3 playerPosition)
     {
         // 각 캐릭터마다 자신만의 UI 요소를 생성하고 위치를 조정
@@ -24,7 +25,7 @@ public class MultiMyStatus : MonoBehaviour
         teamStatus.mynameText = nameStatus.GetComponentInChildren<TextMeshProUGUI>();
         teamStatus.mynameText.text = myplayerName;
         //플레이어 체력 관련
-        GameObject player = GameObject.Find(myPlayerName);
+        MultiScene.Instance._players.TryGetValue(MultiScene.Instance.currentUser, out var player);
         _playerHealth = player.GetComponent<MultiPlayerHealth>();
         if (_playerHealth != null)
         {
@@ -59,9 +60,9 @@ public class MultiMyStatus : MonoBehaviour
         }
     }
 
-    public static void UpdatePlayerHp()
+    public void UpdatePlayerHp()
     {
-        playerHpImage.fillAmount = (float)MultiPlayerHealth.CurrentHealth / MultiPlayerHealth.MaxHealth;    
+        playerHpImage.fillAmount = (float)_playerHealth.CurrentHealth / _playerHealth.MaxHealth;    
     }
     void Awake()
     {

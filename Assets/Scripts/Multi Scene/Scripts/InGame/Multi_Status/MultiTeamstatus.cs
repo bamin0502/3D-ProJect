@@ -13,12 +13,18 @@ public class MultiTeamstatus : MonoBehaviour
     public GameObject statusbar;
 
     private MultiPlayerHealth _playerHealth;
+    
+    public void Awake()
+    {
+        gridLayoutGroup = GameObject.Find("Team Status Image").GetComponent<GridLayoutGroup>();
+
+    }
 
     public void CreateTeamStatus(string PlayerName)
-    {
+    {   
         GameObject teamStatusObject = Instantiate(statusbar, gridLayoutGroup.transform);
         MultiTeamstatus teamStatus = teamStatusObject.GetComponent<MultiTeamstatus>();
-        GameObject player = GameObject.Find(playerName);
+        MultiScene.Instance._players.TryGetValue(MultiScene.Instance.currentUser, out var player);
         _playerHealth = player.GetComponent<MultiPlayerHealth>();
         if (_playerHealth != null)
         {
@@ -44,13 +50,9 @@ public class MultiTeamstatus : MonoBehaviour
             }
         }
     }
-    public static void UpdatePlayerHp()
+    public void UpdatePlayerHp()
     {
-        playerHpImage.fillAmount = (float)MultiPlayerHealth.CurrentHealth / MultiPlayerHealth.MaxHealth;    
+        playerHpImage.fillAmount = (float)_playerHealth.CurrentHealth / _playerHealth.MaxHealth;    
     }
-    public void Awake()
-    {   
-        gridLayoutGroup = GameObject.Find("Team Status Image").GetComponent<GridLayoutGroup>();
-
-    }
+    
 }

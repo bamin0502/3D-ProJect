@@ -9,8 +9,8 @@ using UnityEngine.UI;
 
 public class MultiPlayerHealth : MonoBehaviour
 {
-    public static int MaxHealth;
-    public static int CurrentHealth;
+    public int MaxHealth;
+    public int CurrentHealth;
    
     public TMP_Text deathText;
     public Image endingImage;
@@ -23,6 +23,9 @@ public class MultiPlayerHealth : MonoBehaviour
 
     private static readonly int DoDie = Animator.StringToHash("doDie");
 
+    private MultiMyStatus _multiMyStatus;
+
+    private MultiTeamstatus _multiTeamstatus;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,23 +33,27 @@ public class MultiPlayerHealth : MonoBehaviour
         PlayerStat playerStat = JsonConvert.DeserializeObject<PlayerStat>(json);
         MaxHealth = (int)playerStat.PlayerHealth;
         CurrentHealth = (int)playerStat.Health;
+        _multiMyStatus = GetComponent<MultiMyStatus>();
+        _multiTeamstatus = GetComponent<MultiTeamstatus>();
+        MultiScene.Instance.multiPlayerHealthBar.UpdatePlayerHp();
     }
-
+    
     void Awake()
     {
-        endingImage.rectTransform.gameObject.SetActive(false);
-        killedImage.rectTransform.gameObject.SetActive(false);
+        //endingImage.rectTransform.gameObject.SetActive(false);
+        //killedImage.rectTransform.gameObject.SetActive(false);
     }
 
     public void TakeDamage(int damage)
     {
         CurrentHealth -= damage;
         //자기 머리위에 보일 체력 상태창
-        MultiMyStatus.UpdatePlayerHp();
-        //팀 체력 상태창
-        MultiTeamstatus.UpdatePlayerHp();
+        _multiMyStatus.UpdatePlayerHp();
+        //팀 체력 상태창       
+        
+        _multiTeamstatus.UpdatePlayerHp();
         //자신 체력 메인 UI 체력상태창
-        MultiPlayerHealthBar.UpdatePlayerHp();
+        MultiScene.Instance.multiPlayerHealthBar.UpdatePlayerHp();
         if (CurrentHealth <= 0)
         {
             Die();

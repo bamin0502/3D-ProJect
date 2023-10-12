@@ -21,9 +21,6 @@ public enum DataType
     EnemyTest=7,
     
 }
-
-
-
 public class MultiScene : MonoBehaviour
 {
     public static MultiScene Instance;
@@ -60,15 +57,7 @@ public class MultiScene : MonoBehaviour
     public GameObject playerMyStatus; //자신 머리위에 닉네임 표시할거 전용 프리팹
     public Canvas playerMyCanvas; //자신 머리위에 닉네임 표시할거 전용 캔버스
     [HideInInspector] public ThrownWeaponController currentThrownWeaponController;
-
     public MultiPlayerHealthBar multiPlayerHealthBar;
-
-    //스폰시킬 위치 지정
-    public GameObject myuiHpCanvas;
-
-    //스폰시킬 체력 프리팹 
-    public GameObject myuiHpPrefab;
-
     public Image[] skillImages;
 
     private void Awake()
@@ -213,7 +202,6 @@ public class MultiScene : MonoBehaviour
         string sendData = LitJson.JsonMapper.ToJson(data);
         NetGameManager.instance.RoomBroadcast(sendData);
     }
-
     public void BroadCastingHpPlayer(int index, int health = 2000, int playerHealth = 2000)
     {
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(
@@ -230,8 +218,6 @@ public class MultiScene : MonoBehaviour
         string sendData = LitJson.JsonMapper.ToJson(data);
         NetGameManager.instance.RoomBroadcast(sendData);
     }
-
-
     public void BroadCastingThrowWeapon(Vector3 mousePos, Vector3 playerPos)
     {
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(

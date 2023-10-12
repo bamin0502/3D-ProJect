@@ -8,16 +8,13 @@ public class LoadingSceneManager : MonoBehaviour
 {
     public static string nextScene;
     [SerializeField] Image ProgressBar;
-    [SerializeField] TMP_Text ProgressText;
-    [SerializeField] string[] sentences;
-    [SerializeField] float textDelay = 3.0f;
-
-    private int currentSentenceIndex = 0;
-
+    [SerializeField] Image OtherImage;
+    [SerializeField] float fillSpeed = 0.1f;
+    [SerializeField] float otherImageFillSpeed = 0.2f;
+    private bool fillingOtherImage = true;
     void Start()
     {
         StartCoroutine(LoadScene());
-        StartCoroutine(DisPlaySentences());
     }
 
     public static void LoadScene(string sceneName)
@@ -45,6 +42,7 @@ public class LoadingSceneManager : MonoBehaviour
             float progress = Mathf.Lerp(ProgressBar.fillAmount, operation.progress, timer / timeToFill);
             ProgressBar.fillAmount = progress;
 
+            OtherImage.fillAmount = Mathf.Clamp01(OtherImage.fillAmount + (fillSpeed * Time.deltaTime));
             if (ProgressBar.fillAmount >= targetFillAmount)
             {
                 // ProgressBar가 목표치에 도달하면 나머지 시간을 기다린 후 씬 전환
@@ -53,17 +51,27 @@ public class LoadingSceneManager : MonoBehaviour
                     operation.allowSceneActivation = true;
                     yield break;
                 }
+                if (fillingOtherImage)
+                {
+                    OtherImage.fillAmount += otherImageFillSpeed * Time.deltaTime;
+                    // OtherImage가 1에 도달하면 빠르게 비우도록 상태 변경
+                    if (OtherImage.fillAmount >= 1.0f)
+                    {
+                        fillingOtherImage = false;
+                        OtherImage.fillAmount = 1.0f; // 최대로 채운 후 빠르게 비우도록
+                    }
+                }
+                else
+                {
+                    OtherImage.fillAmount -= otherImageFillSpeed * Time.deltaTime;
+                    // OtherImage가 0에 도달하면 다시 채우도록 상태 변경
+                    if (OtherImage.fillAmount <= 0.0f)
+                    {
+                        fillingOtherImage = true;
+                        OtherImage.fillAmount = 0.0f; // 최저로 비운 후 빠르게 채우도록
+                    }
+                }
             }
-        }
-    }
-    IEnumerator DisPlaySentences()
-    {
-        while (currentSentenceIndex < sentences.Length)
-        {
-            int randomIndex = Random.Range(0, sentences.Length);
-            ProgressText.text = sentences[randomIndex];
-            currentSentenceIndex++;
-            yield return new WaitForSeconds(textDelay);
         }
     }
 }

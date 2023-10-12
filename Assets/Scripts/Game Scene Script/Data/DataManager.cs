@@ -87,7 +87,6 @@ namespace Data
         public string itemName;  // 아이템의 이름(Key값으로 사용할 것)
         private Weapon weapon;
         public MeleeWeapon meleeWeapon;
-        [SerializeField] private ThrownWeaponController thrownWeaponController;
         #endregion
 
         #region 32바이트 암호화키
@@ -300,8 +299,11 @@ namespace Data
             Itemdata itemdata = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
             WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
             EnemyStat enemyStat = LoadFromJsonEncrypted<EnemyStat>("EnemyStat1.json");
+
             if (_item.itemType == Item.ItemType.Throw)
             {
+                var thrownWeaponController = MultiScene.Instance.currentThrownWeaponController;
+                
                 if (!thrownWeaponController.isGrenadeMode)
                 {
                     thrownWeaponController.isGrenadeMode = true;

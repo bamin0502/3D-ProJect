@@ -24,7 +24,8 @@ public class ThrownWeaponController : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0))
             {
-                ThrowGrenade();
+                MultiScene.Instance.BroadCastingThrowWeapon(GetMousePositionOnGround(), transform.position);
+                ThrowGrenade(GetMousePositionOnGround(), transform.position);
                 isGrenadeMode = false;
                 throwRangeIndicator.SetActive(false);
                 damageRangeIndicator.SetActive(false);
@@ -33,14 +34,13 @@ public class ThrownWeaponController : MonoBehaviour
         }
     }
 
-    void ThrowGrenade()
+    public void ThrowGrenade(Vector3 mousePosition, Vector3 playerPos)
     {
-        Vector3 mousePosition = GetMousePositionOnGround();
-        float distanceToMouse = Vector3.Distance(mousePosition, transform.position);
+        float distanceToMouse = Vector3.Distance(mousePosition, playerPos);
         
         if (distanceToMouse > maxThrowRange)
         {
-            var position = transform.position;
+            var position = playerPos;
             Vector3 directionToMouse = (mousePosition - position).normalized;
             mousePosition = position + directionToMouse * maxThrowRange;
             distanceToMouse = maxThrowRange;
@@ -84,7 +84,7 @@ public class ThrownWeaponController : MonoBehaviour
         var transform1 = transform;
         var position1 = transform1.position;
         throwRangeIndicator.transform.position =
-            new Vector3(position1.x, 0.01f, position1.z);
+            new Vector3(position1.x, mousePosition.y + 0.02f, position1.z);
         throwRangeIndicator.transform.localScale =
             new Vector3(maxThrowRange * 2, 0.001f,
                 maxThrowRange * 2);
@@ -92,7 +92,7 @@ public class ThrownWeaponController : MonoBehaviour
         float damageRadius = grenadePrefab.GetComponent<ThrownWeapon>().explosionRadius;
         
         damageRangeIndicator.transform.position =
-            new Vector3(mousePosition.x, 0.02f, mousePosition.z);
+            new Vector3(mousePosition.x, mousePosition.y + 0.02f, mousePosition.z);
         damageRangeIndicator.transform.localScale =
             new Vector3(damageRadius * 2, 0.001f,
                 damageRadius * 2);

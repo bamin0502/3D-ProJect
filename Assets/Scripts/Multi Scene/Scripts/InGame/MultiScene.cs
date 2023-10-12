@@ -38,6 +38,8 @@ public class MultiScene : MonoBehaviour
     public TextMeshProUGUI playerMyNameText; //자신 머리위에 닉네임 표시할거 전용 닉네임 텍스트
     public GameObject playerMyStatus; //자신 머리위에 닉네임 표시할거 전용 프리팹
     public Canvas playerMyCanvas; //자신 머리위에 닉네임 표시할거 전용 캔버스
+
+    [HideInInspector] public ThrownWeaponController currentThrownWeaponController;
     
     
         
@@ -84,6 +86,7 @@ public class MultiScene : MonoBehaviour
             if (newPlayerName.Equals(currentUser))
             {
                 //만약 현재 유저일경우 실행시킬 것들
+                newPlayer.TryGetComponent(out ThrownWeaponController thrownWeaponController);
                 newPlayer.TryGetComponent(out MultiItemDropController pickItem);
                 newPlayer.TryGetComponent(out MultiPlayerHealth playerHealth);
                 //아이템 드랍 관련
@@ -101,6 +104,8 @@ public class MultiScene : MonoBehaviour
                 cineCam.GetRig(1).LookAt = newPlayer.transform;
                 playerCamera.player = newPlayer.transform;
                 multiPlayer._camera = playerCamera.mainCamera;
+                thrownWeaponController._cam = playerCamera.mainCamera;
+                currentThrownWeaponController = thrownWeaponController;
             }
 
         }
@@ -195,6 +200,11 @@ public class MultiScene : MonoBehaviour
                 int weaponIndex = Convert.ToInt32(jData["WEAPON_INDEX"].ToString());
                 user.GetComponent<MultiWeaponController>().PickWeapon(weaponIndex);
                 break;
+            case 6:
+                string playerPosition = jData["PLAYER_POSITION"].ToString();
+                string mousePosition = jData["MOUSE_POSITION"].ToString();
+                user.GetComponent<ThrownWeaponController>().ThrowGrenade(StringToVector(mousePosition),StringToVector(playerPosition));
+                break;
             
         }
     }
@@ -278,6 +288,23 @@ public class MultiScene : MonoBehaviour
             DATA = 5,
             HEALTH = health,
             PlayerHealth = playerHealth,
+        };
+
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
+    }
+
+    public void BroadCastingThrowWeapon(Vector3 mousePos, Vector3 playerPos)
+    {
+        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+            NetGameManager.instance.m_userHandle.m_szUserID);
+
+        var data = new THROW_ATTACK
+        {
+            USER = userSession.m_szUserID,
+            DATA = 6,
+            PLAYER_POSITION = VectorToString(playerPos),
+            MOUSE_POSITION = VectorToString(mousePos),
         };
 
         string sendData = LitJson.JsonMapper.ToJson(data);

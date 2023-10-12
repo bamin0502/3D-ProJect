@@ -16,5 +16,6 @@ MonoBehaviour:
   itemName: "\uD654\uC5FC\uBCD1"
   itemType: 1
   itemImage: {fileID: 21300000, guid: d0d37d51dce2a3f479061660c56727a0, type: 3}
-  itemPrefab: {fileID: 0}
-  weaponType: 
+  itemPrefab: {fileID: 2754795323997618879, guid: 35e0c0da8e5223b4cac2dd4e75d0d38d, type: 3}
+  cooldownTime: 0
+  weaponType: Throw

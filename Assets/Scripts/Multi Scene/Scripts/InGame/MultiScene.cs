@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
+
 public enum DataType
 {
     PlayerAnimation = 1,
@@ -25,7 +26,7 @@ public class MultiScene : MonoBehaviour
 {
     public static MultiScene Instance;
 
-    private readonly Dictionary<string, GameObject> _players = new();
+    public readonly Dictionary<string, GameObject> _players = new();
     [HideInInspector] public List<GameObject> weaponsList; //무기 객체들
     [HideInInspector] public List<GameObject> enemyList; //적 객체들
     [HideInInspector] public List<GameObject> itemsList; //아이템 객체들
@@ -139,6 +140,168 @@ public class MultiScene : MonoBehaviour
 
         }
     }
+public void BroadCastingAnimation(int animationNumber, bool isTrigger = false)
+{
+    UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+        NetGameManager.instance.m_userHandle.m_szUserID);
+
+    var data = new PLAYER_ANIMATION
+    {
+        USER = userSession.m_szUserID,
+        DATA = (int)DataType.PlayerAnimation,
+        ANI_NUM = animationNumber,
+        ANI_TYPE = isTrigger,
+    };
+
+    string sendData = LitJson.JsonMapper.ToJson(data);
+    NetGameManager.instance.RoomBroadcast(sendData);
+}
+
+public void BroadCastingMovement(Vector3 destination, int target = -99)
+{
+    UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+        NetGameManager.instance.m_userHandle.m_szUserID);
+
+    var data = new PLAYER_MOVE
+    {
+        USER = userSession.m_szUserID,
+        DATA = (int)DataType.PlayerMovement,
+        POSITION = VectorToString(destination),
+        TARGET = target,
+    };
+
+    string sendData = LitJson.JsonMapper.ToJson(data);
+    NetGameManager.instance.RoomBroadcast(sendData);
+}
+
+public void BroadCastingPickItem(int index, int itemCount = 1)
+{
+    UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+        NetGameManager.instance.m_userHandle.m_szUserID);
+
+    var data = new PLAYER_ITEM
+    {
+        USER = userSession.m_szUserID,
+        DATA = (int)DataType.PlayerPickItem,
+        ITEM_INDEX = index,
+        ITEM_COUNT = itemCount,
+    };
+
+    string sendData = LitJson.JsonMapper.ToJson(data);
+    NetGameManager.instance.RoomBroadcast(sendData);
+}
+
+public void BroadCastingPickWeapon(int index)
+{
+    UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+        NetGameManager.instance.m_userHandle.m_szUserID);
+
+    var data = new PLAYER_WEAPON
+    {
+        USER = userSession.m_szUserID,
+        DATA = (int)DataType.PlayerPickWeapon,
+        WEAPON_INDEX = index,
+    };
+
+    string sendData = LitJson.JsonMapper.ToJson(data);
+    NetGameManager.instance.RoomBroadcast(sendData);
+}
+
+public void BroadCastingHpPlayer(int index, int health = 2000, int playerHealth = 2000)
+{
+    UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+        NetGameManager.instance.m_userHandle.m_szUserID);
+
+    var data = new PLAYER_STATUS
+    {
+        USER = userSession.m_szUserID,
+        DATA = (int)DataType.PlayerHpPlayer,
+        HEALTH = health,
+        PlayerHealth = playerHealth,
+    };
+
+    string sendData = LitJson.JsonMapper.ToJson(data);
+    NetGameManager.instance.RoomBroadcast(sendData);
+}
+
+
+public void BroadCastingThrowWeapon(Vector3 mousePos, Vector3 playerPos)
+{
+    UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+        NetGameManager.instance.m_userHandle.m_szUserID);
+
+    var data = new THROW_ATTACK
+    {
+        USER = userSession.m_szUserID,
+        DATA = (int)DataType.PlayerThrownWeapon,
+        PLAYER_POSITION = VectorToString(playerPos),
+        MOUSE_POSITION = VectorToString(mousePos),
+    };
+
+    string sendData = LitJson.JsonMapper.ToJson(data);
+    NetGameManager.instance.RoomBroadcast(sendData);
+}
+
+
+
+    public void BroadCastingMonsterSpawn(int index,Vector3 destination){
+    UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+        NetGameManager.instance.m_userHandle.m_szUserID);
+    var data = new MONSTER_SPAWN
+    {
+            
+        DATA = 7,
+        MONSTER_CODE = index,
+        POSITION = VectorToString(destination)
+            
+    };
+}
+public void BroadCastingMonsterAnimation(int index, int aniNum, bool flag)
+{
+    UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+        NetGameManager.instance.m_userHandle.m_szUserID);
+    var data = new ENEMY_ANIMATION
+    {
+        USER = userSession.m_szUserID,
+        DATA = 6,
+        MONSTER_INDEX = index,
+        ANI_NUM = aniNum,
+        ANI_TYPE = flag,
+    };
+        
+    string sendData = LitJson.JsonMapper.ToJson(data);
+    NetGameManager.instance.RoomBroadcast(sendData);
+
+}
+
+private void Update()
+{
+    if (Input.GetKeyDown(KeyCode.M))
+    {
+        foreach (GameObject enemy in MultiScene.Instance.enemyList)
+        {
+            enemy.TryGetComponent<EnemyTest>(out var e);
+            if(e != null) e.StartDetect();
+        }
+    }
+}
+
+
+public void RoomUserDel(UserSession user)
+{
+        
+    if (_players.TryGetValue(user.m_szUserID, out GameObject toDestroy))
+    {
+        _players.Remove(user.m_szUserID);
+        Destroy(toDestroy);
+        MultiTeamstatus teamStatus = statusbar.GetComponent<MultiTeamstatus>();
+        teamStatus.DestroyTeamStatus(user.m_szUserID);
+     
+    }
+
+
+
+}
 
     private void SetAllList()
     {
@@ -183,247 +346,81 @@ public class MultiScene : MonoBehaviour
         return result;
     }
 
-    // public void RoomBroadcast(string szData)
-    // {
-    //     //모든 유저에게 정보 전달
-    //     LitJson.JsonData jData = LitJson.JsonMapper.ToObject(szData);
-    //     string userID = jData["USER"].ToString();
-    //     int dataID = Convert.ToInt32(jData["DATA"].ToString());
-    //
-    //     if (currentUser.Equals(userID)) return;
-    //     _players.TryGetValue(userID, out var user);
-    //     if (user == null) return;
-    //
-    //     switch (dataID)
-    //     {
-    //         case (int)DataType.PlayerAnimation:
-    //             int aniNum = Convert.ToInt32(jData["ANI_NUM"].ToString());
-    //             bool aniType = Convert.ToBoolean(jData["ANI_TYPE"].ToString());
-    //
-    //             if (aniType == false)
-    //             {
-    //                 user.GetComponent<MultiPlayerMovement>().ChangedState((PlayerState)aniNum);
-    //             }
-    //             else
-    //             {
-    //                 int BowAttack = Animator.StringToHash("BowAttack");
-    //                 user.TryGetComponent<MultiMeleeWeaponController>(out var userBowAttack);
-    //                 if (aniNum == BowAttack) userBowAttack.CoroutineArrow();
-    //                 user.GetComponent<MultiPlayerMovement>().SetAnimationTrigger(aniNum);
-    //             }
-    //
-    //             break;
-    //         case (int)DataType.PlayerMovement:
-    //             user.TryGetComponent<MultiPlayerMovement>(out var userMove2);
-    //             user.TryGetComponent<MultiWeaponController>(out var userAttack);
-    //             int target = Convert.ToInt32(jData["TARGET"].ToString());
-    //
-    //             if (target <= -1)
-    //             {
-    //                 userAttack.ClearTarget();
-    //                 userMove2.navAgent.SetDestination(StringToVector(jData["POSITION"].ToString()));
-    //             }
-    //             else
-    //             {
-    //                 userAttack.SetTarget(target);
-    //                 userMove2.navAgent.SetDestination(StringToVector(jData["POSITION"].ToString()));
-    //             }
-    //
-    //             break;
-    //         //플레이어 아이템 드랍 관련 테스트 필요
-    //         case (int)DataType.PlayerPickItem:
-    //             int index = Convert.ToInt32(jData["ITEM_INDEX"].ToString());
-    //             Destroy(itemsList[index]);
-    //             break;
-    //         case (int)DataType.PlayerPickWeapon:
-    //             int weaponIndex = Convert.ToInt32(jData["WEAPON_INDEX"].ToString());
-    //             user.GetComponent<MultiWeaponController>().PickWeapon(weaponIndex);
-    //             break;
-    //
-    //         case (int)DataType.PlayerThrownWeapon:
-    //             string playerPosition = jData["PLAYER_POSITION"].ToString();
-    //             string mousePosition = jData["MOUSE_POSITION"].ToString();
-    //             user.GetComponent<ThrownWeaponController>().ThrowGrenade(StringToVector(mousePosition),StringToVector(playerPosition));
-    //         case 6:
-    //             int monsterIndex = Convert.ToInt32(jData["MONSTER_INDEX"].ToString());
-    //             int aniNumber = Convert.ToInt32(jData["ANI_NUM"].ToString());
-    //             bool monsterAniType = Convert.ToBoolean(jData["ANI_TYPE"].ToString());
-    //             enemyList[monsterIndex].TryGetComponent<Enemy>(out var e);
-    //             e.anim.SetBool(aniNumber, monsterAniType);
-    //             break;
-    //         case 7:
-    //             int monstercode = Convert.ToInt32(jData["MONSTER_INDEX"].ToString());
-    //             
-    //
-    //             break;
-    //         
-    //
-    //     }
-    // }
-
-    #region 브로드캐스팅 관련
-
-    public void BroadCastingAnimation(int animationNumber, bool isTrigger = false)
+    public void RoomBroadcast(string szData)
     {
-        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
-            NetGameManager.instance.m_userHandle.m_szUserID);
-
-        var data = new PLAYER_ANIMATION
-        {
-            USER = userSession.m_szUserID,
-            DATA = (int)DataType.PlayerAnimation,
-            ANI_NUM = animationNumber,
-            ANI_TYPE = isTrigger,
-        };
-
-        string sendData = LitJson.JsonMapper.ToJson(data);
-        NetGameManager.instance.RoomBroadcast(sendData);
-    }
-
-    public void BroadCastingMovement(Vector3 destination, int target = -99)
-    {
-        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
-            NetGameManager.instance.m_userHandle.m_szUserID);
-
-        var data = new PLAYER_MOVE
-        {
-            USER = userSession.m_szUserID,
-            DATA = (int)DataType.PlayerMovement,
-            POSITION = VectorToString(destination),
-            TARGET = target,
-        };
-
-        string sendData = LitJson.JsonMapper.ToJson(data);
-        NetGameManager.instance.RoomBroadcast(sendData);
-    }
-
-    public void BroadCastingPickItem(int index, int itemCount = 1)
-    {
-        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
-            NetGameManager.instance.m_userHandle.m_szUserID);
-
-        var data = new PLAYER_ITEM
-        {
-            USER = userSession.m_szUserID,
-            DATA = (int)DataType.PlayerPickItem,
-            ITEM_INDEX = index,
-            ITEM_COUNT = itemCount,
-        };
-
-        string sendData = LitJson.JsonMapper.ToJson(data);
-        NetGameManager.instance.RoomBroadcast(sendData);
-    }
-
-    public void BroadCastingPickWeapon(int index)
-    {
-        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
-            NetGameManager.instance.m_userHandle.m_szUserID);
-
-        var data = new PLAYER_WEAPON
-        {
-            USER = userSession.m_szUserID,
-            DATA = (int)DataType.PlayerPickWeapon,
-            WEAPON_INDEX = index,
-        };
-
-        string sendData = LitJson.JsonMapper.ToJson(data);
-        NetGameManager.instance.RoomBroadcast(sendData);
-    }
-
-    public void BroadCastingHpPlayer(int index, int health = 2000, int playerHealth = 2000)
-    {
-        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
-            NetGameManager.instance.m_userHandle.m_szUserID);
-
-        var data = new PLAYER_STATUS
-        {
-            USER = userSession.m_szUserID,
-            DATA = (int)DataType.PlayerHpPlayer,
-            HEALTH = health,
-            PlayerHealth = playerHealth,
-        };
-
-        string sendData = LitJson.JsonMapper.ToJson(data);
-        NetGameManager.instance.RoomBroadcast(sendData);
-    }
-
-
-    public void BroadCastingThrowWeapon(Vector3 mousePos, Vector3 playerPos)
-    {
-        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
-            NetGameManager.instance.m_userHandle.m_szUserID);
-
-        var data = new THROW_ATTACK
-        {
-            USER = userSession.m_szUserID,
-            DATA = (int)DataType.PlayerThrownWeapon,
-            PLAYER_POSITION = VectorToString(playerPos),
-            MOUSE_POSITION = VectorToString(mousePos),
-        };
-
-        string sendData = LitJson.JsonMapper.ToJson(data);
-        NetGameManager.instance.RoomBroadcast(sendData);
-    }
-
-    #endregion
-
-    public void BroadCastingMonsterSpawn(int index,Vector3 destination)
-    {
-        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
-            NetGameManager.instance.m_userHandle.m_szUserID);
-        var data = new MONSTER_SPAWN
-        {
+        //모든 유저에게 정보 전달
+        LitJson.JsonData jData = LitJson.JsonMapper.ToObject(szData);
+        string userID = jData["USER"].ToString();
+        int dataID = Convert.ToInt32(jData["DATA"].ToString());
+    
+        if (currentUser.Equals(userID)) return;
+        _players.TryGetValue(userID, out var user);
+        if (user == null) return;
+    
+        // switch (dataID)
+        // {
+        //     case (int)DataType.PlayerAnimation:
+        //         int aniNum = Convert.ToInt32(jData["ANI_NUM"].ToString());
+        //         bool aniType = Convert.ToBoolean(jData["ANI_TYPE"].ToString());
+        //
+        //         if (aniType == false)
+        //         {
+        //             user.GetComponent<MultiPlayerMovement>().ChangedState((PlayerState)aniNum);
+        //         }
+        //         else
+        //         {
+        //             int BowAttack = Animator.StringToHash("BowAttack");
+        //             user.TryGetComponent<MultiMeleeWeaponController>(out var userBowAttack);
+        //             if (aniNum == BowAttack) userBowAttack.CoroutineArrow();
+        //             user.GetComponent<MultiPlayerMovement>().SetAnimationTrigger(aniNum);
+        //         }
+        //
+        //         break;
+        //     case (int)DataType.PlayerMovement:
+        //         user.TryGetComponent<MultiPlayerMovement>(out var userMove2);
+        //         user.TryGetComponent<MultiWeaponController>(out var userAttack);
+        //         int target = Convert.ToInt32(jData["TARGET"].ToString());
+        //
+        //         if (target <= -1)
+        //         {
+        //             userAttack.ClearTarget();
+        //             userMove2.navAgent.SetDestination(StringToVector(jData["POSITION"].ToString()));
+        //         }
+        //         else
+        //         {
+        //             userAttack.SetTarget(target);
+        //             userMove2.navAgent.SetDestination(StringToVector(jData["POSITION"].ToString()));
+        //         }
+        //
+        //         break;
+        //     //플레이어 아이템 드랍 관련 테스트 필요
+        //     case (int)DataType.PlayerPickItem:
+        //         int index = Convert.ToInt32(jData["ITEM_INDEX"].ToString());
+        //         Destroy(itemsList[index]);
+        //         break;
+        //     case (int)DataType.PlayerPickWeapon:
+        //         int weaponIndex = Convert.ToInt32(jData["WEAPON_INDEX"].ToString());
+        //         user.GetComponent<MultiWeaponController>().PickWeapon(weaponIndex);
+        //         break;
+        //
+        //     case (int)DataType.PlayerThrownWeapon:
+        //         string playerPosition = jData["PLAYER_POSITION"].ToString();
+        //         string mousePosition = jData["MOUSE_POSITION"].ToString();
+        //         user.GetComponent<ThrownWeaponController>().ThrowGrenade(StringToVector(mousePosition),StringToVector(playerPosition));
+        //     case 6:
+        //         int monsterIndex = Convert.ToInt32(jData["MONSTER_INDEX"].ToString());
+        //         int aniNumber = Convert.ToInt32(jData["ANI_NUM"].ToString());
+        //         bool monsterAniType = Convert.ToBoolean(jData["ANI_TYPE"].ToString());
+        //         enemyList[monsterIndex].TryGetComponent<Enemy>(out var e);
+        //         e.anim.SetBool(aniNumber, monsterAniType);
+        //         break;
+        //     case 7:
+        //         int monstercode = Convert.ToInt32(jData["MONSTER_INDEX"].ToString());
+        //         
+        //
+        //         break;
             
-            DATA = 7,
-            MONSTER_CODE = index,
-            POSITION = VectorToString(destination)
-            
-        };
-    }
-    public void BroadCastingMonsterAnimation(int index, int aniNum, bool flag)
-    {
-        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
-            NetGameManager.instance.m_userHandle.m_szUserID);
-        var data = new ENEMY_ANIMATION
-        {
-            USER = userSession.m_szUserID,
-            DATA = 6,
-            MONSTER_INDEX = index,
-            ANI_NUM = aniNum,
-            ANI_TYPE = flag,
-        };
-        
-        string sendData = LitJson.JsonMapper.ToJson(data);
-        NetGameManager.instance.RoomBroadcast(sendData);
-
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            foreach (GameObject enemy in MultiScene.Instance.enemyList)
-            {
-                enemy.TryGetComponent<EnemyTest>(out var e);
-                if(e != null) e.StartDetect();
-            }
+    
         }
     }
 
-
-    public void RoomUserDel(UserSession user)
-    {
-        
-        if (_players.TryGetValue(user.m_szUserID, out GameObject toDestroy))
-        {
-            _players.Remove(user.m_szUserID);
-            Destroy(toDestroy);
-            MultiTeamstatus teamStatus = statusbar.GetComponent<MultiTeamstatus>();
-            teamStatus.DestroyTeamStatus(user.m_szUserID);
-     
-        }
-
-
-
-    }
-}

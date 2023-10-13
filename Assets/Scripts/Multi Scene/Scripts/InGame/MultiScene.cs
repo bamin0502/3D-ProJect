@@ -106,7 +106,7 @@ public class MultiScene : MonoBehaviour
             myStatus.mynameText = playerMyNameText;
             myStatus.mynameStatusPrefab = playerMyStatus;
             myStatus.mystatus = playerMyCanvas;
-
+            multiPlayerHealthBar.CreateUiStatus(newPlayerName);
             myStatus.CreateMyStatus(newPlayerName, playerMyCanvas.transform.position);
             if (newPlayerName.Equals(currentUser))
             {
@@ -118,7 +118,7 @@ public class MultiScene : MonoBehaviour
                 pickItem.actionText = itemUsedText;
                 pickItem.inventory = inventory;
                 //개인 체력바 관련
-                multiPlayerHealthBar.CreateUiStatus();
+                
                 //스페이스바 관련
                 multiPlayer.coolText = coolText;
                 multiPlayer.spaceUI = spaceUI;

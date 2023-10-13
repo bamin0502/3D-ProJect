@@ -8,7 +8,6 @@ using UnityEngine.UI;
 public class MultiPlayerMovement : MonoBehaviour
 {
     //만든이: 임성훈
-
     private const float RotAnglePerSecond = 360f;
     private Vector3 _curTargetPos;
     

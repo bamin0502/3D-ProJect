@@ -24,8 +24,9 @@ public class MultiMyStatus : MonoBehaviour
         teamStatus.mynameText = nameStatus.GetComponentInChildren<TextMeshProUGUI>();
         teamStatus.mynameText.text = myplayerName;
         //플레이어 체력 관련
-        MultiScene.Instance._players.TryGetValue(MultiScene.Instance.currentUser, out var player);
-        _playerHealth = player.GetComponent<MultiPlayerHealth>();
+        
+        MultiScene.Instance._players.TryGetValue(myPlayerName,out var playerPrefab);
+        if (playerPrefab != null) _playerHealth = playerPrefab.GetComponent<MultiPlayerHealth>();
         if (_playerHealth != null)
         {
             Debug.Log(myPlayerName+ " 체력바 생성");

@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +12,7 @@ public class MultiMyStatus : MonoBehaviour
     public Canvas mystatus;
     public GameObject mynameStatusPrefab;
     private Camera _cam;
-
+    private bool isDestroyed = false;
     private MultiPlayerHealth _playerHealth;
     private Quaternion rotation = new (0, 0, 0, 0);
     
@@ -53,10 +54,9 @@ public class MultiMyStatus : MonoBehaviour
 
     private void Update()
     {
-        mystatus.transform.rotation = rotation;
-        if (mynameStatusPrefab == null)
+        if (!isDestroyed)
         {
-            return;
+            mystatus.transform.rotation = rotation;
         }
     }
 
@@ -69,5 +69,10 @@ public class MultiMyStatus : MonoBehaviour
         mystatus = GameObject.FindGameObjectWithTag("MyStatus").GetComponent<Canvas>();
         mynameStatusPrefab = Resources.Load<GameObject>("Mystatus");
         
+    }
+
+    private void OnDestroy()
+    {
+        isDestroyed = true;
     }
 }

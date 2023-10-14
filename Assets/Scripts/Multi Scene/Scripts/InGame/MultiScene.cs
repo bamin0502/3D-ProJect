@@ -62,6 +62,7 @@ public class MultiScene : MonoBehaviour
     [HideInInspector] public ThrownWeaponController currentThrownWeaponController;
     public MultiPlayerHealthBar multiPlayerHealthBar;
     public Image[] skillImages;
+    public TextMeshProUGUI skillText;
     
     public GameObject[] itemPrefabs;
     private bool _isMasterClient; //마스터 클라이언트

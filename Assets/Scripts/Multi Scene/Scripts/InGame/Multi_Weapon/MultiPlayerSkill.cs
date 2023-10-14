@@ -18,6 +18,7 @@ public class MultiPlayerSkill : MonoBehaviour
     private void Start()
     {
         _coolTimeImage = MultiScene.Instance.skillImages[3];
+        MultiScene.Instance.skillText.enabled = false;
         _playerMovement = GetComponent<MultiPlayerMovement>();
     }
 
@@ -72,7 +73,7 @@ public class MultiPlayerSkill : MonoBehaviour
     public void ChangeWeapon(int index)
     {
         _weapon = MultiScene.Instance.weaponsList[index].GetComponent<Weapon>();
-
+        MultiScene.Instance.skillText.enabled = true;
         switch (_weapon.weaponType)
         {
             case WeaponType.Bow:

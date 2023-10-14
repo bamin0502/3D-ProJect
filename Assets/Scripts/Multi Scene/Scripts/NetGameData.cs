@@ -105,6 +105,15 @@ public class ENEMY_ANIMATION
 }
 
 [Serializable]
+public class ENEMY_ITEM
+{
+    public string USER = "";
+    public int DATA = 0;
+    public int ITEM_INDEX = 0;
+    public string POSITION = "";
+}
+
+[Serializable]
 public class THROW_ATTACK //활 공격, 수류탄 공격에 사용
 {
     public string USER = "";

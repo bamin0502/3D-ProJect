@@ -48,12 +48,6 @@ public class Enemy : MonoBehaviour
     public float detectionRadius = 5f;
     public EnemyDamage EnemyDam;
     public EnemyType enemyType;
-    #region 아이템 드랍관련 변수 선언 - 제작자 방민호
-    //아이템 드랍 관련 
-    public GameObject[] itemPrefabs;
-    private bool hasDroppedItem = false; // 아이템이 이미 떨어진 상태인지 여부를 나타내는 변수
-    #endregion
-
     private Coroutine _playerDetect;
 
     private int _index;
@@ -179,8 +173,6 @@ public class Enemy : MonoBehaviour
                 anim.SetBool(IsAttack, false);
                 MultiScene.Instance.BroadCastingMonsterAnimation(_index,IsAttack, false);
                 StopCoroutine(attackCoroutine);
-                DropRandomItem();
-
             }
             return;
         }
@@ -212,31 +204,7 @@ public class Enemy : MonoBehaviour
         nav.SetDestination(origninalPosition);
         
     }
-    #region 랜덤 아이템 스폰 -제작자 방민호
-    private void DropRandomItem()
-    {
-        if (!hasDroppedItem && itemPrefabs.Length > 0)
-        {
-            StartCoroutine(DropRandomItemCoroutine());
-        }
-    }
-    private IEnumerator DropRandomItemCoroutine()
-    {
-        yield return new WaitForSeconds(1); // 몬스터가 사라진 후 일정 시간 대기
-
-        if (hasDroppedItem || itemPrefabs.Length == 0)
-        {
-            Debug.Log("아이템이 없거나 이미 아이템이 떨어졌습니다.");
-            yield break;
-        }
-        hasDroppedItem = true; // 아이템이 떨어진 상태로 변경
-
-        int randomIndex = Random.Range(0, itemPrefabs.Length); // 랜덤한 인덱스 선택
-        GameObject itemPrefab = itemPrefabs[randomIndex]; // 선택된 아이템 프리팹
-
-        Instantiate(itemPrefab, transform.position, Quaternion.identity);
-    }
-    #endregion
+    
     void Chase()
     {
          ChaseStart();

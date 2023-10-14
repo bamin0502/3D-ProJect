@@ -5,6 +5,7 @@ using Data;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
+using Unity.Mathematics;
 
 public enum EnemyType
 {
@@ -104,6 +105,11 @@ public class EnemyHealth : MonoBehaviour
     
     void EndDeath()
     {
+        int index = MultiScene.Instance.GetRandomInt(3);
+        var newItem = Instantiate(MultiScene.Instance.itemPrefabs[index], transform.position, quaternion.identity);
+        newItem.transform.SetParent(MultiScene.Instance.itemListParent);
+        MultiScene.Instance.itemsList.Add(newItem);
+        MultiScene.Instance.BroadCastingEnemyItem(transform.position, index);
         Destroy(gameObject);
     }
     void BossDeath()

@@ -5,9 +5,11 @@ using Data;
 using mino;
 using MNF;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 
 public enum DataType
@@ -19,6 +21,7 @@ public enum DataType
     PlayerHpPlayer = 5,
     PlayerThrownWeapon = 6,
     EnemyTest=7,
+    EnemyItem = 8,
     
 }
 public class MultiScene : MonoBehaviour
@@ -59,6 +62,9 @@ public class MultiScene : MonoBehaviour
     [HideInInspector] public ThrownWeaponController currentThrownWeaponController;
     public MultiPlayerHealthBar multiPlayerHealthBar;
     public Image[] skillImages;
+    
+    public GameObject[] itemPrefabs;
+    private bool _isMasterClient; //마스터 클라이언트
 
     private void Awake()
     {
@@ -74,6 +80,23 @@ public class MultiScene : MonoBehaviour
         Instance = this;
         SetUsers();
         SetAllList();
+        
+        //해당 방의 첫번째 유저를 마스터 클라이언트로 설정
+        _isMasterClient = NetGameManager.instance.m_userHandle.m_szUserID.Equals(NetGameManager.instance.m_roomSession
+            .m_userList[0].m_szUserID);
+    }
+
+    public int GetRandomInt(int range)
+    {
+        Debug.Log(_isMasterClient);
+        //랜덤한 int 값 생성
+        if (_isMasterClient)
+        {
+            int rnd = Random.Range(0, range);
+            return rnd;
+        }
+
+        return -1;
     }
 
     private void SetUsers()
@@ -152,6 +175,27 @@ public class MultiScene : MonoBehaviour
         string sendData = LitJson.JsonMapper.ToJson(data);
         NetGameManager.instance.RoomBroadcast(sendData);
     }
+
+    public void BroadCastingEnemyItem(Vector3 destination, int itemIndex = -99)
+    {
+        if (!_isMasterClient) return;
+        
+        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+            NetGameManager.instance.m_userHandle.m_szUserID);
+
+        var data = new ENEMY_ITEM
+        {
+            USER = userSession.m_szUserID,
+            DATA = (int)DataType.EnemyItem,
+            POSITION = VectorToString(destination),
+            ITEM_INDEX = itemIndex,
+        };
+
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
+    }
+    
+    
 
     public void BroadCastingMovement(Vector3 destination, int target = -99)
     {
@@ -234,9 +278,7 @@ public class MultiScene : MonoBehaviour
         string sendData = LitJson.JsonMapper.ToJson(data);
         NetGameManager.instance.RoomBroadcast(sendData);
     }
-
-
-
+    
     public void BroadCastingMonsterSpawn(int index, Vector3 destination)
     {
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(
@@ -291,11 +333,10 @@ public class MultiScene : MonoBehaviour
             Destroy(toDestroy);
             MultiTeamstatus teamStatus = statusbar.GetComponent<MultiTeamstatus>();
             teamStatus.DestroyTeamStatus(user.m_szUserID);
-
         }
 
-
-
+        _isMasterClient = NetGameManager.instance.m_userHandle.m_szUserID.Equals(NetGameManager.instance.m_roomSession
+            .m_userList[0].m_szUserID);
     }
 
     private void SetAllList()
@@ -409,11 +450,13 @@ public class MultiScene : MonoBehaviour
                 enemyList[monsterIndex].TryGetComponent<Enemy>(out var e);
                 e.anim.SetBool(aniNumber, monsterAniType);
                 break;
-            // case 7:
-            //     int monstercode = Convert.ToInt32(jData["MONSTER_INDEX"].ToString());
-            //     
-            //
-            //     break;
+            case (int)DataType.EnemyItem:
+                int itemIndex = Convert.ToInt32(jData["ITEM_INDEX"].ToString());
+                Vector3 enemyItemPos = StringToVector(jData["ITEM_INDEX"].ToString());
+                var newItem = Instantiate(itemPrefabs[itemIndex], enemyItemPos, quaternion.identity);
+                newItem.transform.SetParent(itemListParent);
+                itemsList.Add(newItem);
+                break;
         }
     }
 }

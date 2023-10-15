@@ -141,8 +141,6 @@ public class MultiScene : MonoBehaviour
                 //아이템 드랍 관련
                 pickItem.actionText = itemUsedText;
                 pickItem.inventory = inventory;
-                //개인 체력바 관련
-                
                 //스페이스바 관련
                 multiPlayer.coolText = coolText;
                 multiPlayer.spaceUI = spaceUI;

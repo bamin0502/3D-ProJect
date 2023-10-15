@@ -88,8 +88,7 @@ public class WEAPON_DAMAGE
 // box=0,green=1,red=2
 [Serializable]
 public class MONSTER_SPAWN
-{ 
-    
+{
     public int DATA = 0;
     public int MONSTER_CODE = 0;
     public string POSITION = "";

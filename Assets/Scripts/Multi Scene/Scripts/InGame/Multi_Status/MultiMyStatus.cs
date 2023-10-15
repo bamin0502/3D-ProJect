@@ -54,7 +54,7 @@ public class MultiMyStatus : MonoBehaviour
 
     private void Update()
     {
-        if (!isDestroyed)
+        if (!isDestroyed && mystatus != null)
         {
             mystatus.transform.rotation = rotation;
         }

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
 using Unity.Mathematics;
+using UnityEngine.AI;
 
 public enum EnemyType
 {
@@ -18,6 +19,7 @@ public enum EnemyType
 
 public class EnemyHealth : MonoBehaviour
 {
+    private NavMeshAgent _nav;
     public EnemyHealthBar enemyHealthBar;
     public int maxHealth;
     public int currentHealth;
@@ -34,6 +36,8 @@ public class EnemyHealth : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _nav = GetComponent<NavMeshAgent>();
+        
         string json = "";
 
         if (enemyType == EnemyType.Monster)
@@ -93,6 +97,7 @@ public class EnemyHealth : MonoBehaviour
         Debug.Log("Enemy died!");
         bool isEnemy = gameObject.TryGetComponent(out Enemy enemy);
         bool isBoss = gameObject.TryGetComponent(out Boss boss);
+        _nav.speed = 0;
         if (isEnemy)
         {
             enemy.isDead = true;

@@ -31,12 +31,14 @@ public class StartCut : MonoBehaviour
         {
             // 'Esc' 키를 누르면 컷신을 넘깁니다.
             _playableDirector.time = _playableDirector.duration;
-            SetEnemy();
+            StartCoroutine(SetEnemy());
         }  
     }
 
-    private void SetEnemy()
+    private IEnumerator SetEnemy()
     {
+        yield return new WaitForSeconds(1f);
+        
         foreach (GameObject enemy in MultiScene.Instance.enemyList)
         {
             enemy.TryGetComponent<MultiEnemy>(out var e);
@@ -50,6 +52,6 @@ public class StartCut : MonoBehaviour
     {
         // BGM을 다시 재생
         SoundManager.instance.bgmAudioSource.Play();
-        SetEnemy();
+        StartCoroutine(SetEnemy());
     }
 }

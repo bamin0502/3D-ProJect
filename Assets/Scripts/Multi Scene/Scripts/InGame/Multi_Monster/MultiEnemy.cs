@@ -84,6 +84,8 @@ public class MultiEnemy : MonoBehaviour
     {
         WaitForSeconds wait = new WaitForSeconds(0.5f);
         
+        yield return new WaitForSeconds(Random.Range(0f, 1f)); //코루틴 분산
+        
         while (true)
         {
             int players = Physics.OverlapSphereNonAlloc(transform.position, DetectionRadius, _targets, LayerMask.GetMask("Player"));
@@ -147,6 +149,8 @@ public class MultiEnemy : MonoBehaviour
     public IEnumerator TryAttack()
     {
         WaitForSeconds wait = new WaitForSeconds(1);
+        
+        yield return new WaitForSeconds(Random.Range(0f, 1f)); //코루틴 분산
         
         while (true)
         {

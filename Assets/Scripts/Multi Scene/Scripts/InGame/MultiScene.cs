@@ -20,7 +20,7 @@ public enum DataType
     PlayerPickWeapon = 4,
     PlayerHpPlayer = 5,
     PlayerThrownWeapon = 6,
-    EnemyTest=7,
+    EnemyAnimation=7,
     EnemyItem = 8,
     
 }
@@ -66,7 +66,8 @@ public class MultiScene : MonoBehaviour
     
     public GameObject[] itemPrefabs;
     private bool _isMasterClient; //마스터 클라이언트
-
+    private static readonly int AniEnemy = Animator.StringToHash("aniEnemy");
+    
     private void Awake()
     {
         if (Instance == null)
@@ -292,37 +293,24 @@ public class MultiScene : MonoBehaviour
         };
     }
 
-    public void BroadCastingMonsterAnimation(int index, int aniNum, bool flag)
+    public void BroadCastingEnemyAnimation(int index, int animationNumber, bool isTrigger = false)
     {
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(
             NetGameManager.instance.m_userHandle.m_szUserID);
+
         var data = new ENEMY_ANIMATION
         {
             USER = userSession.m_szUserID,
-            DATA = 6,
+            DATA = (int)DataType.EnemyAnimation,
             MONSTER_INDEX = index,
-            ANI_NUM = aniNum,
-            ANI_TYPE = flag,
+            ANI_NUM = animationNumber,
+            ANI_TYPE = isTrigger,
         };
 
         string sendData = LitJson.JsonMapper.ToJson(data);
         NetGameManager.instance.RoomBroadcast(sendData);
-
     }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            foreach (GameObject enemy in MultiScene.Instance.enemyList)
-            {
-                enemy.TryGetComponent<EnemyTest>(out var e);
-                if (e != null) e.StartDetect();
-            }
-        }
-    }
-
-
+    
     public void RoomUserDel(UserSession user)
     {
 
@@ -442,12 +430,19 @@ public class MultiScene : MonoBehaviour
                 string mousePosition = jData["MOUSE_POSITION"].ToString();
                 user.GetComponent<ThrownWeaponController>().ThrowGrenade(StringToVector(mousePosition), StringToVector(playerPosition));
                 break;
-            case (int)DataType.EnemyTest:
+            case (int)DataType.EnemyAnimation:
                 int monsterIndex = Convert.ToInt32(jData["MONSTER_INDEX"].ToString());
                 int aniNumber = Convert.ToInt32(jData["ANI_NUM"].ToString());
                 bool monsterAniType = Convert.ToBoolean(jData["ANI_TYPE"].ToString());
-                enemyList[monsterIndex].TryGetComponent<Enemy>(out var e);
-                e.anim.SetBool(aniNumber, monsterAniType);
+                enemyList[monsterIndex].TryGetComponent<MultiEnemy>(out var e);
+                if (monsterAniType)
+                {
+                    e.anim.SetTrigger(aniNumber);
+                }
+                else
+                {
+                    e.anim.SetInteger(AniEnemy, aniNumber);
+                }
                 break;
             case (int)DataType.EnemyItem:
                 int itemIndex = Convert.ToInt32(jData["ITEM_INDEX"].ToString());

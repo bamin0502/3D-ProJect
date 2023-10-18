@@ -31,18 +31,25 @@ public class StartCut : MonoBehaviour
         {
             // 'Esc' 키를 누르면 컷신을 넘깁니다.
             _playableDirector.time = _playableDirector.duration;
+            SetEnemy();
         }  
     }
+
+    private void SetEnemy()
+    {
+        foreach (GameObject enemy in MultiScene.Instance.enemyList)
+        {
+            enemy.TryGetComponent<MultiEnemy>(out var e);
+            e.StartCoroutine(e.PlayerDetect());
+            e.StartCoroutine(e.TryAttack());
+        }
+    }
+    
     // 컷신 종료 시 호출될 이벤트 핸들러
     public void OnCutsceneEnd(PlayableDirector director)
     {
         // BGM을 다시 재생
         SoundManager.instance.bgmAudioSource.Play();
-        foreach (GameObject enemy in MultiScene.Instance.enemyList)
-        {
-            enemy.TryGetComponent<EnemyTest>(out var e);
-            if(e != null) e.StartDetect();
-        }
-        
+        SetEnemy();
     }
 }

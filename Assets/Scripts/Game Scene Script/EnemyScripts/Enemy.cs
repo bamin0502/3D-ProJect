@@ -140,7 +140,7 @@ public class Enemy : MonoBehaviour
     {
         isChase = true;
         anim.SetBool(IsWalk, true);
-        MultiScene.Instance.BroadCastingMonsterAnimation(_index,IsWalk, true);
+        //MultiScene.Instance.BroadCastingMonsterAnimation(_index,IsWalk, true);
     }
    
     void FixedUpdate()
@@ -171,7 +171,7 @@ public class Enemy : MonoBehaviour
             if (attackCoroutine != null)
             {
                 anim.SetBool(IsAttack, false);
-                MultiScene.Instance.BroadCastingMonsterAnimation(_index,IsAttack, false);
+                //MultiScene.Instance.BroadCastingMonsterAnimation(_index,IsAttack, false);
                 StopCoroutine(attackCoroutine);
             }
             return;
@@ -200,7 +200,7 @@ public class Enemy : MonoBehaviour
     void Returning()
     {
         anim.SetBool(IsWalk, false);
-        MultiScene.Instance.BroadCastingMonsterAnimation(_index,IsWalk, false);
+        //MultiScene.Instance.BroadCastingMonsterAnimation(_index,IsWalk, false);
         nav.SetDestination(origninalPosition);
         
     }
@@ -241,7 +241,7 @@ public class Enemy : MonoBehaviour
             
             
             anim.SetBool(IsAttack, true);
-            MultiScene.Instance.BroadCastingMonsterAnimation(_index, IsAttack, true);
+            //MultiScene.Instance.BroadCastingMonsterAnimation(_index, IsAttack, true);
             
             
             attackArea.enabled = true;
@@ -262,7 +262,7 @@ public class Enemy : MonoBehaviour
             isChase = true;
             isAttack = false;
             anim.SetBool(IsAttack, false);
-            MultiScene.Instance.BroadCastingMonsterAnimation(_index,IsAttack, false);
+            //MultiScene.Instance.BroadCastingMonsterAnimation(_index,IsAttack, false);
         }
     }
 }

@@ -432,16 +432,16 @@ public class MultiScene : MonoBehaviour
                 break;
             case (int)DataType.EnemyAnimation:
                 int monsterIndex = Convert.ToInt32(jData["MONSTER_INDEX"].ToString());
-                int aniNumber = Convert.ToInt32(jData["ANI_NUM"].ToString());
-                bool monsterAniType = Convert.ToBoolean(jData["ANI_TYPE"].ToString());
-                enemyList[monsterIndex].TryGetComponent<MultiEnemy>(out var e);
-                if (monsterAniType)
-                {
-                    e.anim.SetTrigger(aniNumber);
-                }
-                else
-                {
-                    e.anim.SetInteger(AniEnemy, aniNumber);
+                if (monsterIndex >= 0 && monsterIndex < enemyList.Count) {
+                    if (enemyList[monsterIndex].TryGetComponent<MultiEnemy>(out var e)) {
+                        int aniNumber = Convert.ToInt32(jData["ANI_NUM"].ToString());
+                        bool monsterAniType = Convert.ToBoolean(jData["ANI_TYPE"].ToString());
+                        if (monsterAniType) {
+                            e.anim.SetTrigger(aniNumber);
+                        } else {
+                            e.anim.SetInteger(AniEnemy, aniNumber);
+                        }
+                    }
                 }
                 break;
             case (int)DataType.EnemyItem:

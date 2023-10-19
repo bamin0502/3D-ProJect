@@ -87,12 +87,14 @@ public class MultiEnemy : MonoBehaviour
     public IEnumerator PlayerDetect()
     {
         WaitForSeconds wait = new WaitForSeconds(0.5f);
-        
+        EnemyState lastState = EnemyState.Idle; // 이전 상태를 저장하는 변수
+
         yield return new WaitForSeconds(Random.Range(0f, 1f)); //코루틴 분산
-        
+
         while (true)
         {
-            int players = Physics.OverlapSphereNonAlloc(transform.position, DetectionRadius, _targets, LayerMask.GetMask("Player"));
+            int players = Physics.OverlapSphereNonAlloc(transform.position, DetectionRadius, _targets,
+                LayerMask.GetMask("Player"));
 
             float closestDistance = Mathf.Infinity;
 
@@ -100,6 +102,19 @@ public class MultiEnemy : MonoBehaviour
             {
                 _targetPos = null;
                 _nav.SetDestination(_originalPos);
+
+                float distance = Vector3.Distance(transform.position, _originalPos);
+                
+                if (distance <= 0.1f)
+                {
+                    if (_currentState != EnemyState.Idle)
+                    {
+                        _currentState = EnemyState.Idle;
+                        anim.SetInteger(AniEnemy, (int)_currentState);
+                        MultiScene.Instance.BroadCastingEnemyAnimation(_index, (int)_currentState);
+                    }
+                }
+
                 yield return wait;
             }
 
@@ -119,17 +134,12 @@ public class MultiEnemy : MonoBehaviour
 
             if (_targetPos != null) //추적
             {
-                if(_currentState == EnemyState.Chase) yield return wait;
-                _currentState = EnemyState.Chase;
-                anim.SetInteger(AniEnemy, (int)_currentState);
-                MultiScene.Instance.BroadCastingEnemyAnimation(_index, (int)_currentState);
-            }
-            else //멈춤
-            {
-                if (_currentState == EnemyState.Idle) yield return wait;
-                _currentState = EnemyState.Idle;
-                anim.SetInteger(AniEnemy, (int)_currentState);
-                MultiScene.Instance.BroadCastingEnemyAnimation(_index, (int)_currentState);
+                if (_currentState != EnemyState.Chase)
+                {
+                    _currentState = EnemyState.Chase;
+                    anim.SetInteger(AniEnemy, (int)_currentState);
+                    MultiScene.Instance.BroadCastingEnemyAnimation(_index, (int)_currentState);
+                }
             }
 
             yield return wait;

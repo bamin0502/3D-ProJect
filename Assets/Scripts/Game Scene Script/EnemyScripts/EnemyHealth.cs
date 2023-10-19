@@ -68,10 +68,6 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (currentHealth <= 0)
-        {
-            return;     
-        }
         if (enemyType == EnemyType.Monster || enemyType == EnemyType.GreenSpider || enemyType == EnemyType.RedSpider)
         {
             currentHealth -= damage;
@@ -112,11 +108,15 @@ public class EnemyHealth : MonoBehaviour
     
     void EndDeath()
     {
-        int index = MultiScene.Instance.GetRandomInt(3);
-        var newItem = Instantiate(MultiScene.Instance.itemPrefabs[index], transform.position, quaternion.identity);
-        newItem.transform.SetParent(MultiScene.Instance.itemListParent);
-        MultiScene.Instance.itemsList.Add(newItem);
-        MultiScene.Instance.BroadCastingEnemyItem(transform.position, index);
+        if (MultiScene.Instance.isMasterClient)
+        {
+            int index = MultiScene.Instance.GetRandomInt(3);
+            var newItem = Instantiate(MultiScene.Instance.itemPrefabs[index], transform.position, quaternion.identity);
+            newItem.transform.SetParent(MultiScene.Instance.itemListParent);
+            MultiScene.Instance.itemsList.Add(newItem);
+            MultiScene.Instance.BroadCastingEnemyItem(transform.position, index);
+        }
+        
         Destroy(gameObject);
     }
     void BossDeath()

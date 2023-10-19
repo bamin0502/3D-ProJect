@@ -65,7 +65,7 @@ public class MultiScene : MonoBehaviour
     public TextMeshProUGUI skillText;
     
     public GameObject[] itemPrefabs;
-    private bool _isMasterClient; //마스터 클라이언트
+    public bool isMasterClient; //마스터 클라이언트
     private static readonly int AniEnemy = Animator.StringToHash("aniEnemy");
     
     private void Awake()
@@ -84,15 +84,15 @@ public class MultiScene : MonoBehaviour
         SetAllList();
         
         //해당 방의 첫번째 유저를 마스터 클라이언트로 설정
-        _isMasterClient = NetGameManager.instance.m_userHandle.m_szUserID.Equals(NetGameManager.instance.m_roomSession
+        isMasterClient = NetGameManager.instance.m_userHandle.m_szUserID.Equals(NetGameManager.instance.m_roomSession
             .m_userList[0].m_szUserID);
     }
 
     public int GetRandomInt(int range)
     {
-        Debug.Log(_isMasterClient);
+        Debug.Log(isMasterClient);
         //랜덤한 int 값 생성
-        if (_isMasterClient)
+        if (isMasterClient)
         {
             int rnd = Random.Range(0, range);
             return rnd;
@@ -178,7 +178,7 @@ public class MultiScene : MonoBehaviour
 
     public void BroadCastingEnemyItem(Vector3 destination, int itemIndex = -99)
     {
-        if (!_isMasterClient) return;
+        if (!isMasterClient) return;
         
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(
             NetGameManager.instance.m_userHandle.m_szUserID);
@@ -322,7 +322,7 @@ public class MultiScene : MonoBehaviour
             teamStatus.DestroyTeamStatus(user.m_szUserID);
         }
 
-        _isMasterClient = NetGameManager.instance.m_userHandle.m_szUserID.Equals(NetGameManager.instance.m_roomSession
+        isMasterClient = NetGameManager.instance.m_userHandle.m_szUserID.Equals(NetGameManager.instance.m_roomSession
             .m_userList[0].m_szUserID);
     }
 
@@ -470,7 +470,7 @@ public class MultiScene : MonoBehaviour
                 break;
             case (int)DataType.EnemyItem:
                 int itemIndex = Convert.ToInt32(jData["ITEM_INDEX"].ToString());
-                Vector3 enemyItemPos = StringToVector(jData["ITEM_INDEX"].ToString());
+                Vector3 enemyItemPos = StringToVector(jData["POSITION"].ToString());
                 var newItem = Instantiate(itemPrefabs[itemIndex], enemyItemPos, quaternion.identity);
                 newItem.transform.SetParent(itemListParent);
                 itemsList.Add(newItem);

@@ -15,6 +15,8 @@ public class MultiPlayerSkill : MonoBehaviour
     private bool _isCoolTime = false;
     private Image _coolTimeImage;
 
+    public ParticleSystem[] effects; //0검, 1망치
+
     private void Start()
     {
         _coolTimeImage = MultiScene.Instance.skillImages[3];
@@ -46,6 +48,21 @@ public class MultiPlayerSkill : MonoBehaviour
                     MultiScene.Instance.BroadCastingAnimation(TwoHandedSkill, true);
                     break;
             }
+        }
+    }
+
+    public void SkillStart()
+    {
+        switch (_weapon.weaponType)
+        {
+            case WeaponType.Bow:
+                break;
+            case WeaponType.OneHanded:
+                effects[0].Play();
+                break;
+            case WeaponType.TwoHanded:
+                effects[1].Play();
+                break;
         }
     }
 

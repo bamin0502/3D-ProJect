@@ -41,9 +41,15 @@ public class StartCut : MonoBehaviour
         
         foreach (GameObject enemy in MultiScene.Instance.enemyList)
         {
-            enemy.TryGetComponent<MultiEnemy>(out var e);
-            e.StartCoroutine(e.PlayerDetect());
-            e.StartCoroutine(e.TryAttack());
+            if(enemy.TryGetComponent<MultiEnemy>(out var e))
+            {
+                e.StartCoroutine(e.PlayerDetect());
+                e.StartCoroutine(e.TryAttack());
+            }
+            else
+            {
+                Debug.LogWarning("MultiEnemy 컴포넌트를 찾을 수 없습니다. GameObject 이름: " + enemy.name);
+            }
         }
     }
     

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using UnityEngine.SceneManagement;
 
@@ -10,8 +11,8 @@ using MNF;
 
 public class NetGameManager : KWSingleton<NetGameManager>
 {
-	public UserHandle m_userHandle = new UserHandle();    // 유저개인정보
-	public RoomSession m_roomSession = new RoomSession(); // 방정보
+	public readonly UserHandle m_userHandle = new UserHandle();    // 유저개인정보
+	public readonly RoomSession m_roomSession = new RoomSession(); // 방정보
 
 	override public void Awake()
 	{
@@ -25,17 +26,9 @@ public class NetGameManager : KWSingleton<NetGameManager>
 
 	//방에서 특정유저정보 가져오기
 	public UserSession GetRoomUserSession(string szUserID)
-	{
-		for(int i = 0; i < m_roomSession.m_userList.Count; i++)
-		{
-			if (m_roomSession.m_userList[i].m_szUserID == szUserID)
-			{
-				return m_roomSession.m_userList[i];
-			}
-		}
-
-		return null;
-	}
+    {
+        return m_roomSession.m_userList.FirstOrDefault(t => t.m_szUserID == szUserID);
+    }
 
     //방에서 특정유저 강제퇴장
     public void RoomUserForcedOut(string userID)
@@ -112,11 +105,25 @@ public class NetGameManager : KWSingleton<NetGameManager>
 
         if (SceneManager.GetActiveScene().name == "Lobby Scene")
         {
-            LobbyScene.Instance.RoomBroadcast(szData);
+            if (LobbyScene.Instance != null)
+            {
+                LobbyScene.Instance.RoomBroadcast(szData);
+            }
+            else
+            {
+                Debug.LogError("LobbyScene.Instance is null");
+            }
         }
-        else
+        if(SceneManager.GetActiveScene().name=="Game Scene")
         {
-            MultiScene.Instance.RoomBroadcast(szData);
+            if (MultiScene.Instance != null)
+            {
+                MultiScene.Instance.RoomBroadcast(szData);
+            }
+            else
+            {
+                Debug.LogError("MultiScene.Instance is null");
+            }
         }
 	}
 
@@ -126,14 +133,11 @@ public class NetGameManager : KWSingleton<NetGameManager>
 		UserSession userSession = new UserSession();
 		userSession.ReadBin(br);
 
-		for(int i = 0; i < m_roomSession.m_userList.Count; i++)
-		{
-			if (m_roomSession.m_userList[i].m_szUserID == userSession.m_szUserID)
-			{
-				m_roomSession.m_userList[i].UserDataUpdate(userSession);
-				break;
-			}
-		}		
+		foreach (var t in m_roomSession.m_userList.Where(t => t.m_szUserID == userSession.m_szUserID))
+        {
+            t.UserDataUpdate(userSession);
+            break;
+        }		
 
 		Debug.Log("Recv_ROOM_USER_DATA_UPDATE" + userSession.m_szUserID);
 
@@ -144,13 +148,10 @@ public class NetGameManager : KWSingleton<NetGameManager>
         UserSession userSession = new UserSession();
         userSession.ReadBin(br);
 
-        for (int i = 0; i < m_roomSession.m_userList.Count; i++)
+        foreach (var t in m_roomSession.m_userList.Where(t => t.m_szUserID == userSession.m_szUserID))
         {
-            if (m_roomSession.m_userList[i].m_szUserID == userSession.m_szUserID)
-            {
-                m_roomSession.m_userList[i].UserMoveDirect(userSession);
-                break;
-            }
+            t.UserMoveDirect(userSession);
+            break;
         }
 
         Debug.Log("Recv_ROOM_USER_MOVE_DIRECT" + userSession.m_szUserID);
@@ -162,13 +163,10 @@ public class NetGameManager : KWSingleton<NetGameManager>
         UserSession userSession = new UserSession();
         userSession.ReadBin(br);
 
-        for (int i = 0; i < m_roomSession.m_userList.Count; i++)
+        foreach (var t in m_roomSession.m_userList.Where(t => t.m_szUserID == userSession.m_szUserID))
         {
-            if (m_roomSession.m_userList[i].m_szUserID == userSession.m_szUserID)
-            {
-                m_roomSession.m_userList[i].UserDataUpdate(userSession);
-                break;
-            }
+            t.UserDataUpdate(userSession);
+            break;
         }
 
         Debug.Log("Recv_ROOM_USER_ITEM_UPDATE" + userSession.m_szUserID);

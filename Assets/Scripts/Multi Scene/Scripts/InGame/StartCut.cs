@@ -54,7 +54,7 @@ public class StartCut : MonoBehaviour
     }
     
     // 컷신 종료 시 호출될 이벤트 핸들러
-    public void OnCutsceneEnd(PlayableDirector director)
+    private void OnCutsceneEnd(PlayableDirector director)
     {
         // BGM을 다시 재생
         SoundManager.instance.bgmAudioSource.Play();

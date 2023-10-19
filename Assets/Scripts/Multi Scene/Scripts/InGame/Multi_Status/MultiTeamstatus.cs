@@ -26,7 +26,7 @@ public class MultiTeamstatus : MonoBehaviour
         MultiTeamstatus teamStatus = teamStatusObject.GetComponent<MultiTeamstatus>();
         
         MultiScene.Instance._players.TryGetValue(PlayerName, out var player);
-        _playerHealth = player.GetComponent<MultiPlayerHealth>();
+        _playerHealth = player!.GetComponent<MultiPlayerHealth>();
         if (_playerHealth != null)
         {
             Debug.Log(PlayerName+ " 체력바 생성");

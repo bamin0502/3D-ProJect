@@ -95,15 +95,17 @@ public class EnemyHealth : MonoBehaviour
     void Die()
     {
         Debug.Log("Enemy died!");
-        bool isEnemy = gameObject.TryGetComponent(out Enemy enemy);
-        bool isBoss = gameObject.TryGetComponent(out Boss boss);
+        bool isEnemy = gameObject.TryGetComponent(out MultiEnemy enemy);
+        bool isBoss = gameObject.TryGetComponent(out MultiBoss boss);
         _nav.speed = 0;
         if (isEnemy)
         {
             enemy.isDead = true;
+            EndDeath();
         }
         else if (isBoss) {
             boss.isDead = true;
+            
         }
         anim.SetTrigger(DoDie);
     }

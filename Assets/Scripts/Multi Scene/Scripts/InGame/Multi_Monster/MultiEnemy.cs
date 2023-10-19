@@ -40,6 +40,8 @@ public class MultiEnemy : MonoBehaviour
     private EnemyState _currentState;
     private readonly Collider[] _targets = new Collider[5];
     private string _enemyName;
+    private MultiPlayerHealth _playerHealth;
+    public bool isDead { get; set; }
 
     private void Awake()
     {
@@ -54,6 +56,8 @@ public class MultiEnemy : MonoBehaviour
         _index = MultiScene.Instance.enemyList.IndexOf(gameObject);
         _originalPos = transform.position;
         SetState();
+
+        _playerHealth = FindObjectOfType<MultiPlayerHealth>();
     }
 
     private void SetState()
@@ -139,10 +143,10 @@ public class MultiEnemy : MonoBehaviour
         SoundManager.instance.PlaySE(_enemyName);
         
         bool isPlayer = _targetPos.TryGetComponent(out MultiPlayerHealth playerHealth);
-        
-        if (isPlayer)
+
+        if (_playerHealth != null)
         {
-            playerHealth.TakeDamage(_damage);
+            _playerHealth.TakeDamage(_damage);
         }
     }
 

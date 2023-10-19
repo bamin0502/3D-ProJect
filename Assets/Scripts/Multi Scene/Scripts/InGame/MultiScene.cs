@@ -364,9 +364,20 @@ public class MultiScene : MonoBehaviour
 
     private Vector3 StringToVector(string position)
     {
-        string[] posString = position.Split(",");
-        Vector3 result = new Vector3(float.Parse(posString[0]), float.Parse(posString[1]), float.Parse(posString[2]));
-        return result;
+        string[] posString = position.Split(',');
+        if (posString.Length < 3) {
+            // 예외 상황에 대한 처리
+            Debug.LogError("잘못된 위치 문자열입니다.: " + position);
+            return Vector3.zero;
+        }
+        float x = 0, y = 0, z = 0;
+        float.TryParse(posString[0], out x);
+        float.TryParse(posString[1], out y);
+        float.TryParse(posString[2], out z);
+    
+        return new Vector3(x, y, z);
+        // Vector3 result = new Vector3(float.Parse(posString[0]), float.Parse(posString[1]), float.Parse(posString[2]));
+        // return result;
     }
 
     public void RoomBroadcast(string szData)

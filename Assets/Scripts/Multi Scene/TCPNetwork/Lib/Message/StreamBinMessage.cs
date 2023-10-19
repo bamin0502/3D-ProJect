@@ -25,12 +25,7 @@ public	class StreamBin
 	{
 		UInt16	nSize = 0;
 		nSize = br.ReadUInt16();
-		if( nSize > 0 )
-		{
-			str =	ExtendedTrim( Encoding.Unicode.GetString(br.ReadBytes(nSize*2)) );
-		}else{
-			str = "";
-		}
+		str = nSize > 0 ? ExtendedTrim( Encoding.Unicode.GetString(br.ReadBytes(nSize*2)) ) : "";
 	}
 	
 	public static string  ReadString_uni( BinaryReader br )
@@ -67,7 +62,7 @@ namespace MNF.Message
     [System.Serializable]
 	public	class	StreamBinData
 	{
-		static	public List<BinData> listBinData = new List<BinData> { };
+		static public List<BinData> listBinData = new List<BinData> { };
 
 		static	public BinData GetBinData()
 		{
@@ -209,7 +204,7 @@ namespace MNF.Message
         {
             var tcpSession = session as TCPSession;
 
-            if (tcpSession.RecvCircularBuffer.ReadableSize < SerializedHeaderSize)
+            if (tcpSession!.RecvCircularBuffer.ReadableSize < SerializedHeaderSize)
             {
                 parsingResult.parsingResultEnum = ParsingResult.ParsingResultEnum.PARSING_INCOMPLETE;
                 return;
@@ -271,21 +266,21 @@ namespace MNF.Message
 
 	public	class StreamBinRecver
 	{
-		static	public	StreamBinRecver g;
+		static public StreamBinRecver g;
 
-		public delegate void	OnRecv_KW( NetHead head , BinaryReader br );
-		static	public	OnRecv_KW	onrecv_kw = null;
+		public delegate void OnRecv_KW( NetHead head , BinaryReader br );
+		static public OnRecv_KW	onrecv_kw = null;
 
-		public	int		max_buffObj = 200;
-		public  Queue<StreamBin_RecvBuff>	qRecvBuff = new Queue<StreamBin_RecvBuff>();
+		public int max_buffObj = 200;
+		public readonly Queue<StreamBin_RecvBuff>qRecvBuff = new Queue<StreamBin_RecvBuff>();
 
-		static	public	void	Alloc( )
+		static public void Alloc( )
 		{
 			g = new StreamBinRecver();
 			g.init();
 		}
 
-		public	void init()
+		public void init()
 		{
 			for( int i = 0 ; i < max_buffObj ; i++ )
 			{
@@ -296,7 +291,7 @@ namespace MNF.Message
 		}
 
 
-		static	public StreamBin_RecvBuff	GetRecvBuffObj()
+		static public StreamBin_RecvBuff GetRecvBuffObj()
 		{
 			if( g.qRecvBuff.Count < 1 )
 			{
@@ -306,7 +301,7 @@ namespace MNF.Message
 			return g.qRecvBuff.Dequeue();
 		}
 
-		static	public	void	ReturnRecvBuffObj( StreamBin_RecvBuff buff_obj )
+		static public void ReturnRecvBuffObj( StreamBin_RecvBuff buff_obj )
 		{
 			g.qRecvBuff.Enqueue( buff_obj );
 		}

@@ -49,7 +49,7 @@ namespace MNF
      */
 	public class DispatcherCollection : Singleton<DispatcherCollection>
     {
-        Dictionary<DISPATCH_TYPE, DispatcherThread> dispatcherThreads = new Dictionary<DISPATCH_TYPE, DispatcherThread>();
+        readonly Dictionary<DISPATCH_TYPE, DispatcherThread> dispatcherThreads = new Dictionary<DISPATCH_TYPE, DispatcherThread>();
 
 		/**
          * @brief Create and start the dispatcher.
@@ -60,8 +60,8 @@ namespace MNF
          */
 		internal Dispatcher Start(DISPATCH_TYPE dispatchType, bool isRunThread)
         {
-			if (dispatcherThreads.ContainsKey(dispatchType) == true)
-				return dispatcherThreads[dispatchType].Dispatcher;
+			if (dispatcherThreads.TryGetValue(dispatchType, out var thread))
+				return thread.Dispatcher;
 
 			var dispatcherThread = new DispatcherThread(dispatchType, isRunThread);
 			dispatcherThreads.Add(dispatchType, dispatcherThread);
@@ -92,8 +92,7 @@ namespace MNF
          */
 		internal bool PushMessage(DISPATCH_TYPE dispatchType, IMessage message)
         {
-            DispatcherThread dispatcherThread = null;
-            if (dispatcherThreads.TryGetValue(dispatchType, out dispatcherThread) == false)
+            if (dispatcherThreads.TryGetValue(dispatchType, out var dispatcherThread) == false)
                 return false;
             return dispatcherThread.Dispatcher.pushMessage(message);
         }
@@ -105,8 +104,7 @@ namespace MNF
          */
 		internal Dispatcher GetDispatcher(DISPATCH_TYPE dispatchType)
         {
-            DispatcherThread dispatcherThread = null;
-            if (dispatcherThreads.TryGetValue(dispatchType, out dispatcherThread) == false)
+            if (dispatcherThreads.TryGetValue(dispatchType, out var dispatcherThread) == false)
                 return null;
             return dispatcherThread.Dispatcher;
         }

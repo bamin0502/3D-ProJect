@@ -37,7 +37,7 @@ namespace MNF
                 }
 
                 if (dispatchExporter.Init() == false)
-                    throw new Exception(string.Format("{0} init failed", dispatchExporter.ToString()));
+                    throw new Exception($"{dispatchExporter.ToString()} init failed");
 
                 var targetIPEndPoint = Utility.GetIPEndPoint(ipString, portString);
                 if (targetIPEndPoint == null)

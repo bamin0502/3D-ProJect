@@ -93,8 +93,7 @@ namespace MNF
 		public void AddClientSession<TSession>(int id, TSession session)
             where TSession : TCPSession, new()
         {
-            if (firstClientSession == null)
-                firstClientSession = session;
+            firstClientSession ??= session;
 
             connectedSessionList.Add(id, session);
         }
@@ -317,7 +316,7 @@ namespace MNF
 					throw new Exception("Message Dispatcher get failed");
 
 				if (dispatchExporter.Init() == false)
-                    throw new Exception(string.Format("Message Dispatcher:({0}) init failed", messageDispatcherType));
+                    throw new Exception($"Message Dispatcher:({messageDispatcherType}) init failed");
 
                 return dispatchExporter;
 			}

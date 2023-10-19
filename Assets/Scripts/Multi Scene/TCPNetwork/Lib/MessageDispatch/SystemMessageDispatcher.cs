@@ -30,19 +30,19 @@ namespace MNF
                 switch(messageType)
                 {
                     case SYSTEM_MESSAGE_TYPE.SYSTEM_MESSAGE_CONNECT_SUCCESS:
-                        session.OnConnectSuccess();
+                        session!.OnConnectSuccess();
                         break;
 
                     case SYSTEM_MESSAGE_TYPE.SYSTEM_MESSAGE_CONNECT_FAILED:
-                        session.OnConnectFail();
+                        session!.OnConnectFail();
                         break;
 
                     case SYSTEM_MESSAGE_TYPE.SYSTEM_MESSAGE_ACCEPT:
-                        session.OnAccept();
+                        session!.OnAccept();
                         break;
 
                     case SYSTEM_MESSAGE_TYPE.SYSTEM_MESSAGE_DISCONNECT:
-                        session.OnDisconnect();
+                        session!.OnDisconnect();
                         break;
                 }
                 return 0;
@@ -80,25 +80,25 @@ namespace MNF
         public void pushAcceptMessage(SessionBase session)
         {
             var message = new SystemMessage(SYSTEM_MESSAGE_TYPE.SYSTEM_MESSAGE_ACCEPT, session);
-            SystemMessageEvent(message);
+            SystemMessageEvent!(message);
         }
 
         public void pushConnectSuccessMessage(SessionBase session)
         {
             var message = new SystemMessage(SYSTEM_MESSAGE_TYPE.SYSTEM_MESSAGE_CONNECT_SUCCESS, session);
-            SystemMessageEvent(message);
+            SystemMessageEvent!(message);
         }
 
         public void pushConnectFailMessage(SessionBase session)
         {
             var message = new SystemMessage(SYSTEM_MESSAGE_TYPE.SYSTEM_MESSAGE_CONNECT_FAILED, session);
-            SystemMessageEvent(message);
+            SystemMessageEvent!(message);
         }
 
         public void pushDisconnectMessage(SessionBase session)
         {
             var message = new SystemMessage(SYSTEM_MESSAGE_TYPE.SYSTEM_MESSAGE_DISCONNECT, session);
-            SystemMessageEvent(message);
+            SystemMessageEvent!(message);
         }
     }
 }

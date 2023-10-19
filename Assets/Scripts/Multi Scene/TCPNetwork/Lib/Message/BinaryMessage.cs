@@ -70,7 +70,7 @@ namespace MNF.Message
             var tcpSession = session as TCPSession;
 
             // check readable header
-            if (tcpSession.RecvCircularBuffer.ReadableSize < SerializedHeaderSize)
+            if (tcpSession!.RecvCircularBuffer.ReadableSize < SerializedHeaderSize)
             {
                 parsingResult.parsingResultEnum = ParsingResult.ParsingResultEnum.PARSING_INCOMPLETE;
                 return;

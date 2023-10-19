@@ -1,6 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace MNF.Crypt
@@ -41,10 +42,7 @@ namespace MNF.Crypt
             var hashBytes = Md5Sum(ue.GetBytes(strToEncrypt));
 
             // Convert the encrypted bytes back to a string (base 16)
-            string hashString = "";
-
-            for (int i = 0; i < hashBytes.Length; i++)
-                hashString += System.Convert.ToString(hashBytes[i], 16).PadLeft(2, '0');
+            string hashString = hashBytes.Aggregate("", (current, t) => current + System.Convert.ToString(t, 16).PadLeft(2, '0'));
 
             return hashString.PadLeft(32, '0');
         }
@@ -68,8 +66,7 @@ namespace MNF.Crypt
 
         private void _checkMd5Sum()
         {
-            if (md5 == null)
-                md5 = new MD5CryptoServiceProvider();
+            md5 ??= new MD5CryptoServiceProvider();
         }
 
         public void convertToInteger(byte[] encryptedByte, out UInt64 checksum1, out UInt64 checksum2)

@@ -4,8 +4,8 @@ namespace MNF
 {
     internal class Dispatcher
     {
-        private DISPATCH_TYPE dispatchType = DISPATCH_TYPE.DISPATCH_NONE;
-        private EventNofier eventNotifier = null;
+        private readonly DISPATCH_TYPE dispatchType = DISPATCH_TYPE.DISPATCH_NONE;
+        private readonly EventNofier eventNotifier = null;
         private SwapableMessgeQueue<IMessage> dispatchMessageQueue = new SwapableMessgeQueue<IMessage>();
 
         public Dispatcher(EventNofier eventNotifier, DISPATCH_TYPE dispatchType)
@@ -36,34 +36,36 @@ namespace MNF
             }
 
             int dispatchCount = 0;
-            while (dispatchMessageQueue.getReadableQueue().Count > 0)
+            lock (dispatchMessageQueue)
             {
-                var message = dispatchMessageQueue.getReadableQueue().Peek();
-                var session = message.Session as SessionBase;
-                if (session != null)
+                while (dispatchMessageQueue.getReadableQueue().Count > 0)
                 {
-                    if (session.SessionType == SessionType.SESSION_TCP
-                        && session.IsConnected == false
-                        && message.MessageData != null)
+                    var message = dispatchMessageQueue.getReadableQueue().Peek();
+                    if (message.Session is SessionBase session)
                     {
-                        dispatchMessageQueue.getReadableQueue().Dequeue();
-                        continue;
+                        if (session.SessionType == SessionType.SESSION_TCP
+                            && session.IsConnected == false
+                            && message.MessageData != null)
+                        {
+                            dispatchMessageQueue.getReadableQueue().Dequeue();
+                            continue;
+                        }
                     }
-                }
 
-                int returnValue = message.execute();
-                if (returnValue != 0)
-                {
-                    if (LogManager.Instance.IsWriteLog(ENUM_LOG_TYPE.LOG_TYPE_SYSTEM_DEBUG) == true)
+                    int returnValue = message.execute();
+                    if (returnValue != 0)
                     {
-                        LogManager.Instance.WriteDebug("Dispatcher({0}) Message({1}) return value({2})",
-                        dispatchType.ToString(), message.ToString(), returnValue);
+                        if (LogManager.Instance.IsWriteLog(ENUM_LOG_TYPE.LOG_TYPE_SYSTEM_DEBUG) == true)
+                        {
+                            LogManager.Instance.WriteDebug("Dispatcher({0}) Message({1}) return value({2})",
+                                dispatchType.ToString(), message.ToString(), returnValue);
+                        }
                     }
+
+                    dispatchMessageQueue.getReadableQueue().Dequeue();
+
+                    ++dispatchCount;
                 }
-
-                dispatchMessageQueue.getReadableQueue().Dequeue();
-
-                ++dispatchCount;
             }
 
             if (dispatchCount > 0)

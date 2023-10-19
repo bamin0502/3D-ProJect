@@ -14,8 +14,7 @@ namespace MNF
 
         public bool Add(Type type)
         {
-            IDispatchHelper dispatchExporter = null;
-            if (messageDispatchExporters.TryGetValue(type, out dispatchExporter) == true)
+            if (messageDispatchExporters.TryGetValue(type, out var dispatchExporter) == true)
                 return true;
 
             dispatchExporter = Utility.GetInstance(type) as IDispatchHelper;

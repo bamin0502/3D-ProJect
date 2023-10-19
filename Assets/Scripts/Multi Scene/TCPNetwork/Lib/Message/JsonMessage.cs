@@ -58,7 +58,7 @@ namespace MNF.Message
     public class JsonMessageDeserializer : Deserializer<JsonMessageHeader>
     {
         IntPtr marshalAllocatedBuffer;
-        int marshalAllocatedBufferSize;
+        readonly int marshalAllocatedBufferSize;
 
         public JsonMessageDeserializer() : base(JsonMessageBuffer.MaxMessageSize())
         {

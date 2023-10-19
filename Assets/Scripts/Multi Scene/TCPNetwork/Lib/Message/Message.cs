@@ -27,12 +27,12 @@ namespace MNF
         public override string ToString()
         {
             if (Session == null)
-                return string.Format("session(null):{0}", Dispatcher);
+                return $"session(null):{Dispatcher}";
 
             if (Dispatcher == null)
                 return Session.ToString();
 
-            return string.Format("{0}:{1}", Session, Dispatcher);
+            return $"{Session}:{Dispatcher}";
         }
 
         public abstract int execute();
@@ -63,7 +63,7 @@ namespace MNF
         public override int execute()
         {
             var tempDelegate = Dispatcher as onDispatch<TSession>;
-            return tempDelegate((TSession)Session, MessageData);
+            return tempDelegate!((TSession)Session, MessageData);
         }
     }
 
@@ -81,7 +81,7 @@ namespace MNF
         public override int execute()
         {
             var tempDelegate = Dispatcher as onCustomDispatch<TCustomMessage>;
-            return tempDelegate((TCustomMessage)MessageData);
+            return tempDelegate!((TCustomMessage)MessageData);
         }
     }
 }

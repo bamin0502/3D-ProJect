@@ -2,8 +2,8 @@
 
 namespace MNF
 {
-    public delegate int onDispatch<T>(T session, object message) where T : new();
-    public delegate int onCustomDispatch<T>(T message) where T : new();
+    public delegate int onDispatch<in T>(T session, object message) where T : new();
+    public delegate int onCustomDispatch<in T>(T message) where T : new();
 
     public class DispatchInfo
     {
@@ -24,7 +24,7 @@ namespace MNF
 
         public override string ToString()
         {
-            return string.Format("{0}:{1}", dispatcher.ToString(), messageType.ToString());
+            return $"{dispatcher.ToString()}:{messageType.ToString()}";
         }
     }
 }

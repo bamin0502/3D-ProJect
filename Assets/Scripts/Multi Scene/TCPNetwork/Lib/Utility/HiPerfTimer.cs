@@ -46,12 +46,6 @@ namespace MNF
         }
 
         // Returns the duration of the timer (in seconds)
-        public double Duration
-        {
-            get
-            {
-                return (double)(stopTime - startTime) / (double)freq;
-            }
-        }
+        public double Duration => (double)(stopTime - startTime) / (double)freq;
     }
 }

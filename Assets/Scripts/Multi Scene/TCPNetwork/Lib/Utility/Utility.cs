@@ -20,20 +20,20 @@ namespace MNF
     {
         public static string Serialize<T>(T managedData)
         {
-#if USE_JSON_FX
+        #if USE_JSON_FX
             return JsonFx.Json.JsonWriter.Serialize(managedData);
-#else
+        #else
 			return UnityEngine.JsonUtility.ToJson(managedData);
-#endif
+        #endif
         }
 
         public static object DeSerialize(string managedData, Type type)
         {
-#if USE_JSON_FX
+        #if USE_JSON_FX
             return JsonFx.Json.JsonReader.Deserialize(managedData, type);
-#else
+        #else
 			return UnityEngine.JsonUtility.FromJson(managedData, type);
-#endif
+        #endif
         }
     }
 
@@ -119,12 +119,12 @@ namespace MNF
         // for instance
         public static T GetInstance<T>(string type)
         {
-            return (T)Activator.CreateInstance(Type.GetType(type));
+            return (T)Activator.CreateInstance(Type.GetType(type)!);
         }
 
         public static object GetInstance(string type)
         {
-            return Activator.CreateInstance(Type.GetType(type));
+            return Activator.CreateInstance(Type.GetType(type)!);
         }
 
         public static T GetInstance<T>(Type type)
@@ -154,11 +154,11 @@ namespace MNF
             MethodInfo methodInfo = targetObject.GetType().GetMethod(methodName,
                 BindingFlags.Public | BindingFlags.NonPublic |
                 BindingFlags.Instance | BindingFlags.FlattenHierarchy);
-#if !NETFX_CORE
-            Delegate loadedDelegate = Delegate.CreateDelegate(delegateType, targetObject, methodInfo);
-#else
+        #if !NETFX_CORE
+            Delegate loadedDelegate = Delegate.CreateDelegate(delegateType, targetObject, methodInfo!);
+        #else
             Delegate loadedDelegate = methodInfo.CreateDelegate(delegateType, targetObject);
-#endif
+        #endif
             return loadedDelegate;
         }
 
@@ -252,8 +252,7 @@ namespace MNF
 
                         if (UnicastIPAddressInformation.Address.ToString() == "127.0.0.1")
                         {
-                            if (mLocalAddress == null)
-                                mLocalAddress = UnicastIPAddressInformation.Address;
+                            mLocalAddress ??= UnicastIPAddressInformation.Address;
                             break;
                         }
 
@@ -288,7 +287,7 @@ namespace MNF
                     }
                 }
             }
-            throw new ArgumentException(string.Format("Can't find subnetmask for IP address '{0}'", address));
+            throw new ArgumentException($"Can't find subnetmask for IP address '{address}'");
         }
 #endif
 

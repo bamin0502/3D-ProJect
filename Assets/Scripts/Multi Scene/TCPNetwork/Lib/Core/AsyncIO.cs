@@ -105,12 +105,12 @@ namespace MNF
             {
                 IAcceptHelper acceptor = (IAcceptHelper)e.UserToken;
                 if (acceptor == null)
-                    throw new Exception(string.Format("Acceptor is Invalid object({0})", e.GetType().Name));
+                    throw new Exception($"Acceptor is Invalid object({e.GetType().Name})");
 
                 Socket clientSocket = e.AcceptSocket;
                 var session = acceptor.AllocSession() as TCPSession;
                 if (session == null)
-                    throw new Exception(string.Format("Acceptor didn't alloc session({0})", acceptor.SessionType));
+                    throw new Exception($"Acceptor didn't alloc session({acceptor.SessionType})");
 
                 session.Init();
 
@@ -152,7 +152,7 @@ namespace MNF
             try
             {
                 if (session == null)
-                    throw new Exception(string.Format("Recv session({0}) is invalid", e.GetType().Name));
+                    throw new Exception($"Recv session({e.GetType().Name}) is invalid");
 
                 if ((e.BytesTransferred == 0) || (e.SocketError != SocketError.Success))
                 {
@@ -170,7 +170,7 @@ namespace MNF
 
                 // copy async buffer to circular buffer
                 if (session.DoCopyReceivedData(e.BytesTransferred) == false)
-                    throw new Exception(string.Format("TCPSession({0} copy received data({1}) failed", session, e.BytesTransferred));
+                    throw new Exception($"TCPSession({session} copy received data({e.BytesTransferred}) failed");
 
                 bool isLoop = true;
                 while (isLoop == true)
@@ -191,8 +191,7 @@ namespace MNF
                             break;
 
                         default:
-                            throw new Exception(string.Format(
-                                "TCPSession({0} copy received data({1}) failed", session, e.BytesTransferred));
+                            throw new Exception($"TCPSession({session} copy received data({e.BytesTransferred}) failed");
                     }
                 }
 
@@ -221,9 +220,11 @@ namespace MNF
             {
                 serializer.Serialize(id, managedData);
 
-                var asyncIOResult = new AsyncIOResult();
-                asyncIOResult.serializer = serializer;
-                asyncIOResult.session = session;
+                var asyncIOResult = new AsyncIOResult
+                {
+                    serializer = serializer,
+                    session = session
+                };
 
                 var sendEventArgs = new SocketAsyncEventArgs();
                 sendEventArgs.UserToken = asyncIOResult;
@@ -253,12 +254,12 @@ namespace MNF
             try
             {
                 if (session == null)
-                    throw new Exception(string.Format("Send session({0}) is invalid", e.GetType().Name));
+                    throw new Exception($"Send session({e.GetType().Name}) is invalid");
 
                 session.MessageFactory.FreeSerializer(asyncIOResult.serializer);
 
                 if (e.SocketError != SocketError.Success)
-                    throw new Exception(string.Format("Send session({0}) is error({1})", e.GetType().Name, e.SocketError));
+                    throw new Exception($"Send session({e.GetType().Name}) is error({e.SocketError})");
 
                 int bytesSent = e.BytesTransferred;
 
@@ -291,7 +292,7 @@ namespace MNF
             {
                 session.EndPoint = Utility.GetIPEndPoint(ipString, portString);
                 if (session.EndPoint == null)
-                    throw new Exception(string.Format("Connect EndPoint is invalid, ip({0}) port({1})", ipString, portString));
+                    throw new Exception($"Connect EndPoint is invalid, ip({ipString}) port({portString})");
 
                 SocketAsyncEventArgs connectEventArgs = new SocketAsyncEventArgs();
                 connectEventArgs.UserToken = session;
@@ -317,7 +318,7 @@ namespace MNF
             try
             {
                 if (session == null)
-                    throw new Exception(string.Format("Invalid connect object({0})", e.GetType().Name));
+                    throw new Exception($"Invalid connect object({e.GetType().Name})");
 
                 LogManager.Instance.WriteSystem("TCPSession({0}) connected to {1}", session.ToString(), session.Socket.RemoteEndPoint.ToString());
 

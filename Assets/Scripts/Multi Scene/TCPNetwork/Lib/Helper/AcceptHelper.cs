@@ -46,11 +46,11 @@ namespace MNF
             if (DispatchExporterCollection.Instance.Get(dispatchExporterType) == null)
             {
                 if (DispatchExporterCollection.Instance.Add(dispatchExporterType) == false)
-                    throw new Exception(string.Format("{0} is not DispatchHelper", dispatchExporterType));
+                    throw new Exception($"{dispatchExporterType} is not DispatchHelper");
             }
 
             if (DispatchExporterCollection.Instance.Get(dispatchExporterType).Init() == false)
-                throw new Exception(string.Format("{0} init failed", dispatchExporterType));
+                throw new Exception($"{dispatchExporterType} init failed");
 
             try
             {
@@ -171,51 +171,4 @@ namespace MNF
 			}
 		}
 	}
-
-	/**
-     * @brief Helps the client connect to the server.
-     * @param TSession An MNF network object that inherits SessionBase.
-     * @param TDispatcher The object that will handle the TSession's message.
-     */
- //   class SsslAcceptHelper<TSession, TDispatcher> : ISsslAcceptHelper
-	//	where TSession : SessionBase, new()
-	//{
- //       public bool Create(string ipString, string portString, int backLog, string certificatePath, string passwd)
- //       {
-	//		SessionType = typeof(TSession);
-	//		DispatchExporterType = typeof(TDispatcher);
-
- //           if (CreateCertificate2(certificatePath, passwd) == false)
- //               return false;
-
- //           try
- //           {
-	//			return _Create(ipString, portString, backLog, typeof(TDispatcher));
- //           }
- //           catch (Exception e)
- //           {
-	//			LogManager.Instance.WriteException(e, "Accept failed, IP({0}), Port({1})", ipString, portString);
-	//			return false;
- //           }
-	//	}
-
- //       /**
- //        * @brief Start accept.
- //        * @details Internally, it calls AsyncIO.StartAccept () to get the client's connection.
- //        * @return Returns true if it succeeds, false if it fails.
- //        */
- //       override public bool StartAccept()
- //       {
-	//		return AsyncIO_Ssl.Accept(this);
-	//	}
-
-	//	/**
- //        * @brief Create a TSession object.
- //        * @return Returns the created TSession.
- //        */
-	//	internal override object AllocSession()
-	//	{
-	//		return new TSession();
-	//	}
-	//}
 }

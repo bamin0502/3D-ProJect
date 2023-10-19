@@ -63,21 +63,23 @@ namespace MNF
 
 		public NetHead Copy()
 		{
-			NetHead copy = new NetHead();
-			copy.m_Head1 = this.m_Head1;
-			copy.m_Head2 = this.m_Head2;
-			copy.m_Check = this.m_Check;
-			copy.m_Class = this.m_Class;
-			copy.m_Event = this.m_Event;
+			NetHead copy = new NetHead
+            {
+                m_Head1 = this.m_Head1,
+                m_Head2 = this.m_Head2,
+                m_Check = this.m_Check,
+                m_Class = this.m_Class,
+                m_Event = this.m_Event
+            };
 
-			return copy;
+            return copy;
 		}
 	}
     public class NetHead_Equal : EqualityComparer<NetHead>
     {
         public override bool Equals(NetHead s1, NetHead s2)
         {
-            if (s1.m_Class == s2.m_Class && s1.m_Event == s2.m_Event)
+            if (s1!.m_Class == s2!.m_Class && s1.m_Event == s2.m_Event)
                 return true;
             else
                 return false;

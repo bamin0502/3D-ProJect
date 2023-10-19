@@ -4,12 +4,12 @@ using System.IO;
 
 namespace MNF
 {
-	[System.Serializable]
+	[Serializable]
 	public class RoomBase
 	{
-		public int m_RoomNo = 0;	// 방번호
-		public Int64 m_nMakeUserNo = 0;	// 생성한 유저번호
-		public string m_szRoomCode  = "";	//  
+		public int m_RoomNo = 0;	
+		public Int64 m_nMakeUserNo = 0;	
+		public string m_szRoomCode  = "";
 
 		virtual public void ReadBin(BinaryReader br)
 		{

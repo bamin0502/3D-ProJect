@@ -26,7 +26,7 @@ namespace MNF
 
         public int WaitTime
         {
-            get { return waitTime; }
+            get => waitTime;
             set { waitTime = value; messageEvent.Set(); }
         }
 
@@ -39,8 +39,7 @@ namespace MNF
         {
             Debug.Assert(isStop == false);
 
-            if (messageEvent == null)
-                messageEvent = new AutoResetEvent(false);
+            messageEvent ??= new AutoResetEvent(false);
 
 #if !NETFX_CORE
             if (messageDispatchThread != null)
@@ -82,7 +81,7 @@ namespace MNF
         {
             while (isStop == false)
             {
-                ThreadEvent(messageEvent.WaitOne(waitTime));
+                ThreadEvent!(messageEvent.WaitOne(waitTime));
             }
         }
 

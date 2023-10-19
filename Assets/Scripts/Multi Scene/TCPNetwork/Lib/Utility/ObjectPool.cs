@@ -9,10 +9,7 @@ namespace MNF
         private object poolLock = null;
         private LinkedList<TObject> pool = null;
 
-        public int Count
-        {
-            get { return pool.Count; }
-        }
+        public int Count => pool.Count;
 
         public TObjectPool()
         {

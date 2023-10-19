@@ -8,7 +8,7 @@ using MNF.Message;
 
 using System.IO;
 
-public	class _SendDummy
+public class _SendDummy
 {
 	public _SendDummy()
 	{
@@ -20,8 +20,8 @@ public class MKWNetwork : KWSingleton<MKWNetwork>
 	public bool IsInit { get; private set; }
 
 	private MKWSession m_nowSession = null;
-	public	NetHead_Equal	m_eqSJNetHead	= new NetHead_Equal();
-	public	Dictionary<NetHead,NetRecvCallBack> 	m_dicRecvCallBack;
+	public readonly NetHead_Equal m_eqSJNetHead	= new NetHead_Equal();
+	public	Dictionary<NetHead,NetRecvCallBack> m_dicRecvCallBack;
 
     override public void Awake()
 	{
@@ -36,12 +36,6 @@ public class MKWNetwork : KWSingleton<MKWNetwork>
 
 		m_dicRecvCallBack = new Dictionary<NetHead, NetRecvCallBack>(m_eqSJNetHead);
 	}
-
-	void Start()
-    {
-
-	}
-
 	void OnApplicationQuit()
 	{
         if (IsInit == true)
@@ -127,11 +121,13 @@ public class MKWNetwork : KWSingleton<MKWNetwork>
 			NetRecvCallBack netRecvObj;
 			if (MKWNetwork.instance.m_dicRecvCallBack.TryGetValue(head, out netRecvObj) == false)
 			{
-				NetRecvCallBack 	netCallBack = new NetRecvCallBack();
-				netCallBack.m_ObjFunction	= goFunction;
-				netCallBack.m_Func = szRecvFunc;
+				NetRecvCallBack netCallBack = new NetRecvCallBack
+                {
+                    m_ObjFunction = goFunction,
+                    m_Func = szRecvFunc
+                };
 
-				m_dicRecvCallBack[head] = netCallBack;
+                m_dicRecvCallBack[head] = netCallBack;
 			}
 			else
 			{
@@ -153,11 +149,13 @@ public class MKWNetwork : KWSingleton<MKWNetwork>
 			NetRecvCallBack netRecvObj;
 			if (MKWNetwork.instance.m_dicRecvCallBack.TryGetValue(head, out netRecvObj) == false)
 			{
-				NetRecvCallBack 	netCallBack = new NetRecvCallBack();
-				netCallBack.m_ObjFunction	= goFunction;
-				netCallBack.m_Func = szRecvFunc;
+				NetRecvCallBack netCallBack = new NetRecvCallBack
+                {
+                    m_ObjFunction = goFunction,
+                    m_Func = szRecvFunc
+                };
 
-				m_dicRecvCallBack[head] = netCallBack;
+                m_dicRecvCallBack[head] = netCallBack;
 			}
 			else
 			{

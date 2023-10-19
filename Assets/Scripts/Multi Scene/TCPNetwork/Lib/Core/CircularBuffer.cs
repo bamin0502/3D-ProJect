@@ -10,9 +10,9 @@ namespace MNF
         private int tail = 0;
         private int appendSize = 0;
 
-        public int Head { get { return head; } }
-        public int Tail { get { return tail; } }
-        public int ReadableSize { get { return appendSize; } }
+        public int Head => head;
+        public int Tail => tail;
+        public int ReadableSize => appendSize;
 
         public CircularBuffer(int circularBufferSize)
         {

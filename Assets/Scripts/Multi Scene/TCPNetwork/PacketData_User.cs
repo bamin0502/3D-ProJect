@@ -29,11 +29,13 @@ namespace MNF
 		}
         public UserItem Copy()
         {
-            UserItem copy = new UserItem();
-            copy.m_nIndex = this.m_nIndex;
-            copy.m_nID = this.m_nID;
-            copy.m_nCount = this.m_nCount;
-            copy.m_nEnable = this.m_nEnable;
+            UserItem copy = new UserItem
+            {
+                m_nIndex = this.m_nIndex,
+                m_nID = this.m_nID,
+                m_nCount = this.m_nCount,
+                m_nEnable = this.m_nEnable
+            };
 
             return copy;
         }
@@ -61,10 +63,12 @@ namespace MNF
         }
         public UserBase Copy()
         {
-            UserBase copy = new UserBase();
-            copy.m_byMainNo = this.m_byMainNo;
-            copy.m_nUserNo = this.m_nUserNo;
-            copy.m_szUserID = this.m_szUserID;
+            UserBase copy = new UserBase
+            {
+                m_byMainNo = this.m_byMainNo,
+                m_nUserNo = this.m_nUserNo,
+                m_szUserID = this.m_szUserID
+            };
             return copy;
         }
     }

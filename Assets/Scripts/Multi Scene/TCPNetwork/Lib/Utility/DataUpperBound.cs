@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace MNF
 {
@@ -17,10 +18,9 @@ namespace MNF
 
         public bool insertData(int range, T data)
         {
-            for (int i = 0; i < ranges.Length; ++i)
+            if (ranges.Any(t => t.CompareTo(data) == 0))
             {
-                if (ranges[i].CompareTo(data) == 0)
-                    return false;
+                return false;
             }
 
             ranges[insertCount] = range;

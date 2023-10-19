@@ -14,7 +14,7 @@ namespace MNF.Message
         public override int execute()
         {
             var tcpSession = Session as TCPSession;
-            if (tcpSession.IsConnected == false)
+            if (tcpSession!.IsConnected == false)
                 return -1;
 
             var tmpMessageData = MessageData;

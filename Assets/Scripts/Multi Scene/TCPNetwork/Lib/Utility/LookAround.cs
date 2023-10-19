@@ -55,7 +55,7 @@ namespace MNF
 
         public override string ToString()
         {
-            return string.Format("{0}:{1}:{2}:{3}", ipEndPoint, isServer, uniqueKey, registedDateTime);
+            return $"{ipEndPoint}:{isServer}:{uniqueKey}:{registedDateTime}";
         }
     }
 
@@ -78,19 +78,19 @@ namespace MNF
         public string MyIP { get; private set; }
         public string MyPort { get; private set; }
 
-        IPAddress multicastaddress = IPAddress.Parse("224.0.0.224");
-		int multicastPort = 5100;
+        readonly IPAddress multicastaddress = IPAddress.Parse("224.0.0.224");
+        readonly int multicastPort = 5100;
 
-		List<ResponseEndPointInfo> responseEndPoint = new List<ResponseEndPointInfo>();
+        readonly List<ResponseEndPointInfo> responseEndPoint = new List<ResponseEndPointInfo>();
 		string GeneratedKey { get; set; }
         string LookAroundGeneratedKey { get; set; }
         string MessageGeneratedKey { get; set; }
 
 		StringBuilder messageStringBuilder = new StringBuilder(1024 * 100);
-		string LookAroundCmd { get { return "@LOOKAROUND@"; } }
-        string MessageCmd { get { return "@MESSAGE@"; } }
+		string LookAroundCmd => "@LOOKAROUND@";
+        string MessageCmd => "@MESSAGE@";
 
-		SwapableMessgeQueue<object> sendSwapableMessgeQueue = new SwapableMessgeQueue<object>();
+        SwapableMessgeQueue<object> sendSwapableMessgeQueue = new SwapableMessgeQueue<object>();
 		SwapableMessgeQueue<RecvMessage> recvSwapableMessgeQueue = new SwapableMessgeQueue<RecvMessage>();
 		AutoResetEvent sendResetEvent = new AutoResetEvent(false);
 		ThreadAdapter lookSendThreadAdapter;
@@ -146,9 +146,9 @@ namespace MNF
             IsServer = isServer;
             MyPort = port;
 
-			GeneratedKey = string.Format("{0}#{1}#{2}", Utility.GetProcessID(), MyPort, IsServer);
-			LookAroundGeneratedKey = string.Format("{0}#{1}", LookAroundCmd, GeneratedKey);
-			MessageGeneratedKey = string.Format("{0}#{1}", MessageCmd, GeneratedKey);
+			GeneratedKey = $"{Utility.GetProcessID()}#{MyPort}#{IsServer}";
+			LookAroundGeneratedKey = $"{LookAroundCmd}#{GeneratedKey}";
+			MessageGeneratedKey = $"{MessageCmd}#{GeneratedKey}";
 
 #if !NETFX_CORE
             try
@@ -302,7 +302,7 @@ namespace MNF
             var sendMessage = sendSwapableMessgeQueue.getReadableQueue().Peek() as SendMessage;
 			sendSwapableMessgeQueue.getReadableQueue().Dequeue();
 
-            var jsonData = JsonSupport.Serialize(sendMessage.Message);
+            var jsonData = JsonSupport.Serialize(sendMessage!.Message);
 			messageStringBuilder.Length = 0;
 			messageStringBuilder.Append(MessageGeneratedKey);
 			messageStringBuilder.Append("#");
@@ -513,12 +513,14 @@ namespace MNF
 					if (recvIPEndPoint == null)
 						return;
 
-					var responseEndPointInfo = new ResponseEndPointInfo();
-					responseEndPointInfo.ipEndPoint = recvIPEndPoint;
-					responseEndPointInfo.isServer = isServer;
-					responseEndPointInfo.uniqueKey = uniqueKey;
-                    responseEndPointInfo.registedDateTime = DateTime.Now;
-					responseEndPoint.Add(responseEndPointInfo);
+					var responseEndPointInfo = new ResponseEndPointInfo
+                    {
+                        ipEndPoint = recvIPEndPoint,
+                        isServer = isServer,
+                        uniqueKey = uniqueKey,
+                        registedDateTime = DateTime.Now
+                    };
+                    responseEndPoint.Add(responseEndPointInfo);
 
 					LogManager.Instance.WriteSystem("Add : {0}", recvIPEndPoint.ToString());
 				}

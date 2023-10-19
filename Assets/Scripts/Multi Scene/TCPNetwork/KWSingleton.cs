@@ -17,12 +17,12 @@ namespace MNF
 				
                     if( null == ms_Instance )
                     {
-                        Debug.Log( string.Format ( "{0} {1} {2}", "No instance of ", typeof(T).ToString(), "a temporary on is created." ) );
+                        Debug.Log($"No instance of  {typeof(T).ToString()} a temporary on is created.");
                         ms_Instance = new GameObject( typeof(T).ToString(), typeof(T) ).GetComponent<T> ();
 					
                         if( null == ms_Instance )
                         {
-                            Debug.LogError( string.Format("{0} {1}", "Failed to create a ", typeof(T).ToString()) );					
+                            Debug.LogError($"Failed to create a  {typeof(T).ToString()}");					
                         }				
                     }
                 }

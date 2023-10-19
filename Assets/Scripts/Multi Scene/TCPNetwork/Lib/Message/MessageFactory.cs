@@ -5,13 +5,14 @@ namespace MNF.Message
     public class MessageBuffer<TMessageHeader> where TMessageHeader : new()
     {
         #region Header Support
-        static int headerSize = MarshalHelper.GetManagedDataSize(typeof(TMessageHeader));
-        public static int SerializedHeaderSize { get { return headerSize; } }
+
+        public static int SerializedHeaderSize { get; } = MarshalHelper.GetManagedDataSize(typeof(TMessageHeader));
+
         #endregion Header Support
 
         public TMessageHeader MessageHeader { get; private set; }
         public byte[] SerializedBuffer { get; set; }
-        public int SerializedBufferLength { get { return SerializedBuffer.Length; } }
+        public int SerializedBufferLength => SerializedBuffer.Length;
 
         public MessageBuffer(int messageBufferSize)
         {
@@ -32,7 +33,7 @@ namespace MNF.Message
                 _Serialize(messageID, managedData);
 
                 if (SerializedLength < 0)
-                    throw new Exception(string.Format("SerializedLength:{0} is smaller than 0", SerializedLength));
+                    throw new Exception($"SerializedLength:{SerializedLength} is smaller than 0");
                 
                 if (SerializedLength > MaxMessageBufferSize)
                     throw new Exception(string.Format("SerializedLength:{0} is lagger than MaxMessageBufferSize:{1}"
@@ -56,11 +57,11 @@ namespace MNF.Message
     {
         MessageBuffer<T> MessageBuffer { get; set; }
 
-        public int SerializedHeaderSize { get { return MessageBuffer<T>.SerializedHeaderSize; } }
-        public T MessageHeader { get { return MessageBuffer.MessageHeader; } }
-        public Type HeaderType { get { return typeof(T); } }
+        public int SerializedHeaderSize => MessageBuffer<T>.SerializedHeaderSize;
+        public T MessageHeader => MessageBuffer.MessageHeader;
+        public Type HeaderType => typeof(T);
 
-		public Serializer(int messageBufferSize)
+        public Serializer(int messageBufferSize)
         {
             MaxMessageBufferSize = messageBufferSize;
             MessageBuffer = new MessageBuffer<T>(messageBufferSize);
@@ -98,10 +99,10 @@ namespace MNF.Message
     {
         MessageBuffer<T> MessageBuffer { get; set; }
 
-        public int SerializedHeaderSize { get { return MessageBuffer<T>.SerializedHeaderSize; } }
-        public byte[] SerializedBuffer { get { return MessageBuffer.SerializedBuffer; } }
-        public T MessageHeader { get { return MessageBuffer.MessageHeader; } }
-        public Type HeaderType { get { return typeof(T); } }
+        public int SerializedHeaderSize => MessageBuffer<T>.SerializedHeaderSize;
+        public byte[] SerializedBuffer => MessageBuffer.SerializedBuffer;
+        public T MessageHeader => MessageBuffer.MessageHeader;
+        public Type HeaderType => typeof(T);
 
         public Deserializer(int messageBufferSize)
         {

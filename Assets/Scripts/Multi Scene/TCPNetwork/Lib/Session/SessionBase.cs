@@ -31,8 +31,8 @@ namespace MNF
 
         public bool IsConnected
         {
-            get { return (this.isConnected && this.Socket.Connected); }
-            set { this.isConnected = value; }
+            get => (this.isConnected && this.Socket.Connected);
+            set => this.isConnected = value;
         }
 
         public override string ToString()

@@ -44,8 +44,7 @@ namespace MNF
             if (dispatchList.ContainsKey(messageType) == false)
                 return null;
 
-            DispatchInfo dispatchInfo = null;
-            if (dispatchList.TryGetValue(messageType, out dispatchInfo) == false)
+            if (dispatchList.TryGetValue(messageType, out var dispatchInfo) == false)
                 return null;
 
             return dispatchInfo;
@@ -111,7 +110,7 @@ namespace MNF
 				{
                     Delegate loadedFunction = Utility.LoadDelegate(this, functionName, typeof(TDelegate));
 					if (loadedFunction == null)
-						throw new Exception(string.Format("{0} Dispatch Create Failed", functionName));
+						throw new Exception($"{functionName} Dispatch Create Failed");
 
 					DispatchInfo dispatchInfo = TryGetMessageDispatch(enumMessage.Key);
 					if (dispatchInfo == null)
@@ -156,14 +155,16 @@ namespace MNF
 					}
 
 					if (messageType == null)
-						throw new Exception(string.Format("{0} Packet Invalid", packetName));
+						throw new Exception($"{packetName} Packet Invalid");
 
 					DispatchInfo dispatchInfo = TryGetMessageDispatch(enumMessage.Key);
 					if (dispatchInfo == null)
 					{
-						dispatchInfo = new DispatchInfo(null);
-                        dispatchInfo.messageType = messageType;
-						dispatchList.Add(enumMessage.Key, dispatchInfo);
+						dispatchInfo = new DispatchInfo(null)
+                        {
+                            messageType = messageType
+                        };
+                        dispatchList.Add(enumMessage.Key, dispatchInfo);
 					}
 					else
 					{

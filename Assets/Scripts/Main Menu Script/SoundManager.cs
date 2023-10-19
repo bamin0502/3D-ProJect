@@ -85,9 +85,8 @@ public class SoundManager : MonoBehaviour
         {
             foreach (AudioSource effectAudioSource in effectAudioSources)
             {
-                if (effectAudioSource.isPlaying)
+                if (effectAudioSource.isPlaying && effectAudioSource.clip == effectSound.clip)
                 {
-                    effectAudioSource.clip = effectSound.clip;
                     effectAudioSource.Stop();
                     break;
                 }

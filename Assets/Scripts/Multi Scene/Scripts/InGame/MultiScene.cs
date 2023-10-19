@@ -402,19 +402,32 @@ public class MultiScene : MonoBehaviour
             case (int)DataType.PlayerMovement:
                 user.TryGetComponent<MultiPlayerMovement>(out var userMove2);
                 user.TryGetComponent<MultiWeaponController>(out var userAttack);
-                int target = Convert.ToInt32(jData["TARGET"].ToString());
+                // int target = Convert.ToInt32(jData["TARGET"].ToString());
+                //
+                // if (target <= -1)
+                // {
+                //     userAttack.ClearTarget();
+                //     userMove2.navAgent.SetDestination(StringToVector(jData["POSITION"].ToString()));
+                // }
+                // else
+                // {
+                //     userAttack.SetTarget(target);
+                //     userMove2.navAgent.SetDestination(StringToVector(jData["POSITION"].ToString()));
+                // }
+                if (userMove2 != null && userMove2.navAgent.isActiveAndEnabled) {
+                    int target = Convert.ToInt32(jData["TARGET"].ToString());
+                    Vector3 position = StringToVector(jData["POSITION"].ToString());
 
-                if (target <= -1)
-                {
-                    userAttack.ClearTarget();
-                    userMove2.navAgent.SetDestination(StringToVector(jData["POSITION"].ToString()));
+                    if (userMove2.navAgent.isOnNavMesh) {
+                        if (target <= -1) {
+                            userAttack.ClearTarget();
+                            userMove2.navAgent.SetDestination(position);
+                        } else {
+                            userAttack.SetTarget(target);
+                            userMove2.navAgent.SetDestination(position);
+                        }
+                    }
                 }
-                else
-                {
-                    userAttack.SetTarget(target);
-                    userMove2.navAgent.SetDestination(StringToVector(jData["POSITION"].ToString()));
-                }
-
                 break;
             //플레이어 아이템 드랍 관련 테스트 필요
             case (int)DataType.PlayerPickItem:

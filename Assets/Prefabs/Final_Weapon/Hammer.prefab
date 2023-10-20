@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 6723197841539087298}
   - component: {fileID: 5373485436311974530}
   m_Layer: 0
-  m_Name: Hammer1_3_1
-  m_TagString: Untagged
+  m_Name: Hammer
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96,11 +96,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e776399180208994bbbe3b8258d35ebe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 0
-  weaponName: 
+  range: 5
+  weaponName: Hammer
   isEquipped: 0
-  attackInterval: 0
-  weaponType: 0
-  PickPosition: {x: 0, y: 0, z: 0}
-  PickRotation: {x: 0, y: 0, z: 0}
+  attackInterval: 2
+  weaponType: 3
+  PickPosition: {x: -0.04, y: 0.083, z: 0.404}
+  PickRotation: {x: 151.413, y: -103.622, z: 246.972}
   iconCanvas: {fileID: 0}

@@ -349,4 +349,4 @@ MonoBehaviour:
   PickRotation: {x: 87, y: -130.8, z: 232}
   iconCanvas: {fileID: 0}
   arrowPos: {fileID: 5923339384786526843}
-  projectilePrefab: {fileID: 6491225712752495104, guid: ed0871284de03ba408e887ba4e90e0fa, type: 3}
+  projectilePrefab: {fileID: 8667249111116518685, guid: aff2faa339aa6da4590a3c8f3d77a497, type: 3}

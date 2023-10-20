@@ -3,8 +3,8 @@
 			[Header(Main Settings)]
 				[Space]
 					[HDR]_TintColor("TintColor",Color) = (1,1,1,1)
-					[Toggle(IS_USE_SECOND_COLOR)]_SecondColor("Is use second color",int) = 0
-					[HDR]_TintColor2("Color2",Color) = (1,1,1,1)
+						[Toggle(IS_USE_SECOND_TINTCOLOR)]_SecondTintColor("Is Use Second Tintcolor",int) = 0
+					[HDR]_TintColor2("TintColor2",Color) = (1,1,1,1)
 					_MainTex("MainTexture",2D) = "white" {}
 					_ColorFactor("Color Factor", float) = 1
 					[Toggle(IS_TEXTURE_ANIMATE)]_TextureAnimate("Is Texture Animate",int) = 0
@@ -27,15 +27,11 @@
 		}
 
 		Category{
-			Tags{ "Queue" = "Geometry"  "IgnoreProjector" = "True" "RenderType" = "Transparent" }
+			Tags{ "Queue" = "Transparent"  "IgnoreProjector" = "True" "RenderType" = "Transparent"}
 			Blend[_BlendSrc][_BlendDst]
 			Cull Front
 			ZTest[_ZTest1]
 			ZWrite Off
-			Stencil {
-						Ref 1
-						Comp notequal
-			}
 
 
 			SubShader{
@@ -45,8 +41,8 @@
 						#pragma fragment frag
 						#pragma multi_compile_instancing
 
+						#pragma shader_feature IS_USE_SECOND_TINTCOLOR
 						#pragma shader_feature IS_MASK_FADE
-						#pragma shader_feature IS_USE_SECOND_COLOR
 						#pragma shader_feature IS_TEXTURE_ANIMATE
 						#pragma shader_feature IS_NORMAL_ANIMATE
 						#pragma shader_feature IS_NORMAL_DISTORTION
@@ -63,7 +59,6 @@
 						float4 _NormalTex_ST;
 						float4 _MaskTex_ST;
 						float4 _MainTex_NextFrame;
-						float4 _DepthPyramidScale;
 						float _MaskCutOut;
 
 						UNITY_INSTANCING_BUFFER_START(data)
@@ -71,9 +66,9 @@
 						#define _InverseTransformMatrix_arr data
 							UNITY_DEFINE_INSTANCED_PROP(half4, _TintColor)
 						#define _TintColor_arr data
-						#ifdef IS_USE_SECOND_COLOR
-								UNITY_DEFINE_INSTANCED_PROP(half4, _TintColor2)
-							#define _TintColor2_arr data
+						#ifdef IS_USE_SECOND_TINTCOLOR
+													UNITY_DEFINE_INSTANCED_PROP(half4, _TintColor2)
+						#define _TintColor2_arr data
 						#endif
 							UNITY_DEFINE_INSTANCED_PROP(half, _NormalAnimateSpeed)
 						#define _NormalAnimateSpeed_arr data
@@ -121,7 +116,6 @@
 							o.ray = UnityObjectToViewPos(v.vertex) * float3(-1, -1, 1);
 							o.screenUV = ComputeScreenPos(o.vertex);
 							o.normal = UnityObjectToWorldNormal(o.vertex);
-							//o.screenUV.xy *= _DepthPyramidScale.xy;
 
 							UNITY_TRANSFER_FOG(o, o.vertex);
 							return o;
@@ -131,14 +125,14 @@
 						{
 							UNITY_SETUP_INSTANCE_ID(i);
 							i.ray = i.ray* (_ProjectionParams.z / i.ray.z);
-							float2 screenUV = i.screenUV.xy / i.screenUV.w;
 
-							float depth = Linear01Depth(SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture,screenUV));
+							float depth = Linear01Depth(tex2Dproj(_CameraDepthTexture,i.screenUV));
 							float4 vpos = float4(i.ray * depth, 1);
 							float3 wpos = mul(unity_CameraToWorld, vpos).xyz;
 							float3 opos = mul(unity_WorldToObject, float4(wpos,1)).xyz;
 							float3 objAbs = abs(opos);
 							clip(0.5f - objAbs);
+
 
 							i.texcoord = saturate(opos.xz + 0.5) * _MainTex_ST.xy + _MainTex_ST.zw;
 							i.texcoord2 = saturate(opos.xz + 0.5) * _NormalTex_ST.xy + _NormalTex_ST.zw;
@@ -168,14 +162,14 @@
 							#else
 							half mask_a = tex.a * _MaskCutOut;
 							#endif
-							#ifdef IS_USE_SECOND_COLOR
+							#ifdef IS_USE_SECOND_TINTCOLOR
 								half4 res = tex * UNITY_ACCESS_INSTANCED_PROP(_TintColor2_arr, _TintColor2) *  UNITY_ACCESS_INSTANCED_PROP(_ColorFactor_arr, _ColorFactor);
 								half alpha = res.a * i.color.a * mask_a *  UNITY_ACCESS_INSTANCED_PROP(_ColorFactor_arr, _ColorFactor)  * UNITY_ACCESS_INSTANCED_PROP(_TintColor2_arr, _TintColor2).a;
-							#else			
+							#else
 								half4 res = tex * UNITY_ACCESS_INSTANCED_PROP(_TintColor_arr, _TintColor) *  UNITY_ACCESS_INSTANCED_PROP(_ColorFactor_arr, _ColorFactor);
 								half alpha = res.a * i.color.a * mask_a *  UNITY_ACCESS_INSTANCED_PROP(_ColorFactor_arr, _ColorFactor)  * UNITY_ACCESS_INSTANCED_PROP(_TintColor_arr, _TintColor).a;
-							#endif
-								res.a = alpha;
+							#endif							
+							res.a = alpha;
 
 							if (dot(vpos, i.vertex) != 0)
 								return res;

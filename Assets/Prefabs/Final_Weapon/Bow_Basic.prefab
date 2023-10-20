@@ -342,11 +342,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   range: 10
   weaponName: Bow
-  damage: 30
   isEquipped: 0
   attackInterval: 3
   weaponType: 1
   PickPosition: {x: -0.008, y: 0.041, z: 0.009}
   PickRotation: {x: 87, y: -130.8, z: 232}
+  iconCanvas: {fileID: 0}
   arrowPos: {fileID: 5923339384786526843}
   projectilePrefab: {fileID: 6491225712752495104, guid: ed0871284de03ba408e887ba4e90e0fa, type: 3}

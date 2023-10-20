@@ -315,6 +315,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyHealth: {fileID: 5196484648767173490}
   healthBar: {fileID: 8245656166295737799}
+  healthText: {fileID: 0}
 --- !u!1001 &7266823446170055177
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -675,17 +676,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 0
   curHealth: 0
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  radius: 1
+  maxDistance: 100
+  origin: {fileID: 0}
   attackArea: {fileID: 1226021014}
   target: {fileID: 0}
   isChase: 0
   isAttack: 0
   origninalPosition: {x: 0, y: 0, z: 0}
-  detectionRadius: 5
-  itemPrefabs:
-  - {fileID: 7005254024495169906, guid: a2be9a7ed91393c43ab45799da8e1463, type: 3}
-  - {fileID: 517679667345461060, guid: af265e193312f7e40b241a918614f063, type: 3}
-  - {fileID: 1609437894853043167, guid: 8d0aabb812e0c434ebc2c37a5624d9c2, type: 3}
+  anim: {fileID: 0}
   isDead: 0
+  detectionRadius: 5
+  EnemyDam: 0
+  enemyType: 0
   tmpDamage: 5
 --- !u!195 &2138597249
 NavMeshAgent:
@@ -743,6 +749,12 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 100
   anim: {fileID: 7316493964999413621}
+  enemyType: 1
+  deathText: {fileID: 0}
+  EndingImage: {fileID: 0}
+  KilledImage: {fileID: 0}
+  kill: {fileID: 0}
+  death: {fileID: 0}
 --- !u!95 &7316493964999413621 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 95025375702580604, guid: f88c6ad57910d8648807bcf0c131f49d, type: 3}

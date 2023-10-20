@@ -151,4 +151,4 @@ MonoBehaviour:
   myplayerName: 
   mynameText: {fileID: 6088488544131886441}
   mystatus: {fileID: 0}
-  mynameStatus: {fileID: 4169477120409869724}
+  mynameStatusPrefab: {fileID: 0}

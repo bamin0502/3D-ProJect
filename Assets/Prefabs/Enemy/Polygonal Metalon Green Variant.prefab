@@ -194,6 +194,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyHealth: {fileID: 29126441530824655}
   healthBar: {fileID: 2284900719153736457}
+  healthText: {fileID: 0}
 --- !u!1 &8286174465212127182
 GameObject:
   m_ObjectHideFlags: 0
@@ -393,6 +394,12 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 100
   anim: {fileID: 6873892545987920973}
+  enemyType: 1
+  deathText: {fileID: 0}
+  EndingImage: {fileID: 0}
+  KilledImage: {fileID: 0}
+  kill: {fileID: 0}
+  death: {fileID: 0}
 --- !u!4 &6789359422561921027 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4076386488672668937, guid: af0d37eee67ea1e4c90c6c03df9e6616, type: 3}

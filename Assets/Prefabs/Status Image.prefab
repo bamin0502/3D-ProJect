@@ -382,5 +382,4 @@ MonoBehaviour:
   playerName: 
   nameText: {fileID: 800343205689432058}
   gridLayoutGroup: {fileID: 0}
-  playerHpImage: {fileID: 919965078504133437}
   statusbar: {fileID: 8619022207478084260}

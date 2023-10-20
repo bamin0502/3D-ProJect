@@ -302,4 +302,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58be00802ea2a304dac9275477518770, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myPlayerName: 
+  healthBar: {fileID: 0}
+  healthText: {fileID: 0}
+  playerName: 

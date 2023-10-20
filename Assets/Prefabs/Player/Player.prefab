@@ -1688,6 +1688,7 @@ MonoBehaviour:
   currentTarget: {fileID: 0}
   isAttack: 0
   IconCanvas: {fileID: 0}
+  WeaponText: {fileID: 0}
 --- !u!114 &2789540502124580077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3614,7 +3615,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b78fe75f12dee24d8503e45b872edd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 5
+  pickupRadius: 0
   layerMask:
     serializedVersion: 2
     m_Bits: 8

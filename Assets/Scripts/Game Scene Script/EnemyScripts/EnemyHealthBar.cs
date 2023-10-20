@@ -11,7 +11,10 @@ public class EnemyHealthBar : MonoBehaviour
     private void Start()
     {
         _cam = Camera.main;
-       
+        if (healthText != null)
+        {
+            healthText.text = (float)enemyHealth.currentHealth + "/" + enemyHealth.maxHealth;
+        }
     }
     public void UpdateHealth()
     {

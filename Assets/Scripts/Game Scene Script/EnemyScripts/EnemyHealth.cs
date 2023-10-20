@@ -7,7 +7,7 @@ using DG.Tweening;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine.AI;
-
+using UnityEngine.SceneManagement;
 public enum EnemyType
 {
     Boss,
@@ -15,8 +15,6 @@ public enum EnemyType
     RedSpider,
     GreenSpider
 }
-
-
 public class EnemyHealth : MonoBehaviour
 {
     private NavMeshAgent _nav;
@@ -33,39 +31,72 @@ public class EnemyHealth : MonoBehaviour
 
     private static readonly int DoDie = Animator.StringToHash("doDie");
 
+    private string currentSceneName;
     // Start is called before the first frame update
     void Start()
     {
         _nav = GetComponent<NavMeshAgent>();
-        
-        string json = "";
+        currentSceneName= SceneManager.GetActiveScene().name;
+        EnemyHealthBaseOnScene(currentSceneName);
+    }
+    private void EnemyHealthBaseOnScene(string sceneName)
+    {
+        if (sceneName.Equals("Game Scene"))
+        {
+            string json = "";
+            if (enemyType == EnemyType.Monster)
+            {
+                json = "{\"EnemyHealth\": 1000, \"Health\": 1000}";
+            }
+            else if (enemyType == EnemyType.RedSpider)
+            {
+                json= "{\"EnemyHealth\": 700, \"Health\": 700}";
+            }
+            else if (enemyType == EnemyType.GreenSpider)
+            {
+                json= "{\"EnemyHealth\": 500, \"Health\": 500}";
+            }
+            else if (enemyType == EnemyType.Boss)
+            {
+                json = "{\"EnemyHealth\": 30000, \"Health\": 30000}";
+            }
 
-        if (enemyType == EnemyType.Monster)
-        {
-            json = "{\"EnemyHealth\": 100, \"Health\": 100}";
+            EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
+            maxHealth = (int)enemyStat1.EnemyHealth;
+            currentHealth = (int)enemyStat1.Health;
+            currentHealth = maxHealth;
+            enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
+            DOTween.SetTweensCapacity(500, 50);
         }
-        else if (enemyType == EnemyType.RedSpider)
-        {
-            json= "{\"EnemyHealth\": 70, \"Health\": 70}";
-        }
-        else if (enemyType == EnemyType.GreenSpider)
-        {
-            json= "{\"EnemyHealth\": 50, \"Health\": 50}";
-        }
-        else if (enemyType == EnemyType.Boss)
-        {
-            json = "{\"EnemyHealth\": 300, \"Health\": 300}";
-        }
-
-        EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
-        maxHealth = (int)enemyStat1.EnemyHealth;
-        currentHealth = (int)enemyStat1.Health;
-        currentHealth = maxHealth;
-        enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
-        DOTween.SetTweensCapacity(500, 50);
+        // else if (sceneName.Equals("Multi Scene"))
+        // {
+        //     string json = "";
+        //     if (enemyType == EnemyType.Monster)
+        //     {
+        //         json = "{\"EnemyHealth\": 100, \"Health\": 100}";
+        //     }
+        //     else if (enemyType == EnemyType.RedSpider)
+        //     {
+        //         json= "{\"EnemyHealth\": 70, \"Health\": 70}";
+        //     }
+        //     else if (enemyType == EnemyType.GreenSpider)
+        //     {
+        //         json= "{\"EnemyHealth\": 50, \"Health\": 50}";
+        //     }
+        //     else if (enemyType == EnemyType.Boss)
+        //     {
+        //         json = "{\"EnemyHealth\": 300, \"Health\": 300}";
+        //     }
+        //
+        //     EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
+        //     maxHealth = (int)enemyStat1.EnemyHealth;
+        //     currentHealth = (int)enemyStat1.Health;
+        //     currentHealth = maxHealth;
+        //     enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
+        //     DOTween.SetTweensCapacity(500, 50);
+        // }
         
     }
-
     public void TakeDamage(int damage)
     {
         if (enemyType == EnemyType.Monster || enemyType == EnemyType.GreenSpider || enemyType == EnemyType.RedSpider)

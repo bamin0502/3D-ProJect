@@ -68,7 +68,7 @@ public class EnemyHealth : MonoBehaviour
             enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
             DOTween.SetTweensCapacity(500, 50);
         }
-        // else if (sceneName.Equals("Multi Scene"))
+        // else if (sceneName.Equals("Single Scene"))
         // {
         //     string json = "";
         //     if (enemyType == EnemyType.Monster)

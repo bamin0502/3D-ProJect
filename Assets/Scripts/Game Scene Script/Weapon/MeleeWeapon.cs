@@ -21,7 +21,7 @@ public class MeleeWeapon : Weapon
             {
                 SoundManager.instance.PlaySE("Hammer_Attack");
             }
-            enemy.TakeDamage(isSkill == 0 ? damage : skillDamage);
+            enemy.TakeDamage(isSkill == 0 ? damage : skillDamage, transform.position);
         }
     }
 

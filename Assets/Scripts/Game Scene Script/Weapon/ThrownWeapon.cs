@@ -75,7 +75,7 @@ public class ThrownWeapon : MonoBehaviour
         {
             if (Vector3.Distance(enemy.transform.position, fireEffect.transform.position) <= explosionRadius)
             {
-                enemy.TakeDamage(damage);
+                enemy.TakeDamage(damage, transform.position);
             }
 
             time += applyDamageInterval;

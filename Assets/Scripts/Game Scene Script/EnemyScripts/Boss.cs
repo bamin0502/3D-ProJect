@@ -8,8 +8,8 @@ using UnityEngine.UIElements;
 public class Boss : MonoBehaviour
 {
     public int Healing;
-    public int maxHealth;
-    public int currentHealth;
+    public float maxHealth;
+    public float currentHealth;
 
     public Transform target;
     public BoxCollider meleeArea;
@@ -257,9 +257,9 @@ public class Boss : MonoBehaviour
         draw.Play();
         anim.SetTrigger(DoBigShot);
 
-        int previousHealth = enemyHealth.currentHealth;
-        int potentialHealth = Mathf.Clamp(enemyHealth.currentHealth + Healing, 0, maxHealth);
-        int healedAmount = potentialHealth - previousHealth;
+        float previousHealth = enemyHealth.currentHealth;
+        float potentialHealth = Mathf.Clamp(enemyHealth.currentHealth + Healing, 0, maxHealth);
+        float healedAmount = potentialHealth - previousHealth;
 
         if (healedAmount > 0)
         {

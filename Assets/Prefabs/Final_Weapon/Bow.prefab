@@ -588,6 +588,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1694463686983487922}
   - component: {fileID: -5361244441254641825}
+  - component: {fileID: 1153316943866722087}
   m_Layer: 0
   m_Name: Bow
   m_TagString: Weapon
@@ -610,7 +611,7 @@ Transform:
   - {fileID: 340496612318625317}
   - {fileID: 27720068757495146}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &-5361244441254641825
 MonoBehaviour:
@@ -634,6 +635,19 @@ MonoBehaviour:
   iconCanvas: {fileID: 0}
   arrowPos: {fileID: 5923339384786526843, guid: 55e499f1a9db717449dc77fe299e75e7, type: 3}
   projectilePrefab: {fileID: 8667249111116518685, guid: aff2faa339aa6da4590a3c8f3d77a497, type: 3}
+--- !u!65 &1153316943866722087
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073943991640083208}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.47058105, y: 1, z: 0.123046875}
+  m_Center: {x: 0.03677368, y: 0, z: -0.0050811768}
 --- !u!1 &2850389014307120603
 GameObject:
   m_ObjectHideFlags: 0

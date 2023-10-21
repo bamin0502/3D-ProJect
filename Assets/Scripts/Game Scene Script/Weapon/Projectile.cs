@@ -5,18 +5,18 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public float speed = 25f;
-    public int damage = 10;
-
+    public int damage = 100;
+    private bool isDestroy = false;
+    
     private void Start(){
         StartCoroutine(DeleteCoroutine());
+        
     }
 
     private IEnumerator DeleteCoroutine(){
         yield return new WaitForSeconds(5f);
-
-        if (gameObject != null){
-            Destroy(gameObject);
-        }
+        isDestroy = true;
+        Destroy(gameObject);
     }
 
 
@@ -37,13 +37,11 @@ public class Projectile : MonoBehaviour
             bool isEnemy = target.TryGetComponent(out EnemyHealth enemy);
             if (isEnemy)
             {
-                enemy.TakeDamage(damage);
+                enemy.TakeDamage(damage, transform.position);
             }
-            
-            if (gameObject != null){
-                Destroy(gameObject);
-            }
+
+            isDestroy = true;
+            Destroy(gameObject);
         }
     }
-
 }

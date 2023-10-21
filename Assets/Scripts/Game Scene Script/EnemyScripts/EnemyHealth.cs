@@ -8,6 +8,9 @@ using TMPro;
 using Unity.Mathematics;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
+using DamageNumbersPro;
+using DamageNumbersPro.Internal;
+
 public enum EnemyType
 {
     Boss,
@@ -19,8 +22,8 @@ public class EnemyHealth : MonoBehaviour
 {
     private NavMeshAgent _nav;
     public EnemyHealthBar enemyHealthBar;
-    public int maxHealth;
-    public int currentHealth;
+    public float maxHealth;
+    public float currentHealth;
     public Animator anim;
     public EnemyType enemyType = EnemyType.Monster;
     public TMP_Text deathText;
@@ -30,7 +33,8 @@ public class EnemyHealth : MonoBehaviour
     public TMP_Text death;
 
     private static readonly int DoDie = Animator.StringToHash("doDie");
-
+    public DamageNumber damageNumbersPrefab;
+    public RectTransform RectTransform;
     private string currentSceneName;
     // Start is called before the first frame update
     void Start()
@@ -38,6 +42,11 @@ public class EnemyHealth : MonoBehaviour
         _nav = GetComponent<NavMeshAgent>();
         currentSceneName= SceneManager.GetActiveScene().name;
         EnemyHealthBaseOnScene(currentSceneName);
+    }
+    private void ShowDamageNumbers(float damageAmount,Vector3 position)
+    {
+        DamageNumber damageNumbers = damageNumbersPrefab.Spawn(new Vector3(position.x, position.y + 1f, position.z), damageAmount);
+        damageNumbers.SetAnchoredPosition(RectTransform,new Vector2(0,0));
     }
     private void EnemyHealthBaseOnScene(string sceneName)
     {
@@ -97,17 +106,20 @@ public class EnemyHealth : MonoBehaviour
         // }
         
     }
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage,Vector3 position)
     {
         if (enemyType == EnemyType.Monster || enemyType == EnemyType.GreenSpider || enemyType == EnemyType.RedSpider)
         {
             currentHealth -= damage;
             enemyHealthBar.UpdateHealth();
+            
+            ShowDamageNumbers(damage,transform.position);
         }
         else if(enemyType == EnemyType.Boss)
         {
             currentHealth -= damage;
             enemyHealthBar.UpdateBossHealth();
+            ShowDamageNumbers(damage,transform.position);
         }
         if (currentHealth <= 0 )
         {

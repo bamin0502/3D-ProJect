@@ -52,6 +52,7 @@ public class MultiPlayerHealth : MonoBehaviour
         _multiTeamstatus.UpdatePlayerHp();
         //자신 체력 메인 UI 체력상태창
         MultiScene.Instance.multiPlayerHealthBar.UpdatePlayerHp();
+        MultiScene.Instance.BroadCastingEnemyAttack(damage);
         if (CurrentHealth <= 0)
         {
             Die();

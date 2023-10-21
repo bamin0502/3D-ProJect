@@ -1,12 +1,13 @@
 using System;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 
 public class MultiMyStatus : MonoBehaviour
 {
-    public static Image playerHpImage;
+    public Image playerHpImage;
     public string myplayerName = "";
     public TextMeshProUGUI mynameText;
     public Canvas mystatus;
@@ -50,6 +51,65 @@ public class MultiMyStatus : MonoBehaviour
     {
         _cam = Camera.main;
         rotation = mystatus.transform.rotation;
+
+        // mystatus 초기화
+        mystatus = GameObject.FindGameObjectWithTag("MyStatus").GetComponent<Canvas>();
+        if (mystatus == null)
+        {
+            Debug.LogError("Mystatus Canvas not found.");
+        }
+
+        // mynameStatusPrefab 초기화
+        mynameStatusPrefab = Resources.Load<GameObject>("Mystatus");
+        if (mynameStatusPrefab != null)
+        {
+            Transform hpBackgroundTransform = mynameStatusPrefab.transform.Find("Hp Background Image");
+            if (hpBackgroundTransform != null)
+            {
+                Transform hpImageTransform = hpBackgroundTransform.Find("Hp Image");
+                if (hpImageTransform != null)
+                {
+                    playerHpImage = hpImageTransform.GetComponent<Image>();
+                }
+                else
+                {
+                    Debug.LogError("Hp Image not found as a child of Hp Background Image.");
+                }
+            }
+            else
+            {
+                Debug.LogError("Hp Background Image not found as a child of mynameStatusPrefab.");
+            }
+        }
+        else
+        {
+            Debug.LogError("MynameStatusPrefab not found.");
+        }
+        // Canvas[] canvases = GetComponentsInChildren<Canvas>();
+        // foreach (Canvas canvas in canvases)
+        // {
+        //     if (canvas.CompareTag("MyStatus"))
+        //     {
+        //         mystatus = canvas;
+        //         break;
+        //     }
+        // }
+        // if (mystatus == null)
+        // {
+        //     Debug.LogError("Canvas with the tag MyStatus not found as a child of the player GameObject.");
+        // }
+        // if (mynameStatusPrefab != null)
+        // {
+        //     Transform hpImageTransform = mynameStatusPrefab.transform.Find("Hp Image");
+        //     if (hpImageTransform != null)
+        //     {
+        //         playerHpImage = hpImageTransform.GetComponent<Image>();
+        //     }
+        //     else
+        //     {
+        //         Debug.LogError("Hp Image not found as a child of mynameStatusPrefab.");
+        //     }
+        // }
     }
 
     private void Update()
@@ -64,11 +124,10 @@ public class MultiMyStatus : MonoBehaviour
     {
         playerHpImage.fillAmount = (float)_playerHealth.CurrentHealth / _playerHealth.MaxHealth;    
     }
-    void Awake()
+    public void Awake()
     {
-        mystatus = GameObject.FindGameObjectWithTag("MyStatus").GetComponent<Canvas>();
+        // mystatus = GameObject.FindGameObjectWithTag("MyStatus").GetComponent<Canvas>();
         mynameStatusPrefab = Resources.Load<GameObject>("Mystatus");
-        
     }
 
     private void OnDestroy()

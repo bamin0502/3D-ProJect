@@ -9,7 +9,7 @@ public class MultiTeamstatus : MonoBehaviour
     public string playerName = "";
     public TextMeshProUGUI nameText;
     public GridLayoutGroup gridLayoutGroup;
-    public static Image playerHpImage;
+    public Image playerHpImage;
     public GameObject statusbar;
 
     private MultiPlayerHealth _playerHealth;
@@ -17,7 +17,7 @@ public class MultiTeamstatus : MonoBehaviour
     public void Awake()
     {
         gridLayoutGroup = GameObject.Find("Team Status Image").GetComponent<GridLayoutGroup>();
-
+        playerHpImage = GameObject.Find("Team Status Image").GetComponentInChildren<Image>();
     }
 
     public void CreateTeamStatus(string PlayerName)

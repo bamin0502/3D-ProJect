@@ -143,9 +143,9 @@ namespace MNF
         public Vector3 GetVector3()
         {
             Vector3 vec = new Vector3();
-            vec.x = m_X / 1000;
-            vec.y = m_Y / 1000;
-            vec.z = m_Z / 1000;
+            vec.x = m_X / 1000f;
+            vec.y = m_Y / 1000f;
+            vec.z = m_Z / 1000f;
             return vec;
         }
     }

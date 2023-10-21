@@ -5,7 +5,7 @@ using Data;
 using Newtonsoft.Json;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public class MultiEnemy : MonoBehaviour
 {
     public enum EnemyType
@@ -40,7 +40,7 @@ public class MultiEnemy : MonoBehaviour
     private EnemyState _currentState;
     private readonly Collider[] _targets = new Collider[5];
     private string _enemyName;
-    private MultiPlayerHealth _playerHealth;
+    private string currentSceneName;
     public bool isDead { get; set; }
 
     private void Awake()
@@ -55,33 +55,56 @@ public class MultiEnemy : MonoBehaviour
         MultiScene.Instance.BroadCastingEnemyAnimation(_index, (int)_currentState);
         _index = MultiScene.Instance.enemyList.IndexOf(gameObject);
         _originalPos = transform.position;
-        SetState();
-
-        _playerHealth = FindObjectOfType<MultiPlayerHealth>();
+        currentSceneName = SceneManager.GetActiveScene().name;
+        SetState(currentSceneName);
     }
 
-    private void SetState()
+    private void SetState(string sceneName)
     {
-        string json = "";
+        if (sceneName.Equals("Game Scene"))
+        {
+            string json = "";
+            if (enemyType == EnemyType.Box)
+            {
+                json = "{\"damage\": 100}";
+                _enemyName = "Red Monster";
+            }
+            else if (enemyType == EnemyType.Red)
+            {
+                json = "{\"damage\": 150}";
+                _enemyName = "Red Spider";
+            }
+            else if (enemyType == EnemyType.Green)
+            {
+                json = "{\"damage\": 200}";
+                _enemyName = "Green Spider";
+            }
 
-        if (enemyType == EnemyType.Box)
-        {
-            json = "{\"damage\": 30}";
-            _enemyName = "Red Monster";
+            EnemyStat enemy = JsonConvert.DeserializeObject<EnemyStat>(json);
+            _damage = (int)enemy.damage;
         }
-        else if (enemyType == EnemyType.Red)
-        {
-            json = "{\"damage\": 10}";
-            _enemyName = "Red Spider";
-        }
-        else if (enemyType == EnemyType.Green)
-        {
-            json = "{\"damage\": 20}";
-            _enemyName = "Green Spider";
-        }
-
-        EnemyStat enemy = JsonConvert.DeserializeObject<EnemyStat>(json);
-        _damage = (int)enemy.damage;
+        // if(sceneName.Equals("Single Scene"))
+        // {
+        //     string json = "";
+        //     if (enemyType == EnemyType.Box)
+        //     {
+        //         json = "{\"damage\": 30}";
+        //         _enemyName = "Red Monster";
+        //     }
+        //     else if (enemyType == EnemyType.Red)
+        //     {
+        //         json = "{\"damage\": 10}";
+        //         _enemyName = "Red Spider";
+        //     }
+        //     else if (enemyType == EnemyType.Green)
+        //     {
+        //         json = "{\"damage\": 20}";
+        //         _enemyName = "Green Spider";
+        //     }
+        //
+        //     EnemyStat enemy = JsonConvert.DeserializeObject<EnemyStat>(json);
+        //     _damage = (int)enemy.damage;
+        // }
     }
    
     public IEnumerator PlayerDetect()
@@ -154,9 +177,9 @@ public class MultiEnemy : MonoBehaviour
         
         bool isPlayer = _targetPos.TryGetComponent(out MultiPlayerHealth playerHealth);
 
-        if (_playerHealth != null)
+        if (playerHealth != null)
         {
-            _playerHealth.TakeDamage(_damage);
+            playerHealth.TakeDamage(_damage);
         }
     }
 

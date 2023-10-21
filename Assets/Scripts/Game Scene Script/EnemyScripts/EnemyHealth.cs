@@ -31,7 +31,7 @@ public class EnemyHealth : MonoBehaviour
     public Image KilledImage;
     public TMP_Text kill;
     public TMP_Text death;
-
+    public Canvas canvas;
     private static readonly int DoDie = Animator.StringToHash("doDie");
     public DamageNumber damageNumbersPrefab;
     public RectTransform RectTransform;
@@ -45,8 +45,17 @@ public class EnemyHealth : MonoBehaviour
     }
     private void ShowDamageNumbers(float damageAmount,Vector3 position)
     {
-        DamageNumber damageNumbers = damageNumbersPrefab.Spawn(new Vector3(position.x, position.y + 1f, position.z), damageAmount);
-        damageNumbers.SetAnchoredPosition(RectTransform,new Vector2(0,0));
+        // DamageNumber damageNumbers = Instantiate(damageNumbersPrefab, canvas.transform);
+        // damageNumbers.transform.position = Camera.main.WorldToScreenPoint(position + new Vector3(0, 1f, 0));
+        //
+        // TextMeshProUGUI damageText = damageNumbers.GetComponentInChildren<TextMeshProUGUI>();
+        // if (damageText != null)
+        // {
+        //     damageText.text = damageAmount.ToString("0");
+        // }
+        //
+        // damageNumbers.transform.rotation = canvas.transform.rotation;
+
     }
     private void EnemyHealthBaseOnScene(string sceneName)
     {

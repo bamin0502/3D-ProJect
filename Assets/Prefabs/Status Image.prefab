@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 919965078504133437}
   m_Layer: 5
   m_Name: PlayerHp
-  m_TagString: MultiPlayerHealthBar
+  m_TagString: MultiPlayerTeamHealthBar
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -66,11 +66,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: dcdc43f7a0ad67b4ab3e3db38233dfae, type: 3}
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
@@ -382,4 +382,5 @@ MonoBehaviour:
   playerName: 
   nameText: {fileID: 800343205689432058}
   gridLayoutGroup: {fileID: 0}
+  playerHpImage: {fileID: 0}
   statusbar: {fileID: 8619022207478084260}

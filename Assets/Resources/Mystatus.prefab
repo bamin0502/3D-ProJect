@@ -224,7 +224,7 @@ GameObject:
   - component: {fileID: 3959745699984944992}
   m_Layer: 7
   m_Name: Mystatus
-  m_TagString: Status
+  m_TagString: MultiPlayerTeamHealthBar
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -258,11 +258,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4954051559711252910}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 74bb1f5545c4007498902d08b855f8e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerHpImage: {fileID: 7634274180650970132}
   myplayerName: 
   mynameText: {fileID: 6630305406453156782}
   mystatus: {fileID: 0}
@@ -280,7 +281,7 @@ GameObject:
   - component: {fileID: 7634274180650970132}
   m_Layer: 7
   m_Name: Hp Image
-  m_TagString: MultiPlayerHealthBar
+  m_TagString: MultiPlayerMyHealthBar
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

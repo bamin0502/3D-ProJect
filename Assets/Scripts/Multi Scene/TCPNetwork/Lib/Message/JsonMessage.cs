@@ -103,7 +103,7 @@ namespace MNF.Message
                     return;
                 }
 
-                // check readalbe body
+                // check readabler body
                 if (tcpSession.RecvCircularBuffer.ReadableSize < SerializedHeaderSize + messageBodySize)
                 {
                     parsingResult.parsingResultEnum = ParsingResult.ParsingResultEnum.PARSING_INCOMPLETE;

@@ -23,7 +23,6 @@ public enum DataType
     PlayerThrownWeapon = 6,
     EnemyAnimation=7,
     EnemyItem = 8,
-    EnemyAttack=9,
 }
 public class MultiScene : MonoBehaviour
 {
@@ -311,21 +310,6 @@ public class MultiScene : MonoBehaviour
         string sendData = LitJson.JsonMapper.ToJson(data);
         NetGameManager.instance.RoomBroadcast(sendData);
     }
-    public void BroadCastingEnemyAttack(int damage)
-    {
-        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
-            NetGameManager.instance.m_userHandle.m_szUserID);
-
-        var data = new ENEMY_ATTACK
-        {
-            USER= userSession.m_szUserID,
-            DATA = (int)DataType.EnemyAttack,
-            DAMAGE = damage,
-        };
-
-        string sendData = LitJson.JsonMapper.ToJson(data);
-        NetGameManager.instance.RoomBroadcast(sendData);
-    }
     public void RoomUserDel(UserSession user)
     {
 
@@ -480,6 +464,11 @@ public class MultiScene : MonoBehaviour
                         } else {
                             e.anim.SetInteger(AniEnemy, aniNumber);
                         }
+
+                        if (monsterAniType)
+                        {
+
+                        }
                     }
                 }
                 break;
@@ -489,13 +478,6 @@ public class MultiScene : MonoBehaviour
                 var newItem = Instantiate(itemPrefabs[itemIndex], enemyItemPos, quaternion.identity);
                 newItem.transform.SetParent(itemListParent);
                 itemsList.Add(newItem);
-                break;
-            case (int)DataType.EnemyAttack:
-                int damage = Convert.ToInt32(jData["DAMAGE"].ToString());
-                user.GetComponent<MultiPlayerHealth>().TakeDamage(damage);
-                user.GetComponent<MultiMyStatus>().UpdatePlayerHp();
-                user.GetComponent<MultiTeamstatus>().UpdatePlayerHp();
-                user.GetComponent<PlayerHealthBar>().UpdatePlayerHp();
                 break;
         }
     }

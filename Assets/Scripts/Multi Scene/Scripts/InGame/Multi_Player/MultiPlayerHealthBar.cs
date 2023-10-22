@@ -16,7 +16,6 @@ public class MultiPlayerHealthBar : MonoBehaviour
         MultiScene.Instance._players.TryGetValue(_playerName, out player);
         if (player != null)
         {
-            Debug.Log("플레이어를 찾지 못했습니다...");
             _playerHealth = player.GetComponent<MultiPlayerHealth>();
             if (_playerHealth != null)
             {

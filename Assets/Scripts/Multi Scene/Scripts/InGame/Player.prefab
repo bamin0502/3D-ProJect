@@ -582,8 +582,8 @@ MonoBehaviour:
   killedImage: {fileID: 0}
   kill: {fileID: 0}
   death: {fileID: 0}
-  deathParticle: {fileID: 0}
-  deathBloodParticle: {fileID: 0}
+  deathParticle: {fileID: 5978614181440743757}
+  deathBloodParticle: {fileID: 5946775195833011286}
 --- !u!114 &-7735151206589249757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4616,6 +4616,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4497748329459566, guid: a1a36200a3c61b34b9abfaed1373f4cc, type: 3}
   m_PrefabInstance: {fileID: 5780649860158330764}
   m_PrefabAsset: {fileID: 0}
+--- !u!198 &5946775195833011286 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 198104383770926042, guid: a1a36200a3c61b34b9abfaed1373f4cc, type: 3}
+  m_PrefabInstance: {fileID: 5780649860158330764}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5780649860344165315
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4714,6 +4719,11 @@ PrefabInstance:
 --- !u!4 &5776055468436847659 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4597830263558120, guid: 3b517eddec185dd4a830743a742ad00b, type: 3}
+  m_PrefabInstance: {fileID: 5780649860344165315}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &5978614181440743757 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 198355779183106702, guid: 3b517eddec185dd4a830743a742ad00b, type: 3}
   m_PrefabInstance: {fileID: 5780649860344165315}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5780649860760138425

@@ -1,9 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Unity.VisualScripting;
-
-
 public class MultiTeamstatus : MonoBehaviour
 {
     public string playerName = "";
@@ -17,7 +14,7 @@ public class MultiTeamstatus : MonoBehaviour
     public void Awake()
     {
         gridLayoutGroup = GameObject.Find("Team Status Image").GetComponent<GridLayoutGroup>();
-        playerHpImage = GameObject.Find("Team Status Image").GetComponentInChildren<Image>();
+        
     }
 
     public void CreateTeamStatus(string PlayerName)
@@ -37,6 +34,14 @@ public class MultiTeamstatus : MonoBehaviour
         }
         teamStatus.playerName = playerName;
         teamStatus.nameText.text = playerName;
+        
+        TextMeshProUGUI textComponent = teamStatusObject.GetComponentInChildren<TextMeshProUGUI>();
+        Transform playerHpTransform = teamStatusObject.transform.Find("PlayerHp");
+        if (playerHpTransform != null)
+        {
+            playerHpImage = playerHpTransform.GetComponent<Image>(); // playerHpImage를 초기화
+        }
+        
     }
 
     public void DestroyTeamStatus(string PlayerName)

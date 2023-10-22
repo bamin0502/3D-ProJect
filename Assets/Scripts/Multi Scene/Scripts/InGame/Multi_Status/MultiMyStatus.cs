@@ -37,6 +37,16 @@ public class MultiMyStatus : MonoBehaviour
         {
             Debug.LogError(myPlayerName + "체력바 생성에 실패했습니다.");
         }
+        Transform hpImageTransform = mynameStatusPrefab.transform.Find("Hp Image");
+        if (hpImageTransform != null)
+        {
+            teamStatus.playerHpImage = hpImageTransform.GetComponent<Image>();
+        }
+        else
+        {
+            Debug.LogError("Hp Image not found as a child of mynameStatusPrefab.");
+        }
+        
         // 상태창의 회전을 고정,캔버스도 회전을 막아야 함 
         teamStatus.transform.rotation = new Quaternion(0, 180, 0, 0);
         mystatus.transform.rotation = new Quaternion(0, 180, 0, 0);
@@ -56,60 +66,19 @@ public class MultiMyStatus : MonoBehaviour
         mystatus = GameObject.FindGameObjectWithTag("MyStatus").GetComponent<Canvas>();
         if (mystatus == null)
         {
-            Debug.LogError("Mystatus Canvas not found.");
+            Debug.LogError("캔버스를 불러올 수 없습니다.");
         }
-
-        // mynameStatusPrefab 초기화
         mynameStatusPrefab = Resources.Load<GameObject>("Mystatus");
-        if (mynameStatusPrefab != null)
+        Transform hpImageTransform = mynameStatusPrefab.transform.Find("Hp Image");
+        if (hpImageTransform != null)
         {
-            Transform hpBackgroundTransform = mynameStatusPrefab.transform.Find("Hp Background Image");
-            if (hpBackgroundTransform != null)
-            {
-                Transform hpImageTransform = hpBackgroundTransform.Find("Hp Image");
-                if (hpImageTransform != null)
-                {
-                    playerHpImage = hpImageTransform.GetComponent<Image>();
-                }
-                else
-                {
-                    Debug.LogError("Hp Image not found as a child of Hp Background Image.");
-                }
-            }
-            else
-            {
-                Debug.LogError("Hp Background Image not found as a child of mynameStatusPrefab.");
-            }
+            playerHpImage = hpImageTransform.GetComponent<Image>();
         }
         else
         {
-            Debug.LogError("MynameStatusPrefab not found.");
+            Debug.LogError("해당 프리팹에서 Hp Image를 찾을 수 없습니다.");
         }
-        // Canvas[] canvases = GetComponentsInChildren<Canvas>();
-        // foreach (Canvas canvas in canvases)
-        // {
-        //     if (canvas.CompareTag("MyStatus"))
-        //     {
-        //         mystatus = canvas;
-        //         break;
-        //     }
-        // }
-        // if (mystatus == null)
-        // {
-        //     Debug.LogError("Canvas with the tag MyStatus not found as a child of the player GameObject.");
-        // }
-        // if (mynameStatusPrefab != null)
-        // {
-        //     Transform hpImageTransform = mynameStatusPrefab.transform.Find("Hp Image");
-        //     if (hpImageTransform != null)
-        //     {
-        //         playerHpImage = hpImageTransform.GetComponent<Image>();
-        //     }
-        //     else
-        //     {
-        //         Debug.LogError("Hp Image not found as a child of mynameStatusPrefab.");
-        //     }
-        // }
+
     }
 
     private void Update()
@@ -122,11 +91,20 @@ public class MultiMyStatus : MonoBehaviour
 
     public void UpdatePlayerHp()
     {
-        playerHpImage.fillAmount = (float)_playerHealth.CurrentHealth / _playerHealth.MaxHealth;    
+        if (_playerHealth != null && playerHpImage != null)
+        {
+            playerHpImage.fillAmount = (float)_playerHealth.CurrentHealth / _playerHealth.MaxHealth;    
+        }
+        else
+        {
+            Debug.LogWarning("플레이어의 체력을 찾을 수 없거나 HP Image를 찾을수 없습니다.");
+        }
+        
+        //playerHpImage.fillAmount = (float)_playerHealth.CurrentHealth / _playerHealth.MaxHealth;    
     }
     public void Awake()
     {
-        // mystatus = GameObject.FindGameObjectWithTag("MyStatus").GetComponent<Canvas>();
+        mystatus = GameObject.FindGameObjectWithTag("MyStatus").GetComponent<Canvas>();
         mynameStatusPrefab = Resources.Load<GameObject>("Mystatus");
     }
 

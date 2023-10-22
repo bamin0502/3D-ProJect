@@ -562,7 +562,7 @@ MonoBehaviour:
   myplayerName: 
   mynameText: {fileID: 0}
   mystatus: {fileID: 7794320859078124682}
-  mynameStatusPrefab: {fileID: 4954051559711252910, guid: 43944e28104c0a444899ceabd08cbdcf, type: 3}
+  mynameStatusPrefab: {fileID: 0}
 --- !u!114 &9009733820406593763
 MonoBehaviour:
   m_ObjectHideFlags: 0

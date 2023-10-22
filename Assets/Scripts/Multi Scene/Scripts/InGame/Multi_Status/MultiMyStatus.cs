@@ -37,14 +37,10 @@ public class MultiMyStatus : MonoBehaviour
         {
             Debug.LogError(myPlayerName + "체력바 생성에 실패했습니다.");
         }
-        Transform hpImageTransform = mynameStatusPrefab.transform.Find("Hp Image");
-        if (hpImageTransform != null)
+        Transform playerHpTransform = nameStatus.transform.Find("Hp Image");
+        if (playerHpTransform != null)
         {
-            teamStatus.playerHpImage = hpImageTransform.GetComponent<Image>();
-        }
-        else
-        {
-            Debug.LogError("Hp Image not found as a child of mynameStatusPrefab.");
+            playerHpImage = playerHpTransform.GetComponent<Image>(); // playerHpImage를 초기화
         }
         
         // 상태창의 회전을 고정,캔버스도 회전을 막아야 함 
@@ -69,15 +65,6 @@ public class MultiMyStatus : MonoBehaviour
             Debug.LogError("캔버스를 불러올 수 없습니다.");
         }
         mynameStatusPrefab = Resources.Load<GameObject>("Mystatus");
-        Transform hpImageTransform = mynameStatusPrefab.transform.Find("Hp Image");
-        if (hpImageTransform != null)
-        {
-            playerHpImage = hpImageTransform.GetComponent<Image>();
-        }
-        else
-        {
-            Debug.LogError("해당 프리팹에서 Hp Image를 찾을 수 없습니다.");
-        }
 
     }
 
@@ -91,16 +78,7 @@ public class MultiMyStatus : MonoBehaviour
 
     public void UpdatePlayerHp()
     {
-        if (_playerHealth != null && playerHpImage != null)
-        {
-            playerHpImage.fillAmount = (float)_playerHealth.CurrentHealth / _playerHealth.MaxHealth;    
-        }
-        else
-        {
-            Debug.LogWarning("플레이어의 체력을 찾을 수 없거나 HP Image를 찾을수 없습니다.");
-        }
-        
-        //playerHpImage.fillAmount = (float)_playerHealth.CurrentHealth / _playerHealth.MaxHealth;    
+        playerHpImage.fillAmount = (float)_playerHealth.CurrentHealth / _playerHealth.MaxHealth;  
     }
     public void Awake()
     {

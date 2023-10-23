@@ -131,7 +131,7 @@ public class MultiScene : MonoBehaviour
             myStatus.mynameText = playerMyNameText;
             myStatus.mynameStatusPrefab = playerMyStatus;
             myStatus.mystatus = playerMyCanvas;
-            multiPlayerHealthBar.CreateUiStatus(newPlayerName);
+            
             myStatus.CreateMyStatus(newPlayerName, playerMyCanvas.transform.position);
             if (newPlayerName.Equals(currentUser))
             {
@@ -146,6 +146,8 @@ public class MultiScene : MonoBehaviour
                 multiPlayer.coolText = coolText;
                 multiPlayer.spaceUI = spaceUI;
                 multiPlayer.fill = spaceUI.GetComponent<UnityEngine.UI.Image>();
+                //개인체력바 관련
+                multiPlayerHealthBar.CreateUiStatus(newPlayerName);
                 //카메라 관련
                 cineCam.Follow = newPlayer.transform;
                 cineCam.LookAt = newPlayer.transform;

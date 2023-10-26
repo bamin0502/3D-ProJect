@@ -10,6 +10,7 @@ public class MultiPlayerSkill : MonoBehaviour
     private static readonly int OneHandedSkill = Animator.StringToHash("OneHandedSkill");
     private static readonly int TwoHandedSkill = Animator.StringToHash("TwoHandedSkill");
     private MultiPlayerMovement _playerMovement;
+    private MultiWeaponController _currentWeapon;
     private Weapon _weapon = null;
     public float coolTime = 5.0f; // 쿨타임 (초)
     private bool _isCoolTime = false;
@@ -22,6 +23,7 @@ public class MultiPlayerSkill : MonoBehaviour
         _coolTimeImage = MultiScene.Instance.skillImages[3];
         MultiScene.Instance.skillText.enabled = false;
         _playerMovement = GetComponent<MultiPlayerMovement>();
+        _currentWeapon = GetComponent<MultiWeaponController>();
     }
 
     public void Update()
@@ -29,31 +31,36 @@ public class MultiPlayerSkill : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q) && !_isCoolTime)
         {
             if (_weapon == null) return;
+            Skill(NetGameManager.instance.m_userHandle.m_szUserID);
+            MultiScene.Instance.BroadCastingPlayerSkill();
+        }
+    }
 
-            _playerMovement.navAgent.isStopped = true;
-            
-            StartCoroutine(CoolDown());
-            switch (_weapon.weaponType)
-            {
-                case WeaponType.Bow:
-                    _playerMovement.SetAnimationTrigger(BowSkill);
-                    MultiScene.Instance.BroadCastingAnimation(BowSkill, true);
-                    break;
-                case WeaponType.OneHanded:
-                    _playerMovement.SetAnimationTrigger(OneHandedSkill);
-                    MultiScene.Instance.BroadCastingAnimation(OneHandedSkill, true);
-                    break;
-                case WeaponType.TwoHanded:
-                    _playerMovement.SetAnimationTrigger(TwoHandedSkill);
-                    MultiScene.Instance.BroadCastingAnimation(TwoHandedSkill, true);
-                    break;
-            }
+    public void Skill(string userID)
+    {
+        if (_currentWeapon.equippedWeapon == null || _isCoolTime) return;
+        
+        _playerMovement.navAgent.isStopped = true;
+
+        StartCoroutine(CoolDown(userID));
+        
+        switch (_currentWeapon.equippedWeapon.weaponType)
+        {
+            case WeaponType.Bow:
+                _playerMovement.SetAnimationTrigger(BowSkill);
+                break;
+            case WeaponType.OneHanded:
+                _playerMovement.SetAnimationTrigger(OneHandedSkill);
+                break;
+            case WeaponType.TwoHanded:
+                _playerMovement.SetAnimationTrigger(TwoHandedSkill);
+                break;
         }
     }
 
     public void SkillStart()
     {
-        switch (_weapon.weaponType)
+        switch (_currentWeapon.equippedWeapon.weaponType)
         {
             case WeaponType.Bow:
                 break;
@@ -71,7 +78,7 @@ public class MultiPlayerSkill : MonoBehaviour
         _playerMovement.navAgent.isStopped = false;
     }
 
-    private IEnumerator CoolDown()
+    private IEnumerator CoolDown(string userID)
     {
         _isCoolTime = true;
         float timePassed = 0;
@@ -79,11 +86,19 @@ public class MultiPlayerSkill : MonoBehaviour
         while (timePassed < coolTime)
         {
             timePassed += Time.deltaTime;
-            _coolTimeImage.fillAmount = 1 - (timePassed / coolTime);
+            if (userID.Equals(NetGameManager.instance.m_userHandle.m_szUserID))
+            {
+                _coolTimeImage.fillAmount = 1 - (timePassed / coolTime);
+            }
+            
             yield return null;
         }
 
-        _coolTimeImage.fillAmount = 0;
+        if (userID.Equals(NetGameManager.instance.m_userHandle.m_szUserID))
+        {
+            _coolTimeImage.fillAmount = 0;
+        }
+        
         _isCoolTime = false;
     }
 

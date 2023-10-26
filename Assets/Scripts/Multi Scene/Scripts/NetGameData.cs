@@ -113,6 +113,13 @@ public class ENEMY_ITEM
 }
 
 [Serializable]
+public class PLAYER_SKILL
+{
+    public string USER = "";
+    public int DATA = 0;
+}
+
+[Serializable]
 public class THROW_ATTACK //활 공격, 수류탄 공격에 사용
 {
     public string USER = "";

@@ -23,6 +23,7 @@ public enum DataType
     PlayerThrownWeapon = 6,
     EnemyAnimation=7,
     EnemyItem = 8,
+    PlayerSkill = 9,
 }
 public class MultiScene : MonoBehaviour
 {
@@ -159,6 +160,18 @@ public class MultiScene : MonoBehaviour
             }
 
         }
+    }
+
+    public void BroadCastingPlayerSkill()
+    {
+        var data = new PLAYER_SKILL
+        {
+            USER = NetGameManager.instance.m_userHandle.m_szUserID,
+            DATA = (int)DataType.PlayerSkill,
+        };
+
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
     }
 
     public void BroadCastingAnimation(int animationNumber, bool isTrigger = false)
@@ -480,6 +493,12 @@ public class MultiScene : MonoBehaviour
                 var newItem = Instantiate(itemPrefabs[itemIndex], enemyItemPos, quaternion.identity);
                 newItem.transform.SetParent(itemListParent);
                 itemsList.Add(newItem);
+                break;
+            
+            case (int)DataType.PlayerSkill:
+                Debug.Log("Skill Used");
+                user.TryGetComponent(out MultiPlayerSkill multiPlayerSkill);
+                multiPlayerSkill.Skill(userID);
                 break;
         }
     }

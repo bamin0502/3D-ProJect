@@ -236,7 +236,7 @@ public class GameManager : MonoBehaviour
 
         }
         // //게임 씬 오브젝트 
-        // else if (scene.name == "Multi Scene")
+        // else if (scene.name == "Single Scene")
         // {
         //
         //     Button homeButton = GameOptionImage.transform.Find("HomeButton").GetComponent<Button>();

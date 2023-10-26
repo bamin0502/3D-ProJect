@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
-
+using Cinemachine;
 public class StartCut : MonoBehaviour
 {
     public PlayableDirector _playableDirector;
@@ -23,6 +23,7 @@ public class StartCut : MonoBehaviour
 
         // 컷신 종료 이벤트 핸들러 등록
         _playableDirector.stopped += OnCutsceneEnd;
+        _playableDirector.played += OnCameraShake;
     }
 
     void Update()
@@ -69,6 +70,23 @@ public class StartCut : MonoBehaviour
         if(teamStatusScript != null)
         {
             teamStatusScript.Awake();
+        }
+    }
+
+    private void OnCameraShake(PlayableDirector director)
+    {
+        CinemachineBrain cinemachineBrain = FindObjectOfType<CinemachineBrain>();
+        if (cinemachineBrain != null)
+        {
+            CinemachineVirtualCameraBase virtualCamera = cinemachineBrain.ActiveVirtualCamera as CinemachineVirtualCameraBase;
+            if (virtualCamera != null)
+            {
+                CinemachineBasicMultiChannelPerlin noise = virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+                if (noise != null)
+                {
+                    noise.m_AmplitudeGain = 0f;
+                }
+            }
         }
     }
 }

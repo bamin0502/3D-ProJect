@@ -146,16 +146,10 @@ public class EnemyHealth : MonoBehaviour
         bool isEnemy = gameObject.TryGetComponent(out MultiEnemy enemy);
         bool isBoss = gameObject.TryGetComponent(out MultiBoss boss);
         _nav.speed = 0;
-        if (isEnemy)
-        {
-            enemy.isDead = true;
-            EndDeath();
-        }
-        else if (isBoss) {
-            boss.isDead = true;
-            
-        }
+        if (isEnemy) enemy.isDead = true;
+        else if (isBoss) boss.isDead = true;
         anim.SetTrigger(DoDie);
+        MultiScene.Instance.BroadCastingEnemyAnimation(MultiScene.Instance.enemyList.IndexOf(gameObject), DoDie, true);
     }
     
     void EndDeath()

@@ -175,7 +175,7 @@ public class MultiEnemy : MonoBehaviour
             
         SoundManager.instance.PlaySE(_enemyName);
         
-        bool isPlayer = _targetPos.TryGetComponent(out MultiPlayerHealth playerHealth);
+        _targetPos.TryGetComponent(out MultiPlayerHealth playerHealth);
 
         if (playerHealth != null)
         {
@@ -203,7 +203,7 @@ public class MultiEnemy : MonoBehaviour
 
     private bool IsAttackable()
     {
-        if(_targetPos == null) return false;
+        if(_targetPos == null || isDead) return false;
         
         float distance = Vector3.Distance(transform.position, _targetPos.position);
 

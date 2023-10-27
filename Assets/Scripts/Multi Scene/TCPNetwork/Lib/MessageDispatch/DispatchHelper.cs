@@ -12,7 +12,7 @@ namespace MNF
      */
 	public abstract class IDispatchHelper
     {
-        protected Dictionary<int, DispatchInfo> dispatchList;
+        protected readonly Dictionary<int, DispatchInfo> dispatchList;
         bool isInit;
 
         public IDispatchHelper()

@@ -11,7 +11,7 @@ namespace MNF
 {
 	public class NetManager : KWSingleton<NetManager>
 	{
-		private float	m_fSendCheck		= 0.0f;
+		private float m_fSendCheck		= 0.0f;
 		private DateTime m_dtConnectionTest	= new DateTime();
 
 		override public void Awake( )
@@ -94,8 +94,7 @@ namespace MNF
                 return;
             }
 
-            NetRecvCallBack netRecvObj;
-            if (MKWNetwork.instance.m_dicRecvCallBack.TryGetValue(head, out netRecvObj))
+            if (MKWNetwork.instance.m_dicRecvCallBack.TryGetValue(head, out var netRecvObj))
             {
                 if (netRecvObj.m_ObjFunction != null)
                 {

@@ -4,7 +4,7 @@ namespace MNF.Message
 {
     class AsyncSendMessage : IMessage
     {
-        private int id = 0;
+        private readonly int id = 0;
 
         public AsyncSendMessage( object session, Delegate dispatcher)
             : base(session, dispatcher)

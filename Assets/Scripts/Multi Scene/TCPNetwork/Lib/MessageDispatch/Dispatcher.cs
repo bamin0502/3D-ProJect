@@ -6,7 +6,7 @@ namespace MNF
     {
         private readonly DISPATCH_TYPE dispatchType = DISPATCH_TYPE.DISPATCH_NONE;
         private readonly EventNofier eventNotifier = null;
-        private SwapableMessgeQueue<IMessage> dispatchMessageQueue = new SwapableMessgeQueue<IMessage>();
+        private readonly SwapableMessgeQueue<IMessage> dispatchMessageQueue = new SwapableMessgeQueue<IMessage>();
 
         public Dispatcher(EventNofier eventNotifier, DISPATCH_TYPE dispatchType)
         {

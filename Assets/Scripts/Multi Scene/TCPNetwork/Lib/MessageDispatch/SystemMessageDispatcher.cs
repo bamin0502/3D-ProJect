@@ -16,7 +16,7 @@ namespace MNF
 
         public class SystemMessage : IMessage
         {
-            private SYSTEM_MESSAGE_TYPE messageType;
+            private readonly SYSTEM_MESSAGE_TYPE messageType;
 
             public SystemMessage(SYSTEM_MESSAGE_TYPE messageType, SessionBase session) : base()
             {

@@ -8,7 +8,7 @@ using UnityEngine;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 
-public	class StreamBin
+public class StreamBin
 {
 	public static string ExtendedTrim(string source)
 	{
@@ -64,7 +64,7 @@ namespace MNF.Message
 	{
 		static public List<BinData> listBinData = new List<BinData> { };
 
-		static	public BinData GetBinData()
+		static public BinData GetBinData()
 		{
             return listBinData[0];
 		}
@@ -75,7 +75,7 @@ namespace MNF.Message
         }
 
 
-        static	public	BinaryWriter WriteStart(byte byClass, byte byEvent)
+        static public BinaryWriter WriteStart(byte byClass, byte byEvent)
 		{
             BinData data = new BinData();
 			data.head.MakeHead(byClass, byEvent);
@@ -95,24 +95,24 @@ namespace MNF.Message
 
 	public class StreamBin_RecvBuff
 	{
-		public byte[] 	recvBuffer = new byte[65536];
+		public byte[] recvBuffer = new byte[65536];
 
-		public MemoryStream 	ms;
-		public BinaryReader 	br;
+		public MemoryStream ms;
+		public BinaryReader br;
 
-		public	void	Init()
+		public void Init()
 		{
 			ms = new MemoryStream(recvBuffer,false); 
 			br = new BinaryReader(ms);
 		}
 
-		public	BinaryReader	Read_Start()
+		public BinaryReader Read_Start()
 		{
 			ms.Seek(0,SeekOrigin.Begin);
 			return br;
 		}
 
-		public	void	Copy( byte[] src , int startidx , int size )
+		public void Copy( byte[] src , int startidx , int size )
 		{
 			Buffer.BlockCopy( src , 0 , recvBuffer , startidx , size );
 		}
@@ -186,8 +186,8 @@ namespace MNF.Message
 
     public class StreamBinMessageDeserializer : Deserializer<StreamBinMessageHeader>
     {
-        IntPtr marshalAllocatedBuffer;
-        int marshalAllocatedBufferSize;
+        readonly IntPtr marshalAllocatedBuffer;
+        readonly int marshalAllocatedBufferSize;
 
         public StreamBinMessageDeserializer() : base(StreamBinMessageBuffer.MaxMessageSize())
         {
@@ -271,7 +271,7 @@ namespace MNF.Message
 		public delegate void OnRecv_KW( NetHead head , BinaryReader br );
 		static public OnRecv_KW	onrecv_kw = null;
 
-		public int max_buffObj = 200;
+		public readonly int max_buffObj = 200;
 		public readonly Queue<StreamBin_RecvBuff>qRecvBuff = new Queue<StreamBin_RecvBuff>();
 
 		static public void Alloc( )

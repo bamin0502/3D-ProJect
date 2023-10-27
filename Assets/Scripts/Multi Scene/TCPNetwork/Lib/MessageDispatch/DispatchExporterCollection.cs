@@ -5,7 +5,7 @@ namespace MNF
 {
     internal class DispatchExporterCollection : Singleton<DispatchExporterCollection>
     {
-        private Dictionary<Type, IDispatchHelper> messageDispatchExporters = null;
+        private readonly Dictionary<Type, IDispatchHelper> messageDispatchExporters = null;
 
         public DispatchExporterCollection()
         {
@@ -27,8 +27,7 @@ namespace MNF
 
         public IDispatchHelper Get(Type type)
         {
-            IDispatchHelper messageDipatchExporter = null;
-            if (messageDispatchExporters.TryGetValue(type, out messageDipatchExporter) == false)
+            if (messageDispatchExporters.TryGetValue(type, out var messageDipatchExporter) == false)
             {
                 if (Add(type) == false)
                     return null;

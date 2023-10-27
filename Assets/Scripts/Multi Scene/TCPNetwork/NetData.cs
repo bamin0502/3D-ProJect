@@ -91,13 +91,15 @@ namespace MNF
 
         public NetDateTime Copy()
         {
-            NetDateTime copy = new NetDateTime();
-            copy.m_YY = this.m_YY;
-            copy.m_MM = this.m_MM;
-            copy.m_DD = this.m_DD;
-            copy.m_HH = this.m_HH;
-            copy.m_MI = this.m_MI;
-            copy.m_SS = this.m_SS;
+            NetDateTime copy = new NetDateTime
+            {
+                m_YY = this.m_YY,
+                m_MM = this.m_MM,
+                m_DD = this.m_DD,
+                m_HH = this.m_HH,
+                m_MI = this.m_MI,
+                m_SS = this.m_SS
+            };
             return copy;
         }
     }
@@ -138,14 +140,16 @@ namespace MNF
         {
             bw.Write((Int64)m_X);
             bw.Write((Int64)m_Y);
-            bw.Write((Int64)m_Z); ;
+            bw.Write((Int64)m_Z);
         }
         public Vector3 GetVector3()
         {
-            Vector3 vec = new Vector3();
-            vec.x = m_X / 1000f;
-            vec.y = m_Y / 1000f;
-            vec.z = m_Z / 1000f;
+            Vector3 vec = new Vector3
+            {
+                x = m_X / 1000f,
+                y = m_Y / 1000f,
+                z = m_Z / 1000f
+            };
             return vec;
         }
     }

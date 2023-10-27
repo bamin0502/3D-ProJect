@@ -126,8 +126,8 @@ namespace MNF.Message
         where TMSerializer : Serializer, new()
         where TMDeserializer : Deserializer, new()
     {
-        TObjectPool<TMSerializer> serializerPool = new TObjectPool<TMSerializer>();
-        TMDeserializer deserializer = new TMDeserializer();
+        readonly TObjectPool<TMSerializer> serializerPool = new TObjectPool<TMSerializer>();
+        readonly TMDeserializer deserializer = new TMDeserializer();
 
 		public override void Init()
         {

@@ -103,7 +103,7 @@ namespace MNF.Message
                     return;
                 }
 
-                // check readabler body
+                // check readable body
                 if (tcpSession.RecvCircularBuffer.ReadableSize < SerializedHeaderSize + messageBodySize)
                 {
                     parsingResult.parsingResultEnum = ParsingResult.ParsingResultEnum.PARSING_INCOMPLETE;
@@ -136,7 +136,7 @@ namespace MNF.Message
             parsingResult.messageSize = messageSize;
 
             // pop dispatched message size
-            if (tcpSession != null) tcpSession.RecvCircularBuffer.pop(messageSize);
+            tcpSession?.RecvCircularBuffer.pop(messageSize);
         }
 	}
 

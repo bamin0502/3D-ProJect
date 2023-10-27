@@ -91,7 +91,6 @@ public class MultiScene : MonoBehaviour
 
     public int GetRandomInt(int range)
     {
-        Debug.Log(isMasterClient);
         //랜덤한 int 값 생성
         if (isMasterClient)
         {
@@ -509,7 +508,6 @@ public class MultiScene : MonoBehaviour
                 break;
             
             case (int)DataType.PlayerSkill:
-                Debug.Log("Skill Used");
                 user.TryGetComponent(out MultiPlayerSkill multiPlayerSkill);
                 multiPlayerSkill.Skill(userID);
                 break;

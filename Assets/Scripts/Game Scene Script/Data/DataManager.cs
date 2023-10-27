@@ -307,6 +307,7 @@ namespace Data
                 if (!thrownWeaponController.isGrenadeMode)
                 {
                     thrownWeaponController.isGrenadeMode = true;
+                    thrownWeaponController.throwMode = 0;
                     thrownWeaponController.throwRangeIndicator.SetActive(true);
                     thrownWeaponController.damageRangeIndicator.SetActive(true);
                     return true;

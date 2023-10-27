@@ -621,8 +621,13 @@ MonoBehaviour:
   throwRangeIndicator: {fileID: 8035269872575942630}
   damageRangeIndicator: {fileID: 8035269871671460856}
   isGrenadeMode: 0
+  throwMode: 0
   grenadeFlightTime: 2
   spinSpeed: 1
+  bowSkillEffect: {fileID: 7192735799087838584, guid: dcfe5c1842494954eb6c8c1a5f36cdb0, type: 3}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &1178666365210230095
 GameObject:
   m_ObjectHideFlags: 0
@@ -2624,6 +2629,7 @@ MonoBehaviour:
   healthBar: {fileID: 0}
   healthText: {fileID: 0}
   playerName: 
+  nameText: {fileID: 0}
 --- !u!114 &1170930448121615590
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,11 +6,11 @@ using UnityEngine.UI;
 public class MultiPlayerSkill : MonoBehaviour
 {
     //플레이어 스킬 관련
-    private static readonly int BowSkill = Animator.StringToHash("BowSkill");
     private static readonly int OneHandedSkill = Animator.StringToHash("OneHandedSkill");
     private static readonly int TwoHandedSkill = Animator.StringToHash("TwoHandedSkill");
     private MultiPlayerMovement _playerMovement;
     private MultiWeaponController _currentWeapon;
+    private ThrownWeaponController _thrownWeaponController;
     private Weapon _weapon = null;
     public float coolTime = 5.0f; // 쿨타임 (초)
     private bool _isCoolTime = false;
@@ -24,6 +24,7 @@ public class MultiPlayerSkill : MonoBehaviour
         MultiScene.Instance.skillText.enabled = false;
         _playerMovement = GetComponent<MultiPlayerMovement>();
         _currentWeapon = GetComponent<MultiWeaponController>();
+        _thrownWeaponController = MultiScene.Instance.currentThrownWeaponController;
     }
 
     public void Update()
@@ -31,10 +32,13 @@ public class MultiPlayerSkill : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q) && !_isCoolTime)
         {
             if (_weapon == null) return;
+            
             Skill(NetGameManager.instance.m_userHandle.m_szUserID);
             MultiScene.Instance.BroadCastingPlayerSkill();
         }
     }
+
+        
 
     public void Skill(string userID)
     {
@@ -47,7 +51,15 @@ public class MultiPlayerSkill : MonoBehaviour
         switch (_currentWeapon.equippedWeapon.weaponType)
         {
             case WeaponType.Bow:
-                _playerMovement.SetAnimationTrigger(BowSkill);
+                if (!MultiScene.Instance.currentUser.Equals(userID)) return;
+                
+                if (!_thrownWeaponController.isGrenadeMode)
+                {
+                    _thrownWeaponController.isGrenadeMode = true;
+                    _thrownWeaponController.throwMode = 1;
+                    _thrownWeaponController.throwRangeIndicator.SetActive(true);
+                    _thrownWeaponController.damageRangeIndicator.SetActive(true);
+                }
                 break;
             case WeaponType.OneHanded:
                 _playerMovement.SetAnimationTrigger(OneHandedSkill);
@@ -62,8 +74,6 @@ public class MultiPlayerSkill : MonoBehaviour
     {
         switch (_currentWeapon.equippedWeapon.weaponType)
         {
-            case WeaponType.Bow:
-                break;
             case WeaponType.OneHanded:
                 effects[0].Play();
                 break;

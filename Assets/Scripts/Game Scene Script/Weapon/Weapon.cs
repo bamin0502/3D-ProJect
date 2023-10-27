@@ -42,6 +42,11 @@ public abstract class Weapon : MonoBehaviour
         currentSceneName= SceneManager.GetActiveScene().name;
         LoadWeaponData(currentSceneName);
     }
+
+    public int GetSkillDamage()
+    {
+        return skillDamage;
+    }
     private void LoadWeaponData(string sceneName)
     {
         if (sceneName.Equals("Game Scene"))

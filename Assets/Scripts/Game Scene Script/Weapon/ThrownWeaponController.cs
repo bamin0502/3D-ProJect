@@ -1,10 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ThrownWeaponController : MonoBehaviour
 {
     //임성훈
+    private static readonly int BowSkillHash = Animator.StringToHash("BowSkill");
     public Camera _cam;  //카메라
     public GameObject grenadePrefab;   // 수류탄 프리팹(나중에 인벤토리에서 가져오는걸로 수정)
     public float maxThrowRange = 10f;  // 최대 던지기 범위
@@ -12,10 +16,22 @@ public class ThrownWeaponController : MonoBehaviour
     public GameObject throwRangeIndicator;  // 던지기 범위 표시
     public GameObject damageRangeIndicator;  // 데미지 범위 표시
     public bool isGrenadeMode; //던지기 모드
+    public int throwMode = 0;
     public float grenadeFlightTime = 2.0f; // 수류탄 날라가는 시간
     public float spinSpeed = 1.0f; // 수류탄 회전속도
+    public GameObject bowSkillEffect;
+    private MultiPlayerMovement _playerMovement;
+    private MultiWeaponController _currentWeapon;
+    private readonly Collider[] enemies = new Collider[20];
+    public LayerMask enemyLayer;
+    private Vector3 _mousePos;
 
-  
+    private void Start()
+    {
+        _playerMovement = GetComponent<MultiPlayerMovement>();
+        _currentWeapon = GetComponent<MultiWeaponController>();
+    }
+
     void Update()
     {
         if (isGrenadeMode)
@@ -24,13 +40,42 @@ public class ThrownWeaponController : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0))
             {
-                MultiScene.Instance.BroadCastingThrowWeapon(GetMousePositionOnGround(), transform.position);
-                ThrowGrenade(GetMousePositionOnGround(), transform.position);
+                if (throwMode == 0)
+                {
+                    MultiScene.Instance.BroadCastingThrowWeapon(GetMousePositionOnGround(), transform.position, 0);
+                    ThrowGrenade(GetMousePositionOnGround(), transform.position);
+                }
+                else if (throwMode == 1)
+                {
+                    _mousePos = GetMousePositionOnGround();
+                    MultiScene.Instance.BroadCastingThrowWeapon(_mousePos, transform.position, 1);
+                    BowSkill();
+                }
+                
                 isGrenadeMode = false;
                 throwRangeIndicator.SetActive(false);
                 damageRangeIndicator.SetActive(false);
-
             }
+        }
+    }
+
+    public void BowSkill()
+    {
+        _playerMovement.SetAnimationTrigger(BowSkillHash);
+    }
+
+    public void SetMousePos(Vector3 pos)
+    {
+        _mousePos = pos;
+    }
+
+    public void SkillStart()
+    {
+        switch (_currentWeapon.equippedWeapon.weaponType)
+        {
+            case WeaponType.Bow:
+                BowSkill(_mousePos);
+                break;
         }
     }
 
@@ -67,7 +112,60 @@ public class ThrownWeaponController : MonoBehaviour
         rb.AddTorque(Random.insideUnitSphere * spinSpeed, ForceMode.VelocityChange);
 
     }
+
+    public void BowSkill(Vector3 mousePosition)
+    {
+        float distanceToMouse = Vector3.Distance(mousePosition, transform.position);
+
+        if (distanceToMouse > maxThrowRange)
+        {
+            var position = transform.position;
+            Vector3 directionToMouse = (mousePosition - position).normalized;
+            mousePosition = position + directionToMouse * maxThrowRange;
+        }
+
+        GameObject arrowSkill = Instantiate(bowSkillEffect, mousePosition, Quaternion.identity);
+        ArrowSkillDamage(mousePosition);
+        PlayParticleSystems(arrowSkill);
+    }
+
+    private void ArrowSkillDamage(Vector3 mousePosition)
+    {
+        float damageRadius = grenadePrefab.GetComponent<ThrownWeapon>().explosionRadius;
+        
+        int numColliders = Physics.OverlapSphereNonAlloc(mousePosition, damageRadius, enemies, enemyLayer);
+
+        for (int i = 0; i < numColliders; i++)
+        {
+            Collider target = enemies[i];
+            bool isEnemy = target.TryGetComponent(out EnemyHealth enemy);
+            if (isEnemy)
+            {
+                enemy.TakeDamage(_currentWeapon.equippedWeapon.GetSkillDamage(), transform.position);
+            }
+        }
+    }
+
+    private IEnumerator DeleteParticleCoroutine(GameObject particle, float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        Destroy(particle);
+    }
     
+    private void PlayParticleSystems(GameObject arrowSkill)
+    {
+        Transform[] myChildren = arrowSkill.GetComponentsInChildren<Transform>();
+        foreach (Transform child in myChildren)
+        {
+            child.TryGetComponent(out ParticleSystem arrowParticle);
+            if (arrowParticle != null)
+            {
+                arrowParticle.Play();
+                StartCoroutine(DeleteParticleCoroutine(arrowSkill, arrowParticle.main.duration));
+                return;
+            }
+        }
+    }
 
     void UpdateIndicators()
     {

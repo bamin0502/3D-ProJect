@@ -277,7 +277,7 @@ public class MultiScene : MonoBehaviour
         string sendData = LitJson.JsonMapper.ToJson(data);
         NetGameManager.instance.RoomBroadcast(sendData);
     }
-    public void BroadCastingThrowWeapon(Vector3 mousePos, Vector3 playerPos)
+    public void BroadCastingThrowWeapon(Vector3 mousePos, Vector3 playerPos, int skillType)
     {
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(
             NetGameManager.instance.m_userHandle.m_szUserID);
@@ -286,6 +286,7 @@ public class MultiScene : MonoBehaviour
         {
             USER = userSession.m_szUserID,
             DATA = (int)DataType.PlayerThrownWeapon,
+            SKILL_TYPE = skillType,
             PLAYER_POSITION = VectorToString(playerPos),
             MOUSE_POSITION = VectorToString(mousePos),
         };
@@ -466,7 +467,19 @@ public class MultiScene : MonoBehaviour
             case (int)DataType.PlayerThrownWeapon:
                 string playerPosition = jData["PLAYER_POSITION"].ToString();
                 string mousePosition = jData["MOUSE_POSITION"].ToString();
-                user.GetComponent<ThrownWeaponController>().ThrowGrenade(StringToVector(mousePosition), StringToVector(playerPosition));
+                int skillType = Convert.ToInt32(jData["SKILL_TYPE"].ToString());
+                user.TryGetComponent(out ThrownWeaponController throwWeapon);
+                
+                if (skillType == 0)
+                {
+                    throwWeapon.ThrowGrenade(StringToVector(mousePosition),
+                        StringToVector(playerPosition));
+                }
+                else if (skillType == 1)
+                {
+                    throwWeapon.SetMousePos(StringToVector(mousePosition));
+                    throwWeapon.BowSkill();
+                }
                 break;
             case (int)DataType.EnemyAnimation:
                 int monsterIndex = Convert.ToInt32(jData["MONSTER_INDEX"].ToString());

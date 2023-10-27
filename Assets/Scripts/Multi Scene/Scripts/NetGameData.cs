@@ -124,6 +124,7 @@ public class THROW_ATTACK //활 공격, 수류탄 공격에 사용
 {
     public string USER = "";
     public int DATA = 0;
+    public int SKILL_TYPE = 0;
     public string PLAYER_POSITION = ""; 
     public string MOUSE_POSITION = "";
 }

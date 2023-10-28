@@ -27,6 +27,7 @@ public enum DataType
     PlayerSkill = 9,
     PlayerUseItem = 10,
     SECOND_CUTSCENE=11,
+    LAST_CUTSCENE=12,
 }
 public class MultiScene : MonoBehaviour
 {
@@ -379,6 +380,21 @@ public class MultiScene : MonoBehaviour
         string sendData = LitJson.JsonMapper.ToJson(data);
         NetGameManager.instance.RoomBroadcast(sendData);
     }
+
+    public void BroadCastingLastCutSceneStart(bool isTrigger = false)
+    {
+        UserSession userSession= NetGameManager.instance.GetRoomUserSession(
+            NetGameManager.instance.m_userHandle.m_szUserID);
+        var data = new LAST_CUTSCENE
+        {
+             USER = userSession.m_szUserID,
+             DATA = (int)DataType.LAST_CUTSCENE,
+             CUTSCENE_NUM = 2,
+             CUTSCENE_TYPE = isTrigger,
+        };
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
+    }
     public void RoomUserDel(UserSession user)
     {
 
@@ -605,6 +621,11 @@ public class MultiScene : MonoBehaviour
                 int cutSceneNum = Convert.ToInt32(jData["CUTSCENE_NUM"].ToString());
                 secondPlayableDirector.playableAsset = secondCut;
                 secondPlayableDirector.Play();
+                break;
+            case (int)DataType.LAST_CUTSCENE:
+                int cutSceneNum2 = Convert.ToInt32(jData["CUTSCENE_NUM"].ToString());
+                lastPlayableDirector.playableAsset = lastCut;
+                lastPlayableDirector.Play();
                 break;
         }
 

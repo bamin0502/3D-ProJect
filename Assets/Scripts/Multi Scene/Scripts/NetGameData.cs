@@ -152,4 +152,12 @@ public class SECOND_CUTSCENE
     public int CUTSCENE_NUM = 0;
     public bool CUTSCENE_TYPE = false;
 }
+[Serializable]
+public class LAST_CUTSCENE
+{
+    public string USER = "";
+    public int DATA = 0;
+    public int CUTSCENE_NUM = 0;
+    public bool CUTSCENE_TYPE = false;
+}
 

@@ -14,7 +14,7 @@ public class Inventory : MonoBehaviour
     [SerializeField]
     private GameObject go_SlotsParent;
     //슬롯들의 배열 지정
-    private Slot[] slots;
+    public Slot[] slots;
     // Start is called before the first frame update
     void Start()
     {

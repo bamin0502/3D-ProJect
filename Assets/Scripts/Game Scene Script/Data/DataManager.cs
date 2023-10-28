@@ -299,7 +299,8 @@ namespace Data
             Itemdata itemdata = LoadFromJsonEncrypted<Itemdata>("Itemdata.json");
             WeaponData weaponData = LoadFromJsonEncrypted<WeaponData>("WeaponData.json");
             EnemyStat enemyStat = LoadFromJsonEncrypted<EnemyStat>("EnemyStat1.json");
-
+            MultiPlayerHealth currentPlayerHealth = MultiScene.Instance.currentPlayerHealth;
+            
             if (_item.itemType == Item.ItemType.Throw)
             {
                 var thrownWeaponController = MultiScene.Instance.currentThrownWeaponController;
@@ -315,7 +316,9 @@ namespace Data
             }
             if (_item.itemType == Item.ItemType.Buff)
             {
-                PlayerHealth.maxHealth += 100;
+                currentPlayerHealth.MaxHealth += 500;
+                currentPlayerHealth.UpdateHealth();
+                MultiScene.Instance.BroadCastingItemUse((int)Item.ItemType.Buff);
                 StartCoroutine(DisplayItemMessage("최대 체력이 100 증가하였습니다!"));
                 return true;
                 #region 일단 무기공격력에다가 연결 실패해서 일단 주석처리하고 나중에 할 예정 임시로 최대체력을 증가시키기로
@@ -333,26 +336,21 @@ namespace Data
             }
             if (_item.itemType == Item.ItemType.Used)
             {
-                
-                if (PlayerHealth.currentHealth < PlayerHealth.maxHealth)  // 현재 체력이 최대 체력보다 작을 때만 회복 가능
+                if (currentPlayerHealth.CurrentHealth < currentPlayerHealth.MaxHealth)
                 {
-                    int healthToRestore = (int)itemdata.Health;
-                    int availableRestore = PlayerHealth.maxHealth - PlayerHealth.currentHealth;  // 회복 가능한 양
-                    int totalHealth = PlayerHealth.maxHealth;
-                    int Health = PlayerHealth.currentHealth;
-                    if (totalHealth > PlayerHealth.maxHealth)
+                    currentPlayerHealth.CurrentHealth += 500;
+                    if (currentPlayerHealth.CurrentHealth >= currentPlayerHealth.MaxHealth)
                     {
-                        healthToRestore = PlayerHealth.maxHealth - PlayerHealth.currentHealth;  // 실제로 회복 가능한 양 조정
-                        totalHealth = PlayerHealth.maxHealth;
-
+                        currentPlayerHealth.CurrentHealth = currentPlayerHealth.MaxHealth;
                     }
 
-                    PlayerHealth.currentHealth += healthToRestore;
-                    StartCoroutine(DisplayItemMessage("체력을 " + healthToRestore + " 회복했습니다!"));
-                    //StartCooldown(_item);
-                    return true;                    
+                    currentPlayerHealth.UpdateHealth();
+                    MultiScene.Instance.BroadCastingItemUse((int)Item.ItemType.Used);
+                    StartCoroutine(DisplayItemMessage("체력을 회복했습니다!"));
+                    return true;
                 }
-                
+
+                return false;
             }            
             return false;
         }

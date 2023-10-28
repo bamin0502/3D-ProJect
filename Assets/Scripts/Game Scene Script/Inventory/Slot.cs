@@ -29,7 +29,7 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
     void Start()
     {
         theItemEffectDatabase = FindObjectOfType<DataManager>();
-        slots = new Slot[4];
+        slots = MultiScene.Instance.inventory.slots;
         slots[0] = slot1.GetComponent<Slot>();
         slots[1] = slot2.GetComponent<Slot>();
         slots[2] = slot3.GetComponent<Slot>();
@@ -66,12 +66,8 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
             bool itemUsed = theItemEffectDatabase.UseItem(slots[slotIndex].item);
 
             if (!itemUsed) return;
-
-            if (slots[slotIndex].item.itemType == Item.ItemType.Used || slots[slotIndex].item.itemType == Item.ItemType.Buff ||
-                slots[slotIndex].item.itemType == Item.ItemType.Throw)
-            {
-                slots[slotIndex].SetSlotCount(-1);
-            }
+            
+            slots[slotIndex].SetSlotCount(-1);
         }
         else
         {

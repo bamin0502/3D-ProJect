@@ -128,6 +128,14 @@ public class THROW_ATTACK //활 공격, 수류탄 공격에 사용
     public string PLAYER_POSITION = ""; 
     public string MOUSE_POSITION = "";
 }
+
+[Serializable]
+public class PLAYER_ITEMUSE
+{
+    public string USER = "";
+    public int DATA = 0;
+    public int ITEM_TYPE = 0;
+}
 [Serializable]
 public class ENEMY_ATTACK //몬스터 공격에 사용
 {

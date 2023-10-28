@@ -24,6 +24,7 @@ public enum DataType
     EnemyAnimation=7,
     EnemyItem = 8,
     PlayerSkill = 9,
+    PlayerUseItem = 10,
 }
 public class MultiScene : MonoBehaviour
 {
@@ -68,6 +69,8 @@ public class MultiScene : MonoBehaviour
     public GameObject[] itemPrefabs;
     public bool isMasterClient; //마스터 클라이언트
     private static readonly int AniEnemy = Animator.StringToHash("aniEnemy");
+
+    public MultiPlayerHealth currentPlayerHealth;
     
     private void Awake()
     {
@@ -138,7 +141,7 @@ public class MultiScene : MonoBehaviour
                 //만약 현재 유저일경우 실행시킬 것들
                 newPlayer.TryGetComponent(out ThrownWeaponController thrownWeaponController);
                 newPlayer.TryGetComponent(out MultiItemDropController pickItem);
-                newPlayer.TryGetComponent(out MultiPlayerHealth playerHealth);
+                currentPlayerHealth = newPlayer.GetComponent<MultiPlayerHealth>();
                 //아이템 드랍 관련
                 pickItem.actionText = itemUsedText;
                 pickItem.inventory = inventory;
@@ -293,6 +296,22 @@ public class MultiScene : MonoBehaviour
         string sendData = LitJson.JsonMapper.ToJson(data);
         NetGameManager.instance.RoomBroadcast(sendData);
     }
+
+    public void BroadCastingItemUse(int itemType)
+    {
+        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+            NetGameManager.instance.m_userHandle.m_szUserID);
+
+        var data = new PLAYER_ITEMUSE
+        {
+            USER = userSession.m_szUserID,
+            DATA = (int)DataType.PlayerUseItem,
+            ITEM_TYPE = itemType,
+        };
+
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
+    }
     
     public void BroadCastingMonsterSpawn(int index, Vector3 destination)
     {
@@ -439,20 +458,26 @@ public class MultiScene : MonoBehaviour
                 //     userAttack.SetTarget(target);
                 //     userMove2.navAgent.SetDestination(StringToVector(jData["POSITION"].ToString()));
                 // }
-                if (userMove2 != null && userMove2.navAgent.isActiveAndEnabled) {
+                if (userMove2 != null && userMove2.navAgent.isActiveAndEnabled)
+                {
                     int target = Convert.ToInt32(jData["TARGET"].ToString());
                     Vector3 position = StringToVector(jData["POSITION"].ToString());
 
-                    if (userMove2.navAgent.isOnNavMesh) {
-                        if (target <= -1) {
+                    if (userMove2.navAgent.isOnNavMesh)
+                    {
+                        if (target <= -1)
+                        {
                             userAttack.ClearTarget();
                             userMove2.navAgent.SetDestination(position);
-                        } else {
+                        }
+                        else
+                        {
                             userAttack.SetTarget(target);
                             userMove2.navAgent.SetDestination(position);
                         }
                     }
                 }
+
                 break;
             //플레이어 아이템 드랍 관련 테스트 필요
             case (int)DataType.PlayerPickItem:
@@ -468,7 +493,7 @@ public class MultiScene : MonoBehaviour
                 string mousePosition = jData["MOUSE_POSITION"].ToString();
                 int skillType = Convert.ToInt32(jData["SKILL_TYPE"].ToString());
                 user.TryGetComponent(out ThrownWeaponController throwWeapon);
-                
+
                 if (skillType == 0)
                 {
                     throwWeapon.ThrowGrenade(StringToVector(mousePosition),
@@ -479,16 +504,22 @@ public class MultiScene : MonoBehaviour
                     throwWeapon.SetMousePos(StringToVector(mousePosition));
                     throwWeapon.BowSkill();
                 }
+
                 break;
             case (int)DataType.EnemyAnimation:
                 int monsterIndex = Convert.ToInt32(jData["MONSTER_INDEX"].ToString());
-                if (monsterIndex >= 0 && monsterIndex < enemyList.Count) {
-                    if (enemyList[monsterIndex].TryGetComponent<MultiEnemy>(out var e)) {
+                if (monsterIndex >= 0 && monsterIndex < enemyList.Count)
+                {
+                    if (enemyList[monsterIndex].TryGetComponent<MultiEnemy>(out var e))
+                    {
                         int aniNumber = Convert.ToInt32(jData["ANI_NUM"].ToString());
                         bool monsterAniType = Convert.ToBoolean(jData["ANI_TYPE"].ToString());
-                        if (monsterAniType) {
+                        if (monsterAniType)
+                        {
                             e.anim.SetTrigger(aniNumber);
-                        } else {
+                        }
+                        else
+                        {
                             e.anim.SetInteger(AniEnemy, aniNumber);
                         }
 
@@ -498,6 +529,7 @@ public class MultiScene : MonoBehaviour
                         }
                     }
                 }
+
                 break;
             case (int)DataType.EnemyItem:
                 int itemIndex = Convert.ToInt32(jData["ITEM_INDEX"].ToString());
@@ -506,12 +538,32 @@ public class MultiScene : MonoBehaviour
                 newItem.transform.SetParent(itemListParent);
                 itemsList.Add(newItem);
                 break;
-            
+
             case (int)DataType.PlayerSkill:
                 user.TryGetComponent(out MultiPlayerSkill multiPlayerSkill);
                 multiPlayerSkill.Skill(userID);
                 break;
+            case (int)DataType.PlayerUseItem:
+                int itemType = Convert.ToInt32(jData["ITEM_TYPE"].ToString());
+                user.TryGetComponent(out MultiPlayerHealth playerHp);
+                
+                if (itemType == (int)Item.ItemType.Buff)
+                {
+                    playerHp.MaxHealth += 500;
+                }
+                else if (itemType == (int)Item.ItemType.Used)
+                {
+                    playerHp.CurrentHealth += 500;
+                    if (playerHp.CurrentHealth >= playerHp.MaxHealth)
+                    {
+                        playerHp.CurrentHealth = playerHp.MaxHealth;
+                    }
+                }
+
+                playerHp.UpdateHealth();
+                break;
         }
+
     }
 }
 

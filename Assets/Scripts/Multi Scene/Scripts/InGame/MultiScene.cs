@@ -267,7 +267,7 @@ public class MultiScene : MonoBehaviour
         string sendData = LitJson.JsonMapper.ToJson(data);
         NetGameManager.instance.RoomBroadcast(sendData);
     }
-    public void BroadCastingHpPlayer(int index, int health = 2000, int playerHealth = 2000)
+    public void BroadCastingHpPlayer(int index, int health = 10000, int playerHealth = 10000)
     {
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(
             NetGameManager.instance.m_userHandle.m_szUserID);

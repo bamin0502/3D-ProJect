@@ -29,11 +29,15 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
     void Start()
     {
         theItemEffectDatabase = FindObjectOfType<DataManager>();
-        slots = MultiScene.Instance.inventory.slots;
-        slots[0] = slot1.GetComponent<Slot>();
-        slots[1] = slot2.GetComponent<Slot>();
-        slots[2] = slot3.GetComponent<Slot>();
-        slots[3] = slot4.GetComponent<Slot>();
+        slots = new Slot[4];
+        if (MultiScene.Instance.inventory.slots.Length >= 4)
+        {
+            slots[0] = slot1.GetComponent<Slot>();
+            slots[1] = slot2.GetComponent<Slot>();
+            slots[2] = slot3.GetComponent<Slot>();
+            slots[3] = slot4.GetComponent<Slot>(); 
+        }
+        
     }
     void Update()
     {

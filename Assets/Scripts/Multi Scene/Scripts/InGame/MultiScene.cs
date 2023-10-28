@@ -26,6 +26,7 @@ public enum DataType
     EnemyItem = 8,
     PlayerSkill = 9,
     PlayerUseItem = 10,
+    SECOND_CUTSCENE=11,
 }
 public class MultiScene : MonoBehaviour
 {
@@ -352,6 +353,19 @@ public class MultiScene : MonoBehaviour
         string sendData = LitJson.JsonMapper.ToJson(data);
         NetGameManager.instance.RoomBroadcast(sendData);
     }
+
+    public void BroadCastingSecondCutSceneStart()
+    {
+        UserSession userSession= NetGameManager.instance.GetRoomUserSession(
+            NetGameManager.instance.m_userHandle.m_szUserID);
+
+        var data = new SECOND_CUTSCENE
+        {
+            USER = userSession.m_szUserID,
+            DATA = (int)DataType.SECOND_CUTSCENE,
+            CUTSCENE_NUM= 1,
+        };
+    }
     public void RoomUserDel(UserSession user)
     {
 
@@ -398,17 +412,10 @@ public class MultiScene : MonoBehaviour
             Transform child = enemyListParent.GetChild(i);
             enemyList.Add(child.gameObject);
 
-            if (isCutScene==false)
+            if (isCutScene == false && enemyListParent.childCount == 0)
             {
-                if (enemyListParent.GetChild(i) == null)
-                {
-                    //두 번째 컷신 실행
-                    secondPlayableDirector.playableAsset = secondCut;
-                    secondPlayableDirector.Play();
-                    isCutScene = true;
-                    break;
-                }
-                
+                BroadCastingSecondCutSceneStart();
+                isCutScene = true;
             }
             
         }
@@ -586,6 +593,10 @@ public class MultiScene : MonoBehaviour
                 }
 
                 playerHp.UpdateHealth();
+                break;
+            case (int)DataType.SECOND_CUTSCENE:
+                secondPlayableDirector.playableAsset = secondCut;
+                secondPlayableDirector.Play();
                 break;
         }
 

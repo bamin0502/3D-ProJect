@@ -144,3 +144,11 @@ public class ENEMY_ATTACK //몬스터 공격에 사용
     public int DAMAGE = 0;
 }
 
+[Serializable]
+public class SECOND_CUTSCENE
+{
+    public string USER = "";
+    public int DATA = 0;
+    public int CUTSCENE_NUM = 0;
+}
+

@@ -11,7 +11,8 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
-
+using UnityEngine.Timeline;
+using UnityEngine.Playables;
 
 public enum DataType
 {
@@ -37,7 +38,10 @@ public class MultiScene : MonoBehaviour
     public Transform weaponsListParent; //무기 객체들이 있는 부모 객체
     public Transform enemyListParent; //적 객체들이 있는 부모 객체
     public Transform itemListParent; //아이템 객체들이 있는 부모 객체
-
+    public PlayableDirector secondPlayableDirector; //두번째 컷신 감독
+    public TimelineAsset secondCut; //두번째 컷신
+    public PlayableDirector lastPlayableDirector; //마지막 컷신 감독
+    public TimelineAsset lastCut; //마지막 컷신
     public Inventory inventory;
     public TextMeshProUGUI itemUsedText;
     public TextMeshProUGUI noticeText;
@@ -361,9 +365,12 @@ public class MultiScene : MonoBehaviour
 
     private void SetAllList()
     {
-        weaponsList.Capacity = weaponsListParent.childCount;
-        enemyList.Capacity = enemyListParent.childCount;
-
+        //weaponsList.Capacity = weaponsListParent.childCount;
+        //enemyList.Capacity = enemyListParent.childCount;
+        weaponsList = new List<GameObject>(weaponsListParent.childCount);
+        enemyList = new List<GameObject>(enemyListParent.childCount);
+        itemsList = new List<GameObject>(itemListParent.childCount);
+        
         for (int i = 0; i < weaponsListParent.childCount; i++)
         {
             Transform child = weaponsListParent.GetChild(i);
@@ -386,6 +393,13 @@ public class MultiScene : MonoBehaviour
         {
             Transform child = enemyListParent.GetChild(i);
             enemyList.Add(child.gameObject);
+
+            if (enemyListParent.GetChild(i) == null)
+            {
+                 //두 번째 컷신 실행
+                secondPlayableDirector.playableAsset = secondCut;
+                secondPlayableDirector.Play();
+            }
         }
     }
 
@@ -403,10 +417,10 @@ public class MultiScene : MonoBehaviour
             Debug.LogError("잘못된 위치 문자열입니다.: " + position);
             return Vector3.zero;
         }
-        float x = 0, y = 0, z = 0;
-        float.TryParse(posString[0], out x);
-        float.TryParse(posString[1], out y);
-        float.TryParse(posString[2], out z);
+
+        float.TryParse(posString[0], out var x);
+        float.TryParse(posString[1], out var y);
+        float.TryParse(posString[2], out var z);
     
         return new Vector3(x, y, z);
         // Vector3 result = new Vector3(float.Parse(posString[0]), float.Parse(posString[1]), float.Parse(posString[2]));

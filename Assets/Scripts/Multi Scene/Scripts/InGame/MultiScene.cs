@@ -75,7 +75,7 @@ public class MultiScene : MonoBehaviour
     private static readonly int AniEnemy = Animator.StringToHash("aniEnemy");
 
     public MultiPlayerHealth currentPlayerHealth;
-    
+    private bool isCutScene = false;
     private void Awake()
     {
         if (Instance == null)
@@ -89,13 +89,17 @@ public class MultiScene : MonoBehaviour
     {
         Instance = this;
         SetUsers();
-        SetAllList();
+        
         
         //해당 방의 첫번째 유저를 마스터 클라이언트로 설정
         isMasterClient = NetGameManager.instance.m_userHandle.m_szUserID.Equals(NetGameManager.instance.m_roomSession
             .m_userList[0].m_szUserID);
     }
 
+    private void Update()
+    {
+        SetAllList();
+    }
     public int GetRandomInt(int range)
     {
         //랜덤한 int 값 생성
@@ -394,12 +398,19 @@ public class MultiScene : MonoBehaviour
             Transform child = enemyListParent.GetChild(i);
             enemyList.Add(child.gameObject);
 
-            if (enemyListParent.GetChild(i) == null)
+            if (isCutScene==false)
             {
-                 //두 번째 컷신 실행
-                secondPlayableDirector.playableAsset = secondCut;
-                secondPlayableDirector.Play();
+                if (enemyListParent.GetChild(i) == null)
+                {
+                    //두 번째 컷신 실행
+                    secondPlayableDirector.playableAsset = secondCut;
+                    secondPlayableDirector.Play();
+                    isCutScene = true;
+                    break;
+                }
+                
             }
+            
         }
     }
 

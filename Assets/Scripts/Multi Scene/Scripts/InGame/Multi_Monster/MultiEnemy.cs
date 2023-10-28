@@ -141,11 +141,6 @@ public class MultiEnemy : MonoBehaviour
                 yield return wait;
             }
 
-            if (_targetPos == null)
-            {
-                yield return wait;
-                continue;
-            }
             for (int i = 0; i < players; i++)
             {
                 var target = _targets[i];
@@ -215,5 +210,3 @@ public class MultiEnemy : MonoBehaviour
         return distance <= AttackRadius;
     }
 }
-
-

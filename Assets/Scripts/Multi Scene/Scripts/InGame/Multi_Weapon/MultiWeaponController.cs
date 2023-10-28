@@ -113,16 +113,17 @@ public class MultiWeaponController : MonoBehaviour
 
     public void SetTarget(int enemy)
     {
-        GameObject target = MultiScene.Instance.enemyList[enemy];
+        var target = MultiScene.Instance.enemyList[enemy];
         
         if(equippedWeapon == null) return;
         currentTarget = target.transform;
         _agent.stoppingDistance = GetWeaponRange();
-        _agent.SetDestination(currentTarget.position);
+        var position = currentTarget.position;
+        _agent.SetDestination(position);
         attackTimer = 0f;
         
         var range = GetWeaponRange();
-        float distance = Vector3.Distance(transform.position, currentTarget.position);
+        float distance = Vector3.Distance(transform.position, position);
         isAttack = distance <= range;
     }
 

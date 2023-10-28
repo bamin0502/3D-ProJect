@@ -35,7 +35,7 @@ namespace MNF
         {
             IPAddress thisIp = null;
             IPHostEntry iphostentry = Dns.GetHostEntry(serverIP);// Find host name
-            foreach (IPAddress ipAddress in iphostentry.AddressList)// Grab the first IP addresses
+            foreach (var ipAddress in iphostentry.AddressList)// Grab the first IP addresses
             {
                 if (ipAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                     thisIp = ipAddress;

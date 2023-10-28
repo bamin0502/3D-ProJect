@@ -74,15 +74,15 @@ public class MultiScene : MonoBehaviour
     public GameObject[] itemPrefabs;
     public bool isMasterClient; //마스터 클라이언트
     private static readonly int AniEnemy = Animator.StringToHash("aniEnemy");
-
+    public GameObject Enemy;
     public MultiPlayerHealth currentPlayerHealth;
-    private bool isCutScene = false;
+    public  bool isCutScene = false;
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-
+            
         }
     }
 
@@ -90,7 +90,7 @@ public class MultiScene : MonoBehaviour
     {
         Instance = this;
         SetUsers();
-        
+        SetAllList(); 
         
         //해당 방의 첫번째 유저를 마스터 클라이언트로 설정
         isMasterClient = NetGameManager.instance.m_userHandle.m_szUserID.Equals(NetGameManager.instance.m_roomSession
@@ -99,7 +99,7 @@ public class MultiScene : MonoBehaviour
 
     private void Update()
     {
-        SetAllList();
+        StartSecondScene();
     }
     public int GetRandomInt(int range)
     {
@@ -113,6 +113,17 @@ public class MultiScene : MonoBehaviour
         return -1;
     }
 
+    private void StartSecondScene()
+    {
+        if (Enemy.transform.childCount == 0 && !isCutScene)
+        {
+            isCutScene = true;
+            BroadCastingSecondCutSceneStart(true);
+            secondPlayableDirector.playableAsset = secondCut;
+            secondPlayableDirector.Play();
+            Debug.LogError("컷신 나오는지 확인용");
+        }
+    }
     private void SetUsers()
     {
         RoomSession roomSession = NetGameManager.instance.m_roomSession;
@@ -354,17 +365,19 @@ public class MultiScene : MonoBehaviour
         NetGameManager.instance.RoomBroadcast(sendData);
     }
 
-    public void BroadCastingSecondCutSceneStart()
+    private void BroadCastingSecondCutSceneStart(bool isTrigger = false)
     {
         UserSession userSession= NetGameManager.instance.GetRoomUserSession(
             NetGameManager.instance.m_userHandle.m_szUserID);
-
         var data = new SECOND_CUTSCENE
         {
             USER = userSession.m_szUserID,
             DATA = (int)DataType.SECOND_CUTSCENE,
-            CUTSCENE_NUM= 1,
+            CUTSCENE_NUM=1,
+            CUTSCENE_TYPE = isTrigger,
         };
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
     }
     public void RoomUserDel(UserSession user)
     {
@@ -389,45 +402,39 @@ public class MultiScene : MonoBehaviour
         enemyList = new List<GameObject>(enemyListParent.childCount);
         itemsList = new List<GameObject>(itemListParent.childCount);
         
-        for (int i = 0; i < weaponsListParent.childCount; i++)
+        for (var i = 0; i < weaponsListParent.childCount; i++)
         {
             Transform child = weaponsListParent.GetChild(i);
             weaponsList.Add(child.gameObject);
         }
 
-        for (int i = 0; i < enemyListParent.childCount; i++)
+        for (var i = 0; i < enemyListParent.childCount; i++)
         {
             Transform child = enemyListParent.GetChild(i);
             enemyList.Add(child.gameObject);
         }
 
-        for (int i = 0; i < itemListParent.childCount; i++)
+        for (var i = 0; i < itemListParent.childCount; i++)
         {
             Transform child = itemListParent.GetChild(i);
             itemsList.Add(child.gameObject);
         }
 
-        for (int i = 0; i < enemyListParent.childCount; i++)
+        for (var i = 0; i < enemyListParent.childCount; i++)
         {
             Transform child = enemyListParent.GetChild(i);
             enemyList.Add(child.gameObject);
-
-            if (isCutScene == false && enemyListParent.childCount == 0)
-            {
-                BroadCastingSecondCutSceneStart();
-                isCutScene = true;
-            }
-            
         }
+
     }
 
-    private string VectorToString(Vector3 position)
+    private static string VectorToString(Vector3 position)
     {
         string result = $"{position.x},{position.y},{position.z}";
         return result;
     }
 
-    private Vector3 StringToVector(string position)
+    private static Vector3 StringToVector(string position)
     {
         string[] posString = position.Split(',');
         if (posString.Length < 3) {
@@ -595,6 +602,7 @@ public class MultiScene : MonoBehaviour
                 playerHp.UpdateHealth();
                 break;
             case (int)DataType.SECOND_CUTSCENE:
+                int cutSceneNum = Convert.ToInt32(jData["CUTSCENE_NUM"].ToString());
                 secondPlayableDirector.playableAsset = secondCut;
                 secondPlayableDirector.Play();
                 break;

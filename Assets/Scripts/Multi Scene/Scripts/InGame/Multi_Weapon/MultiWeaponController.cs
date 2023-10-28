@@ -113,18 +113,32 @@ public class MultiWeaponController : MonoBehaviour
 
     public void SetTarget(int enemy)
     {
-        var target = MultiScene.Instance.enemyList[enemy];
+        if (enemy >= 0 && enemy < MultiScene.Instance.enemyList.Count)
+        {
+            var target = MultiScene.Instance.enemyList[enemy];
+
+            if (target != null)
+            {
+                if(equippedWeapon == null) return;
+                currentTarget = target.transform;
+                _agent.stoppingDistance = GetWeaponRange();
+                var position = currentTarget.position;
+                _agent.SetDestination(position);
+                attackTimer = 0f;
         
-        if(equippedWeapon == null) return;
-        currentTarget = target.transform;
-        _agent.stoppingDistance = GetWeaponRange();
-        var position = currentTarget.position;
-        _agent.SetDestination(position);
-        attackTimer = 0f;
-        
-        var range = GetWeaponRange();
-        float distance = Vector3.Distance(transform.position, position);
-        isAttack = distance <= range;
+                var range = GetWeaponRange();
+                float distance = Vector3.Distance(transform.position, position);
+                isAttack = distance <= range;
+            }
+            else
+            {
+                Debug.LogWarning("Enemy 컴포넌트를 찾을 수 없습니다. GameObject 이름: " + target.name);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("적의 인덱스가 범위를 벗어났습니다. 인덱스: " + enemy);
+        }
     }
 
     private float GetWeaponRange()

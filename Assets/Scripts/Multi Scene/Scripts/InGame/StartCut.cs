@@ -1,11 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using Cinemachine;
-using Cysharp.Threading.Tasks;
 public class StartCut : MonoBehaviour
 {
     public PlayableDirector _playableDirector;
@@ -28,26 +26,26 @@ public class StartCut : MonoBehaviour
         //_playableDirector.played += OnCameraShake;
     }
 
-    private async Task Update()
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             // 'Esc' 키를 누르면 컷신을 넘깁니다.
             _playableDirector.time = _playableDirector.duration;
-            await SetEnemy();
+            StartCoroutine(SetEnemy());
         }  
     }
 
-    private async UniTask SetEnemy()
+    private IEnumerator SetEnemy()
     {
-        await UniTask.Delay(1000);
+        yield return new WaitForSeconds(1f);
 
         foreach (GameObject enemy in MultiScene.Instance.enemyList)
         {
             if (enemy.TryGetComponent<MultiEnemy>(out var e))
             {
-                await e.PlayerDetect();
-                await e.TryAttack();
+                e.StartCoroutine(e.PlayerDetect());
+                e.StartCoroutine(e.TryAttack());
             }
             else
             {
@@ -57,11 +55,11 @@ public class StartCut : MonoBehaviour
     }
 
     // 컷신 종료 시 호출될 이벤트 핸들러
-    private async void OnCutsceneEnd(PlayableDirector director)
+    private void OnCutsceneEnd(PlayableDirector director)
     {
         // BGM을 다시 재생
-        SoundManager.instance.bgmAudioSource.Play(); 
-        await SetEnemy();
+        SoundManager.instance.bgmAudioSource.Play();
+        StartCoroutine(SetEnemy());
         
         MultiMyStatus myStatusScript=GameObject.FindObjectOfType<MultiMyStatus>();
         MultiTeamstatus teamStatusScript=GameObject.FindObjectOfType<MultiTeamstatus>();

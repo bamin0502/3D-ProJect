@@ -35,7 +35,12 @@ public class MultiPlayerMovement : MonoBehaviour
         ani = GetComponent<AniSetting>();
         _weaponController = GetComponent<MultiWeaponController>();
         MultiScene.Instance.BroadCastingAnimation((int)PlayerState.Idle);
-        spaceUI.SetActive(false);//스페이스바 UI 비활성화
+
+        if (spaceUI != null)
+        {
+            spaceUI.SetActive(false);//스페이스바 UI 비활성화    
+        }
+        
     }
     private void Update()
     {

@@ -81,7 +81,7 @@ public class MultiPlayerHealth : MonoBehaviour
         gameObject.layer = 2;
         deathParticle.Play();
         deathBloodParticle.Play();
-        MultiScene.Instance.isDead = true;
+        if(MultiScene.Instance.currentUser.Equals(gameObject.name)) MultiScene.Instance.isDead = true;
         MultiScene.Instance._players.Remove(gameObject.name);
         GetComponent<MultiPlayerMovement>().SetAnimationTrigger(DoDie);
         deathText.DOText("당신은 "+ "<color=red>" + "몬스터"+ "</color>" + "에게 죽었습니다.", 3, true, ScrambleMode.None, null);

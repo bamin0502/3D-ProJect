@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
     //멀티 게임 실행을 시킬 메서드 지정(일단은 작업을 위해 이동은 시키나 나중에는 로비씬에서 이동시킬거임)
     public void MultiGameStartButtonClick()
     {
-        SceneManager.LoadScene("Lobby Scene");
+        LoadingSceneManager.LoadScene("Lobby Scene");
     }
     //게임 종료를 시킬 메서드 지정
     public void QuitGame()

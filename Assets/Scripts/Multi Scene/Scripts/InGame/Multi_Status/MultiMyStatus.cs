@@ -1,6 +1,4 @@
-using System;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,7 +24,6 @@ public class MultiMyStatus : MonoBehaviour
         teamStatus.mynameText = nameStatus.GetComponentInChildren<TextMeshProUGUI>();
         teamStatus.mynameText.text = myplayerName;
         //플레이어 체력 관련
-        
         MultiScene.Instance._players.TryGetValue(myPlayerName,out var playerPrefab);
         if (playerPrefab != null) _playerHealth = playerPrefab.GetComponent<MultiPlayerHealth>();
         if (_playerHealth != null)
@@ -65,7 +62,6 @@ public class MultiMyStatus : MonoBehaviour
             Debug.LogError("캔버스를 불러올 수 없습니다.");
         }
         mynameStatusPrefab = Resources.Load<GameObject>("Mystatus");
-
     }
 
     private void Update()

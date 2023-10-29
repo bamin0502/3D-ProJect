@@ -33,11 +33,9 @@ public class EnemyHealth : MonoBehaviour
     public TMP_Text death;
     private static readonly int DoDie = Animator.StringToHash("doDie");
     public DamageNumber damageNumbersPrefab;
-    
     private string currentSceneName;
-
     public Transform hudPos;
-    // Start is called before the first frame update
+    
     void Start()
     {
         _nav = GetComponent<NavMeshAgent>();

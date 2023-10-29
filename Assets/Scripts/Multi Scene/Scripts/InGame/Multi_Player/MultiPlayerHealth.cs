@@ -46,6 +46,10 @@ public class MultiPlayerHealth : MonoBehaviour
     public void TakeDamage(int damage)
     {
         CurrentHealth -= damage;
+        if(CurrentHealth <= 0)
+        {
+            CurrentHealth = 0;
+        }
         //자기 머리위에 보일 체력 상태창
         _multiMyStatus.UpdatePlayerHp();
         //팀 체력 상태창      
@@ -53,12 +57,14 @@ public class MultiPlayerHealth : MonoBehaviour
         //자신 체력 메인 UI 체력상태창
         MultiScene.Instance.multiPlayerHealthBar.UpdatePlayerHp();
         CinemachineShake.Instance.ShakeCamera(4f, 1f);
-        //MultiScene.Instance.BroadCastingEnemyAttack(damage);
         if (CurrentHealth <= 0)
         {
             Die();
             StartCoroutine(DeathTitle());
+            Invoke(nameof(EndDeath), 3f);
+            
         }
+
     }
 
     public void UpdateHealth()

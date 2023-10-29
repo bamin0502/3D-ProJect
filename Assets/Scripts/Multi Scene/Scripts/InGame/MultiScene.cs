@@ -81,6 +81,7 @@ public class MultiScene : MonoBehaviour
     public GameObject Enemy;
     public MultiPlayerHealth currentPlayerHealth;
     public  bool isCutScene = false;
+    private int currentPlayerIndex=0;//관전 중인 플레이어 인덱스 설정
     private void Awake()
     {
         if (Instance == null)
@@ -94,8 +95,8 @@ public class MultiScene : MonoBehaviour
     {
         Instance = this;
         SetUsers();
-        SetAllList(); 
-        
+        SetAllList();
+        FindPlayerCamera(currentUser);
         //해당 방의 첫번째 유저를 마스터 클라이언트로 설정
         isMasterClient = NetGameManager.instance.m_userHandle.m_szUserID.Equals(NetGameManager.instance.m_roomSession
             .m_userList[0].m_szUserID);
@@ -188,7 +189,8 @@ public class MultiScene : MonoBehaviour
         }
     }
 
-    public void BroadCastingPlayerSkill()
+    #region 브로드캐스팅 관련
+ public void BroadCastingPlayerSkill()
     {
         var data = new PLAYER_SKILL
         {
@@ -431,9 +433,13 @@ public class MultiScene : MonoBehaviour
         NetGameManager.instance.RoomBroadcast(sendData);
     }
     
-    
-    
-    public void RoomUserDel(UserSession user)
+
+    #endregion
+
+
+
+    #region 유저 관련
+ public void RoomUserDel(UserSession user)
     {
 
         if (_players.TryGetValue(user.m_szUserID, out GameObject toDestroy))
@@ -505,7 +511,49 @@ public class MultiScene : MonoBehaviour
         // Vector3 result = new Vector3(float.Parse(posString[0]), float.Parse(posString[1]), float.Parse(posString[2]));
         // return result;
     }
+                             
 
+    #endregion
+
+    #region 카메라 관전 관련
+    public void SwitchCameraTargetToNextPlayer()
+    {
+        currentPlayerIndex = (currentPlayerIndex + 1) % _players.Count; // 다음 플레이어로 전환
+
+        List<string> playerIDs = new List<string>(_players.Keys); // 모든 플레이어 ID를 가져옴
+        string nextPlayerID = playerIDs[currentPlayerIndex]; // 현재 인덱스에 해당하는 다음 플레이어 ID
+
+        SetCameraTargetFromPlayerID(nextPlayerID); // 다음 플레이어로 관전 대상 변경
+    }
+    public void SetCameraTargetFromPlayerID(string playerID)
+    {
+        Transform playerCameraTransform = FindPlayerCamera(playerID);
+
+        if (playerCameraTransform != null)
+        {
+            cineCam.Follow = playerCameraTransform;
+            cineCam.LookAt = playerCameraTransform;
+            playerCamera.player = playerCameraTransform;
+            
+        }
+        else
+        {
+            Debug.LogError("카메라를 찾을 수 없습니다.");
+        }
+    }
+    private Transform FindPlayerCamera(string playerID)
+    {
+        if (_players.TryGetValue(playerID, out GameObject player))
+        {
+            var playerCamera = player.GetComponentInChildren<Camera>();
+            if (playerCamera != null)
+            {
+                return playerCamera.transform;
+            }
+        }
+        return null;
+    }
+    #endregion
     public void RoomBroadcast(string szData)
     {
         //모든 유저에게 정보 전달
@@ -518,11 +566,11 @@ public class MultiScene : MonoBehaviour
         if (user == null) return;
 
         switch (dataID)
-        {
+        { 
+            #region 플레이어 애니메이션 관련
             case (int)DataType.PlayerAnimation:
                 int aniNum = Convert.ToInt32(jData["ANI_NUM"].ToString());
                 bool aniType = Convert.ToBoolean(jData["ANI_TYPE"].ToString());
-
                 if (aniType == false)
                 {
                     user.GetComponent<MultiPlayerMovement>().ChangedState((PlayerState)aniNum);
@@ -534,23 +582,13 @@ public class MultiScene : MonoBehaviour
                     if (aniNum == BowAttack) userBowAttack.CoroutineArrow();
                     user.GetComponent<MultiPlayerMovement>().SetAnimationTrigger(aniNum);
                 }
-
                 break;
+            #endregion
+
+            #region 플레이어 움직임 관련
             case (int)DataType.PlayerMovement:
                 user.TryGetComponent<MultiPlayerMovement>(out var userMove2);
                 user.TryGetComponent<MultiWeaponController>(out var userAttack);
-                // int target = Convert.ToInt32(jData["TARGET"].ToString());
-                //
-                // if (target <= -1)
-                // {
-                //     userAttack.ClearTarget();
-                //     userMove2.navAgent.SetDestination(StringToVector(jData["POSITION"].ToString()));
-                // }
-                // else
-                // {
-                //     userAttack.SetTarget(target);
-                //     userMove2.navAgent.SetDestination(StringToVector(jData["POSITION"].ToString()));
-                // }
                 if (userMove2 != null && userMove2.navAgent.isActiveAndEnabled)
                 {
                     int target = Convert.ToInt32(jData["TARGET"].ToString());
@@ -572,7 +610,11 @@ public class MultiScene : MonoBehaviour
                 }
 
                 break;
-            //플레이어 아이템 드랍 관련 테스트 필요
+                
+
+            #endregion
+
+            #region 플레이어 아이템 드랍 관련
             case (int)DataType.PlayerPickItem:
                 int index = Convert.ToInt32(jData["ITEM_INDEX"].ToString());
                 Destroy(itemsList[index]);
@@ -599,6 +641,10 @@ public class MultiScene : MonoBehaviour
                 }
 
                 break;
+                
+            #endregion
+
+            #region 몬스터 애니메이션 관련
             case (int)DataType.EnemyAnimation:
                 int monsterIndex = Convert.ToInt32(jData["MONSTER_INDEX"].ToString());
                 if (monsterIndex >= 0 && monsterIndex < enemyList.Count)
@@ -611,8 +657,12 @@ public class MultiScene : MonoBehaviour
                         else e.SetEnemyAnimation(AniEnemy, aniNumber);
                     }
                 }
-
                 break;
+                
+
+            #endregion
+
+            #region 몬스터 아이템 드랍 관련
             case (int)DataType.EnemyItem:
                 int itemIndex = Convert.ToInt32(jData["ITEM_INDEX"].ToString());
                 Vector3 enemyItemPos = StringToVector(jData["POSITION"].ToString());
@@ -620,11 +670,20 @@ public class MultiScene : MonoBehaviour
                 newItem.transform.SetParent(itemListParent);
                 itemsList.Add(newItem);
                 break;
+                
 
+            #endregion
+
+            #region 플레이어 무기 스킬 관련
             case (int)DataType.PlayerSkill:
                 user.TryGetComponent(out MultiPlayerSkill multiPlayerSkill);
                 multiPlayerSkill.Skill(userID);
                 break;
+                
+
+            #endregion
+           
+            #region 플레이어 아이템 사용 관련
             case (int)DataType.PlayerUseItem:
                 int itemType = Convert.ToInt32(jData["ITEM_TYPE"].ToString());
                 user.TryGetComponent(out MultiPlayerHealth playerHp);
@@ -644,16 +703,25 @@ public class MultiScene : MonoBehaviour
 
                 playerHp.UpdateHealth();
                 break;
+            #endregion
+
+            #region 두번째 컷신 관련
             case (int)DataType.SECOND_CUTSCENE:
                 int cutSceneNum = Convert.ToInt32(jData["CUTSCENE_NUM"].ToString());
                 secondPlayableDirector.playableAsset = secondCut;
                 secondPlayableDirector.Play();
                 break;
+            #endregion
+
+            #region 마지막 컷신 관련
             case (int)DataType.LAST_CUTSCENE:
                 int cutSceneNum2 = Convert.ToInt32(jData["CUTSCENE_NUM"].ToString());
                 lastPlayableDirector.playableAsset = lastCut;
                 lastPlayableDirector.Play();
                 break;
+            #endregion
+
+            #region 플레이어 데미지 처리 관련
             case (int)DataType.PlayerTakeDamage:
                 int damage = Convert.ToInt32(jData["DAMAGE"].ToString());
                 string targetPlayer = jData["TARGET"].ToString();
@@ -661,7 +729,13 @@ public class MultiScene : MonoBehaviour
                 if(v == null) return;
                 v.TryGetComponent(out MultiPlayerHealth playerHealth);
                 if (playerHealth != null) playerHealth.TakeDamage(damage);
+                
                 break;
+                
+
+            #endregion
+
+            #region 몬스터 플레이어 추적 관련
             case (int)DataType.EnemyChaseTarget:
                 int enemyIndex = Convert.ToInt32(jData["ENEMY_INDEX"].ToString());
                 string chasePlayer = jData["TARGET"].ToString();
@@ -678,6 +752,19 @@ public class MultiScene : MonoBehaviour
                     multiEnemy.SetDestination(value.transform);
                 }
                 break;
+                
+
+            #endregion
+
+            #region 플레이어 체력 관련
+            case (int)DataType.PlayerHpPlayer:
+                user.TryGetComponent(out MultiPlayerHealth playerHealth2);
+                playerHealth2.MaxHealth = Convert.ToInt32(jData["HEALTH"].ToString());
+                playerHealth2.CurrentHealth = Convert.ToInt32(jData["PlayerHealth"].ToString());
+                if(playerHealth2.CurrentHealth <= 0) playerHealth2.Die();
+            break;
+            #endregion
+                
         }
 
     }

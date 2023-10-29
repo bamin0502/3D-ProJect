@@ -29,16 +29,13 @@ public class MultiPlayerHealth : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        string json = "{\"PlayerHealth\": 10000, \"Health\": 10000}";
+        string json = "{\"PlayerHealth\": 100, \"Health\": 100}";
         PlayerStat playerStat = JsonConvert.DeserializeObject<PlayerStat>(json);
         MaxHealth = (int)playerStat.PlayerHealth;
         CurrentHealth = (int)playerStat.Health;
         _multiMyStatus = GetComponent<MultiMyStatus>();
         _multiTeamstatus = GetComponent<MultiTeamstatus>();
         MultiScene.Instance.multiPlayerHealthBar.UpdatePlayerHp();
-        
-        
-        
     }
     
     void Awake()
@@ -80,9 +77,13 @@ public class MultiPlayerHealth : MonoBehaviour
 
     public void Die()
     {
+        if(MultiScene.Instance.isDead) return;
+        
         deathParticle.Play();
-        deathBloodParticle.Play(); 
-        MultiScene.Instance.BroadCastingAnimation((int)PlayerState.Dead);
+        deathBloodParticle.Play();
+        MultiScene.Instance.isDead = true;
+        MultiScene.Instance._players.Remove(gameObject.name);
+        GetComponent<MultiPlayerMovement>().SetAnimationTrigger(DoDie);
         deathText.DOText("당신은 "+ "<color=red>" + "몬스터"+ "</color>" + "에게 죽었습니다.", 3, true, ScrambleMode.None, null);
         endingImage.rectTransform.gameObject.SetActive(true);
     }

@@ -81,7 +81,11 @@ public class MultiScene : MonoBehaviour
     public GameObject Enemy;
     public MultiPlayerHealth currentPlayerHealth;
     public  bool isCutScene = false;
-    private int currentPlayerIndex=0;//관전 중인 플레이어 인덱스 설정
+    private string currenViewPlayer = "";
+    public TextMeshProUGUI endingText;
+    public Image endingImage; 
+    public bool isDead;
+    
     private void Awake()
     {
         if (Instance == null)
@@ -96,7 +100,6 @@ public class MultiScene : MonoBehaviour
         Instance = this;
         SetUsers();
         SetAllList();
-        FindPlayerCamera(currentUser);
         //해당 방의 첫번째 유저를 마스터 클라이언트로 설정
         isMasterClient = NetGameManager.instance.m_userHandle.m_szUserID.Equals(NetGameManager.instance.m_roomSession
             .m_userList[0].m_szUserID);
@@ -105,6 +108,11 @@ public class MultiScene : MonoBehaviour
     private void Update()
     {
         StartSecondScene();
+
+        if (isDead && Input.GetMouseButtonDown(0))
+        {
+            SwitchToNextPlayer();
+        }
     }
     public int GetRandomInt(int range)
     {
@@ -166,7 +174,11 @@ public class MultiScene : MonoBehaviour
                 //만약 현재 유저일경우 실행시킬 것들
                 newPlayer.TryGetComponent(out ThrownWeaponController thrownWeaponController);
                 newPlayer.TryGetComponent(out MultiItemDropController pickItem);
-                currentPlayerHealth = newPlayer.GetComponent<MultiPlayerHealth>();
+                newPlayer.TryGetComponent(out MultiPlayerHealth multiPlayerHealth);
+                currentPlayerHealth = multiPlayerHealth;
+                multiPlayerHealth.deathText = endingText;
+                multiPlayerHealth.endingImage = endingImage;
+                
                 //아이템 드랍 관련
                 pickItem.actionText = itemUsedText;
                 pickItem.inventory = inventory;
@@ -516,43 +528,42 @@ public class MultiScene : MonoBehaviour
     #endregion
 
     #region 카메라 관전 관련
-    public void SwitchCameraTargetToNextPlayer()
+
+    public void SwitchToNextPlayer()
     {
-        currentPlayerIndex = (currentPlayerIndex + 1) % _players.Count; // 다음 플레이어로 전환
+        endingImage.gameObject.SetActive(false);
+        endingText.gameObject.SetActive(false);
+        
+        List<string> playerKeys = new List<string>(_players.Keys);
 
-        List<string> playerIDs = new List<string>(_players.Keys); // 모든 플레이어 ID를 가져옴
-        string nextPlayerID = playerIDs[currentPlayerIndex]; // 현재 인덱스에 해당하는 다음 플레이어 ID
-
-        SetCameraTargetFromPlayerID(nextPlayerID); // 다음 플레이어로 관전 대상 변경
-    }
-    public void SetCameraTargetFromPlayerID(string playerID)
-    {
-        Transform playerCameraTransform = FindPlayerCamera(playerID);
-
-        if (playerCameraTransform != null)
+        if (string.IsNullOrWhiteSpace(currenViewPlayer))
         {
-            cineCam.Follow = playerCameraTransform;
-            cineCam.LookAt = playerCameraTransform;
-            playerCamera.player = playerCameraTransform;
-            
+            currenViewPlayer = playerKeys[0];
         }
         else
         {
-            Debug.LogError("카메라를 찾을 수 없습니다.");
+            int currentIndex = playerKeys.IndexOf(currenViewPlayer);
+            int nextIndex = (currentIndex + 1) % playerKeys.Count;
+            currenViewPlayer = playerKeys[nextIndex];
         }
+
+        ChangeCamaraView(currenViewPlayer);
     }
-    private Transform FindPlayerCamera(string playerID)
+    
+    private void ChangeCamaraView(string id)
     {
-        if (_players.TryGetValue(playerID, out GameObject player))
+        _players.TryGetValue(id, out GameObject newPlayer);
+        if (!newPlayer)
         {
-            var playerCamera = player.GetComponentInChildren<Camera>();
-            if (playerCamera != null)
-            {
-                return playerCamera.transform;
-            }
+            Debug.LogError("카메라를 찾을 수 없습니다.");
+            return;
         }
-        return null;
+
+        cineCam.Follow = newPlayer.transform;
+        cineCam.LookAt = newPlayer.transform;
+        playerCamera.player = newPlayer.transform;
     }
+    
     #endregion
     public void RoomBroadcast(string szData)
     {

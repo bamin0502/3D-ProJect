@@ -24,7 +24,7 @@ public class MultiEnemy : MonoBehaviour
     private static readonly int IsAttack = Animator.StringToHash("isAttack");
     private static readonly int AniEnemy = Animator.StringToHash("aniEnemy");
     
-    private Transform _targetPos; // Player의 Transform 컴포넌트
+    [SerializeField] private Transform _targetPos; // Player의 Transform 컴포넌트
     private NavMeshAgent _nav; // NavMeshAgent 컴포넌트
     
     private Vector3 _originalPos; //몬스터 원래 위치
@@ -89,7 +89,6 @@ public class MultiEnemy : MonoBehaviour
         _index = MultiScene.Instance.enemyList.IndexOf(gameObject);
         _targetPos = null;
         _nav.SetDestination(_originalPos);
-
     }
    
     public IEnumerator PlayerDetect()

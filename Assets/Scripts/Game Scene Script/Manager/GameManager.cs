@@ -196,25 +196,25 @@ public class GameManager : MonoBehaviour
         //게임 씬 오브젝트 
         else if (scene.name == "Game Scene")
         {
-            Button homeButton = GameOptionImage.transform.Find("HomeButton").GetComponent<Button>();
-            if (homeButton != null)
-            {
-                homeButton.onClick.AddListener(BackMainMenu);
-            }
-            else
-            {
-                Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
-            }
+            // Button homeButton = GameOptionImage.transform.Find("HomeButton").GetComponent<Button>();
+            // if (homeButton != null)
+            // {
+            //     homeButton.onClick.AddListener(BackMainMenu);
+            // }
+            // else
+            // {
+            //     Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
+            // }
             
-            Button RestartButton = EndingImage.transform.Find("Home Button").GetComponent<Button>();
-            if(RestartButton != null)
-            {
-                RestartButton.onClick.AddListener(GamestartButtonClick);
-            }
-            else
-            {
-                Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
-            }
+            // Button RestartButton = EndingImage.transform.Find("Home Button").GetComponent<Button>();
+            // if(RestartButton != null)
+            // {
+            //     RestartButton.onClick.AddListener(GamestartButtonClick);
+            // }
+            // else
+            // {
+            //     Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
+            // }
             Button MainButton = EndingImage.transform.Find("Main Button").GetComponent<Button>();
             if(MainButton != null)
             {

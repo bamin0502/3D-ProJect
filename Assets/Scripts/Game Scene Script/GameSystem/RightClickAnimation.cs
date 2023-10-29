@@ -27,7 +27,7 @@ public class RightClickAnimation : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(1)) // 오른쪽 클릭
+        if (!MultiScene.Instance.isDead && Input.GetMouseButtonDown(1)) // 오른쪽 클릭
         {
             Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 

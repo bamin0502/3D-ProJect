@@ -14,6 +14,7 @@ public class MouseCursorController : MonoBehaviour
 
     void Update()
     {
+        if(MultiScene.Instance.isDead) return;
         ChangeCursorBasedOnMouseOver();
     }
 

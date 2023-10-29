@@ -543,7 +543,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerName: 
   nameText: {fileID: 0}
-  gridLayoutGroup: {fileID: 0}
+  gridLayoutGroup: {fileID: 936742001049693870, guid: 10a76509f4cb9f64b856da18bbb4d5fb, type: 3}
   playerHpImage: {fileID: 0}
   statusbar: {fileID: 0}
 --- !u!114 &-7003272008903750786
@@ -578,7 +578,7 @@ MonoBehaviour:
   MaxHealth: 0
   CurrentHealth: 0
   deathText: {fileID: 0}
-  endingImage: {fileID: 0}
+  endingImage: {fileID: 6842677917849154319, guid: 8247b6285e28b8a4498989934add892c, type: 3}
   killedImage: {fileID: 0}
   kill: {fileID: 0}
   death: {fileID: 0}

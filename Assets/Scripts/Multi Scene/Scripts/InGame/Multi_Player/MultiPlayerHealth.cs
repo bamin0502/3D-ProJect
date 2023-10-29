@@ -13,6 +13,7 @@ public class MultiPlayerHealth : MonoBehaviour
     public int CurrentHealth;
    
     public TMP_Text deathText;
+    [SerializeField]
     public Image endingImage;
 
     public Image killedImage;
@@ -35,6 +36,9 @@ public class MultiPlayerHealth : MonoBehaviour
         _multiMyStatus = GetComponent<MultiMyStatus>();
         _multiTeamstatus = GetComponent<MultiTeamstatus>();
         MultiScene.Instance.multiPlayerHealthBar.UpdatePlayerHp();
+        
+        
+        
     }
     
     void Awake()
@@ -60,7 +64,7 @@ public class MultiPlayerHealth : MonoBehaviour
         if (CurrentHealth <= 0)
         {
             Die();
-            StartCoroutine(DeathTitle());
+            //StartCoroutine(DeathTitle());
             Invoke(nameof(EndDeath), 3f);
             
         }

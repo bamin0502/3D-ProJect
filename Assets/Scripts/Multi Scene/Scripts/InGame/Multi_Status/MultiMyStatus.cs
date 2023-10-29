@@ -16,11 +16,11 @@ public class MultiMyStatus : MonoBehaviour
     private bool isDestroyed = false;
     private MultiPlayerHealth _playerHealth;
     private Quaternion rotation = new (0, 0, 0, 0);
-    
+    private GameObject nameStatus;
     public void CreateMyStatus(string myPlayerName, Vector3 playerPosition)
     {
         // 각 캐릭터마다 자신만의 UI 요소를 생성하고 위치를 조정
-        GameObject nameStatus = Instantiate(mynameStatusPrefab, playerPosition + new Vector3(0, 1, 0), Quaternion.identity);
+        nameStatus = Instantiate(mynameStatusPrefab, playerPosition + new Vector3(0, 1, 0), Quaternion.identity);
         MultiMyStatus teamStatus = nameStatus.GetComponent<MultiMyStatus>();
         teamStatus.myplayerName = myplayerName;
         teamStatus.mynameText = nameStatus.GetComponentInChildren<TextMeshProUGUI>();
@@ -56,7 +56,7 @@ public class MultiMyStatus : MonoBehaviour
     void Start()
     {
         _cam = Camera.main;
-        rotation = mystatus.transform.rotation;
+        rotation = transform.rotation;
 
         // mystatus 초기화
         mystatus = GameObject.FindGameObjectWithTag("MyStatus").GetComponent<Canvas>();
@@ -70,9 +70,9 @@ public class MultiMyStatus : MonoBehaviour
 
     private void Update()
     {
-        if (!isDestroyed && mystatus != null)
+        if (!isDestroyed && nameStatus != null)
         {
-            mystatus.transform.rotation = rotation;
+            nameStatus.transform.rotation = rotation;
         }
     }
 

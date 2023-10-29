@@ -31,11 +31,12 @@ public class EnemyHealth : MonoBehaviour
     public Image KilledImage;
     public TMP_Text kill;
     public TMP_Text death;
-    public Canvas canvas;
     private static readonly int DoDie = Animator.StringToHash("doDie");
     public DamageNumber damageNumbersPrefab;
-    public RectTransform RectTransform;
+    
     private string currentSceneName;
+
+    public Transform hudPos;
     // Start is called before the first frame update
     void Start()
     {
@@ -43,20 +44,7 @@ public class EnemyHealth : MonoBehaviour
         currentSceneName= SceneManager.GetActiveScene().name;
         EnemyHealthBaseOnScene(currentSceneName);
     }
-    private void ShowDamageNumbers(float damageAmount,Vector3 position)
-    {
-        // DamageNumber damageNumbers = Instantiate(damageNumbersPrefab, canvas.transform);
-        // damageNumbers.transform.position = Camera.main.WorldToScreenPoint(position + new Vector3(0, 1f, 0));
-        //
-        // TextMeshProUGUI damageText = damageNumbers.GetComponentInChildren<TextMeshProUGUI>();
-        // if (damageText != null)
-        // {
-        //     damageText.text = damageAmount.ToString("0");
-        // }
-        //
-        // damageNumbers.transform.rotation = canvas.transform.rotation;
-
-    }
+   
     private void EnemyHealthBaseOnScene(string sceneName)
     {
         if (sceneName.Equals("Game Scene"))
@@ -121,14 +109,13 @@ public class EnemyHealth : MonoBehaviour
         {
             currentHealth -= damage;
             enemyHealthBar.UpdateHealth();
-            
-            ShowDamageNumbers(damage,transform.position);
+            DamageNumber damageNumber = damageNumbersPrefab.Spawn(hudPos.transform.position, damage);
         }
         else if(enemyType == EnemyType.Boss)
         {
             currentHealth -= damage;
             enemyHealthBar.UpdateBossHealth();
-            ShowDamageNumbers(damage,transform.position);
+            DamageNumber damageNumber = damageNumbersPrefab.Spawn(hudPos.transform.position, damage);
         }
         if (currentHealth <= 0 )
         {

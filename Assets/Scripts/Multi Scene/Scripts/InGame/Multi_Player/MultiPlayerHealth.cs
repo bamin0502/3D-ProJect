@@ -78,7 +78,7 @@ public class MultiPlayerHealth : MonoBehaviour
     public void Die()
     {
         if(MultiScene.Instance.isDead) return;
-        
+        gameObject.layer = 2;
         deathParticle.Play();
         deathBloodParticle.Play();
         MultiScene.Instance.isDead = true;

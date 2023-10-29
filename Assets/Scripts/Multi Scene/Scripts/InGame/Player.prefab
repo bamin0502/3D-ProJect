@@ -617,7 +617,7 @@ MonoBehaviour:
   maxThrowRange: 10
   groundLayer:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 4096
   throwRangeIndicator: {fileID: 8035269872575942630}
   damageRangeIndicator: {fileID: 8035269871671460856}
   isGrenadeMode: 0

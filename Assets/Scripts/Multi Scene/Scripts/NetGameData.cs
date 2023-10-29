@@ -161,3 +161,21 @@ public class LAST_CUTSCENE
     public bool CUTSCENE_TYPE = false;
 }
 
+[Serializable]
+public class PLAYER_TAKE_DAMAGE
+{
+    public string USER = "";
+    public int DATA = 0;
+    public int DAMAGE = 0;
+    public string TARGET = "";
+}
+
+[Serializable]
+public class ENEMY_CHASE
+{
+    public string USER = "";
+    public int DATA = 0;
+    public int ENEMY_INDEX = 0;
+    public string TARGET = "";
+}
+

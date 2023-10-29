@@ -28,6 +28,8 @@ public enum DataType
     PlayerUseItem = 10,
     SECOND_CUTSCENE=11,
     LAST_CUTSCENE=12,
+    PlayerTakeDamage = 13,
+    EnemyChaseTarget = 14,
 }
 public class MultiScene : MonoBehaviour
 {
@@ -74,6 +76,7 @@ public class MultiScene : MonoBehaviour
     
     public GameObject[] itemPrefabs;
     public bool isMasterClient; //마스터 클라이언트
+    private static readonly int IsAttack = Animator.StringToHash("isAttack");
     private static readonly int AniEnemy = Animator.StringToHash("aniEnemy");
     public GameObject Enemy;
     public MultiPlayerHealth currentPlayerHealth;
@@ -395,6 +398,41 @@ public class MultiScene : MonoBehaviour
         string sendData = LitJson.JsonMapper.ToJson(data);
         NetGameManager.instance.RoomBroadcast(sendData);
     }
+
+    public void BroadCastingTakeDamage(string player, int damage)
+    {
+        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+            NetGameManager.instance.m_userHandle.m_szUserID);
+        
+        var data = new PLAYER_TAKE_DAMAGE
+        {
+            USER = userSession.m_szUserID,
+            DATA = (int)DataType.PlayerTakeDamage,
+            TARGET = player,
+            DAMAGE = damage,
+        };
+        
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
+    }
+
+    public void BroadCastingSetEnemyTarget(string player, int index)
+    {
+        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+            NetGameManager.instance.m_userHandle.m_szUserID);
+        var data = new ENEMY_CHASE
+        {
+            USER = userSession.m_szUserID,
+            DATA = (int)DataType.EnemyChaseTarget,
+            TARGET = player,
+            ENEMY_INDEX = index,
+        };
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
+    }
+    
+    
+    
     public void RoomUserDel(UserSession user)
     {
 
@@ -569,19 +607,8 @@ public class MultiScene : MonoBehaviour
                     {
                         int aniNumber = Convert.ToInt32(jData["ANI_NUM"].ToString());
                         bool monsterAniType = Convert.ToBoolean(jData["ANI_TYPE"].ToString());
-                        if (monsterAniType)
-                        {
-                            e.anim.SetTrigger(aniNumber);
-                        }
-                        else
-                        {
-                            e.anim.SetInteger(AniEnemy, aniNumber);
-                        }
-
-                        if (monsterAniType)
-                        {
-
-                        }
+                        if (monsterAniType) e.SetEnemyAnimation(aniNumber, isTrigger: true);
+                        else e.SetEnemyAnimation(AniEnemy, aniNumber);
                     }
                 }
 
@@ -626,6 +653,30 @@ public class MultiScene : MonoBehaviour
                 int cutSceneNum2 = Convert.ToInt32(jData["CUTSCENE_NUM"].ToString());
                 lastPlayableDirector.playableAsset = lastCut;
                 lastPlayableDirector.Play();
+                break;
+            case (int)DataType.PlayerTakeDamage:
+                int damage = Convert.ToInt32(jData["DAMAGE"].ToString());
+                string targetPlayer = jData["TARGET"].ToString();
+                _players.TryGetValue(targetPlayer, out GameObject v);
+                if(v == null) return;
+                v.TryGetComponent(out MultiPlayerHealth playerHealth);
+                if (playerHealth != null) playerHealth.TakeDamage(damage);
+                break;
+            case (int)DataType.EnemyChaseTarget:
+                int enemyIndex = Convert.ToInt32(jData["ENEMY_INDEX"].ToString());
+                string chasePlayer = jData["TARGET"].ToString();
+                enemyList[enemyIndex].TryGetComponent(out MultiEnemy multiEnemy);
+                if (multiEnemy == null) return;
+                if (string.IsNullOrWhiteSpace(chasePlayer))
+                {
+                    multiEnemy.SetDestination(null);
+                }
+                else
+                {
+                    _players.TryGetValue(chasePlayer, out GameObject value);
+                    if (value == null) return;
+                    multiEnemy.SetDestination(value.transform);
+                }
                 break;
         }
 

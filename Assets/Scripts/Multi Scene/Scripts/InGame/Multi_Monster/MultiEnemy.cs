@@ -14,7 +14,6 @@ public class MultiEnemy : MonoBehaviour
         Red,
         Box
     }
-
     private enum EnemyState
     {
         Idle,
@@ -34,7 +33,7 @@ public class MultiEnemy : MonoBehaviour
     private const float AttackRadius = 2f; //공격 가능 범위
     private const float DetectionRadius = 7f; //플레이어 감지 범위
     public EnemyType enemyType; //해당 몬스터 타입
-    private int _index; //해당 몬스터 인덱스
+    private int _index = -1; //해당 몬스터 인덱스
     private int _damage; //해당 몬스터 데미지
 
     private EnemyState _currentState;
@@ -43,6 +42,9 @@ public class MultiEnemy : MonoBehaviour
     private string currentSceneName;
     public bool isDead { get; set; }
 
+
+    private Transform currentTarget;
+
     private void Awake()
     {
         _nav = GetComponent<NavMeshAgent>();
@@ -50,12 +52,9 @@ public class MultiEnemy : MonoBehaviour
     }
     private void Start()
     {
-        _currentState = EnemyState.Idle;
-        anim.SetInteger(AniEnemy, (int)_currentState);
-        MultiScene.Instance.BroadCastingEnemyAnimation(_index, (int)_currentState);
-        _index = MultiScene.Instance.enemyList.IndexOf(gameObject);
-        _originalPos = transform.position;
         currentSceneName = SceneManager.GetActiveScene().name;
+        _originalPos = transform.position;
+        _currentState = EnemyState.Idle;
         SetState(currentSceneName);
     }
 
@@ -83,39 +82,29 @@ public class MultiEnemy : MonoBehaviour
             EnemyStat enemy = JsonConvert.DeserializeObject<EnemyStat>(json);
             _damage = (int)enemy.damage;
         }
-        // if(sceneName.Equals("Single Scene"))
-        // {
-        //     string json = "";
-        //     if (enemyType == EnemyType.Box)
-        //     {
-        //         json = "{\"damage\": 30}";
-        //         _enemyName = "Red Monster";
-        //     }
-        //     else if (enemyType == EnemyType.Red)
-        //     {
-        //         json = "{\"damage\": 10}";
-        //         _enemyName = "Red Spider";
-        //     }
-        //     else if (enemyType == EnemyType.Green)
-        //     {
-        //         json = "{\"damage\": 20}";
-        //         _enemyName = "Green Spider";
-        //     }
-        //
-        //     EnemyStat enemy = JsonConvert.DeserializeObject<EnemyStat>(json);
-        //     _damage = (int)enemy.damage;
-        // }
+    }
+
+    public void SetIndex()
+    {
+        _index = MultiScene.Instance.enemyList.IndexOf(gameObject);
+        _targetPos = null;
+        _nav.SetDestination(_originalPos);
+
     }
    
     public IEnumerator PlayerDetect()
     {
-        WaitForSeconds wait = new WaitForSeconds(0.5f);
+        if(!MultiScene.Instance.isMasterClient) yield break;
+        
+        WaitForSeconds wait = new WaitForSeconds(1f);
         EnemyState lastState = EnemyState.Idle; // 이전 상태를 저장하는 변수
 
-        yield return new WaitForSeconds(Random.Range(0f, 1f)); //코루틴 분산
+        yield return new WaitForSeconds(Random.Range(0f, 2f)); //코루틴 분산
 
         while (true)
         {
+            if (isDead) yield break;
+            
             int players = Physics.OverlapSphereNonAlloc(transform.position, DetectionRadius, _targets,
                 LayerMask.GetMask("Player"));
 
@@ -124,8 +113,6 @@ public class MultiEnemy : MonoBehaviour
             if (players <= 0)
             {
                 _targetPos = null;
-                _nav.SetDestination(_originalPos);
-
                 float distance = Vector3.Distance(transform.position, _originalPos);
                 
                 if (distance <= 0.1f)
@@ -133,7 +120,7 @@ public class MultiEnemy : MonoBehaviour
                     if (_currentState != EnemyState.Idle)
                     {
                         _currentState = EnemyState.Idle;
-                        anim.SetInteger(AniEnemy, (int)_currentState);
+                        SetEnemyAnimation(AniEnemy, (int)_currentState);
                         MultiScene.Instance.BroadCastingEnemyAnimation(_index, (int)_currentState);
                     }
                 }
@@ -151,7 +138,6 @@ public class MultiEnemy : MonoBehaviour
                 {
                     closestDistance = distance;
                     _targetPos = target.transform;
-                    _nav.SetDestination(_targetPos.position);
                 }
             }
 
@@ -160,18 +146,61 @@ public class MultiEnemy : MonoBehaviour
                 if (_currentState != EnemyState.Chase)
                 {
                     _currentState = EnemyState.Chase;
-                    anim.SetInteger(AniEnemy, (int)_currentState);
+                    SetEnemyAnimation(AniEnemy, (int)_currentState);
                     MultiScene.Instance.BroadCastingEnemyAnimation(_index, (int)_currentState);
                 }
+            }
+
+            if (_targetPos != currentTarget || (_nav.remainingDistance > 0.5f && _targetPos != null))
+            {
+                currentTarget = _targetPos;
+                if (_index < 0 || _index > MultiScene.Instance.enemyList.Count) yield break;
+
+                if (_targetPos == null)
+                {
+                    _nav.SetDestination(_originalPos);
+                }
+                else
+                {
+                    _nav.SetDestination(_targetPos.transform.position);
+                }
+
+                MultiScene.Instance.BroadCastingSetEnemyTarget(_targetPos != null ? _targetPos.name : "", _index);
             }
 
             yield return wait;
         }
     }
 
+    public void SetEnemyAnimation(int id, int state = 0, bool isTrigger = false)
+    {
+        if (isTrigger) anim.SetTrigger(id);
+        else anim.SetInteger(id, state);
+    }
+
+    public void SetDestination(Transform target)
+    {
+        if (_index < 0 || _index > MultiScene.Instance.enemyList.Count) return;
+
+        if (target != currentTarget || (_nav.remainingDistance > 0.5f && target != null))
+        {
+            currentTarget = target;
+
+            if (target == null)
+            {
+                _nav.SetDestination(_originalPos);
+            }
+            else
+            {
+                _nav.SetDestination(target.transform.position);
+            }
+        }
+    }
+
     public void Attack()
     {
-        if (!IsAttackable()) return;
+        if (!MultiScene.Instance.isMasterClient) return;
+        if (!IsAttackable() || isDead) return;
             
         SoundManager.instance.PlaySE(_enemyName);
         
@@ -180,20 +209,25 @@ public class MultiEnemy : MonoBehaviour
         if (playerHealth != null)
         {
             playerHealth.TakeDamage(_damage);
+            MultiScene.Instance.BroadCastingTakeDamage(_targetPos.name, _damage);
         }
     }
 
     public IEnumerator TryAttack()
     {
+        if (!MultiScene.Instance.isMasterClient) yield break;
+        
         WaitForSeconds wait = new WaitForSeconds(1);
         
         yield return new WaitForSeconds(Random.Range(0f, 1f)); //코루틴 분산
         
         while (true)
         {
+            if(isDead) yield break;
+            
             if(IsAttackable())
             {
-                anim.SetTrigger(IsAttack);
+                SetEnemyAnimation(IsAttack, isTrigger: true);
                 MultiScene.Instance.BroadCastingEnemyAnimation(_index, IsAttack, true);
             }
             

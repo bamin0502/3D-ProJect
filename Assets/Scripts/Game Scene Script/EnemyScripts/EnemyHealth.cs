@@ -149,14 +149,14 @@ public class EnemyHealth : MonoBehaviour
             MultiScene.Instance.itemsList.Add(newItem);
             MultiScene.Instance.BroadCastingEnemyItem(transform.position, index);
         }
-        
+
+        MultiScene.Instance.enemyList.Remove(gameObject);
         Destroy(gameObject);
     }
     void BossDeath()
     {
         deathText.DOText("축하합니다 당신은 " + "<color=red>" + "보스" + "</color>" + "를 잡았습니다!", 3, true, ScrambleMode.None, null);
         EndingImage.rectTransform.gameObject.SetActive(true);
-        
     }
     IEnumerator BossKill()
     {

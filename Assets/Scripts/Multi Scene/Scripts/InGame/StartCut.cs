@@ -46,6 +46,7 @@ public class StartCut : MonoBehaviour
             {
                 e.StartCoroutine(e.PlayerDetect());
                 e.StartCoroutine(e.TryAttack());
+                e.SetIndex();
             }
             else
             {

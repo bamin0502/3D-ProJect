@@ -8,14 +8,8 @@ public class MultiTeamstatus : MonoBehaviour
     [SerializeField]public GridLayoutGroup gridLayoutGroup;
     public Image playerHpImage;
     public GameObject statusbar;
-
     private MultiPlayerHealth _playerHealth;
     
-    public void Awake()
-    {
-        //gridLayoutGroup = GameObject.Find("Team Status Image").GetComponent<GridLayoutGroup>();
-    }
-
     public void CreateTeamStatus(string PlayerName)
     {   
         GameObject teamStatusObject = Instantiate(statusbar, gridLayoutGroup.transform);

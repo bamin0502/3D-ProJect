@@ -29,19 +29,16 @@ public class MultiPlayerHealth : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        string json = "{\"PlayerHealth\": 100, \"Health\": 100}";
+        
+        string json = "{\"PlayerHealth\": 10000, \"Health\": 10000}";
+        
+        
         PlayerStat playerStat = JsonConvert.DeserializeObject<PlayerStat>(json);
         MaxHealth = (int)playerStat.PlayerHealth;
         CurrentHealth = (int)playerStat.Health;
         _multiMyStatus = GetComponent<MultiMyStatus>();
         _multiTeamstatus = GetComponent<MultiTeamstatus>();
         MultiScene.Instance.multiPlayerHealthBar.UpdatePlayerHp();
-    }
-    
-    void Awake()
-    {
-        //endingImage.rectTransform.gameObject.SetActive(false);
-        //killedImage.rectTransform.gameObject.SetActive(false);
     }
 
     public void TakeDamage(int damage)
@@ -61,7 +58,6 @@ public class MultiPlayerHealth : MonoBehaviour
         if (CurrentHealth <= 0)
         {
             Die();
-            //StartCoroutine(DeathTitle());
             Invoke(nameof(EndDeath), 3f);
             
         }
@@ -86,20 +82,6 @@ public class MultiPlayerHealth : MonoBehaviour
         GetComponent<MultiPlayerMovement>().SetAnimationTrigger(DoDie);
         deathText.DOText("당신은 "+ "<color=red>" + "몬스터"+ "</color>" + "에게 죽었습니다.", 3, true, ScrambleMode.None, null);
         endingImage.rectTransform.gameObject.SetActive(true);
-    }
-    IEnumerator DeathTitle()
-    {
-        killedImage.rectTransform.gameObject.SetActive(true);
-        kill.text = "Monster";
-        death.text = "Player";
-       
-        yield return new WaitForSeconds(10f);
-                
-        killedImage.DOFade(0f, 1f).OnComplete(() =>
-        {
-            killedImage.rectTransform.gameObject.SetActive(false);
-        });
-
     }
     void EndDeath()
     {

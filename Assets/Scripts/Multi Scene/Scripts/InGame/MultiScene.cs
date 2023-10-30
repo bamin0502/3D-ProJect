@@ -80,11 +80,11 @@ public class MultiScene : MonoBehaviour
     private static readonly int AniEnemy = Animator.StringToHash("aniEnemy");
     public GameObject Enemy;
     public MultiPlayerHealth currentPlayerHealth;
-    public  bool isCutScene = false;
+    public bool isCutScene = false;
     private string currenViewPlayer = "";
     public TextMeshProUGUI endingText;
     public Image endingImage; 
-    public bool isDead;
+    public bool isDead =false;
     
     private void Awake()
     {
@@ -109,7 +109,8 @@ public class MultiScene : MonoBehaviour
     {
         StartSecondScene();
 
-        if (isDead && Input.GetMouseButtonDown(0))
+       
+        if (isDead==true && Input.GetMouseButtonDown(0))
         {
             SwitchToNextPlayer();
         }
@@ -202,7 +203,7 @@ public class MultiScene : MonoBehaviour
     }
 
     #region 브로드캐스팅 관련
- public void BroadCastingPlayerSkill()
+    public void BroadCastingPlayerSkill()
     {
         var data = new PLAYER_SKILL
         {
@@ -451,7 +452,7 @@ public class MultiScene : MonoBehaviour
 
 
     #region 유저 관련
- public void RoomUserDel(UserSession user)
+    public void RoomUserDel(UserSession user)
     {
 
         if (_players.TryGetValue(user.m_szUserID, out GameObject toDestroy))
@@ -520,8 +521,6 @@ public class MultiScene : MonoBehaviour
         float.TryParse(posString[2], out var z);
     
         return new Vector3(x, y, z);
-        // Vector3 result = new Vector3(float.Parse(posString[0]), float.Parse(posString[1]), float.Parse(posString[2]));
-        // return result;
     }
                              
 
@@ -534,8 +533,9 @@ public class MultiScene : MonoBehaviour
         endingImage.gameObject.SetActive(false);
         endingText.gameObject.SetActive(false);
         
+        noticeText.text = "플레이어 전환(마우스 오른키)";
         List<string> playerKeys = new List<string>(_players.Keys);
-
+        isDead = true;
         if (string.IsNullOrWhiteSpace(currenViewPlayer))
         {
             currenViewPlayer = playerKeys[0];
@@ -562,6 +562,7 @@ public class MultiScene : MonoBehaviour
         cineCam.Follow = newPlayer.transform;
         cineCam.LookAt = newPlayer.transform;
         playerCamera.player = newPlayer.transform;
+        
     }
     
     #endregion

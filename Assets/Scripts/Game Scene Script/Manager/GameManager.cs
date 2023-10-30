@@ -124,7 +124,7 @@ public class GameManager : MonoBehaviour
             SourceImage.gameObject.SetActive(false);
         }
 
-        GameOptionImage = GameObject.FindWithTag("Game Option");
+        GameOptionImage = GameObject.FindGameObjectWithTag("Game Option");
         if (GameOptionImage == null)
         {
             Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
@@ -196,25 +196,6 @@ public class GameManager : MonoBehaviour
         //게임 씬 오브젝트 
         else if (scene.name == "Game Scene")
         {
-            // Button homeButton = GameOptionImage.transform.Find("HomeButton").GetComponent<Button>();
-            // if (homeButton != null)
-            // {
-            //     homeButton.onClick.AddListener(BackMainMenu);
-            // }
-            // else
-            // {
-            //     Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
-            // }
-            
-            // Button RestartButton = EndingImage.transform.Find("Home Button").GetComponent<Button>();
-            // if(RestartButton != null)
-            // {
-            //     RestartButton.onClick.AddListener(GamestartButtonClick);
-            // }
-            // else
-            // {
-            //     Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
-            // }
             Button MainButton = EndingImage.transform.Find("Main Button").GetComponent<Button>();
             if(MainButton != null)
             {
@@ -235,48 +216,5 @@ public class GameManager : MonoBehaviour
             }
 
         }
-        // //게임 씬 오브젝트 
-        // else if (scene.name == "Single Scene")
-        // {
-        //
-        //     Button homeButton = GameOptionImage.transform.Find("HomeButton").GetComponent<Button>();
-        //     if (homeButton != null)
-        //     {
-        //         homeButton.onClick.AddListener(BackMainMenu);
-        //     }
-        //     else
-        //     {
-        //         Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
-        //     }
-        //
-        //     Button RestartButton = EndingImage.transform.Find("Home Button").GetComponent<Button>();
-        //     if (RestartButton != null)
-        //     {
-        //         RestartButton.onClick.AddListener(GamestartButtonClick);
-        //     }
-        //     else
-        //     {
-        //         Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
-        //     }
-        //     Button MainButton = EndingImage.transform.Find("Main Button").GetComponent<Button>();
-        //     if (MainButton != null)
-        //     {
-        //         MainButton.onClick.AddListener(BackMainMenu);
-        //     }
-        //     else
-        //     {
-        //         Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
-        //     }
-        //     Button QuitButton = EndingImage.transform.Find("Quit Button").GetComponent<Button>();
-        //     if (QuitButton != null)
-        //     {
-        //         QuitButton.onClick.AddListener(QuitGame);
-        //     }
-        //     else
-        //     {
-        //         Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
-        //     }
-        //
-        // }
     }
 }

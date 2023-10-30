@@ -18,12 +18,11 @@ public class StartCut : MonoBehaviour
         {
             // 컷신이 시작되면 BGM을 중지
             SoundManager.instance.bgmAudioSource.Stop();
-
         }
 
         // 컷신 종료 이벤트 핸들러 등록
         _playableDirector.stopped += OnCutsceneEnd;
-        //_playableDirector.played += OnCameraShake;
+        
     }
 
     private void Update()
@@ -68,26 +67,5 @@ public class StartCut : MonoBehaviour
         {
             myStatusScript.Awake();
         }
-        if(teamStatusScript != null)
-        {
-            teamStatusScript.Awake();
-        }
     }
-
-    // private void OnCameraShake(PlayableDirector director)
-    // {
-    //     CinemachineBrain cinemachineBrain = FindObjectOfType<CinemachineBrain>();
-    //     if (cinemachineBrain != null)
-    //     {
-    //         CinemachineVirtualCameraBase virtualCamera = cinemachineBrain.ActiveVirtualCamera as CinemachineVirtualCameraBase;
-    //         if (virtualCamera != null)
-    //         {
-    //             CinemachineBasicMultiChannelPerlin noise = virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-    //             if (noise != null)
-    //             {
-    //                 noise.m_AmplitudeGain = 0f;
-    //             }
-    //         }
-    //     }
-    // }
 }

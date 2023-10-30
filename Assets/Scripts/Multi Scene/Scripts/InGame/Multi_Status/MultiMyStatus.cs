@@ -61,7 +61,6 @@ public class MultiMyStatus : MonoBehaviour
         {
             Debug.LogError("캔버스를 불러올 수 없습니다.");
         }
-        //mynameStatusPrefab = Resources.Load<GameObject>("Mystatus");
     }
 
     private void Update()
@@ -79,7 +78,6 @@ public class MultiMyStatus : MonoBehaviour
     public void Awake()
     {
         mystatus = GameObject.FindGameObjectWithTag("MyStatus").GetComponent<Canvas>();
-        //mynameStatusPrefab = Resources.Load<GameObject>("Mystatus");
     }
 
     private void OnDestroy()

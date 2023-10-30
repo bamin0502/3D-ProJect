@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,42 +7,53 @@ public class Projectile : MonoBehaviour
 {
     public float speed = 25f;
     public int damage = 100;
-    private bool isDestroy = false;
-    
-    private void Start(){
+    public Rigidbody rb;
+    private Transform _target;
+
+    private void Start()
+    {
+        SoundManager.instance.PlaySE("Bow_Attack");
         StartCoroutine(DeleteCoroutine());
-        
+    }
+
+    public void Shot(Transform target)
+    {
+        _target = target;
+    }
+
+    void FixedUpdate()
+    {
+        if (_target != null)
+        {
+            rb.velocity = transform.forward * speed;
+            Vector3 targetPos = _target.transform.position - transform.position;
+            transform.rotation = Quaternion.LookRotation(targetPos);
+        }
+        else
+        {
+            rb.velocity = transform.forward * speed;
+        }
     }
 
     private IEnumerator DeleteCoroutine(){
-        yield return new WaitForSeconds(5f);
-        isDestroy = true;
+        yield return new WaitForSeconds(3f);
         Destroy(gameObject);
     }
 
-
-    public IEnumerator ShotCoroutine(Transform target){
-        if(target == null){
-            yield break;
-        }
-
-        yield return new WaitForSeconds(0.3f);
-        SoundManager.instance.PlaySE("Bow_Attack");
-
-        while(target != null && Vector3.Distance(transform.position, target.position) > 0.1f){
-            transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
-            yield return null;
-        }
-
-        if(target != null){
-            bool isEnemy = target.TryGetComponent(out EnemyHealth enemy);
-            if (isEnemy)
+    private void OnTriggerEnter(Collider other)
+    {
+        if (_target == null) return;
+        if (other.CompareTag("Enemy"))
+        {
+            rb.constraints = RigidbodyConstraints.FreezeAll;
+            speed = 0;
+            
+            _target.TryGetComponent(out EnemyHealth enemy);
+            if (enemy != null)
             {
                 enemy.TakeDamage(damage, transform.position);
+                Destroy(gameObject);
             }
-
-            isDestroy = true;
-            Destroy(gameObject);
         }
     }
 }

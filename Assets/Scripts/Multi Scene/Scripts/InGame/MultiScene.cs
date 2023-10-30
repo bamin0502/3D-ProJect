@@ -611,9 +611,6 @@ public class MultiScene : MonoBehaviour
                 }
                 else
                 {
-                    int BowAttack = Animator.StringToHash("BowAttack");
-                    user.TryGetComponent<MultiMeleeWeaponController>(out var userBowAttack);
-                    if (aniNum == BowAttack) userBowAttack.CoroutineArrow();
                     user.GetComponent<MultiPlayerMovement>().SetAnimationTrigger(aniNum);
                 }
                 break;

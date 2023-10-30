@@ -144,7 +144,7 @@ public class MultiWeaponController : MonoBehaviour
     private float GetWeaponRange()
     {
         if (equippedWeapon == null) return 0;
-        return equippedWeapon is RangedWeapon weapon ? weapon.range : ((MeleeWeapon)equippedWeapon).range;
+        return equippedWeapon is RangedWeapon weapon ? weapon.range + 0.8f : ((MeleeWeapon)equippedWeapon).range + 0.2f;
     }
 
     public void ClearTarget()

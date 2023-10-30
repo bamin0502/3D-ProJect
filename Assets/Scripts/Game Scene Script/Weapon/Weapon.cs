@@ -43,6 +43,11 @@ public abstract class Weapon : MonoBehaviour
         LoadWeaponData(currentSceneName);
     }
 
+    public int GetDamage()
+    {
+        return damage;
+    }
+
     public int GetSkillDamage()
     {
         return skillDamage;

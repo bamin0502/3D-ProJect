@@ -58,7 +58,6 @@ public class MeleeWeaponController : MonoBehaviour
             {
                 case WeaponType.Bow:
                     playerMovement.ani.ani.SetTrigger(BowAttack);
-                    StartCoroutine(ArrowSpawnCoroutine());
                     break;
                 case WeaponType.Gun:
                     playerMovement.ani.ani.SetTrigger(GunAttack);
@@ -75,12 +74,4 @@ public class MeleeWeaponController : MonoBehaviour
         }
     }
 
-    private IEnumerator ArrowSpawnCoroutine(){
-        yield return new WaitForSeconds(0.1f);
-        SoundManager.instance.PlaySE("Bow_String");
-        var currentBow = currentWeapon.GetComponent<RangedWeapon>();
-        var arrow = Instantiate(currentBow.projectilePrefab, currentBow.arrowPos.position, Quaternion.LookRotation(currentBow.arrowPos.forward));
-        arrow.transform.parent = currentBow.transform;
-        StartCoroutine(arrow.GetComponent<Projectile>().ShotCoroutine(currentTarget));
-    }
 }

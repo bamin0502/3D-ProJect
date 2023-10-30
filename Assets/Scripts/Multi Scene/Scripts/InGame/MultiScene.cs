@@ -51,7 +51,7 @@ public class MultiScene : MonoBehaviour
     public GameObject spaceUI;
 
     public CinemachineFreeLook cineCam;
-    public CameraController playerCamera;
+    public Camera playerCamera;
     public Transform[] positions; //유저 찍어낼 위치
     public GameObject playerPrefab; //찍어낼 유저 프리팹
     public string currentUser = "";
@@ -199,9 +199,9 @@ public class MultiScene : MonoBehaviour
                 cineCam.Follow = newPlayer.transform;
                 cineCam.LookAt = newPlayer.transform;
                 cineCam.GetRig(1).LookAt = newPlayer.transform;
-                playerCamera.player = newPlayer.transform;
-                multiPlayer._camera = playerCamera.mainCamera;
-                thrownWeaponController._cam = playerCamera.mainCamera;
+                //playerCamera.player = newPlayer.transform;
+                multiPlayer._camera = playerCamera;
+                thrownWeaponController._cam = playerCamera;
                 currentThrownWeaponController = thrownWeaponController;
             }
 
@@ -567,8 +567,6 @@ public class MultiScene : MonoBehaviour
 
         cineCam.Follow = newPlayer.transform;
         cineCam.LookAt = newPlayer.transform;
-        playerCamera.player = newPlayer.transform;
-        
     }
     
     #endregion

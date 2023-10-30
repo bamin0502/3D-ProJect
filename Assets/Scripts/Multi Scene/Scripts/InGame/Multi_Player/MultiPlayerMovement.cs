@@ -2,6 +2,7 @@ using mino;
 using UnityEngine;
 using UnityEngine.AI;
 using System;
+using Cinemachine;
 using TMPro;
 using UnityEngine.UI;
 
@@ -55,6 +56,8 @@ public class MultiPlayerMovement : MonoBehaviour
             LayerMask enemyMask = LayerMask.GetMask("Enemy");
             LayerMask combinedMask = playerMask | enemyMask;
             LayerMask layerMask = ~combinedMask;
+            
+            
 
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity, enemyMask))
             {

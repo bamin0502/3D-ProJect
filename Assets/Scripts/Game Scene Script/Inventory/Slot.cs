@@ -65,6 +65,7 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
 
     internal void UseItemInSlot(int slotIndex)
     {
+        if(slots[slotIndex] == null) return;
         if (slots[slotIndex].item != null)
         {
             bool itemUsed = theItemEffectDatabase.UseItem(slots[slotIndex].item);

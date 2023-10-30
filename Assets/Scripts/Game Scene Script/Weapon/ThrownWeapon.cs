@@ -34,7 +34,7 @@ public class ThrownWeapon : MonoBehaviour
 
     private void OnTriggerEnter(Collider ground)
     {
-        if (ground.gameObject.layer == LayerMask.NameToLayer("Ground") && canExplode)
+        if (ground.gameObject.layer == LayerMask.NameToLayer("Object") && canExplode)
         {
             Explode();
         }

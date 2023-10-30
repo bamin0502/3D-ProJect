@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 9055983732950183007}
   - component: {fileID: 9055837764129312487}
   - component: {fileID: 6056977364601250819}
+  - component: {fileID: 1207889503983577091}
+  - component: {fileID: 8537653535942377899}
   m_Layer: 0
   m_Name: ArrowCrossbow2_2 1
   m_TagString: Untagged
@@ -4902,6 +4904,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 25
   damage: 10
+  rb: {fileID: 1207889503983577091}
+--- !u!54 &1207889503983577091
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8667249111116518685}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!136 &8537653535942377899
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8667249111116518685}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.09
+  m_Height: 1.08
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: -0.05}
 --- !u!1 &9180896199367130903
 GameObject:
   m_ObjectHideFlags: 0

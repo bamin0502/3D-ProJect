@@ -52,10 +52,11 @@ public class MultiScene : MonoBehaviour
 
     public CinemachineFreeLook cineCam;
     public Camera playerCamera;
+    public Camera MinimapCamera;
     public Transform[] positions; //유저 찍어낼 위치
     public GameObject playerPrefab; //찍어낼 유저 프리팹
     public string currentUser = "";
-
+    
     public List<Transform> boxSpawnPoint;
     public List<Transform> greenSpawnPoint;
     public List<Transform> redSpawnPoint;
@@ -110,14 +111,26 @@ public class MultiScene : MonoBehaviour
     private void Update()
     {
         StartSecondScene();
-
+        
        
         if (isDead && Input.GetMouseButtonDown(0))
         {
             SwitchToNextPlayer();
         }
     }
-    
+
+    private void LateUpdate()
+    {
+        if (_players.TryGetValue(currentUser, out GameObject player))
+        {
+            if (MinimapCamera != null)
+            {
+                // 플레이어의 위치를 기준으로 미니맵 카메라의 위치를 갱신합니다.
+                var position = player.transform.position;
+                MinimapCamera.transform.position = new Vector3(position.x, 33, position.z);
+            }
+        }
+    }
 
     #endregion
     
@@ -202,12 +215,15 @@ public class MultiScene : MonoBehaviour
                 //playerCamera.player = newPlayer.transform;
                 multiPlayer._camera = playerCamera;
                 thrownWeaponController._cam = playerCamera;
+                //미니맵 카메라 관련
+                var position = newPlayer.transform.position;
+                MinimapCamera.transform.position = new Vector3(position.x, 33, position.z);//Y값만 적절하게 조절하면됩니다.
                 currentThrownWeaponController = thrownWeaponController;
             }
 
         }
     }
-
+    
     #region 브로드캐스팅 관련
     public void BroadCastingPlayerSkill()
     {

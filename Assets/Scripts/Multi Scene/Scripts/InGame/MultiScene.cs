@@ -112,7 +112,7 @@ public class MultiScene : MonoBehaviour
         StartSecondScene();
 
        
-        if (isDead==true && Input.GetMouseButtonDown(0))
+        if (isDead && Input.GetMouseButtonDown(0))
         {
             SwitchToNextPlayer();
         }
@@ -541,7 +541,7 @@ public class MultiScene : MonoBehaviour
         
         noticeText.text = "플레이어 전환(마우스 오른키)";
         List<string> playerKeys = new List<string>(_players.Keys);
-        isDead = true;
+        
         if (string.IsNullOrWhiteSpace(currenViewPlayer))
         {
             currenViewPlayer = playerKeys[0];
@@ -764,13 +764,18 @@ public class MultiScene : MonoBehaviour
                 if (string.IsNullOrWhiteSpace(chasePlayer))
                 {
                     multiEnemy.SetDestination(null);
+                    return;
                 }
-                else
+
+                _players.TryGetValue(chasePlayer, out GameObject value);
+                
+                if (value == null)
                 {
-                    _players.TryGetValue(chasePlayer, out GameObject value);
-                    if (value == null) return;
-                    multiEnemy.SetDestination(value.transform);
+                    multiEnemy.SetDestination(null);
+                    return;
                 }
+
+                multiEnemy.SetDestination(value.transform);
                 break;
                 
 

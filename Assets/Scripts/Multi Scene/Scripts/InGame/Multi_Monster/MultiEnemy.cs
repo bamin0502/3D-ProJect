@@ -24,13 +24,13 @@ public class MultiEnemy : MonoBehaviour
     private static readonly int IsAttack = Animator.StringToHash("isAttack");
     private static readonly int AniEnemy = Animator.StringToHash("aniEnemy");
     
-    [SerializeField] private Transform _targetPos; // Player의 Transform 컴포넌트
+    public Transform _targetPos; // Player의 Transform 컴포넌트
     private NavMeshAgent _nav; // NavMeshAgent 컴포넌트
     
     private Vector3 _originalPos; //몬스터 원래 위치
     [HideInInspector] public Animator anim; //몬스터 애니메이션
 
-    private const float AttackRadius = 2f; //공격 가능 범위
+    private const float AttackRadius = 3f; //공격 가능 범위
     private const float DetectionRadius = 7f; //플레이어 감지 범위
     public EnemyType enemyType; //해당 몬스터 타입
     private int _index = -1; //해당 몬스터 인덱스
@@ -42,6 +42,8 @@ public class MultiEnemy : MonoBehaviour
     private string currentSceneName;
     public bool isDead { get; set; }
 
+    public Coroutine AttackCoroutine;
+    public Coroutine DetectCoroutine;
 
     private Transform currentTarget;
 
@@ -109,12 +111,13 @@ public class MultiEnemy : MonoBehaviour
 
             float closestDistance = Mathf.Infinity;
 
-            if (players <= 0)
+            if (players <= 0) _targetPos = null;
+
+            if (_targetPos == null)
             {
-                _targetPos = null;
-                float distance = Vector3.Distance(transform.position, _originalPos);
-                
-                if (distance <= 0.1f)
+                SetDestination(_targetPos, true);
+
+                if (_nav.remainingDistance <= 0.1f)
                 {
                     if (_currentState != EnemyState.Idle)
                     {
@@ -150,22 +153,7 @@ public class MultiEnemy : MonoBehaviour
                 }
             }
 
-            if (_targetPos != currentTarget || (_nav.remainingDistance > 0.5f && _targetPos != null))
-            {
-                currentTarget = _targetPos;
-                if (_index < 0 || _index > MultiScene.Instance.enemyList.Count) yield break;
-
-                if (_targetPos == null)
-                {
-                    _nav.SetDestination(_originalPos);
-                }
-                else
-                {
-                    _nav.SetDestination(_targetPos.transform.position);
-                }
-
-                MultiScene.Instance.BroadCastingSetEnemyTarget(_targetPos != null ? _targetPos.name : "", _index);
-            }
+            SetDestination(_targetPos, true);
 
             yield return wait;
         }
@@ -177,12 +165,13 @@ public class MultiEnemy : MonoBehaviour
         else anim.SetInteger(id, state);
     }
 
-    public void SetDestination(Transform target)
+    public void SetDestination(Transform target, bool isNetwork = false)
     {
         if (_index < 0 || _index > MultiScene.Instance.enemyList.Count) return;
 
-        if (target != currentTarget || (_nav.remainingDistance > 0.5f && target != null))
+        if (target != currentTarget || (_nav.remainingDistance > 0.15f && target != null))
         {
+            _targetPos = target;
             currentTarget = target;
 
             if (target == null)
@@ -192,6 +181,11 @@ public class MultiEnemy : MonoBehaviour
             else
             {
                 _nav.SetDestination(target.transform.position);
+            }
+
+            if (isNetwork)
+            {
+                MultiScene.Instance.BroadCastingSetEnemyTarget(_targetPos != null ? _targetPos.name : "", _index);
             }
         }
     }

@@ -70,6 +70,7 @@ public class MultiPlayerHealth : MonoBehaviour
         _multiTeamstatus.UpdatePlayerHp();
         MultiScene.Instance.multiPlayerHealthBar.UpdatePlayerHp();
     }
+    
 
     public void Die()
     {
@@ -82,6 +83,18 @@ public class MultiPlayerHealth : MonoBehaviour
         GetComponent<MultiPlayerMovement>().SetAnimationTrigger(DoDie);
         deathText.DOText("당신은 "+ "<color=red>" + "몬스터"+ "</color>" + "에게 죽었습니다.", 3, true, ScrambleMode.None, null);
         endingImage.rectTransform.gameObject.SetActive(true);
+        
+        foreach (GameObject enemy in MultiScene.Instance.enemyList)
+        {
+            if (enemy.TryGetComponent<MultiEnemy>(out var e))
+            {
+                if (e.DetectCoroutine != null) e.StopCoroutine(e.DetectCoroutine);
+                if (e.AttackCoroutine != null) e.StopCoroutine(e.AttackCoroutine);
+                e._targetPos = null;
+                e.AttackCoroutine = e.StartCoroutine(e.PlayerDetect());
+                e.AttackCoroutine = e.StartCoroutine(e.TryAttack());
+            }
+        }
     }
     void EndDeath()
     {

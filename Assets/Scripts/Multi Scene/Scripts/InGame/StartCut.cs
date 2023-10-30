@@ -43,8 +43,8 @@ public class StartCut : MonoBehaviour
         {
             if (enemy.TryGetComponent<MultiEnemy>(out var e))
             {
-                e.StartCoroutine(e.PlayerDetect());
-                e.StartCoroutine(e.TryAttack());
+                e.DetectCoroutine = e.StartCoroutine(e.PlayerDetect());
+                e.AttackCoroutine = e.StartCoroutine(e.TryAttack());
                 e.SetIndex();
             }
             else

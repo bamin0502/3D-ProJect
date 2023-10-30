@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
 using Cinemachine;
-using Data;
 using mino;
 using MNF;
 using TMPro;
 using Unity.Mathematics;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using UnityEngine.Timeline;
@@ -22,17 +19,18 @@ public enum DataType
     PlayerPickWeapon = 4,
     PlayerHpPlayer = 5,
     PlayerThrownWeapon = 6,
-    EnemyAnimation=7,
+    EnemyAnimation= 7,
     EnemyItem = 8,
     PlayerSkill = 9,
     PlayerUseItem = 10,
-    SECOND_CUTSCENE=11,
-    LAST_CUTSCENE=12,
+    SECOND_CUTSCENE= 11,
+    LAST_CUTSCENE= 12,
     PlayerTakeDamage = 13,
     EnemyChaseTarget = 14,
 }
 public class MultiScene : MonoBehaviour
 {
+    #region 메서드
     public static MultiScene Instance;
 
     public readonly Dictionary<string, GameObject> _players = new();
@@ -86,9 +84,13 @@ public class MultiScene : MonoBehaviour
     public Image endingImage; 
     public bool isDead =false;
     
+
+    #endregion
+
+    #region 이벤트 함수
     private void Awake()
     {
-        if (Instance == null)
+        if (Instance == null)            
         {
             Instance = this;
             
@@ -115,6 +117,10 @@ public class MultiScene : MonoBehaviour
             SwitchToNextPlayer();
         }
     }
+    
+
+    #endregion
+    
     public int GetRandomInt(int range)
     {
         //랜덤한 int 값 생성
@@ -566,6 +572,8 @@ public class MultiScene : MonoBehaviour
     }
     
     #endregion
+
+    #region 모든 유저에게 실행시킬 브로드캐스트
     public void RoomBroadcast(string szData)
     {
         //모든 유저에게 정보 전달
@@ -780,6 +788,10 @@ public class MultiScene : MonoBehaviour
         }
 
     }
+    
+
+    #endregion
+
 }
 
 

@@ -624,7 +624,7 @@ MonoBehaviour:
   throwMode: 0
   grenadeFlightTime: 2
   spinSpeed: 1
-  bowSkillEffect: {fileID: 7192735799087838584, guid: dcfe5c1842494954eb6c8c1a5f36cdb0, type: 3}
+  bowSkillEffect: {fileID: 1431295227271002891, guid: afd4370de2b8e7a46bdd504cf6384f4a, type: 3}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 256

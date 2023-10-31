@@ -113,7 +113,7 @@ public class MultiScene : MonoBehaviour
         StartSecondScene();
         
        
-        if (isDead && Input.GetMouseButtonDown(0))
+        if (isDead && Input.GetMouseButtonDown(1))
         {
             SwitchToNextPlayer();
         }
@@ -127,7 +127,7 @@ public class MultiScene : MonoBehaviour
             {
                 // 플레이어의 위치를 기준으로 미니맵 카메라의 위치를 갱신합니다.
                 var position = player.transform.position;
-                MinimapCamera.transform.position = new Vector3(position.x, 33, position.z);
+                MinimapCamera.transform.position = new Vector3(position.x, position.y+33, position.z);
             }
         }
     }
@@ -212,12 +212,12 @@ public class MultiScene : MonoBehaviour
                 cineCam.Follow = newPlayer.transform;
                 cineCam.LookAt = newPlayer.transform;
                 cineCam.GetRig(1).LookAt = newPlayer.transform;
-                //playerCamera.player = newPlayer.transform;
                 multiPlayer._camera = playerCamera;
                 thrownWeaponController._cam = playerCamera;
                 //미니맵 카메라 관련
                 var position = newPlayer.transform.position;
-                MinimapCamera.transform.position = new Vector3(position.x, 33, position.z);//Y값만 적절하게 조절하면됩니다.
+                MinimapCamera.transform.position = new Vector3(position.x, position.y+33, position.z);//Y값만 적절하게 조절하면됩니다.
+                //던지는 아이템 관련
                 currentThrownWeaponController = thrownWeaponController;
             }
 
@@ -678,7 +678,7 @@ public class MultiScene : MonoBehaviour
             #region 몬스터 애니메이션 관련
             case (int)DataType.EnemyAnimation:
                 int monsterIndex = Convert.ToInt32(jData["MONSTER_INDEX"].ToString());
-                if (monsterIndex >= 0 && monsterIndex < enemyList.Count)
+                if (monsterIndex >= 0 && monsterIndex < enemyList.Count && enemyList[monsterIndex] != null)
                 {
                     if (enemyList[monsterIndex].TryGetComponent<MultiEnemy>(out var e))
                     {

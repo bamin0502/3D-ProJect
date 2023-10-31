@@ -772,23 +772,26 @@ public class MultiScene : MonoBehaviour
             case (int)DataType.EnemyChaseTarget:
                 int enemyIndex = Convert.ToInt32(jData["ENEMY_INDEX"].ToString());
                 string chasePlayer = jData["TARGET"].ToString();
-                enemyList[enemyIndex].TryGetComponent(out MultiEnemy multiEnemy);
-                if (multiEnemy == null) return;
-                if (string.IsNullOrWhiteSpace(chasePlayer))
+                if (enemyIndex >= 0 && enemyIndex < enemyList.Count && enemyList[enemyIndex] != null)
                 {
-                    multiEnemy.SetDestination(null);
-                    return;
+                    var enemyObject = enemyList[enemyIndex];
+                    var multiEnemyComponent = enemyObject.GetComponent<MultiEnemy>();
+                    if(multiEnemyComponent != null)
+                    {
+                        if (string.IsNullOrWhiteSpace(chasePlayer))
+                        {
+                            multiEnemyComponent.SetDestination(null);
+                            return;
+                        }
+                        _players.TryGetValue(chasePlayer, out GameObject value);
+                        if (value == null)
+                        {
+                            multiEnemyComponent.SetDestination(null);
+                            return;
+                        }
+                        multiEnemyComponent.SetDestination(value.transform);
+                    }
                 }
-
-                _players.TryGetValue(chasePlayer, out GameObject value);
-                
-                if (value == null)
-                {
-                    multiEnemy.SetDestination(null);
-                    return;
-                }
-
-                multiEnemy.SetDestination(value.transform);
                 break;
                 
 

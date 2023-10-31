@@ -21,7 +21,7 @@ public class MultiPlayerHealthBar : MonoBehaviour
 
             if (_playerHealth != null)
             {
-                Debug.Log(playerPrefab.name + "체력바 생성");
+                Debug.Log(playerPrefab.name + " 체력바 생성");
                 healthText.text = _playerHealth.CurrentHealth + "/" + _playerHealth.MaxHealth;
                 UpdatePlayerHp();
             }

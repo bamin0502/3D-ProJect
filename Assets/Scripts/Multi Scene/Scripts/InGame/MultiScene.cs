@@ -680,12 +680,14 @@ public class MultiScene : MonoBehaviour
                 int monsterIndex = Convert.ToInt32(jData["MONSTER_INDEX"].ToString());
                 if (monsterIndex >= 0 && monsterIndex < enemyList.Count && enemyList[monsterIndex] != null)
                 {
-                    if (enemyList[monsterIndex].TryGetComponent<MultiEnemy>(out var e))
+                    var enemyObject = enemyList[monsterIndex];
+                    var multiEnemyComponent = enemyObject.GetComponent<MultiEnemy>();
+                    if (multiEnemyComponent != null)
                     {
                         int aniNumber = Convert.ToInt32(jData["ANI_NUM"].ToString());
                         bool monsterAniType = Convert.ToBoolean(jData["ANI_TYPE"].ToString());
-                        if (monsterAniType) e.SetEnemyAnimation(aniNumber, isTrigger: true);
-                        else e.SetEnemyAnimation(AniEnemy, aniNumber);
+                        if (monsterAniType) multiEnemyComponent.SetEnemyAnimation(aniNumber, isTrigger: true);
+                        else multiEnemyComponent.SetEnemyAnimation(AniEnemy, aniNumber);
                     }
                 }
                 break;

@@ -188,7 +188,7 @@ public class MultiEnemy : MonoBehaviour
     public void Attack()
     {
         if (MultiScene.Instance.isMasterClient==MultiScene.Instance.other)return; 
-        if (!IsAttackable() || isDead) return;
+        if (!IsAttackable() || isDead || _targetPos==null) return;
             
         SoundManager.instance.PlaySE(_enemyName);
         

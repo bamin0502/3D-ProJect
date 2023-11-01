@@ -90,7 +90,6 @@ public class MultiPlayerMovement : MonoBehaviour
             }
         }
         
-        //만약 플레이어가 목적지에 도착하였을때! 다시 애니메이션을 기본상태로 되돌림 , 만든이:방민호
         if (!navAgent.pathPending && navAgent.remainingDistance <= navAgent.stoppingDistance && !navAgent.hasPath)
         {
             if (currentState == PlayerState.RunForward)

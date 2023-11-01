@@ -1,39 +1,31 @@
-using System.Collections;
 using UnityEngine;
 using Data;
 using Newtonsoft.Json;
 using TMPro;
 using DG.Tweening;
 using mino;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
-
 public class MultiPlayerHealth : MonoBehaviour
 {
     public int MaxHealth;
     public int CurrentHealth;
-   
     public TMP_Text deathText;
     [SerializeField]
     public Image endingImage;
-
     public Image killedImage;
     public TMP_Text kill;
     public TMP_Text death;
     public ParticleSystem deathParticle;
     public ParticleSystem deathBloodParticle;
-
     private static readonly int DoDie = Animator.StringToHash("doDie");
-    [SerializeField]public Volume volume;
     private MultiMyStatus _multiMyStatus;
     private MultiTeamstatus _multiTeamstatus;
     // Start is called before the first frame update
     void Start()
     {
         
-        string json = "{\"PlayerHealth\": 10000, \"Health\": 10000}";
-        
-        
+        string json = "{\"PlayerHealth\": 100, \"Health\": 100}";
+        var followCamera = MultiScene.Instance.playerCamera;
         PlayerStat playerStat = JsonConvert.DeserializeObject<PlayerStat>(json);
         MaxHealth = (int)playerStat.PlayerHealth;
         CurrentHealth = (int)playerStat.Health;
@@ -41,7 +33,7 @@ public class MultiPlayerHealth : MonoBehaviour
         _multiTeamstatus = GetComponent<MultiTeamstatus>();
         MultiScene.Instance.multiPlayerHealthBar.UpdatePlayerHp();
     }
-
+    
     public void TakeDamage(int damage)
     {
         CurrentHealth -= damage;
@@ -84,7 +76,8 @@ public class MultiPlayerHealth : MonoBehaviour
         GetComponent<MultiPlayerMovement>().SetAnimationTrigger(DoDie);
         deathText.DOText("당신은 "+ "<color=red>" + "몬스터"+ "</color>" + "에게 죽었습니다.", 3, true, ScrambleMode.None, null);
         endingImage.rectTransform.gameObject.SetActive(true);
-        
+
+        MultiScene.Instance.ChangeColor();
         foreach (GameObject enemy in MultiScene.Instance.enemyList)
         {
             if (enemy.TryGetComponent<MultiEnemy>(out var e))

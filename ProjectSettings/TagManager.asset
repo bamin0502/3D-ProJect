@@ -28,6 +28,17 @@ TagManager:
   - TeamStatus
   - MyStatus
   - Status
+  - PlayerHealthBar
+  - MultiPlayerTeamHealthBar
+  - MultiPlayerMyHealthBar
+  - Death
+  - Hp
+  - Killed Image
+  - HpText
+  - HpBar
+  - DeathText
+  - Kill
+  - PlayerHp
   layers:
   - Default
   - TransparentFX
@@ -42,7 +53,7 @@ TagManager:
   - EnemyBullet
   - Minimap Object
   - Object
-  - 
+  - NoProcessing
   - 
   - 
   - 

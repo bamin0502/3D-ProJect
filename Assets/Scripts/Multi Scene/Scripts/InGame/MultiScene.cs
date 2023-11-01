@@ -10,7 +10,8 @@ using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using UnityEngine.Timeline;
 using UnityEngine.Playables;
-
+using UnityEngine.Rendering.Universal;
+using Cinemachine.PostFX;
 public enum DataType
 {
     PlayerAnimation = 1,
@@ -85,8 +86,7 @@ public class MultiScene : MonoBehaviour
     public TextMeshProUGUI endingText;
     public Image endingImage; 
     public bool isDead =false;
-    
-
+    [SerializeField]public CinemachineVolumeSettings volumeSettings;
     #endregion
 
     #region 이벤트 함수
@@ -97,6 +97,11 @@ public class MultiScene : MonoBehaviour
             Instance = this;
             
         }
+    }
+    //에디터 플레이중에 종료되면 실행시킬거
+    private void OnApplicationQuit()
+    {
+        RevertColor();
     }
 
     private void Start()
@@ -109,6 +114,11 @@ public class MultiScene : MonoBehaviour
             .m_userList[0].m_szUserID);
         other=!NetGameManager.instance.m_userHandle.m_szUserID.Equals(NetGameManager.instance.m_roomSession
             .m_userList[0].m_szUserID);
+        volumeSettings = cineCam.GetComponent<CinemachineVolumeSettings>();
+        if (volumeSettings != null)
+        {
+            RevertColor(); 
+        }
     }
 
     private void Update()
@@ -222,6 +232,7 @@ public class MultiScene : MonoBehaviour
                 MinimapCamera.transform.position = new Vector3(position.x, position.y+33, position.z);//Y값만 적절하게 조절하면됩니다.
                 //던지는 아이템 관련
                 currentThrownWeaponController = thrownWeaponController;
+                
             }
 
         }
@@ -560,7 +571,7 @@ public class MultiScene : MonoBehaviour
         
         noticeText.text = "플레이어 전환(마우스 오른키)";
         List<string> playerKeys = new List<string>(_players.Keys);
-        
+        RevertColor();
         if (string.IsNullOrWhiteSpace(currenViewPlayer))
         {
             currenViewPlayer = playerKeys[0];
@@ -587,7 +598,26 @@ public class MultiScene : MonoBehaviour
         cineCam.Follow = newPlayer.transform;
         cineCam.LookAt = newPlayer.transform;
     }
-    
+
+    public void ChangeColor()
+    {
+        // colorAdjustments 객체를 가져옵니다.
+        if(volumeSettings.m_Profile.TryGet<ColorAdjustments>(out var colorAdjustments))
+        {
+            // Saturation 값을 -100으로 설정하여 모든 색상을 회색조로 만듭니다.
+            colorAdjustments.saturation.value = -100f;
+        }
+    }
+
+    public void RevertColor()
+    {
+        // colorAdjustments 객체를 가져옵니다.
+        if(volumeSettings.m_Profile.TryGet<ColorAdjustments>(out var colorAdjustments))
+        {
+            // Saturation 값을 0으로 설정해서 다시 되돌림
+            colorAdjustments.saturation.value = 0f;
+        }
+    }
     #endregion
 
     #region 모든 유저에게 실행시킬 브로드캐스트

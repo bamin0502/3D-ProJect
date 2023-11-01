@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using TMPro;
 using DG.Tweening;
 using mino;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class MultiPlayerHealth : MonoBehaviour
@@ -23,7 +24,7 @@ public class MultiPlayerHealth : MonoBehaviour
     public ParticleSystem deathBloodParticle;
 
     private static readonly int DoDie = Animator.StringToHash("doDie");
-
+    [SerializeField]public Volume volume;
     private MultiMyStatus _multiMyStatus;
     private MultiTeamstatus _multiTeamstatus;
     // Start is called before the first frame update

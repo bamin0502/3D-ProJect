@@ -584,6 +584,7 @@ MonoBehaviour:
   death: {fileID: 0}
   deathParticle: {fileID: 5978614181440743757}
   deathBloodParticle: {fileID: 5946775195833011286}
+  volume: {fileID: 3335741945163301544, guid: 0a7cd49b708fd8b49b3948a16d507acc, type: 3}
 --- !u!114 &-7735151206589249757
 MonoBehaviour:
   m_ObjectHideFlags: 0

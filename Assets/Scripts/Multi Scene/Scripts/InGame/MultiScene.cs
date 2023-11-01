@@ -618,28 +618,34 @@ public class MultiScene : MonoBehaviour
 
             #region 플레이어 움직임 관련
             case (int)DataType.PlayerMovement:
-                user.TryGetComponent<MultiPlayerMovement>(out var userMove2);
-                user.TryGetComponent<MultiWeaponController>(out var userAttack);
-                if (userMove2 != null && userMove2.navAgent.isActiveAndEnabled)
-                {
-                    int target = Convert.ToInt32(jData["TARGET"].ToString());
-                    Vector3 position = StringToVector(jData["POSITION"].ToString());
-
-                    if (userMove2.navAgent.isOnNavMesh)
+                if (user.TryGetComponent<MultiPlayerMovement>(out var userMove2) && user.TryGetComponent<MultiWeaponController>(out var userAttack)){
+                    if (userMove2 != null && userMove2.navAgent.isActiveAndEnabled)
                     {
-                        if (target <= -1)
-                        {
-                            userAttack.ClearTarget();
-                            userMove2.navAgent.SetDestination(position);
-                        }
-                        else
-                        {
-                            userAttack.SetTarget(target);
-                            userMove2.navAgent.SetDestination(position);
-                        }
-                    }
-                }
+                        int target = Convert.ToInt32(jData["TARGET"].ToString());
+                        Vector3 position = StringToVector(jData["POSITION"].ToString());
 
+                        if (userMove2.navAgent.isOnNavMesh)
+                        {
+                            if (userAttack == null)
+                            {
+                                Debug.LogError("MultiWeaponController 컴포넌트를 찾을 수 없습니다.");
+                            }
+                            else
+                            {
+                                if (target <= -1)
+                                {
+                                    userAttack.ClearTarget();
+                                    userMove2.navAgent.SetDestination(position);
+                                }
+                                else
+                                {
+                                    userAttack.SetTarget(target);
+                                    userMove2.navAgent.SetDestination(position);
+                                }
+                            }
+                        }
+                    } 
+                }
                 break;
                 
 

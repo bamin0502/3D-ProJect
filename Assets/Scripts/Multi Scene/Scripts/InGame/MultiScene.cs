@@ -75,6 +75,7 @@ public class MultiScene : MonoBehaviour
     
     public GameObject[] itemPrefabs;
     public bool isMasterClient; //마스터 클라이언트
+    public bool other;
     private static readonly int IsAttack = Animator.StringToHash("isAttack");
     private static readonly int AniEnemy = Animator.StringToHash("aniEnemy");
     public GameObject Enemy;
@@ -105,6 +106,8 @@ public class MultiScene : MonoBehaviour
         SetAllList();
         //해당 방의 첫번째 유저를 마스터 클라이언트로 설정
         isMasterClient = NetGameManager.instance.m_userHandle.m_szUserID.Equals(NetGameManager.instance.m_roomSession
+            .m_userList[0].m_szUserID);
+        other=!NetGameManager.instance.m_userHandle.m_szUserID.Equals(NetGameManager.instance.m_roomSession
             .m_userList[0].m_szUserID);
     }
 
@@ -279,7 +282,7 @@ public class MultiScene : MonoBehaviour
     {
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(
             NetGameManager.instance.m_userHandle.m_szUserID);
-
+        
         var data = new PLAYER_MOVE
         {
             USER = userSession.m_szUserID,
@@ -778,6 +781,7 @@ public class MultiScene : MonoBehaviour
             case (int)DataType.EnemyChaseTarget:
                 int enemyIndex = Convert.ToInt32(jData["ENEMY_INDEX"].ToString());
                 string chasePlayer = jData["TARGET"].ToString();
+                
                 if (enemyIndex >= 0 && enemyIndex < enemyList.Count && enemyList[enemyIndex] != null)
                 {
                     var enemyObject = enemyList[enemyIndex];

@@ -60,6 +60,9 @@ public class MultiEnemy : MonoBehaviour
         SetState(currentSceneName);
     }
 
+    private void Update()
+    {
+    }
     private void SetState(string sceneName)
     {
         if (sceneName.Equals("Game Scene"))
@@ -95,8 +98,7 @@ public class MultiEnemy : MonoBehaviour
    
     public IEnumerator PlayerDetect()
     {
-        if(!MultiScene.Instance.isMasterClient) yield break;
-        
+        if(MultiScene.Instance.isMasterClient==MultiScene.Instance.other) yield break;
         WaitForSeconds wait = new WaitForSeconds(1f);
         EnemyState lastState = EnemyState.Idle; // 이전 상태를 저장하는 변수
 
@@ -174,14 +176,7 @@ public class MultiEnemy : MonoBehaviour
             _targetPos = target;
             currentTarget = target;
 
-            if (target == null)
-            {
-                _nav.SetDestination(_originalPos);
-            }
-            else
-            {
-                _nav.SetDestination(target.transform.position);
-            }
+            _nav.SetDestination(target == null ? _originalPos : target.transform.position);
 
             if (isNetwork)
             {
@@ -192,7 +187,7 @@ public class MultiEnemy : MonoBehaviour
 
     public void Attack()
     {
-        if (!MultiScene.Instance.isMasterClient) return;
+        if (MultiScene.Instance.isMasterClient==MultiScene.Instance.other)return; 
         if (!IsAttackable() || isDead) return;
             
         SoundManager.instance.PlaySE(_enemyName);
@@ -208,8 +203,7 @@ public class MultiEnemy : MonoBehaviour
 
     public IEnumerator TryAttack()
     {
-        if (!MultiScene.Instance.isMasterClient) yield break;
-        
+        if (MultiScene.Instance.isMasterClient==MultiScene.Instance.other) yield break;
         WaitForSeconds wait = new WaitForSeconds(1);
         
         yield return new WaitForSeconds(Random.Range(0f, 1f)); //코루틴 분산

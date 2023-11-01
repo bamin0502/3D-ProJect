@@ -519,7 +519,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 454, y: 39}
+  m_AnchoredPosition: {x: 86, y: 12}
   m_SizeDelta: {x: -2400, y: -1390}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &247132732
@@ -557,7 +557,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uAC19\uC774 \uD558\uAE30"
+  m_text: "\uAC8C\uC784 \uC2DC\uC791"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 455a2912ead3a0b4396443c87184cbf2, type: 2}
   m_sharedMaterial: {fileID: -539235162860306656, guid: 455a2912ead3a0b4396443c87184cbf2, type: 2}
@@ -1354,7 +1354,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &490162249
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7507,7 +7507,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 98ccdfa5856b2154ca18b014717eea3d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5d308fae3ac0a844c84aff2e18e6e0e6, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

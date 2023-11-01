@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4168,11 +4168,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uCD9C\uCC98 \uD45C\uC2DC\n \nFont:\uB125\uC2A8 LV.1,LV2 \uACE0\uB515\nhttp://levelup.nexon.com/font/index.aspx\n\nBGM:
-    \uB85C\uC2A4\uD2B8\uC544\uD06C(Lost Survival / LOST ARK Official Soundtrack)\nhttps://www.youtube.com/watch?v=bSvufwVtZjo\n\nThanks
-    to, Mike Koenig\r\nFrom: http://soundbible.com/845-Suction.html\r\n\r\nDistributor:
-    \uC800\uC791\uAD8C \uAC71\uC815\uC5C6\uB294 \uC720\uD29C\uBE0C\uC6A9 \uC74C\uC6D0
-    & \uBB34\uB8CC \uD6A8\uACFC\uC74C \uC11C\uBE44\uC2A4 \u2018\uBBA4\uD31F\u2019\r\nhttps://www.mewpot.com\n"
+  m_text: "\uCD9C\uCC98 \uD45C\uC2DC\nFont:\uB125\uC2A8 LV.1,LV2 \uACE0\uB515\nhttp://levelup.nexon.com/font/index.aspx\n\nBGM:
+    \uB85C\uC2A4\uD2B8\uC544\uD06C(Lost Survival / LOST ARK Official Soundtrack)\nhttps://www.youtube.com/watch?v=bSvufwVtZjo\n\n\uC774
+    \uAC8C\uC784\uC740 \uBBA4\uD31F\uC774 \uC81C\uC791\uD55C \uBC30\uACBD\uC74C\uC545\uC744
+    \uC0AC\uC6A9\uD588\uC2B5\uB2C8\uB2E4\r\nBattle of Boss - https://youtu.be/1FoCvK77O8U\r\n\r\n\uC774
+    \uAC8C\uC784\uC740 \uBBA4\uD31F\uC774 \uC81C\uC791\uD55C \uBC30\uACBD\uC74C\uC545\uC744
+    \uC0AC\uC6A9\uD588\uC2B5\uB2C8\uB2E4\r\nOver And Over - Download: https://www.mewpot.com/songs/6011\n\n\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 455a2912ead3a0b4396443c87184cbf2, type: 2}
   m_sharedMaterial: {fileID: -539235162860306656, guid: 455a2912ead3a0b4396443c87184cbf2, type: 2}
@@ -4200,7 +4201,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34
+  m_fontSize: 36.85
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

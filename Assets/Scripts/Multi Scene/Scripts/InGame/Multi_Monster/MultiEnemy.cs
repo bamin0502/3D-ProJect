@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using NavMeshBuilder = UnityEditor.AI.NavMeshBuilder;
+
 public class MultiEnemy : MonoBehaviour
 {
     public enum EnemyType
@@ -197,7 +199,7 @@ public class MultiEnemy : MonoBehaviour
             if(playerHealth.CurrentHealth <= 0) return;
             
             playerHealth.TakeDamage(_damage);
-            MultiScene.Instance.BroadCastingTakeDamage(_targetPos.name, _damage);
+            MultiScene.Instance.BroadCastingTakeDamage(_targetPos != null ? _targetPos.name : "", _damage);
         }
     }
 

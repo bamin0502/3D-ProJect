@@ -12,6 +12,7 @@ using UnityEngine.Timeline;
 using UnityEngine.Playables;
 using UnityEngine.Rendering.Universal;
 using Cinemachine.PostFX;
+using UnityEngine.AI;
 
 
 public enum DataType
@@ -30,6 +31,7 @@ public enum DataType
     LAST_CUTSCENE= 12,
     PlayerTakeDamage = 13,
     EnemyChaseTarget = 14,
+    PlayerDead = 15,
 }
 public class MultiScene : MonoBehaviour
 {
@@ -165,6 +167,7 @@ public class MultiScene : MonoBehaviour
             Debug.LogError("컷신 나오는지 확인용");
         }
     }
+    
     private void SetUsers()
     {
         RoomSession roomSession = NetGameManager.instance.m_roomSession;
@@ -435,6 +438,21 @@ public class MultiScene : MonoBehaviour
         NetGameManager.instance.RoomBroadcast(sendData);
     }
 
+    public void BroadCastingPlayerDead(string player)
+    {
+        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+            NetGameManager.instance.m_userHandle.m_szUserID);
+        var data = new PLAYER_DEAD
+        {
+            USER = userSession.m_szUserID,
+            DATA = (int)DataType.PlayerDead,
+            TARGET = player,
+        };
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
+        
+    }
+
     public void BroadCastingSetEnemyTarget(string player, int index)
     {
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(
@@ -539,7 +557,6 @@ public class MultiScene : MonoBehaviour
         
         noticeText.text = "플레이어 전환(마우스 오른키)";
         List<string> playerKeys = new List<string>(_players.Keys);
-        //RevertColor();
         if (string.IsNullOrWhiteSpace(currenViewPlayer))
         {
             currenViewPlayer = playerKeys[0];
@@ -765,13 +782,30 @@ public class MultiScene : MonoBehaviour
             case (int)DataType.PlayerTakeDamage:
                 int damage = Convert.ToInt32(jData["DAMAGE"].ToString());
                 string targetPlayer = jData["TARGET"].ToString();
+                if(string.IsNullOrWhiteSpace(targetPlayer)) return;
                 _players.TryGetValue(targetPlayer, out GameObject v);
                 if(v == null) return;
                 v.TryGetComponent(out MultiPlayerHealth playerHealth);
                 if (playerHealth != null) playerHealth.TakeDamage(damage);
                 break;
-                
-
+            #endregion
+            
+            #region 플레이어 죽음 관련
+            case (int)DataType.PlayerDead:
+                string deadPlayer = jData["TARGET"].ToString();
+                if(string.IsNullOrWhiteSpace(deadPlayer)) return;
+                _players.TryGetValue(deadPlayer, out GameObject deadV);
+                if(deadV == null) return;
+                deadV.GetComponent<NavMeshAgent>().isStopped = true;
+                deadV.TryGetComponent(out MultiPlayerHealth pH);
+                if (pH != null)
+                {
+                    pH.CurrentHealth = 0;
+                    pH.UpdateHealth();
+                    pH.Die();
+                    pH.Invoke(nameof(pH.EndDeath), 3f);
+                }
+                break;
             #endregion
 
             #region 몬스터 플레이어 추적 관련

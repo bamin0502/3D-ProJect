@@ -179,3 +179,11 @@ public class ENEMY_CHASE
     public string TARGET = "";
 }
 
+[Serializable]
+public class PLAYER_DEAD
+{
+    public string USER = "";
+    public int DATA = 0;
+    public string TARGET = "";
+}
+

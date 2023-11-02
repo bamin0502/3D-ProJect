@@ -437,19 +437,6 @@ namespace Data
         }
         */
         #endregion
-        //public void StartCooldown(Item _item)
-        //{
-        //    _item.cooldownTime = 10; // 쿨타임 시간 설정 (예시로 10초로 설정)
-        //    StartCoroutine(CooldownCoroutine(_item));
-        //}
-        //public IEnumerator CooldownCoroutine(Item _item)
-        //{
-        //    while (_item.cooldownTime > 0)
-        //    {
-        //        yield return new WaitForSeconds(1f); // 1초 대기
-        //        _item.cooldownTime--;
-        //    }
-        //}
     }
 }
 

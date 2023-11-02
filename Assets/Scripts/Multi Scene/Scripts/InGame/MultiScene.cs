@@ -54,7 +54,7 @@ public class MultiScene : MonoBehaviour
     public TextMeshProUGUI noticeText;
     public TextMeshProUGUI coolText;
     public GameObject spaceUI;
-
+    
     public CinemachineFreeLook cineCam;
     public Camera playerCamera;
     public Camera MinimapCamera;
@@ -73,7 +73,7 @@ public class MultiScene : MonoBehaviour
     public MultiPlayerHealthBar multiPlayerHealthBar;
     public Image[] skillImages;
     public TextMeshProUGUI skillText;
-    
+    public GameObject[] layerObjects;
     public GameObject[] itemPrefabs;
     public bool isMasterClient; //마스터 클라이언트
     private static readonly int AniEnemy = Animator.StringToHash("aniEnemy");
@@ -83,7 +83,8 @@ public class MultiScene : MonoBehaviour
     private string currenViewPlayer = "";
     public TextMeshProUGUI endingText;
     public Image endingImage; 
-    public bool isDead =false;
+    public bool isDead = false;
+    public NavMeshAgent nav;
     [SerializeField]public CinemachineVolumeSettings volumeSettings;
     #endregion
 
@@ -120,6 +121,8 @@ public class MultiScene : MonoBehaviour
 
     private void Update()
     {
+        
+        
         StartSecondScene();
         
        
@@ -127,6 +130,8 @@ public class MultiScene : MonoBehaviour
         {
             SwitchToNextPlayer();
         }
+
+        
     }
 
     private void LateUpdate()
@@ -164,7 +169,8 @@ public class MultiScene : MonoBehaviour
             BroadCastingSecondCutSceneStart(true);
             secondPlayableDirector.playableAsset = secondCut;
             secondPlayableDirector.Play();
-            Debug.LogError("컷신 나오는지 확인용");
+            nav.areaMask=NavMesh.AllAreas;
+            Debug.LogWarning("컷신 나오는지 확인용");
         }
     }
     
@@ -209,6 +215,8 @@ public class MultiScene : MonoBehaviour
                 currentPlayerHealth = multiPlayerHealth;
                 multiPlayerHealth.deathText = endingText;
                 multiPlayerHealth.endingImage = endingImage;
+                newPlayer.TryGetComponent(out NavMeshAgent navMeshAgent);
+                nav=navMeshAgent;
                 
                 //아이템 드랍 관련
                 pickItem.actionText = itemUsedText;
@@ -767,6 +775,7 @@ public class MultiScene : MonoBehaviour
                 int cutSceneNum = Convert.ToInt32(jData["CUTSCENE_NUM"].ToString());
                 secondPlayableDirector.playableAsset = secondCut;
                 secondPlayableDirector.Play();
+                nav.areaMask = NavMesh.AllAreas;
                 break;
             #endregion
 
@@ -775,6 +784,7 @@ public class MultiScene : MonoBehaviour
                 int cutSceneNum2 = Convert.ToInt32(jData["CUTSCENE_NUM"].ToString());
                 lastPlayableDirector.playableAsset = lastCut;
                 lastPlayableDirector.Play();
+                
                 break;
             #endregion
 

@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using NavMeshBuilder = UnityEditor.AI.NavMeshBuilder;
 
 public class MultiEnemy : MonoBehaviour
 {

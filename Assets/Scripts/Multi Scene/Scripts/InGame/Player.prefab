@@ -431,7 +431,7 @@ NavMeshAgent:
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 0
-  m_WalkableMask: 4294967295
+  m_WalkableMask: 7
   m_ObstacleAvoidanceType: 4
 --- !u!54 &1970835488249192249
 Rigidbody:
@@ -584,7 +584,6 @@ MonoBehaviour:
   death: {fileID: 0}
   deathParticle: {fileID: 5978614181440743757}
   deathBloodParticle: {fileID: 5946775195833011286}
-  volumeSettings: {fileID: 7209170573384620246, guid: 3552cc09f799f0d42b9c583722c42025, type: 3}
 --- !u!114 &-7735151206589249757
 MonoBehaviour:
   m_ObjectHideFlags: 0

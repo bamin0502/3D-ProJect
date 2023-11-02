@@ -86,8 +86,8 @@ Material:
     - _StencilOp: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
-    - _TextureHeight: 1024
-    - _TextureWidth: 1024
+    - _TextureHeight: 4096
+    - _TextureWidth: 4096
     - _UnderlayDilate: 0
     - _UnderlayOffsetX: 0
     - _UnderlayOffsetY: 0
@@ -160,8 +160,8 @@ MonoBehaviour:
   m_FreeGlyphRects:
   - m_X: 0
     m_Y: 0
-    m_Width: 1023
-    m_Height: 1023
+    m_Width: 4095
+    m_Height: 4095
   m_fontInfo:
     Name: Oswald
     PointSize: 71
@@ -185,8 +185,8 @@ MonoBehaviour:
     AtlasWidth: 512
     AtlasHeight: 512
   atlas: {fileID: 0}
-  m_AtlasWidth: 1024
-  m_AtlasHeight: 1024
+  m_AtlasWidth: 4096
+  m_AtlasHeight: 4096
   m_AtlasPadding: 9
   m_AtlasRenderMode: 4165
   m_glyphInfoList: []
@@ -203,8 +203,8 @@ MonoBehaviour:
     pointSize: 90
     padding: 9
     packingMode: 4
-    atlasWidth: 1024
-    atlasHeight: 1024
+    atlasWidth: 4096
+    atlasHeight: 4096
     characterSetSelectionMode: 6
     characterSequence: 20-7E,A0,2026
     referencedFontAssetGUID: 0161d805a3764c089bef00bfe00793f5

@@ -78,6 +78,7 @@ public class MultiScene : MonoBehaviour
     
     public GameObject[] itemPrefabs;
     public bool isMasterClient; //마스터 클라이언트
+    public bool isOtherClient; //방장을 제외한 다른 클라이언트
     private static readonly int IsAttack = Animator.StringToHash("isAttack");
     private static readonly int AniEnemy = Animator.StringToHash("aniEnemy");
     public GameObject Enemy;
@@ -113,7 +114,9 @@ public class MultiScene : MonoBehaviour
         //해당 방의 첫번째 유저를 마스터 클라이언트로 설정
         isMasterClient = NetGameManager.instance.m_userHandle.m_szUserID.Equals(NetGameManager.instance.m_roomSession
             .m_userList[0].m_szUserID);
-
+        //해당 방의 마스터 클라이언트를 제외한 나머지를 다른 클라이언트로 설정
+        isOtherClient = !NetGameManager.instance.m_userHandle.m_szUserID.Equals(NetGameManager.instance.m_roomSession
+            .m_userList[0].m_szUserID);
         volumeSettings = cineCam.GetComponent<CinemachineVolumeSettings>();
         if (volumeSettings != null)
         {

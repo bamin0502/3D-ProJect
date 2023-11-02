@@ -246,5 +246,15 @@ public class MultiPlayerMovement : MonoBehaviour
         UpdateFillAmount();
     }
 
+    public void NavStop()
+    {
+        navAgent.isStopped = true;
+    }
+    
+    public void NavResume()
+    {
+        navAgent.isStopped = false;
+    }
+
 
 }

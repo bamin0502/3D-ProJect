@@ -194,14 +194,18 @@ public class MultiEnemy : MonoBehaviour
 
         if (playerHealth != null)
         {
-            playerHealth.TakeDamage(_damage);
-            MultiScene.Instance.BroadCastingTakeDamage(_targetPos.name, _damage);
+            if (_targetPos != null)
+            {
+                playerHealth.TakeDamage(_damage);
+                MultiScene.Instance.BroadCastingTakeDamage(_targetPos.name, _damage);
+            }
         }
     }
 
     public IEnumerator TryAttack()
     {
         if (!MultiScene.Instance.isMasterClient) yield break;
+        
         WaitForSeconds wait = new WaitForSeconds(1);
         
         yield return new WaitForSeconds(Random.Range(0f, 1f)); //코루틴 분산
@@ -212,6 +216,7 @@ public class MultiEnemy : MonoBehaviour
             
             if(IsAttackable())
             {
+                yield return wait;
                 SetEnemyAnimation(IsAttack, isTrigger: true);
                 MultiScene.Instance.BroadCastingEnemyAnimation(_index, IsAttack, true);
             }

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using Data;
 using Newtonsoft.Json;
@@ -10,16 +11,21 @@ public class MultiBullet : MonoBehaviour
       
     private void Start()
     {
-        if(target != null)
-            target = GameObject.FindGameObjectWithTag("Player").transform;  // Player 태그가 달린 오브젝트를 타겟으로 설정
+        StartCoroutine(DeleteMySelf());
+        
         string json = "{\"damage\": 50}";
         EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
         damage = (int)enemyStat1.damage;
     }
 
+    IEnumerator DeleteMySelf()
+    {
+        yield return new WaitForSeconds(3f);
+        Destroy(gameObject);
+    }
+
     private void Update()
     {
-        Destroy(gameObject, 5f);
         if (target == null)  // 타겟이 없으면 미사일 삭제
         {
             Destroy(gameObject);
@@ -41,9 +47,7 @@ public class MultiBullet : MonoBehaviour
 
     private void HitTarget()
     {
-        
-        DamagePlayer();
-
+        //DamagePlayer();
         Destroy(gameObject);
     }
 

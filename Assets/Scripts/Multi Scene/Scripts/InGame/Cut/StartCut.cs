@@ -52,6 +52,15 @@ public class StartCut : MonoBehaviour
                 Debug.LogWarning("MultiEnemy 컴포넌트를 찾을 수 없습니다. GameObject 이름: " + enemy.name);
             }
         }
+
+        MultiScene.Instance.bossObject.TryGetComponent(out MultiBoss multiBoss);
+        if (multiBoss != null)
+        {
+            Debug.LogWarning("Setting");
+            multiBoss.StartCoroutine(multiBoss.PlayerDetect());
+            multiBoss.StartCoroutine(multiBoss.ChangeTarget());
+            multiBoss.StartCoroutine(multiBoss.StartThink());
+        }
     }
 
     // 컷신 종료 시 호출될 이벤트 핸들러

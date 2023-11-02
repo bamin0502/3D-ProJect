@@ -194,11 +194,10 @@ public class MultiEnemy : MonoBehaviour
 
         if (playerHealth != null)
         {
-            if (_targetPos != null)
-            {
-                playerHealth.TakeDamage(_damage);
-                MultiScene.Instance.BroadCastingTakeDamage(_targetPos.name, _damage);
-            }
+            if(playerHealth.CurrentHealth <= 0) return;
+            
+            playerHealth.TakeDamage(_damage);
+            MultiScene.Instance.BroadCastingTakeDamage(_targetPos.name, _damage);
         }
     }
 
@@ -206,9 +205,9 @@ public class MultiEnemy : MonoBehaviour
     {
         if (!MultiScene.Instance.isMasterClient) yield break;
         
-        WaitForSeconds wait = new WaitForSeconds(1);
+        WaitForSeconds wait = new WaitForSeconds(1.5f);
         
-        yield return new WaitForSeconds(Random.Range(0f, 1f)); //코루틴 분산
+        yield return new WaitForSeconds(Random.Range(0f, 2f)); //코루틴 분산
         
         while (true)
         {

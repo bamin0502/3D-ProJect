@@ -255,6 +255,4 @@ public class MultiPlayerMovement : MonoBehaviour
     {
         navAgent.isStopped = false;
     }
-
-
 }

@@ -59,10 +59,6 @@ public class MultiScene : MonoBehaviour
     public Transform[] positions; //유저 찍어낼 위치
     public GameObject playerPrefab; //찍어낼 유저 프리팹
     public string currentUser = "";
-    
-    public List<Transform> boxSpawnPoint;
-    public List<Transform> greenSpawnPoint;
-    public List<Transform> redSpawnPoint;
 
     public TextMeshProUGUI playerNameText; //팀상태창 전용 닉네임 텍스트
     public GridLayoutGroup gridLayoutGroup; //팀상태창 전용 그룹
@@ -78,8 +74,6 @@ public class MultiScene : MonoBehaviour
     
     public GameObject[] itemPrefabs;
     public bool isMasterClient; //마스터 클라이언트
-    public bool isOtherClient; //방장을 제외한 다른 클라이언트
-    private static readonly int IsAttack = Animator.StringToHash("isAttack");
     private static readonly int AniEnemy = Animator.StringToHash("aniEnemy");
     public GameObject Enemy;
     public MultiPlayerHealth currentPlayerHealth;
@@ -114,9 +108,7 @@ public class MultiScene : MonoBehaviour
         //해당 방의 첫번째 유저를 마스터 클라이언트로 설정
         isMasterClient = NetGameManager.instance.m_userHandle.m_szUserID.Equals(NetGameManager.instance.m_roomSession
             .m_userList[0].m_szUserID);
-        //해당 방의 마스터 클라이언트를 제외한 나머지를 다른 클라이언트로 설정
-        isOtherClient = !NetGameManager.instance.m_userHandle.m_szUserID.Equals(NetGameManager.instance.m_roomSession
-            .m_userList[0].m_szUserID);
+
         volumeSettings = cineCam.GetComponent<CinemachineVolumeSettings>();
         if (volumeSettings != null)
         {
@@ -342,22 +334,7 @@ public class MultiScene : MonoBehaviour
         string sendData = LitJson.JsonMapper.ToJson(data);
         NetGameManager.instance.RoomBroadcast(sendData);
     }
-    public void BroadCastingHpPlayer(int index, int health = 10000, int playerHealth = 10000)
-    {
-        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
-            NetGameManager.instance.m_userHandle.m_szUserID);
 
-        var data = new PLAYER_STATUS
-        {
-            USER = userSession.m_szUserID,
-            DATA = (int)DataType.PlayerHpPlayer,
-            HEALTH = health,
-            PlayerHealth = playerHealth,
-        };
-
-        string sendData = LitJson.JsonMapper.ToJson(data);
-        NetGameManager.instance.RoomBroadcast(sendData);
-    }
     public void BroadCastingThrowWeapon(Vector3 mousePos, Vector3 playerPos, int skillType)
     {
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(
@@ -392,19 +369,6 @@ public class MultiScene : MonoBehaviour
         NetGameManager.instance.RoomBroadcast(sendData);
     }
     
-    public void BroadCastingMonsterSpawn(int index, Vector3 destination)
-    {
-        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
-            NetGameManager.instance.m_userHandle.m_szUserID);
-        var data = new MONSTER_SPAWN
-        {
-
-            DATA = 7,
-            MONSTER_CODE = index,
-            POSITION = VectorToString(destination)
-
-        };
-    }
 
     public void BroadCastingEnemyAnimation(int index, int animationNumber, bool isTrigger = false)
     {
@@ -575,7 +539,7 @@ public class MultiScene : MonoBehaviour
         
         noticeText.text = "플레이어 전환(마우스 오른키)";
         List<string> playerKeys = new List<string>(_players.Keys);
-        RevertColor();
+        //RevertColor();
         if (string.IsNullOrWhiteSpace(currenViewPlayer))
         {
             currenViewPlayer = playerKeys[0];
@@ -805,7 +769,6 @@ public class MultiScene : MonoBehaviour
                 if(v == null) return;
                 v.TryGetComponent(out MultiPlayerHealth playerHealth);
                 if (playerHealth != null) playerHealth.TakeDamage(damage);
-                
                 break;
                 
 
@@ -840,16 +803,6 @@ public class MultiScene : MonoBehaviour
                 
 
             #endregion
-
-            #region 플레이어 체력 관련
-            case (int)DataType.PlayerHpPlayer:
-                user.TryGetComponent(out MultiPlayerHealth playerHealth2);
-                playerHealth2.MaxHealth = Convert.ToInt32(jData["HEALTH"].ToString());
-                playerHealth2.CurrentHealth = Convert.ToInt32(jData["PlayerHealth"].ToString());
-                if(playerHealth2.CurrentHealth <= 0) playerHealth2.Die();
-            break;
-            #endregion
-                
         }
 
     }

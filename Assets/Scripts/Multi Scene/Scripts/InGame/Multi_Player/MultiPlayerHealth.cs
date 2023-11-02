@@ -80,6 +80,8 @@ public class MultiPlayerHealth : MonoBehaviour
         
         foreach (GameObject enemy in MultiScene.Instance.enemyList)
         {
+            if(enemy == null) continue;
+            
             if (enemy.TryGetComponent<MultiEnemy>(out var e))
             {
                 if (e.DetectCoroutine != null) e.StopCoroutine(e.DetectCoroutine);

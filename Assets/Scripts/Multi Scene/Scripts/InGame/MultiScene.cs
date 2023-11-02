@@ -54,7 +54,7 @@ public class MultiScene : MonoBehaviour
     public TextMeshProUGUI noticeText;
     public TextMeshProUGUI coolText;
     public GameObject spaceUI;
-
+    
     public CinemachineFreeLook cineCam;
     public Camera playerCamera;
     public Camera MinimapCamera;
@@ -73,7 +73,7 @@ public class MultiScene : MonoBehaviour
     public MultiPlayerHealthBar multiPlayerHealthBar;
     public Image[] skillImages;
     public TextMeshProUGUI skillText;
-    
+    public GameObject[] layerObjects;
     public GameObject[] itemPrefabs;
     public bool isMasterClient; //마스터 클라이언트
     private static readonly int AniEnemy = Animator.StringToHash("aniEnemy");
@@ -83,7 +83,8 @@ public class MultiScene : MonoBehaviour
     private string currenViewPlayer = "";
     public TextMeshProUGUI endingText;
     public Image endingImage; 
-    public bool isDead =false;
+    public bool isDead = false;
+    public NavMeshAgent nav;
     [SerializeField]public CinemachineVolumeSettings volumeSettings;
     #endregion
 
@@ -110,7 +111,6 @@ public class MultiScene : MonoBehaviour
         //해당 방의 첫번째 유저를 마스터 클라이언트로 설정
         isMasterClient = NetGameManager.instance.m_userHandle.m_szUserID.Equals(NetGameManager.instance.m_roomSession
             .m_userList[0].m_szUserID);
-
         volumeSettings = cineCam.GetComponent<CinemachineVolumeSettings>();
         if (volumeSettings != null)
         {
@@ -120,9 +120,6 @@ public class MultiScene : MonoBehaviour
 
     private void Update()
     {
-        StartSecondScene();
-        
-       
         if (isDead && Input.GetMouseButtonDown(1))
         {
             SwitchToNextPlayer();
@@ -156,17 +153,7 @@ public class MultiScene : MonoBehaviour
         return -1;
     }
 
-    private void StartSecondScene()
-    {
-        if (Enemy.transform.childCount == 0 && !isCutScene)
-        {
-            isCutScene = true;
-            BroadCastingSecondCutSceneStart(true);
-            secondPlayableDirector.playableAsset = secondCut;
-            secondPlayableDirector.Play();
-            Debug.LogError("컷신 나오는지 확인용");
-        }
-    }
+
     
     private void SetUsers()
     {
@@ -209,7 +196,7 @@ public class MultiScene : MonoBehaviour
                 currentPlayerHealth = multiPlayerHealth;
                 multiPlayerHealth.deathText = endingText;
                 multiPlayerHealth.endingImage = endingImage;
-                
+                nav = newPlayer.GetComponent<NavMeshAgent>();   
                 //아이템 드랍 관련
                 pickItem.actionText = itemUsedText;
                 pickItem.inventory = inventory;
@@ -391,7 +378,7 @@ public class MultiScene : MonoBehaviour
         NetGameManager.instance.RoomBroadcast(sendData);
     }
 
-    private void BroadCastingSecondCutSceneStart(bool isTrigger = false)
+    public void BroadCastingSecondCutSceneStart(bool isTrigger = false)
     {
         UserSession userSession= NetGameManager.instance.GetRoomUserSession(
             NetGameManager.instance.m_userHandle.m_szUserID);
@@ -757,7 +744,6 @@ public class MultiScene : MonoBehaviour
                         playerHp.CurrentHealth = playerHp.MaxHealth;
                     }
                 }
-
                 playerHp.UpdateHealth();
                 break;
             #endregion
@@ -765,8 +751,21 @@ public class MultiScene : MonoBehaviour
             #region 두번째 컷신 관련
             case (int)DataType.SECOND_CUTSCENE:
                 int cutSceneNum = Convert.ToInt32(jData["CUTSCENE_NUM"].ToString());
+                currentUser = NetGameManager.instance.m_userHandle.m_szUserID;
+                nav = user.GetComponent<NavMeshAgent>();
+                nav.areaMask = NavMesh.AllAreas;
                 secondPlayableDirector.playableAsset = secondCut;
                 secondPlayableDirector.Play();
+                if(secondPlayableDirector.state == PlayState.Playing)
+                {
+                    // 컷신이 시작되면 BGM을 중지
+                    SoundManager.instance.bgmAudioSource.Stop();
+                }
+                else
+                {
+                    // 컷신이 끝나면 BGM을 재생
+                    SoundManager.instance.bgmAudioSource.Play();
+                }
                 break;
             #endregion
 
@@ -775,6 +774,7 @@ public class MultiScene : MonoBehaviour
                 int cutSceneNum2 = Convert.ToInt32(jData["CUTSCENE_NUM"].ToString());
                 lastPlayableDirector.playableAsset = lastCut;
                 lastPlayableDirector.Play();
+                
                 break;
             #endregion
 

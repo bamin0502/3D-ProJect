@@ -73,7 +73,6 @@ public class PLAYER_STATUS
     public int DATA = 0;
     public int Health = -99;
     public int PlayerHealth = -99;
-
     public int HEALTH { get; set; }
 }
 [Serializable]

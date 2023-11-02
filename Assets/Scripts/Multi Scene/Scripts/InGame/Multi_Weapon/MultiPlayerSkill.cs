@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.VFX;
 
 public class MultiPlayerSkill : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class MultiPlayerSkill : MonoBehaviour
     private Image _coolTimeImage;
 
     public ParticleSystem[] effects; //0검, 1망치
-
+    public VisualEffect[] visualEffects;//0검, 1망치
     private void Start()
     {
         _coolTimeImage = MultiScene.Instance.skillImages[3];
@@ -76,9 +77,11 @@ public class MultiPlayerSkill : MonoBehaviour
         {
             case WeaponType.OneHanded:
                 effects[0].Play();
+                
                 break;
             case WeaponType.TwoHanded:
                 effects[1].Play();
+                
                 break;
         }
     }

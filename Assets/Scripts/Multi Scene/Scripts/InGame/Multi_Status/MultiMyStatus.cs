@@ -73,6 +73,7 @@ public class MultiMyStatus : MonoBehaviour
 
     public void UpdatePlayerHp()
     {
+        
         playerHpImage.fillAmount = (float)_playerHealth.CurrentHealth / _playerHealth.MaxHealth;  
     }
     public void Awake()

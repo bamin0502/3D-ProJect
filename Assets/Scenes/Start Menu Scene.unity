@@ -493,7 +493,6 @@ GameObject:
   - component: {fileID: 247132731}
   - component: {fileID: 247132734}
   - component: {fileID: 247132733}
-  - component: {fileID: 247132732}
   - component: {fileID: 247132735}
   m_Layer: 5
   m_Name: Multi Text
@@ -522,21 +521,6 @@ RectTransform:
   m_AnchoredPosition: {x: 86, y: 12}
   m_SizeDelta: {x: -2400, y: -1390}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &247132732
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 247132730}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 1, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 1, y: -1}
-  m_UseGraphicAlpha: 1
 --- !u!114 &247132733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -567,8 +551,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4290641916
+  m_fontColor: {r: 0.987524, g: 1, b: 0.740566, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -3758,7 +3742,6 @@ GameObject:
   - component: {fileID: 1287831433}
   - component: {fileID: 1287831436}
   - component: {fileID: 1287831435}
-  - component: {fileID: 1287831434}
   - component: {fileID: 1287831437}
   m_Layer: 5
   m_Name: Option Text
@@ -3787,21 +3770,6 @@ RectTransform:
   m_AnchoredPosition: {x: 74, y: -231}
   m_SizeDelta: {x: -2400, y: -1390}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1287831434
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1287831432}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 1, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 1, y: -1}
-  m_UseGraphicAlpha: 1
 --- !u!114 &1287831435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3832,8 +3800,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4290641916
+  m_fontColor: {r: 0.987524, g: 1, b: 0.740566, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -7637,7 +7605,6 @@ GameObject:
   - component: {fileID: 2120634630}
   - component: {fileID: 2120634633}
   - component: {fileID: 2120634632}
-  - component: {fileID: 2120634631}
   - component: {fileID: 2120634634}
   m_Layer: 5
   m_Name: QuitButton
@@ -7666,21 +7633,6 @@ RectTransform:
   m_AnchoredPosition: {x: 71, y: -464}
   m_SizeDelta: {x: -2400, y: -1390}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2120634631
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2120634629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 1, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 1, y: -1}
-  m_UseGraphicAlpha: 1
 --- !u!114 &2120634632
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7711,8 +7663,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4290641916
+  m_fontColor: {r: 0.987524, g: 1, b: 0.740566, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

@@ -35,7 +35,6 @@ public class MultiPlayerHealthBar : MonoBehaviour
     {
         healthBar.fillAmount = (float)_playerHealth.CurrentHealth / _playerHealth.MaxHealth;
         healthText.text = _playerHealth.CurrentHealth + "/" + _playerHealth.MaxHealth;
-        
-
     }
+    
 }

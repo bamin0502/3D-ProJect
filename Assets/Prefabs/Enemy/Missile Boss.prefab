@@ -4955,6 +4955,21 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 5, y: 3, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-2262729144878654046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3327963749274513257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72ed0f77bd4a5714a860946b9a46acb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  damage: 20
+  speed: 5
 --- !u!114 &851604021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4967,18 +4982,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 312788b59f44e41488164828c27668e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &851604022
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3327963749274513257}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0fed60eb8b1b54b46ae586c8422543df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  damage: 0
-  speed: 3

@@ -3,8 +3,6 @@ using UnityEngine;
 using UnityEngine.AI;
 using Data;
 using Newtonsoft.Json;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class MultiEnemy : MonoBehaviour

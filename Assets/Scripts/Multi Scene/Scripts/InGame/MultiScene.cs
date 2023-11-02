@@ -32,16 +32,22 @@ public enum DataType
     PlayerTakeDamage = 13,
     EnemyChaseTarget = 14,
     PlayerDead = 15,
+    BossAnimation = 16,
+    TARGET_SET = 17,
+    EnemySkill = 18,
 }
 public class MultiScene : MonoBehaviour
 {
     #region 메서드
     public static MultiScene Instance;
 
+    public GameObject bossObject;
+
     public readonly Dictionary<string, GameObject> _players = new();
     [HideInInspector] public List<GameObject> weaponsList; //무기 객체들
     [HideInInspector] public List<GameObject> enemyList; //적 객체들
     [HideInInspector] public List<GameObject> itemsList; //아이템 객체들
+    
     public Transform weaponsListParent; //무기 객체들이 있는 부모 객체
     public Transform enemyListParent; //적 객체들이 있는 부모 객체
     public Transform itemListParent; //아이템 객체들이 있는 부모 객체
@@ -253,6 +259,38 @@ public class MultiScene : MonoBehaviour
         string sendData = LitJson.JsonMapper.ToJson(data);
         NetGameManager.instance.RoomBroadcast(sendData);
     }
+    public void BroadCastingBossAnimation(int animationNumber, bool isTrigger = false)
+    {
+        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+            NetGameManager.instance.m_userHandle.m_szUserID);
+    
+        var data = new BOSS_ANIMATION 
+        { 
+            USER = userSession.m_szUserID,
+            DATA = (int)DataType.BossAnimation,
+            ANI_NUM = animationNumber,
+            ANI_TYPE = isTrigger,
+        };
+        
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
+
+    }
+    public void BroadCastingTargetSet(string target)//copy
+    {
+        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+            NetGameManager.instance.m_userHandle.m_szUserID);
+        var data = new TARGET_SET()
+        {
+            USER = userSession.m_szUserID,
+            DATA = (int)DataType.TARGET_SET,
+            TARGET_POSITION = target,
+
+        };
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
+
+    }
 
     public void BroadCastingEnemyItem(Vector3 destination, int itemIndex = -99)
     {
@@ -450,6 +488,20 @@ public class MultiScene : MonoBehaviour
             DATA = (int)DataType.EnemyChaseTarget,
             TARGET = player,
             ENEMY_INDEX = index,
+        };
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
+    }
+    
+    public void BroadCastingSkill(int skillNum)
+    {
+        UserSession userSession = NetGameManager.instance.GetRoomUserSession(
+            NetGameManager.instance.m_userHandle.m_szUserID);
+        var data = new ENEMY_SKILL
+        {
+            USER = userSession.m_szUserID,
+            DATA = (int)DataType.EnemySkill,
+            SKILL_NUM = skillNum,
         };
         string sendData = LitJson.JsonMapper.ToJson(data);
         NetGameManager.instance.RoomBroadcast(sendData);
@@ -836,6 +888,51 @@ public class MultiScene : MonoBehaviour
                 break;
                 
 
+            #endregion
+            #region 보스 애니메이션
+            case (int)DataType.BossAnimation:
+                if (bossObject == null) return;
+                if (bossObject.TryGetComponent<MultiBoss>(out var boss))
+                {
+                    int aniBossNum = Convert.ToInt32(jData["ANI_NUM"].ToString());
+                    bool bossAniType = Convert.ToBoolean(jData["ANI_TYPE"].ToString());
+                    if (bossAniType)
+                    {
+                        boss.anim.SetTrigger(aniBossNum);
+                    }
+                }
+                break;
+            #endregion
+            #region 보스 추적 
+            case (int)DataType.TARGET_SET:
+                if (bossObject == null) return;
+                string targetName = jData["TARGET_POSITION"].ToString();
+                if(string.IsNullOrEmpty(targetName))  return;
+                _players.TryGetValue(targetName, out GameObject playerObject);
+                if (bossObject.TryGetComponent<MultiBoss>(out var b))
+                {
+                    b.target = playerObject;
+                }
+                break;
+            #endregion
+            #region 보스 스킬 
+            case (int)DataType.EnemySkill:
+                int skillNum = Convert.ToInt32(jData["SKILL_NUM"].ToString());
+                bossObject.TryGetComponent<MultiBoss>(out var bossSkill);
+                
+                if(bossSkill == null) return;
+                
+                switch (skillNum)
+                {
+                    case 0:
+                        bossSkill.LaunchMissile();
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                }
+                break;
             #endregion
         }
 

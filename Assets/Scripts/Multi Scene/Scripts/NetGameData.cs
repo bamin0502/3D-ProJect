@@ -101,7 +101,23 @@ public class ENEMY_ANIMATION
     public int ANI_NUM = 0;
     public bool ANI_TYPE = false;
 }
+[Serializable]
+public class TARGET_SET //copy
+{
+    public String USER = " ";
+    public int DATA = 0;
+    public string TARGET_POSITION = "";
 
+}
+
+[Serializable]
+public class BOSS_ANIMATION //copy
+{
+    public string USER = " ";
+    public int DATA = 0;
+    public int ANI_NUM = 0;
+    public bool ANI_TYPE = false;
+}
 [Serializable]
 public class ENEMY_ITEM
 {
@@ -186,3 +202,10 @@ public class PLAYER_DEAD
     public string TARGET = "";
 }
 
+[Serializable]
+public class ENEMY_SKILL
+{
+    public string USER = "";
+    public int DATA = 0;
+    public int SKILL_NUM = 0;
+}

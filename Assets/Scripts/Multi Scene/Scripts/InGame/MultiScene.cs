@@ -12,6 +12,8 @@ using UnityEngine.Timeline;
 using UnityEngine.Playables;
 using UnityEngine.Rendering.Universal;
 using Cinemachine.PostFX;
+
+
 public enum DataType
 {
     PlayerAnimation = 1,
@@ -76,7 +78,6 @@ public class MultiScene : MonoBehaviour
     
     public GameObject[] itemPrefabs;
     public bool isMasterClient; //마스터 클라이언트
-    public bool other;
     private static readonly int IsAttack = Animator.StringToHash("isAttack");
     private static readonly int AniEnemy = Animator.StringToHash("aniEnemy");
     public GameObject Enemy;
@@ -112,8 +113,7 @@ public class MultiScene : MonoBehaviour
         //해당 방의 첫번째 유저를 마스터 클라이언트로 설정
         isMasterClient = NetGameManager.instance.m_userHandle.m_szUserID.Equals(NetGameManager.instance.m_roomSession
             .m_userList[0].m_szUserID);
-        other=!NetGameManager.instance.m_userHandle.m_szUserID.Equals(NetGameManager.instance.m_roomSession
-            .m_userList[0].m_szUserID);
+
         volumeSettings = cineCam.GetComponent<CinemachineVolumeSettings>();
         if (volumeSettings != null)
         {
@@ -232,6 +232,7 @@ public class MultiScene : MonoBehaviour
                 MinimapCamera.transform.position = new Vector3(position.x, position.y+33, position.z);//Y값만 적절하게 조절하면됩니다.
                 //던지는 아이템 관련
                 currentThrownWeaponController = thrownWeaponController;
+                
                 
             }
 

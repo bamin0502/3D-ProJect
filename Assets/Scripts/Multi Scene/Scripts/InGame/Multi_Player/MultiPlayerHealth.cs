@@ -20,11 +20,11 @@ public class MultiPlayerHealth : MonoBehaviour
     private static readonly int DoDie = Animator.StringToHash("doDie");
     private MultiMyStatus _multiMyStatus;
     private MultiTeamstatus _multiTeamstatus;
-    // Start is called before the first frame update
+
     void Start()
     {
         
-        string json = "{\"PlayerHealth\": 100, \"Health\": 100}";
+        string json = "{\"PlayerHealth\": 10000, \"Health\": 10000}";
         var followCamera = MultiScene.Instance.playerCamera;
         PlayerStat playerStat = JsonConvert.DeserializeObject<PlayerStat>(json);
         MaxHealth = (int)playerStat.PlayerHealth;
@@ -47,14 +47,11 @@ public class MultiPlayerHealth : MonoBehaviour
         _multiTeamstatus.UpdatePlayerHp();
         //자신 체력 메인 UI 체력상태창
         MultiScene.Instance.multiPlayerHealthBar.UpdatePlayerHp();
-        CinemachineShake.Instance.ShakeCamera(4f, 1f);
         if (CurrentHealth <= 0)
         {
             Die();
             Invoke(nameof(EndDeath), 3f);
-            
         }
-
     }
 
     public void UpdateHealth()
@@ -71,13 +68,16 @@ public class MultiPlayerHealth : MonoBehaviour
         gameObject.layer = 2;
         deathParticle.Play();
         deathBloodParticle.Play();
-        if(MultiScene.Instance.currentUser.Equals(gameObject.name)) MultiScene.Instance.isDead = true;
+        if (MultiScene.Instance.currentUser.Equals(gameObject.name))
+        {
+            MultiScene.Instance.ChangeColor();
+            MultiScene.Instance.isDead = true;
+        }
         MultiScene.Instance._players.Remove(gameObject.name);
         GetComponent<MultiPlayerMovement>().SetAnimationTrigger(DoDie);
         deathText.DOText("당신은 "+ "<color=red>" + "몬스터"+ "</color>" + "에게 죽었습니다.", 3, true, ScrambleMode.None, null);
         endingImage.rectTransform.gameObject.SetActive(true);
-
-        MultiScene.Instance.ChangeColor();
+        
         foreach (GameObject enemy in MultiScene.Instance.enemyList)
         {
             if (enemy.TryGetComponent<MultiEnemy>(out var e))

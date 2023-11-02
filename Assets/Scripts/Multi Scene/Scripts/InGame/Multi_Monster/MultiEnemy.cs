@@ -59,10 +59,7 @@ public class MultiEnemy : MonoBehaviour
         _currentState = EnemyState.Idle;
         SetState(currentSceneName);
     }
-
-    private void Update()
-    {
-    }
+    
     private void SetState(string sceneName)
     {
         if (sceneName.Equals("Game Scene"))
@@ -98,7 +95,8 @@ public class MultiEnemy : MonoBehaviour
    
     public IEnumerator PlayerDetect()
     {
-        if(MultiScene.Instance.isMasterClient==MultiScene.Instance.other) yield break;
+        if (!MultiScene.Instance.isMasterClient) yield break;
+        
         WaitForSeconds wait = new WaitForSeconds(1f);
         EnemyState lastState = EnemyState.Idle; // 이전 상태를 저장하는 변수
 
@@ -187,7 +185,7 @@ public class MultiEnemy : MonoBehaviour
 
     public void Attack()
     {
-        if (MultiScene.Instance.isMasterClient==MultiScene.Instance.other)return; 
+        if (!MultiScene.Instance.isMasterClient) return;
         if (!IsAttackable() || isDead || _targetPos==null) return;
             
         SoundManager.instance.PlaySE(_enemyName);
@@ -203,7 +201,7 @@ public class MultiEnemy : MonoBehaviour
 
     public IEnumerator TryAttack()
     {
-        if (MultiScene.Instance.isMasterClient==MultiScene.Instance.other) yield break;
+        if (!MultiScene.Instance.isMasterClient) yield break;
         WaitForSeconds wait = new WaitForSeconds(1);
         
         yield return new WaitForSeconds(Random.Range(0f, 1f)); //코루틴 분산

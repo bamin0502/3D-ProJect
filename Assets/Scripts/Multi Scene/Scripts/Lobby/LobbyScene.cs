@@ -47,14 +47,14 @@ public class LobbyScene : MonoBehaviour
     
     private void Start()
     {
-        NetGameManager.instance.ConnectServer("127.0.0.1", 3650, true);
+        //NetGameManager.instance.ConnectServer("127.0.0.1", 3650, true);
         lobbyButton.onClick.AddListener(OnClick_LobbyButton);
         loginButton.onClick.AddListener(OnClick_Login);
         inputChat.onSubmit.AddListener(SendChatting);
         Instance = this;
-        NetGameManager.instance.ConnectServer("192.168.0.122", 3650, true);
+        //NetGameManager.instance.ConnectServer("192.168.0.122", 3650, true);
         //나중에 각자 집에서 단체로 AWS서버로 테스트해야해서 이건 지우지말것
-        //NetGameManager.instance.ConnectServer("3.34.116.91", 3650); 
+        NetGameManager.instance.ConnectServer("3.34.116.91", 3650); 
         
     }
     private void Update()
@@ -82,6 +82,7 @@ public class LobbyScene : MonoBehaviour
                 string chatText = "<#4FB7FF><b>알림 : 준비 되지 않은 사람이 있습니다.</b></color>";
                 AddChatting(chatText);
                 return;
+                
             }
             if (roomSession.m_userList.Count < MinUserToStart)
             {
@@ -116,14 +117,12 @@ public class LobbyScene : MonoBehaviour
             loginAlertText.text = "로그인에 실패했습니다.";
             return;
         }
-
-        RoomSession roomSession = NetGameManager.instance.m_roomSession;
-        int userCount = roomSession.m_userList.Count;
+        
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(NetGameManager.instance.m_userHandle.m_szUserID);
         string chatText = $"<#4FB7FF><b>알림 : {userSession.m_szUserID} 님이 입장하셨습니다.</b></color>";
         BroadcastChat(chatText);
         
-        if (userCount == 1) //해당 로비에 유저가 본인 뿐이면 방의 방장으로 설정
+        if (NetGameManager.instance.m_roomSession.m_userList.Count <= 1) //해당 로비에 유저가 본인 뿐이면 방의 방장으로 설정
         {
             lobbyButtonText.text = "게임 시작";
             userSession.m_nUserData[0] = (int)LobbyUserState.Admin;
@@ -136,10 +135,10 @@ public class LobbyScene : MonoBehaviour
 
         NetGameManager.instance.RoomUserDataUpdate(userSession);
         
-		for(int i = 0; i < userCount; i++)
-		{
-            RoomOneUserAdd(roomSession.m_userList[i]);
-		}
+		foreach (var t in NetGameManager.instance.m_roomSession.m_userList)
+        {
+            RoomOneUserAdd(t);
+        }
 	}
     public void RoomUserAdd(UserSession user)
 	{

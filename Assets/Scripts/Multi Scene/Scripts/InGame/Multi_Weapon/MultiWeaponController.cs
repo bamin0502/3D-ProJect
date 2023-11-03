@@ -117,6 +117,11 @@ public class MultiWeaponController : MonoBehaviour
         {
             var target = MultiScene.Instance.enemyList[enemy];
 
+            if (target == null)
+            {
+                Debug.LogWarning("적이 null입니다. 인덱스: " + enemy);
+                return; 
+            }
             if (target != null)
             {
                 if(equippedWeapon == null) return;
@@ -188,9 +193,6 @@ public class MultiWeaponController : MonoBehaviour
     public void PickWeapon(int index)
     {
         Weapon obj = MultiScene.Instance.weaponsList[index].GetComponent<Weapon>();
-        
-        
-        
         
         StartCoroutine(EquipWeaponAfterDelay(obj, 0.1f));
     }

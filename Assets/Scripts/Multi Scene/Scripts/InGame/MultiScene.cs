@@ -765,7 +765,6 @@ public class MultiScene : MonoBehaviour
                         playerHp.CurrentHealth = playerHp.MaxHealth;
                     }
                 }
-
                 playerHp.UpdateHealth();
                 break;
             #endregion
@@ -773,9 +772,11 @@ public class MultiScene : MonoBehaviour
             #region 두번째 컷신 관련
             case (int)DataType.SECOND_CUTSCENE:
                 int cutSceneNum = Convert.ToInt32(jData["CUTSCENE_NUM"].ToString());
+                user.TryGetComponent(out NavMeshAgent navMeshAgent);
+                nav = navMeshAgent;
                 secondPlayableDirector.playableAsset = secondCut;
                 secondPlayableDirector.Play();
-                nav.areaMask = NavMesh.AllAreas;
+                navMeshAgent.areaMask = NavMesh.AllAreas;
                 break;
             #endregion
 

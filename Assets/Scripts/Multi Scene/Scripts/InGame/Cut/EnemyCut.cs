@@ -16,6 +16,8 @@ public class EnemyCut : MonoBehaviour
     void Start()
     {
         checkObject = MultiScene.Instance.Enemy;
+        MultiScene.Instance.secondPlayableDirector = playableDirector;
+       
         if (playableDirector.playableAsset == SecondCut)
         {
             // 컷신이 시작되면 BGM을 중지

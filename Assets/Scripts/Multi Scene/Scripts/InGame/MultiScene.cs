@@ -928,8 +928,10 @@ public class MultiScene : MonoBehaviour
                         bossSkill.LaunchMissile();
                         break;
                     case 1:
+                        bossSkill.Heal();
                         break;
                     case 2:
+                        bossSkill.Taunt();
                         break;
                 }
                 break;

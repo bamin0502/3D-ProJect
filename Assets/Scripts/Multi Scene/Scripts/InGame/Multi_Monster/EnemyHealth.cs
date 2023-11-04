@@ -35,7 +35,7 @@ public class EnemyHealth : MonoBehaviour
     public DamageNumber damageNumbersPrefab;
     private string currentSceneName;
     public Transform hudPos;
-    
+    public ParticleSystem dieEffect;
     void Start()
     {
         _nav = GetComponent<NavMeshAgent>();
@@ -72,34 +72,6 @@ public class EnemyHealth : MonoBehaviour
             enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
             DOTween.SetTweensCapacity(500, 50);
         }
-        // else if (sceneName.Equals("Single Scene"))
-        // {
-        //     string json = "";
-        //     if (enemyType == EnemyType.Monster)
-        //     {
-        //         json = "{\"EnemyHealth\": 100, \"Health\": 100}";
-        //     }
-        //     else if (enemyType == EnemyType.RedSpider)
-        //     {
-        //         json= "{\"EnemyHealth\": 70, \"Health\": 70}";
-        //     }
-        //     else if (enemyType == EnemyType.GreenSpider)
-        //     {
-        //         json= "{\"EnemyHealth\": 50, \"Health\": 50}";
-        //     }
-        //     else if (enemyType == EnemyType.Boss)
-        //     {
-        //         json = "{\"EnemyHealth\": 300, \"Health\": 300}";
-        //     }
-        //
-        //     EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
-        //     maxHealth = (int)enemyStat1.EnemyHealth;
-        //     currentHealth = (int)enemyStat1.Health;
-        //     currentHealth = maxHealth;
-        //     enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
-        //     DOTween.SetTweensCapacity(500, 50);
-        // }
-        
     }
     public void TakeDamage(float damage,Vector3 position)
     {
@@ -130,9 +102,14 @@ public class EnemyHealth : MonoBehaviour
         Debug.Log("Enemy died!");
         bool isEnemy = gameObject.TryGetComponent(out MultiEnemy enemy);
         bool isBoss = gameObject.TryGetComponent(out MultiBoss boss);
+        if (isEnemy)
+        {
+            dieEffect.Play();
+        }
         _nav.speed = 0;
         if (isEnemy) enemy.isDead = true;
         else if (isBoss) boss.isDead = true;
+        
         anim.SetTrigger(DoDie);
         MultiScene.Instance.BroadCastingEnemyAnimation(MultiScene.Instance.enemyList.IndexOf(gameObject), DoDie, true);
     }

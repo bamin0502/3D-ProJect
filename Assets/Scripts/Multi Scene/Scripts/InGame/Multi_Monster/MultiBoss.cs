@@ -23,6 +23,10 @@ public GameObject missile;
 public Transform missilePortA;
 public Transform missilePortB;
 
+//점프 공격 관련 변수
+public float moveSpeed = 5.0f;
+private Vector3 lookVec;
+private Vector3 tauntVec;
 public int missileDmg;
 public int meleeDmg;
 
@@ -33,6 +37,7 @@ public float maxHealth;
 public float currentHealth;
 
 public GameObject target;
+public Transform targetPos;
 
 public float detectionRadius = 10f;
 
@@ -125,13 +130,17 @@ void SelectTarget()
     if(!MultiScene.Instance.isMasterClient) return;
     int randomIndex = MultiScene.Instance.GetRandomInt(hitCount - 1);
     target = _targets[randomIndex].gameObject;
+    targetPos = target.gameObject.transform;
     MultiScene.Instance.BroadCastingTargetSet(target.name);
 }
 public void Update()
 {
     if (target != null)
     {
-        transform.LookAt(target.transform.position);
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
+        lookVec = new Vector3(h, 0, v) * 5f;
+        transform.LookAt(target.transform.position + lookVec);
     }
     
 }
@@ -142,31 +151,35 @@ public void LaunchMissile()
     MissileShot(missilePortB);
 }
 
+
+
 public void Think()
 {
     int ranAction = MultiScene.Instance.GetRandomInt(6);
     if(target == null) return;
     _isThink = true;
-    switch (ranAction)
+    switch (4)
     {
-        default:
+       case 1:
             LaunchMissile();
             MultiScene.Instance.BroadCastingSkill(0);
             anim.SetTrigger(DoShot);
-            MultiScene.Instance.BroadCastingBossAnimation(DoShot,true); ;
+            MultiScene.Instance.BroadCastingBossAnimation(DoShot,true); 
             break;
         
-        /*case 2:
+       case 2:
             break;
-        case 3:
+       case 3:
             Debug.LogWarning("Heal");
-            //StartCoroutine(Heal());
+            Heal();
+            MultiScene.Instance.BroadCastingSkill(1);
+            anim.SetTrigger(DoBigShot);
+            MultiScene.Instance.BroadCastingBossAnimation(DoBigShot,true); 
             break;
-        case 4:
-            Debug.LogWarning("Taunt");
-            //StartCoroutine(Taunt());
+       case 4:
+           Taunt();
             break;
-        case 5:
+        /*case 5:
             break;
         case 6:
             break;*/
@@ -186,32 +199,39 @@ public void MissileShot(Transform obj)
 public void ReThink()
 {
     _isThink = false;
+    Debug.LogWarning("ReThink");
 }
-IEnumerator Heal()
+public void Heal()
 {
     Debug.Log("체력 회복");
     Healdraw.Play();
-    Debug.Log("Healdraw");
     draw.Play();
-    Debug.Log("Healdraw.play");
     anim.SetTrigger(DoBigShot);
-    Debug.Log("anim Play");
-    MultiScene.Instance.BroadCastingBossAnimation(DoBigShot,true);
-
+    
     enemyHealth.currentHealth += enemyHealth.maxHealth;
     if (enemyHealth.currentHealth >= enemyHealth.maxHealth)
     {
         enemyHealth.currentHealth = enemyHealth.maxHealth;
     }
-    
-    yield return new WaitForSeconds(5f);
-    Think();
-
 }
 
-IEnumerator Taunt()
+public void Taunt()
 {
-    yield return new WaitForSeconds(5f);
-    Think();
+    if (target != null)
+    {
+        Jump.Play();
+        tauntVec = target.transform.position + lookVec;
+        MultiScene.Instance.BroadCastingSkill(2);
+        anim.SetTrigger(DoTaunt);
+        MultiScene.Instance.BroadCastingBossAnimation(DoTaunt,true);
+        Vector3 targetPosition = target.transform.position;
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+    }
+    
+}
+
+public void Assult()
+{
+    nav.SetDestination(tauntVec);
 }
 }

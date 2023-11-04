@@ -54,7 +54,8 @@ public class MultiPlayerMovement : MonoBehaviour
             
             LayerMask playerMask = LayerMask.GetMask("Player");
             LayerMask enemyMask = LayerMask.GetMask("Enemy");
-            LayerMask combinedMask = playerMask | enemyMask;
+            LayerMask wallMask= LayerMask.GetMask("Wall");
+            LayerMask combinedMask = playerMask | enemyMask | wallMask;
             LayerMask layerMask = ~combinedMask;
             
             

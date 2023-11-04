@@ -193,7 +193,7 @@ public class MultiWeaponController : MonoBehaviour
     public void PickWeapon(int index)
     {
         Weapon obj = MultiScene.Instance.weaponsList[index].GetComponent<Weapon>();
-        
+        HidePickupText();
         StartCoroutine(EquipWeaponAfterDelay(obj, 0.1f));
     }
 

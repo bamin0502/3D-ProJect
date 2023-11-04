@@ -15,7 +15,7 @@ public class BossMelee : MonoBehaviour
         {
             // 플레이어 태그를 가진 오브젝트와 충돌한 경우
             
-            bool isPlayer = target.TryGetComponent(out PlayerHealth playerHealth);
+            bool isPlayer = target.TryGetComponent(out MultiPlayerHealth playerHealth);
             if (isPlayer)
             {
                 Debug.Log("근접 데메지 입힘");

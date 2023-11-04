@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -69,12 +68,5 @@ public class StartCut : MonoBehaviour
         // BGM을 다시 재생
         SoundManager.instance.bgmAudioSource.Play();
         StartCoroutine(SetEnemy());
-        
-        MultiMyStatus myStatusScript=GameObject.FindObjectOfType<MultiMyStatus>();
-        MultiTeamstatus teamStatusScript=GameObject.FindObjectOfType<MultiTeamstatus>();
-        if (myStatusScript != null)
-        {
-            myStatusScript.Awake();
-        }
     }
 }

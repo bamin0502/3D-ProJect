@@ -10,7 +10,6 @@ public class BossMelee : MonoBehaviour
     private Transform target;
     void OnTriggerEnter(Collider other)
     {
-
         if (isAttacking && other.gameObject.CompareTag("Player"))
         {
             // 플레이어 태그를 가진 오브젝트와 충돌한 경우

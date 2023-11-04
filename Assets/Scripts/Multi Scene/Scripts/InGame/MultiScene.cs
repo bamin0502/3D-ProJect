@@ -126,7 +126,7 @@ public class MultiScene : MonoBehaviour
 
     private void Update()
     {
-        StartSecondScene();
+       
         if (isDead && Input.GetMouseButtonDown(1))
         {
             SwitchToNextPlayer();
@@ -160,17 +160,7 @@ public class MultiScene : MonoBehaviour
         return -1;
     }
 
-    private void StartSecondScene()
-    {
-        if (Enemy.transform.childCount == 0 && !isCutScene)
-        {
-            isCutScene = true;
-            BroadCastingSecondCutSceneStart(true);
-            secondPlayableDirector.playableAsset = secondCut;
-            secondPlayableDirector.Play();
-            Debug.LogError("컷신 나오는지 확인용");
-        }
-    }
+
 
     
     private void SetUsers()

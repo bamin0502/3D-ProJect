@@ -60,7 +60,7 @@ public class MultiScene : MonoBehaviour
     public TextMeshProUGUI noticeText;
     public TextMeshProUGUI coolText;
     public GameObject spaceUI;
-    
+
     public CinemachineFreeLook cineCam;
     public Camera playerCamera;
     public Camera MinimapCamera;
@@ -79,7 +79,7 @@ public class MultiScene : MonoBehaviour
     public MultiPlayerHealthBar multiPlayerHealthBar;
     public Image[] skillImages;
     public TextMeshProUGUI skillText;
-    public GameObject[] layerObjects;
+    
     public GameObject[] itemPrefabs;
     public bool isMasterClient; //마스터 클라이언트
     private static readonly int AniEnemy = Animator.StringToHash("aniEnemy");
@@ -89,9 +89,9 @@ public class MultiScene : MonoBehaviour
     private string currenViewPlayer = "";
     public TextMeshProUGUI endingText;
     public Image endingImage; 
-    public bool isDead = false;
-    public NavMeshAgent nav;
+    public bool isDead =false;
     [SerializeField]public CinemachineVolumeSettings volumeSettings;
+    public NavMeshAgent nav;
     #endregion
 
     #region 이벤트 함수
@@ -126,6 +126,7 @@ public class MultiScene : MonoBehaviour
 
     private void Update()
     {
+        StartSecondScene();
         if (isDead && Input.GetMouseButtonDown(1))
         {
             SwitchToNextPlayer();
@@ -159,6 +160,17 @@ public class MultiScene : MonoBehaviour
         return -1;
     }
 
+    private void StartSecondScene()
+    {
+        if (Enemy.transform.childCount == 0 && !isCutScene)
+        {
+            isCutScene = true;
+            BroadCastingSecondCutSceneStart(true);
+            secondPlayableDirector.playableAsset = secondCut;
+            secondPlayableDirector.Play();
+            Debug.LogError("컷신 나오는지 확인용");
+        }
+    }
 
     
     private void SetUsers()
@@ -818,6 +830,7 @@ public class MultiScene : MonoBehaviour
                     // 컷신이 끝나면 BGM을 재생
                     SoundManager.instance.bgmAudioSource.Play();
                 }
+                
                 break;
             #endregion
 
@@ -826,7 +839,6 @@ public class MultiScene : MonoBehaviour
                 int cutSceneNum2 = Convert.ToInt32(jData["CUTSCENE_NUM"].ToString());
                 lastPlayableDirector.playableAsset = lastCut;
                 lastPlayableDirector.Play();
-                
                 break;
             #endregion
 

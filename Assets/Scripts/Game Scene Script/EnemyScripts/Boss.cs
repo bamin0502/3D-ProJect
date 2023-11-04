@@ -31,10 +31,10 @@ public class Boss : MonoBehaviour
     public int missileDmg;
     public int meleeDmg;
 
-    public EnemyHealth enemyHealth;
+    //public EnemyHealth enemyHealth;
     public Rigidbody rigid;
     public BoxCollider boxCollider;
-    public EnemyHealthBar enemyHealthBar;
+    //public EnemyHealthBar enemyHealthBar;
     private Material mat;
     private NavMeshAgent nav;
     private Animator anim;
@@ -70,15 +70,15 @@ public class Boss : MonoBehaviour
 
     void Start()
     {
-        enemyHealth = GetComponent<EnemyHealth>();
-        enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
+        //enemyHealth = GetComponent<EnemyHealth>();
+        //enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
 
         StartCoroutine(ThinkRoutine());
         string json = "{\"Heal\": 20}";
         EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
         Healing = (int)enemyStat1.Heal;
         
-        currentHealth = enemyHealth.maxHealth;  // 현재 체력을 최대 체력으로 초기화합니다.
+        //currentHealth = enemyHealth.maxHealth;  // 현재 체력을 최대 체력으로 초기화합니다.
         maxHealth = currentHealth;  // 최대 체력도 현재 체력과 동일하게 설정합니다.
         
     }
@@ -257,31 +257,31 @@ public class Boss : MonoBehaviour
         draw.Play();
         anim.SetTrigger(DoBigShot);
 
-        float previousHealth = enemyHealth.currentHealth;
-        float potentialHealth = Mathf.Clamp(enemyHealth.currentHealth + Healing, 0, maxHealth);
-        float healedAmount = potentialHealth - previousHealth;
+        //float previousHealth = enemyHealth.currentHealth;
+        //float potentialHealth = Mathf.Clamp(enemyHealth.currentHealth + Healing, 0, maxHealth);
+        // healedAmount = potentialHealth - previousHealth;
 
-        if (healedAmount > 0)
-        {
-            enemyHealth.currentHealth = potentialHealth;
-            Debug.Log("보스의 체력이 " + healedAmount + "만큼 회복됨, 현재 체력: " + enemyHealth.currentHealth);
-            enemyHealthBar.UpdateBossHealth();
-        }
-        else if (healedAmount < 0)
-        {
-            healedAmount = 0; // 음수 값이면 0으로 설정하여 출력하지 않도록 함
-        }
-        else
-        {
-            Debug.Log("보스의 체력은 이미 최대치이거나 회복할 수 없습니다.");
-        }
-
-        if (healedAmount > 0)
-        {
-            yield return new WaitForSeconds(5f);
-        }
+        // if (healedAmount > 0)
+        // {
+        //     enemyHealth.currentHealth = potentialHealth;
+        //     Debug.Log("보스의 체력이 " + healedAmount + "만큼 회복됨, 현재 체력: " + enemyHealth.currentHealth);
+        //     enemyHealthBar.UpdateBossHealth();
+        // }
+        // else if (healedAmount < 0)
+        // {
+        //     healedAmount = 0; // 음수 값이면 0으로 설정하여 출력하지 않도록 함
+        // }
+        // else
+        // {
+        //     Debug.Log("보스의 체력은 이미 최대치이거나 회복할 수 없습니다.");
+        // }
+        //
+        // if (healedAmount > 0)
+        // {
+        //     yield return new WaitForSeconds(5f);
+        // }
         StartCoroutine(Think());
-
+        yield break;
     }
     void OnDestroy()
     {

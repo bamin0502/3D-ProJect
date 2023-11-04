@@ -756,6 +756,16 @@ public class MultiScene : MonoBehaviour
                 nav.areaMask = NavMesh.AllAreas;
                 secondPlayableDirector.playableAsset = secondCut;
                 secondPlayableDirector.Play();
+                if(secondPlayableDirector.state == PlayState.Playing)
+                {
+                    // 컷신이 시작되면 BGM을 중지
+                    SoundManager.instance.bgmAudioSource.Stop();
+                }
+                else
+                {
+                    // 컷신이 끝나면 BGM을 재생
+                    SoundManager.instance.bgmAudioSource.Play();
+                }
                 break;
             #endregion
 

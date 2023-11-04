@@ -17,12 +17,7 @@ public class EnemyCut : MonoBehaviour
     {
         checkObject = MultiScene.Instance.Enemy;
         MultiScene.Instance.secondPlayableDirector = playableDirector;
-       
-        if (playableDirector.playableAsset == SecondCut)
-        {
-            // 컷신이 시작되면 BGM을 중지
-            SoundManager.instance.bgmAudioSource.Stop();
-        }
+        
         playableDirector.stopped += OnCutsceneEnd;
     }
 
@@ -48,7 +43,12 @@ public class EnemyCut : MonoBehaviour
             isCutScene = true;
             MultiScene.Instance.nav.areaMask=NavMesh.AllAreas;
             playableDirector.playableAsset = SecondCut;
-            playableDirector.Play(); 
+            playableDirector.Play();
+            if (playableDirector.playableAsset == SecondCut)
+            {
+                // 컷신이 시작되면 BGM을 중지
+                SoundManager.instance.bgmAudioSource.Stop();
+            }
             MultiScene.Instance.BroadCastingSecondCutSceneStart(true);
             Debug.LogWarning("컷신 나오는지 확인용");
         }

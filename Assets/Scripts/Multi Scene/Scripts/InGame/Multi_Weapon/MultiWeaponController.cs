@@ -224,6 +224,7 @@ public class MultiWeaponController : MonoBehaviour
         if(newWeapon != null)
         {
             newWeapon.isEquipped = true;
+            HidePickupText();
             if(newWeapon.TryGetComponent(out Collider collider))
             {
                 collider.enabled = false;

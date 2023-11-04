@@ -937,12 +937,8 @@ public class MultiScene : MonoBehaviour
                 break;
             #endregion
         }
-
     }
-    
-
     #endregion
-
 }
 
 

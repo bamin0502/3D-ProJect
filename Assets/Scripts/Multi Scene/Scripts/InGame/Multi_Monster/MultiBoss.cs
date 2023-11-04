@@ -23,10 +23,16 @@ public GameObject missile;
 public Transform missilePortA;
 public Transform missilePortB;
 
-//점프 공격 관련 변수
+//점프 이동
 public float moveSpeed = 5.0f;
 private Vector3 lookVec;
 private Vector3 tauntVec;
+//점프 공격
+public Transform raycastOrigin; //중심 위치
+public float raycastDistance = 2f; // 레이케스트 거리 설정
+public LayerMask hitLayer; // 충돌을 감지할 레이어 설정
+public int damageAmount = 10; // 데미지 양 설정
+
 public int missileDmg;
 public int meleeDmg;
 
@@ -178,6 +184,10 @@ public void Think()
             break;
        case 4:
            Taunt();
+           MultiScene.Instance.BroadCastingSkill(2);
+           anim.SetTrigger(DoTaunt);
+           MultiScene.Instance.BroadCastingBossAnimation(DoTaunt,true);
+          
             break;
         /*case 5:
             break;
@@ -221,17 +231,22 @@ public void Taunt()
     {
         Jump.Play();
         tauntVec = target.transform.position + lookVec;
-        MultiScene.Instance.BroadCastingSkill(2);
-        anim.SetTrigger(DoTaunt);
-        MultiScene.Instance.BroadCastingBossAnimation(DoTaunt,true);
-        Vector3 targetPosition = target.transform.position;
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+        nav.SetDestination(tauntVec);
+       
+       /* Vector3 targetPosition = target.transform.position;
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);*/
     }
     
 }
 
-public void Assult()
+public void JumpAttack()
 {
-    nav.SetDestination(tauntVec);
+    RaycastHit hit;
+    if (Physics.Raycast(raycastOrigin.position, raycastOrigin.forward, out hit, raycastDistance, LayerMask.GetMask("Player")))
+    {
+        
+    }
 }
+
+
 }

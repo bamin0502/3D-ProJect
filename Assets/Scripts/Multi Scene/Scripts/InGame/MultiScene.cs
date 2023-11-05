@@ -82,6 +82,7 @@ public class MultiScene : MonoBehaviour
     
     public GameObject[] itemPrefabs;
     public bool isMasterClient; //마스터 클라이언트
+    public bool isMine;//자기 자신 클라이언트
     private static readonly int AniEnemy = Animator.StringToHash("aniEnemy");
     public GameObject Enemy;
     public MultiPlayerHealth currentPlayerHealth;
@@ -117,6 +118,11 @@ public class MultiScene : MonoBehaviour
         //해당 방의 첫번째 유저를 마스터 클라이언트로 설정
         isMasterClient = NetGameManager.instance.m_userHandle.m_szUserID.Equals(NetGameManager.instance.m_roomSession
             .m_userList[0].m_szUserID);
+        // 만약 현재 클라이언트가 방장 클라이언트라면 isMine은 false
+        isMine = !isMasterClient &&
+                 // 그렇지 않다면 isMine은 현재 클라이언트가 자신인지를 나타냄
+                 NetGameManager.instance.m_userHandle.m_szUserID.Equals(currentUser);
+        
         volumeSettings = cineCam.GetComponent<CinemachineVolumeSettings>();
         if (volumeSettings != null)
         {

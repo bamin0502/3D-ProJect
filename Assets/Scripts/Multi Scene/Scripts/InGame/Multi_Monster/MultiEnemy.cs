@@ -94,7 +94,7 @@ public class MultiEnemy : MonoBehaviour
    
     public IEnumerator PlayerDetect()
     {
-        if (!MultiScene.Instance.isMasterClient) yield break;
+        if (MultiScene.Instance.isMasterClient) yield break;
         
         WaitForSeconds wait = new WaitForSeconds(1f);
         EnemyState lastState = EnemyState.Idle; // 이전 상태를 저장하는 변수
@@ -184,7 +184,7 @@ public class MultiEnemy : MonoBehaviour
 
     public void Attack()
     {
-        if (!MultiScene.Instance.isMasterClient) return;
+        if (MultiScene.Instance.isMasterClient) return;
         if (!IsAttackable() || isDead || _targetPos==null) return;
             
         SoundManager.instance.PlaySE(_enemyName);
@@ -202,7 +202,7 @@ public class MultiEnemy : MonoBehaviour
 
     public IEnumerator TryAttack()
     {
-        if (!MultiScene.Instance.isMasterClient) yield break;
+        if (MultiScene.Instance.isMasterClient) yield break;
         
         WaitForSeconds wait = new WaitForSeconds(1.5f);
         

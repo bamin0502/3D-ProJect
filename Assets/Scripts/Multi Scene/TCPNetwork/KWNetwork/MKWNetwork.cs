@@ -111,7 +111,7 @@ public class MKWNetwork : KWSingleton<MKWNetwork>
         return false;
     }
 
-	public	void	SendData(byte byClass, byte byEvent, GameObject goFunction = null, string szRecvFunc = "")
+	public void SendData(byte byClass, byte byEvent, GameObject goFunction = null, string szRecvFunc = "")
 	{
         NetHead head = new NetHead();
 		head.MakeHead(byClass, byEvent);

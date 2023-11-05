@@ -33,6 +33,7 @@ public class MultiBoss : MonoBehaviour
     private int damageAmount = 10; // 데미지 양 설정
 
     public int missileDmg;
+    public GameObject jumpObj;
     public int meleeDmg;
 
     public EnemyHealthBar enemyHealthBar;
@@ -75,6 +76,7 @@ public class MultiBoss : MonoBehaviour
         healAmount = (int)enemyStat1.Heal;
         currentHealth = enemyHealth.maxHealth;
         maxHealth = enemyHealth.maxHealth;
+        jumpObj.gameObject.SetActive(false);
     }
 
     public IEnumerator PlayerDetect()
@@ -125,6 +127,7 @@ public class MultiBoss : MonoBehaviour
         WaitForSeconds wait = new WaitForSeconds(3f);
         while (true)
         {
+            jumpObj.gameObject.SetActive(false);
             if(target == null || _isThink) yield return wait;
             Think();
             yield return wait;
@@ -186,7 +189,7 @@ public class MultiBoss : MonoBehaviour
            MultiScene.Instance.BroadCastingSkill(2);
            anim.SetTrigger(DoTaunt);
            MultiScene.Instance.BroadCastingBossAnimation(DoTaunt,true);
-          
+           Invoke("setJumpObj",1.7f);
             break;
         /*case 5:
             break;
@@ -231,7 +234,7 @@ public class MultiBoss : MonoBehaviour
             Jump.Play();
             tauntVec = target.transform.position + lookVec;
             nav.SetDestination(tauntVec);
-       
+            MeleeAttack.Play();
             /* Vector3 targetPosition = target.transform.position;
              transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);*/
         }

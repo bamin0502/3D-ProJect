@@ -23,7 +23,7 @@ public class LobbyScene : MonoBehaviour
     public TMP_InputField inputUserID;
     public GameObject loginPanel;
     public Button loginButton;
-
+    public Button reconnectButton; 
     [Header("로비 패널")]
     public TextMeshProUGUI lobbyButtonText;
     public Button lobbyButton;
@@ -47,16 +47,26 @@ public class LobbyScene : MonoBehaviour
     
     private void Start()
     {
-        NetGameManager.instance.ConnectServer("127.0.0.1", 3650, true);
+        //NetGameManager.instance.ConnectServer("127.0.0.1", 3650, true);
         lobbyButton.onClick.AddListener(OnClick_LobbyButton);
         loginButton.onClick.AddListener(OnClick_Login);
         inputChat.onSubmit.AddListener(SendChatting);
-        Instance = this;
+        reconnectButton.onClick.AddListener(OnClick_Reconnect);
         //NetGameManager.instance.ConnectServer("192.168.0.122", 3650, true);
         //나중에 각자 집에서 단체로 AWS서버로 테스트해야해서 이건 지우지말것
         //NetGameManager.instance.ConnectServer("3.34.116.91", 3650); 
-        
+        NetGameManager.instance.ConnectServer("3.34.116.91", 3650);
+        //NetGameManager.instance.ConnectServer("3,11,111,1111",3650,true);
     }
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
+
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -65,8 +75,11 @@ public class LobbyScene : MonoBehaviour
             if (!chatRoot.rect.Contains(localMousePosition)) chatBox.gameObject.SetActive(false);
         }
     }
-    
-    
+    private void OnClick_Reconnect()
+    {
+        // 재접속 메서드 호출
+        NetManager.instance.Init("3.34.116.91", 3650);
+    }
     private void OnClick_LobbyButton()
 	{
         //준비, 시작버튼 클릭시
@@ -110,7 +123,6 @@ public class LobbyScene : MonoBehaviour
     public void RoomEnter()
 	{
         // 새로 들어왔을때
-        
         if (!CanEnterRoom(NetGameManager.instance.m_userHandle.m_szUserID))
         {
             loginPanel.SetActive(true);
@@ -277,6 +289,7 @@ public class LobbyScene : MonoBehaviour
     public void OnConnectFail()
     {
         loginAlertText.text = "서버와의 연결에 실패했습니다.";
+       
     }
 
     private bool CanEnterRoom(string userID)
@@ -310,19 +323,26 @@ public class LobbyScene : MonoBehaviour
             return;
         }
 
+
         if (!_regex.IsMatch(_userId))
         {
             loginAlertText.text = "아이디에 특수문자는 사용할 수 없습니다.";
             return;
         }
-
+       
+        
         NetGameManager.instance.UserLogin(_userId, 1);
+        
     }
 
     public void UserLoginResult(ushort usResult)
     {
         //로그인 결과
-        if (usResult == 0) loginPanel.SetActive(false);
+        if (usResult == 0)
+        {
+            loginPanel.SetActive(false);
+           
+        }
         else if (usResult == 125) loginAlertText.text = "이미 존재하는 아이디입니다.";
         else loginAlertText.text = "로그인에 실패했습니다." + usResult;
     }

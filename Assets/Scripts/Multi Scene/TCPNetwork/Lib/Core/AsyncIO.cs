@@ -212,6 +212,8 @@ namespace MNF
         internal static bool AsyncSend(TCPSession session)
         {
             return DispatcherCollection.Instance.PushMessage( DISPATCH_TYPE.DISPATCH_SEND, new Message.AsyncSendMessage(session, null));
+            
+            
         }
         internal static bool SyncSend<T>(TCPSession session, int id, T managedData) where T : new()
         {

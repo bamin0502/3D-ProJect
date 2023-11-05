@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.AI;
 using Data;
 using Newtonsoft.Json;
-using UnityEngine.UIElements;
 
 public class MultiBoss : MonoBehaviour
 {
@@ -65,17 +64,17 @@ public class MultiBoss : MonoBehaviour
 
     private void Awake()
     {
-    rigid = GetComponent<Rigidbody>();
-    nav = GetComponent<NavMeshAgent>();
+        rigid = GetComponent<Rigidbody>();
+        nav = GetComponent<NavMeshAgent>();
     }
 
     void Start()
     {
-    string json = "{\"Heal\": 20}";
-    EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
-    healAmount = (int)enemyStat1.Heal;
-    currentHealth = enemyHealth.maxHealth;
-    maxHealth = enemyHealth.maxHealth;
+        string json = "{\"Heal\": 20}";
+        EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
+        healAmount = (int)enemyStat1.Heal;
+        currentHealth = enemyHealth.maxHealth;
+        maxHealth = enemyHealth.maxHealth;
     }
 
     public IEnumerator PlayerDetect()
@@ -83,39 +82,39 @@ public class MultiBoss : MonoBehaviour
         if (!MultiScene.Instance.isMasterClient) yield break;
     
         WaitForSeconds wait = new WaitForSeconds(1f);
-    while (true)
-    {
-        _targets = new Collider[5];
-        hitCount = Physics.OverlapSphereNonAlloc(transform.position, detectionRadius, _targets,
-            LayerMask.GetMask("Player"));
-
-        Debug.LogWarning(hitCount + "====================");
-
-        if (hitCount <= 0) target = null;
-        else if(target == null && hitCount >= 1)
-        {
-            target = _targets[0].gameObject;
-            MultiScene.Instance.BroadCastingTargetSet(target.name);
-        }
-
-        yield return wait;
-    }
-}
-    public IEnumerator ChangeTarget()
-    {
-    if (!MultiScene.Instance.isMasterClient) yield break;
-    
-    WaitForSeconds wait = new WaitForSeconds(3f);
         while (true)
         {
-        if(hitCount >= 1)
-        {
-            SelectTarget();
+            _targets = new Collider[5];
+            hitCount = Physics.OverlapSphereNonAlloc(transform.position, detectionRadius, _targets,
+                LayerMask.GetMask("Player"));
+
+            Debug.LogWarning(hitCount + "====================");
+
+            if (hitCount <= 0) target = null;
+            else if(target == null && hitCount >= 1)
+            {
+                target = _targets[0].gameObject;
+                MultiScene.Instance.BroadCastingTargetSet(target.name);
+            }
+
             yield return wait;
         }
+    }
+    public IEnumerator ChangeTarget()
+    {
+        if (!MultiScene.Instance.isMasterClient) yield break;
+    
+        WaitForSeconds wait = new WaitForSeconds(3f);
+        while (true)
+        {
+            if(hitCount >= 1)
+            {
+                SelectTarget();
+                yield return wait;
+            }
         
         
-        yield return wait;
+            yield return wait;
         }
     }
 
@@ -123,12 +122,12 @@ public class MultiBoss : MonoBehaviour
     {
         if (!MultiScene.Instance.isMasterClient) yield break;
     
-    WaitForSeconds wait = new WaitForSeconds(3f);
+        WaitForSeconds wait = new WaitForSeconds(3f);
         while (true)
         {
-        if(target == null || _isThink) yield return wait;
-        Think();
-        yield return wait;
+            if(target == null || _isThink) yield return wait;
+            Think();
+            yield return wait;
         }
     }
     public void SelectTarget()
@@ -143,18 +142,18 @@ public class MultiBoss : MonoBehaviour
     {
         if (target != null)
         {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-        lookVec = new Vector3(h, 0, v) * 5f;
-        transform.LookAt(target.transform.position + lookVec);
+            float h = Input.GetAxisRaw("Horizontal");
+            float v = Input.GetAxisRaw("Vertical");
+            lookVec = new Vector3(h, 0, v) * 5f;
+            transform.LookAt(target.transform.position + lookVec);
         }
     
     }
 
     public void LaunchMissile()
     {   
-    MissileShot(missilePortA);
-    MissileShot(missilePortB);
+        MissileShot(missilePortA);
+        MissileShot(missilePortB);
     }
 
 
@@ -199,10 +198,10 @@ public class MultiBoss : MonoBehaviour
     {
         if (target != null)
         {
-        GameObject instantMissileA = Instantiate(missile, obj.position, missilePortA.rotation);
-        MultiBullet bossMissileA = instantMissileA.GetComponent<MultiBullet>();
-        bossMissileA.target = target.transform;
-        SoundManager.instance.PlaySE("Missile");
+            GameObject instantMissileA = Instantiate(missile, obj.position, missilePortA.rotation);
+            MultiBullet bossMissileA = instantMissileA.GetComponent<MultiBullet>();
+            bossMissileA.target = target.transform;
+            SoundManager.instance.PlaySE("Missile");
         }
     }
 
@@ -221,7 +220,7 @@ public class MultiBoss : MonoBehaviour
         enemyHealth.currentHealth += enemyHealth.maxHealth;
         if (enemyHealth.currentHealth >= enemyHealth.maxHealth)
         {
-        enemyHealth.currentHealth = enemyHealth.maxHealth;
+            enemyHealth.currentHealth = enemyHealth.maxHealth;
         }
     }
 
@@ -229,12 +228,12 @@ public class MultiBoss : MonoBehaviour
     {
         if (target != null)
         {
-        Jump.Play();
-        tauntVec = target.transform.position + lookVec;
-        nav.SetDestination(tauntVec);
+            Jump.Play();
+            tauntVec = target.transform.position + lookVec;
+            nav.SetDestination(tauntVec);
        
-       /* Vector3 targetPosition = target.transform.position;
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);*/
+            /* Vector3 targetPosition = target.transform.position;
+             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);*/
         }
     
     }

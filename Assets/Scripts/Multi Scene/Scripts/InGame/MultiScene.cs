@@ -40,8 +40,8 @@ public class MultiScene : MonoBehaviour
 {
     #region 메서드
     public static MultiScene Instance;
-
-    public GameObject bossObject;
+                                                        
+    [SerializeField]public GameObject bossObject;
 
     public readonly Dictionary<string, GameObject> _players = new();
     [HideInInspector] public List<GameObject> weaponsList; //무기 객체들
@@ -100,8 +100,8 @@ public class MultiScene : MonoBehaviour
         if (Instance == null)            
         {
             Instance = this;
-            
         }
+        
     }
     //에디터 플레이중에 종료되면 실행시킬거
     private void OnApplicationQuit()
@@ -126,7 +126,7 @@ public class MultiScene : MonoBehaviour
 
     private void Update()
     {
-       
+        bossObject.transform.rotation=quaternion.identity;
         if (isDead && Input.GetMouseButtonDown(1))
         {
             SwitchToNextPlayer();

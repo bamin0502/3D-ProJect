@@ -21,11 +21,16 @@ public class ObjectHideCamera : MonoBehaviour
     {
         RefreshHiddenObjects();
 
-        foreach (var hideable in previouslyhiddenObjects)
+
+        if (!tPlayer.activeInHierarchy)
         {
-            if (Vector3.Distance(transform.position, hideable.transform.position) > 1f)
-                hideable.SetVisible(true);
+            foreach (var hideable in previouslyhiddenObjects)
+            {
+                if (Vector3.Distance(transform.position, hideable.transform.position) >0.1f)
+                    hideable.SetVisible(true);
+            } 
         }
+        
     }
 
 

@@ -23,19 +23,15 @@ public class MultiBoss : MonoBehaviour
     public Transform missilePortB;
 
     //점프 이동
-    private float moveSpeed = 5.0f;
+    public float moveSpeed = 5.0f;
     private Vector3 lookVec;
     private Vector3 tauntVec;
-    //점프 공격
-    private Transform raycastOrigin; //중심 위치
-    private float raycastDistance = 2f; // 레이케스트 거리 설정
-    public LayerMask hitLayer; // 충돌을 감지할 레이어 설정
-    private int damageAmount = 10; // 데미지 양 설정
 
-    public int missileDmg;
+    //점프 공격
     public GameObject jumpObj;
     public int meleeDmg;
-
+    public int missileDmg;
+    
     public EnemyHealthBar enemyHealthBar;
     public EnemyHealth enemyHealth;
     public int healAmount;
@@ -101,7 +97,7 @@ public class MultiBoss : MonoBehaviour
 
             yield return wait;
         }
-    }
+}
     public IEnumerator ChangeTarget()
     {
         if (!MultiScene.Instance.isMasterClient) yield break;
@@ -118,7 +114,7 @@ public class MultiBoss : MonoBehaviour
         
             yield return wait;
         }
-    }
+}
 
     public IEnumerator StartThink()
     {
@@ -133,7 +129,7 @@ public class MultiBoss : MonoBehaviour
             yield return wait;
         }
     }
-    public void SelectTarget()
+    void SelectTarget()
     {
         if(!MultiScene.Instance.isMasterClient) return;
         int randomIndex = MultiScene.Instance.GetRandomInt(hitCount - 1);
@@ -150,11 +146,35 @@ public class MultiBoss : MonoBehaviour
             lookVec = new Vector3(h, 0, v) * 5f;
             transform.LookAt(target.transform.position + lookVec);
         }
-    
-    }
+
+        /* if (startCheck)
+         {
+             Debug.LogWarning("시작 타이머 체크");
+             startAttackTime -= Time.deltaTime;
+         }
+
+         else
+         {
+             Debug.LogWarning("시작 타이머 넘김");
+             return;
+
+         }
+
+         if (startAttack)
+         {
+             Debug.LogWarning("어택 타이머 체크");
+             detectionTime -= Time.deltaTime;
+         }
+         else
+         {
+
+             Debug.LogWarning("어택 타이머 넘김");
+             return;
+         }*/
+}
 
     public void LaunchMissile()
-    {   
+    {
         MissileShot(missilePortA);
         MissileShot(missilePortB);
     }
@@ -174,7 +194,6 @@ public class MultiBoss : MonoBehaviour
             anim.SetTrigger(DoShot);
             MultiScene.Instance.BroadCastingBossAnimation(DoShot,true); 
             break;
-        
        case 2:
             break;
        case 3:
@@ -188,8 +207,8 @@ public class MultiBoss : MonoBehaviour
            Taunt();
            MultiScene.Instance.BroadCastingSkill(2);
            anim.SetTrigger(DoTaunt);
-           MultiScene.Instance.BroadCastingBossAnimation(DoTaunt,true);
            Invoke("setJumpObj",1.7f);
+           MultiScene.Instance.BroadCastingBossAnimation(DoTaunt,true);
             break;
         /*case 5:
             break;
@@ -234,19 +253,12 @@ public class MultiBoss : MonoBehaviour
             Jump.Play();
             tauntVec = target.transform.position + lookVec;
             nav.SetDestination(tauntVec);
-            MeleeAttack.Play();
-            /* Vector3 targetPosition = target.transform.position;
-             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);*/
-        }
-    
-    }
-
-    public void JumpAttack()
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(raycastOrigin.position, raycastOrigin.forward, out hit, raycastDistance, LayerMask.GetMask("Player")))
-        {
         
         }
     }
+    public void setJumpObj()
+    {
+        jumpObj.gameObject.SetActive(true);
+    }
+
 }

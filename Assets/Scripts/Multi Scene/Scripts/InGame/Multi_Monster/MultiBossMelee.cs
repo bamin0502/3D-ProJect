@@ -4,29 +4,29 @@ using Newtonsoft.Json;
 
 public class MultiBossMelee : MonoBehaviour
 {
-    public bool isAttacking = false;
-    private PlayerHealth playerHealth;
+    private MultiPlayerHealth playerHealth;
     public int meleeDamage;
-    private Transform target;
-    void OnTriggerEnter(Collider other)
+    public void OnTriggerEnter(Collider other)
     {
-
-        if (isAttacking && other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
+            if (!MultiScene.Instance.isMasterClient) return;
+        if (other.CompareTag("Player"))
         {
-            // 플레이어 태그를 가진 오브젝트와 충돌한 경우
-            
-            bool isPlayer = target.TryGetComponent(out PlayerHealth playerHealth);
-            if (isPlayer)
+            Debug.LogWarning("hit a"+ other.name);
+            Debug.Log("근접 데메지 입힘");
+            Debug.LogWarning(meleeDamage);
+            other.TryGetComponent(out MultiPlayerHealth playerHealth);
+            if (playerHealth != null)
             {
-                Debug.Log("근접 데메지 입힘");
+                if(playerHealth.CurrentHealth <= 0) return;
                 playerHealth.TakeDamage(meleeDamage);
+                MultiScene.Instance.BroadCastingTakeDamage(other != null ? other.name : "", meleeDamage);
             }
         }
     }
     private void Start()
     {
-        target = GameObject.FindGameObjectWithTag("Player").gameObject.transform;
-        string json = "{\"damage\": 80}";
+        string json = "{\"damage\": 500}";
         EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
         meleeDamage = (int)enemyStat1.damage;
     }

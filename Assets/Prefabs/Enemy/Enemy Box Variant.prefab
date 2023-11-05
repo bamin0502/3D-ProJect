@@ -715,3 +715,6 @@ MonoBehaviour:
   KilledImage: {fileID: 0}
   kill: {fileID: 0}
   death: {fileID: 0}
+  damageNumbersPrefab: {fileID: 0}
+  hudPos: {fileID: 0}
+  dieEffect: {fileID: 0}

@@ -1724,8 +1724,13 @@ MonoBehaviour:
   throwRangeIndicator: {fileID: 5939301510397123646}
   damageRangeIndicator: {fileID: 5939301512441270304}
   isGrenadeMode: 0
+  throwMode: 0
   grenadeFlightTime: 2
   spinSpeed: 1
+  bowSkillEffect: {fileID: 0}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &2789540502124580075
 MonoBehaviour:
   m_ObjectHideFlags: 0

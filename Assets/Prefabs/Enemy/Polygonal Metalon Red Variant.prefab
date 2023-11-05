@@ -755,6 +755,9 @@ MonoBehaviour:
   KilledImage: {fileID: 0}
   kill: {fileID: 0}
   death: {fileID: 0}
+  damageNumbersPrefab: {fileID: 0}
+  hudPos: {fileID: 0}
+  dieEffect: {fileID: 0}
 --- !u!95 &7316493964999413621 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 95025375702580604, guid: f88c6ad57910d8648807bcf0c131f49d, type: 3}

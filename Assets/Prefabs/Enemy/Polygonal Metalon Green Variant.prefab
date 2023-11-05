@@ -400,6 +400,9 @@ MonoBehaviour:
   KilledImage: {fileID: 0}
   kill: {fileID: 0}
   death: {fileID: 0}
+  damageNumbersPrefab: {fileID: 0}
+  hudPos: {fileID: 0}
+  dieEffect: {fileID: 0}
 --- !u!4 &6789359422561921027 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4076386488672668937, guid: af0d37eee67ea1e4c90c6c03df9e6616, type: 3}

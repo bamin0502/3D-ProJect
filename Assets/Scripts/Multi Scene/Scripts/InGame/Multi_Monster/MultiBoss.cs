@@ -207,8 +207,8 @@ public class MultiBoss : MonoBehaviour
 
     public void ReThink()
     {
-    _isThink = false;
-    Debug.LogWarning("ReThink");
+        _isThink = false;
+        Debug.LogWarning("ReThink");
     }
     public void Heal()
     {

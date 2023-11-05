@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,9 +20,16 @@ public class ObjectHideCamera : MonoBehaviour
     private void LateUpdate()
     {
         RefreshHiddenObjects();
+
+        foreach (var hideable in previouslyhiddenObjects)
+        {
+            if (Vector3.Distance(transform.position, hideable.transform.position) > 1f)
+                hideable.SetVisible(true);
+        }
     }
 
-    public void RefreshHiddenObjects()
+
+    private void RefreshHiddenObjects()
     {
         if (tPlayer == null)
         {
@@ -33,15 +39,16 @@ public class ObjectHideCamera : MonoBehaviour
                 target = tPlayer.transform;
             }
         }
-        
-        Vector3 toTarget= target.position - transform.position;
+
+        var position = transform.position;
+        Vector3 toTarget= target.position - position;
         float targetDistance = toTarget.magnitude;
         Vector3 targetDirection = toTarget / targetDistance;
         
         targetDistance -= sphereCastRadius * 1.1f;
         
         hiddenObjects.Clear();
-        int hitCount= Physics.SphereCastNonAlloc(transform.position, 
+        int hitCount= Physics.SphereCastNonAlloc(position, 
             sphereCastRadius, targetDirection, hitBuffer, targetDistance, 
             -1, QueryTriggerInteraction.Ignore);
 

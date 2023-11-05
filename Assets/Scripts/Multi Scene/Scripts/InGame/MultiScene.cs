@@ -126,7 +126,6 @@ public class MultiScene : MonoBehaviour
 
     private void Update()
     {
-        bossObject.transform.rotation=quaternion.identity;
         if (isDead && Input.GetMouseButtonDown(1))
         {
             SwitchToNextPlayer();

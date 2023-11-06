@@ -15,13 +15,11 @@ public class ObjectHideCamera : MonoBehaviour
     private List<HideObject> previouslyhiddenObjects = new List<HideObject>();
 
     private GameObject tPlayer;
-
-
+    
     private void LateUpdate()
     {
         RefreshHiddenObjects();
-
-
+        
         if (!tPlayer.activeInHierarchy)
         {
             foreach (var hideable in previouslyhiddenObjects)
@@ -38,7 +36,7 @@ public class ObjectHideCamera : MonoBehaviour
     {
         if (tPlayer == null)
         {
-            tPlayer = MultiScene.Instance._players[Equals(name).ToString()].gameObject;
+            tPlayer = GameObject.FindGameObjectWithTag("Player");
             if (tPlayer != null)
             {
                 target = tPlayer.transform;

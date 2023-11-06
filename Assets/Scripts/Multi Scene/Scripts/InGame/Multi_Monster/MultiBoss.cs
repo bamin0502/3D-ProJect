@@ -240,7 +240,6 @@ public class MultiBoss : MonoBehaviour
         Debug.Log("체력 회복");
         Healdraw.Play();
         draw.Play();
-        anim.SetTrigger(DoBigShot);
     
         enemyHealth.currentHealth += enemyHealth.maxHealth;
         if (enemyHealth.currentHealth >= enemyHealth.maxHealth)

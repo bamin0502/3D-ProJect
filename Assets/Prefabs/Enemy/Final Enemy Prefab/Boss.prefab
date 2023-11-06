@@ -10318,7 +10318,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2695053109288446612}
   - component: {fileID: 2695053109288446614}
-  - component: {fileID: 2695053109288446615}
   m_Layer: 8
   m_Name: MeleeArea
   m_TagString: Untagged
@@ -10354,20 +10353,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3.42, y: 0.79, z: 3.89}
   m_Center: {x: 0.71, y: -1.94, z: 0.66}
---- !u!114 &2695053109288446615
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2695053109288446613}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0122f4df41da6f04995a1db83f7c3449, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isAttacking: 0
-  meleeDamage: 0
 --- !u!1 &2695053109792652236
 GameObject:
   m_ObjectHideFlags: 0
@@ -25767,6 +25752,7 @@ MonoBehaviour:
   damageNumbersPrefab: {fileID: 1994187435594371367, guid: 4b1457d028d15f748a6fddead735221d, type: 3}
   hudPos: {fileID: 1305580447974076262}
   dieEffect: {fileID: 0}
+  isDead: 0
 --- !u!114 &5902190004253455852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25787,11 +25773,10 @@ MonoBehaviour:
   missile: {fileID: 3327963749274513257, guid: 7442fd4743929764199c99bcab6cebf8, type: 3}
   missilePortA: {fileID: 2695053110256474398}
   missilePortB: {fileID: 2695053109172081024}
-  hitLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  missileDmg: 0
+  moveSpeed: 5
+  jumpObj: {fileID: 0}
   meleeDmg: 0
+  missileDmg: 0
   enemyHealthBar: {fileID: 5657563897472497130}
   enemyHealth: {fileID: 5657563896939768694}
   healAmount: 0

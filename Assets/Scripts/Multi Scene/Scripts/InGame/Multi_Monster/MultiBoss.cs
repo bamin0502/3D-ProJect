@@ -66,7 +66,7 @@ public class MultiBoss : MonoBehaviour
 
     void Start()
     {
-        string json = "{\"Heal\": 200}";
+        string json = "{\"Heal\": 1000}";
         EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
         healAmount = (int)enemyStat1.Heal;
         jumpObj.gameObject.SetActive(false);
@@ -202,7 +202,13 @@ public class MultiBoss : MonoBehaviour
                 anim.SetTrigger(DoShot);
                 MultiScene.Instance.BroadCastingBossAnimation(DoShot,true); 
                 break;
-            case 2: break;
+            case 2:
+                Taunt();
+                MultiScene.Instance.BroadCastingSkill(2);
+                anim.SetTrigger(DoTaunt);
+                Invoke(nameof(setJumpObj),1.7f);
+                MultiScene.Instance.BroadCastingBossAnimation(DoTaunt,true); 
+                break;
             case 3:
                 Debug.LogWarning("Heal");
                 Heal();
@@ -211,11 +217,7 @@ public class MultiBoss : MonoBehaviour
                 MultiScene.Instance.BroadCastingBossAnimation(DoBigShot,true); 
                 break;
             case 4:
-                Taunt();
-                MultiScene.Instance.BroadCastingSkill(2);
-                anim.SetTrigger(DoTaunt);
-                Invoke(nameof(setJumpObj),1.7f);
-                MultiScene.Instance.BroadCastingBossAnimation(DoTaunt,true);
+                
                 break;
 
         }
@@ -243,6 +245,8 @@ public class MultiBoss : MonoBehaviour
         draw.Play();
         
         enemyHealth.currentHealth = Math.Min(enemyHealth.currentHealth + healAmount, enemyHealth.maxHealth);
+        
+        enemyHealthBar.UpdateBossHealth();
     }
 
     public void Taunt()

@@ -91,8 +91,7 @@ public class EnemyHealth : MonoBehaviour
 
     private void ApplyDamage(int damage, bool isNetwork)
     {
-        currentHealth -= damage;
-        
+        currentHealth = Math.Max(currentHealth - damage, 0);
         if (enemyHealthBar != null)
         {
             if (enemyType != EnemyType.Boss) enemyHealthBar.UpdateHealth();

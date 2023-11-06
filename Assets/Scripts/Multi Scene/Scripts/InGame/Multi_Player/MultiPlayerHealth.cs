@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Data;
 using Newtonsoft.Json;
@@ -12,9 +13,6 @@ public class MultiPlayerHealth : MonoBehaviour
     public TMP_Text deathText;
     [SerializeField]
     public Image endingImage;
-    public Image killedImage;
-    public TMP_Text kill;
-    public TMP_Text death;
     public ParticleSystem deathParticle;
     public ParticleSystem deathBloodParticle;
     private static readonly int DoDie = Animator.StringToHash("doDie");
@@ -36,7 +34,7 @@ public class MultiPlayerHealth : MonoBehaviour
     
     public void TakeDamage(int damage)
     {
-        CurrentHealth -= damage;
+        CurrentHealth = Math.Max(CurrentHealth - damage, 0);
         if(CurrentHealth <= 0) CurrentHealth = 0;
         UpdateHealth();
         if (CurrentHealth <= 0)

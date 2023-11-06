@@ -33,6 +33,7 @@ public class EnemyHealthBar : MonoBehaviour
             UpdateHealth();
         }
     }
+    
     public void UpdateHealth()
     {
         healthBar.fillAmount = (float)enemyHealth.currentHealth / enemyHealth.maxHealth;
@@ -50,5 +51,7 @@ public class EnemyHealthBar : MonoBehaviour
         Vector3 lookAtPosition = _cam.transform.position;
         lookAtPosition.x = transform.position.x;
         transform.LookAt(lookAtPosition);
+       
+       
     }
 }

@@ -10,112 +10,67 @@ using UnityEditor;
 public class MultiWeaponController : MonoBehaviour
 {
     //임성훈
-    
-    private static readonly int Pickup = Animator.StringToHash("ItemPickup");
-    private MultiPlayerSkill _playerSkill;
     private const float WeaponPickupRange = 2f;
-    
-    private MultiPlayerMovement _playerMovement;
-    private NavMeshAgent _agent;
+    private const string WeaponTag = "Weapon";
+    private const string Untagged = "Untagged";
+    private static readonly int Pickup = Animator.StringToHash("ItemPickup");
+    public Weapon equippedWeapon;
+    public bool isAttack;
     
     public Transform weaponHolder;
     public Transform weaponHolder2;
-    
-    private Weapon targetedWeapon;
-    public Weapon equippedWeapon;
     public Transform currentTarget;
-    private float attackTimer;
-    public bool isAttack;
-    public Canvas IconCanvas;
     
-    private bool isInRangeToPickup = false;
-    private bool isPickingUpWeapon = false;
+    private MultiPlayerSkill _playerSkill;
+    private MultiPlayerMovement _playerMovement;
+    private NavMeshAgent _agent;
+    private float _attackTimer;
+    private bool _isInRangeToPickup = false;
+    private MultiScene _multiScene;
+    private Collider[] _itemColliders = new Collider[1];
 
     private void Start()
     {
         _playerSkill = GetComponent<MultiPlayerSkill>();
         _playerMovement = GetComponent<MultiPlayerMovement>();
         _agent = _playerMovement.navAgent;
+        _multiScene = MultiScene.Instance;
     }
-    
+
     private void Update()
     {
         if (currentTarget != null)
         {
             AttackTarget();
         }
-        
-        if(MultiScene.Instance.currentUser != transform.gameObject.name) return;
-        
-        HandleInput();
 
-        if (targetedWeapon != null)
-        {
-            TryPickupWeapon();
-        }
-        
+        if (_multiScene.currentUser != transform.gameObject.name) return;
 
-        if (!isPickingUpWeapon && isInRangeToPickup)
-        {
-            ShowPickupText();
-        }
-        else
-        {
-            HidePickupText();
-        }
-    }
-
-    
-
-    private void OnDrawGizmos()
-    {
-        #if UNITY_EDITOR
-        // 무기 주울 수 있는 범위를 시각적으로 표시합니다.
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, WeaponPickupRange);
-        #endif
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Weapon"))
-        {
-            isInRangeToPickup = true;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Weapon"))
-        {
-            isInRangeToPickup = false;
-            HidePickupText();
-        }
-    }
-    private void ShowPickupText()
-    {
-        MultiScene.Instance.noticeText.gameObject.SetActive(true);
-        MultiScene.Instance.noticeText.text = "무기 줍기" + "<color=yellow>" + "(G)" + "</color>";
-    }
-
-    private void HidePickupText()
-    {
-        MultiScene.Instance.noticeText.text = "";
-        MultiScene.Instance.noticeText.gameObject.SetActive(false);
-    }
-    private void HandleInput()
-    {
         if (Input.GetKeyDown(KeyCode.G))
         {
-            TryPickupWeapon();
+            if(_isInRangeToPickup) TryPickupWeapon();
+        }
+    }
+
+    private void ShowPickupText(bool isShow)
+    {
+        if (!_multiScene.noticeText.gameObject.activeSelf && isShow)
+        {
+            _multiScene.noticeText.gameObject.SetActive(true);
+            _multiScene.noticeText.text = "무기 줍기" + "<color=yellow>" + "(G)" + "</color>";
+        }
+        else if(_multiScene.noticeText.gameObject.activeSelf && !isShow)
+        {
+            _multiScene.noticeText.text = "";
+            _multiScene.noticeText.gameObject.SetActive(false);
         }
     }
 
     public void SetTarget(int enemy)
     {
-        if (enemy >= 0 && enemy < MultiScene.Instance.enemyList.Count)
+        if (enemy >= 0 && enemy < _multiScene.enemyList.Count)
         {
-            var target = MultiScene.Instance.enemyList[enemy];
+            var target = _multiScene.enemyList[enemy];
 
             if (target == null)
             {
@@ -129,7 +84,7 @@ public class MultiWeaponController : MonoBehaviour
                 _agent.stoppingDistance = GetWeaponRange();
                 var position = currentTarget.position;
                 _agent.SetDestination(position);
-                attackTimer = 0f;
+                _attackTimer = 0f;
         
                 var range = GetWeaponRange();
                 float distance = Vector3.Distance(transform.position, position);
@@ -151,7 +106,6 @@ public class MultiWeaponController : MonoBehaviour
         if (equippedWeapon == null) return 0;
         return equippedWeapon is RangedWeapon weapon ? weapon.range + 0.8f : ((MeleeWeapon)equippedWeapon).range + 0.2f;
     }
-
     public void ClearTarget()
     {
         currentTarget = null;
@@ -159,53 +113,38 @@ public class MultiWeaponController : MonoBehaviour
         _agent.stoppingDistance = 0f;
     }
 
+    public IEnumerator CheckCanPickupWeapon()
+    {
+        WaitForSeconds wait = new WaitForSeconds(1f);
+        
+        while (true)
+        {
+            _itemColliders = new Collider[1];
+            int weaponCount = Physics.OverlapSphereNonAlloc(transform.position, WeaponPickupRange, _itemColliders);
+            _isInRangeToPickup = weaponCount > 0 && _itemColliders[0].CompareTag("Weapon");
+            ShowPickupText(_isInRangeToPickup);
+            
+            yield return wait;
+        }
+    }
+
     private void TryPickupWeapon()
     {
-        //무기 콜라이더 배열 
-        Collider[] itemColliders = new Collider[1];
+        _playerMovement.SetAnimationTrigger(Pickup);
+        _multiScene.BroadCastingAnimation(Pickup, true);
 
-        int weaponCount = Physics.OverlapSphereNonAlloc(transform.position, WeaponPickupRange, itemColliders);
-        
-        //만약 무기를 찾았다면
-        if (weaponCount > 0)
-        {
-            for (int i = 0; i < weaponCount; i++)
-            {
-                Collider collider = itemColliders[i];
-               
-                if (collider.CompareTag("Weapon"))
-                {
-                    _playerMovement.SetAnimationTrigger(Pickup);
-                    MultiScene.Instance.BroadCastingAnimation(Pickup, true);
+        int index = _multiScene.weaponsList.IndexOf(_itemColliders[0].gameObject);
 
-                    int index = MultiScene.Instance.weaponsList.IndexOf(collider.gameObject);
-
-                    PickWeapon(index);
-                    _playerSkill.ChangeWeapon(index);
-                    MultiScene.Instance.BroadCastingPickWeapon(index);
-                    
-                    HidePickupText();
-                }
-            }
-        }
+        PickWeapon(index);
+        _playerSkill.ChangeWeapon(index);
+        _multiScene.BroadCastingPickWeapon(index);
     }
 
     public void PickWeapon(int index)
     {
-        Weapon obj = MultiScene.Instance.weaponsList[index].GetComponent<Weapon>();
-        HidePickupText();
-        StartCoroutine(EquipWeaponAfterDelay(obj, 0.1f));
+        EquipWeapon(_multiScene.weaponsList[index].GetComponent<Weapon>());
     }
-
-    private IEnumerator EquipWeaponAfterDelay(Weapon newWeapon, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        EquipWeapon(newWeapon);
-        targetedWeapon = null;
-        isPickingUpWeapon = false;
-        HidePickupText();
-    }
-
+    
     private void AttackTarget()
     {
         if (Vector3.Distance(transform.position, currentTarget.position) <= _agent.stoppingDistance)
@@ -217,64 +156,48 @@ public class MultiWeaponController : MonoBehaviour
     
     private void EquipWeapon(Weapon newWeapon)
     {
-        if (equippedWeapon != null)
-        {            
-            DropEquippedWeapon();
-        }
+        if (equippedWeapon != null) DropEquippedWeapon();
+        
         if(newWeapon != null)
         {
+            newWeapon.tag = Untagged;
             newWeapon.isEquipped = true;
-            HidePickupText();
-            if(newWeapon.TryGetComponent(out Collider collider))
-            {
-                collider.enabled = false;
-            }
+            
+            if(newWeapon.TryGetComponent(out Collider collider)) collider.enabled = false;
 
-            var transform1 = newWeapon.transform;
-            transform1.parent = newWeapon.weaponType != WeaponType.Bow ? weaponHolder : weaponHolder2;
-            transform1.localPosition = newWeapon.PickPosition;
-            newWeapon.transform.localRotation = Quaternion.Euler(newWeapon.PickRotation);
+            Transform weaponTransform = newWeapon.transform;
+            weaponTransform.parent = newWeapon.weaponType != WeaponType.Bow ? weaponHolder : weaponHolder2;
+            weaponTransform.localPosition = newWeapon.PickPosition;
+            weaponTransform.localRotation = Quaternion.Euler(newWeapon.PickRotation);
             equippedWeapon = newWeapon;
+            
             if (equippedWeapon.iconCanvas != null)
             {
-                DisableCanvas(equippedWeapon.iconCanvas); // 현재 무기의 아이콘 비활성화
+                OnOffCanvas(equippedWeapon.iconCanvas, false);
             }
         }
-
-       
     }
 
     private void DropEquippedWeapon()
     {
+        if(equippedWeapon == null) return;
+        if (equippedWeapon.iconCanvas != null) OnOffCanvas(equippedWeapon.iconCanvas);
 
-        if(equippedWeapon != null)
-        {
-            if(equippedWeapon.iconCanvas != null)
-            {
-                EnableCanvas(equippedWeapon.iconCanvas);
-            }
-            equippedWeapon.transform.SetParent(null);
-            equippedWeapon.isEquipped = false;
-            if(equippedWeapon.TryGetComponent(out Collider collider)){
-                collider.enabled = true;
-            }
+        equippedWeapon.tag = WeaponTag;
+        equippedWeapon.isEquipped = false;
+        equippedWeapon.transform.SetParent(null);
+        
+        if (equippedWeapon.TryGetComponent(out Collider collider)) collider.enabled = true;
 
-            Transform transform1;
-            (transform1 = equippedWeapon.transform).rotation = Quaternion.Euler(90f, 0f, 0f);
-            var transform2 = transform;
-            transform1.position = transform2.position + transform2.forward * 1f;
-            equippedWeapon = null;
-        }
-
+        equippedWeapon.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+        equippedWeapon.transform.position = transform.position + transform.forward;
+        
+        equippedWeapon = null;
     }
-    private void DisableCanvas(Canvas canvas)
+    
+    private void OnOffCanvas(Canvas canvas, bool isOn = true)
     {
-        canvas.enabled = false;
-    }
-
-    private void EnableCanvas(Canvas canvas)
-    {
-        canvas.enabled = true;
+        canvas.enabled = isOn;
     }
 }
         

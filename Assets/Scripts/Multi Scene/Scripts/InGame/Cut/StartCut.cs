@@ -59,6 +59,17 @@ public class StartCut : MonoBehaviour
             multiBoss.StartCoroutine(multiBoss.ChangeTarget());
             multiBoss.StartCoroutine(multiBoss.StartThink());
         }
+
+        MultiScene.Instance._players.TryGetValue(MultiScene.Instance.currentUser, out GameObject player);
+        if (player != null)
+        {
+            var weaponController = player.GetComponent<MultiWeaponController>();
+            if (weaponController != null)
+            {
+                weaponController.StartCoroutine(weaponController.CheckCanPickupWeapon());
+            }
+            
+        }
     }
 
     // 컷신 종료 시 호출될 이벤트 핸들러

@@ -73,6 +73,9 @@ public class MultiBoss : MonoBehaviour
         currentHealth = enemyHealth.maxHealth;
         maxHealth = enemyHealth.maxHealth;
         jumpObj.gameObject.SetActive(false);
+        StopCoroutine(PlayerDetect());
+        StopCoroutine(ChangeTarget());
+        StopCoroutine(StartThink());
     }
 
     public IEnumerator PlayerDetect()

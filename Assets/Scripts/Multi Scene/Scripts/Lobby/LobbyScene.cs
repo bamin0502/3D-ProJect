@@ -52,10 +52,10 @@ public class LobbyScene : MonoBehaviour
         loginButton.onClick.AddListener(OnClick_Login);
         inputChat.onSubmit.AddListener(SendChatting);
         reconnectButton.onClick.AddListener(OnClick_Reconnect);
-        //NetGameManager.instance.ConnectServer("192.168.0.122", 3650, true);
+        NetGameManager.instance.ConnectServer("192.168.0.122", 3650, true);
         //나중에 각자 집에서 단체로 AWS서버로 테스트해야해서 이건 지우지말것
         //NetGameManager.instance.ConnectServer("3.34.116.91", 3650); 
-        NetGameManager.instance.ConnectServer("3.34.116.91", 3650);
+        //NetGameManager.instance.ConnectServer("3.34.116.91", 3650);
         //NetGameManager.instance.ConnectServer("3,11,111,1111",3650,true);
     }
 

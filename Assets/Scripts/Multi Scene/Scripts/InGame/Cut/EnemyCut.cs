@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -31,6 +32,7 @@ public class EnemyCut : MonoBehaviour
     {
         // BGM을 다시 재생
         SoundManager.instance.bgmAudioSource.Play();
+        StartCoroutine(bossCutScene());
     }
     void Update()
     {
@@ -49,8 +51,21 @@ public class EnemyCut : MonoBehaviour
                 // 컷신이 시작되면 BGM을 중지
                 SoundManager.instance.bgmAudioSource.Stop();
             }
+            
             MultiScene.Instance.BroadCastingSecondCutSceneStart(true);
             Debug.LogWarning("컷신 나오는지 확인용");
+        }
+    }
+    IEnumerator bossCutScene()
+    {
+        yield return new WaitForSeconds(1f);
+        MultiScene.Instance.bossObject.TryGetComponent(out MultiBoss multiBoss);
+        if (multiBoss != null)
+        {
+            Debug.LogWarning("Setting");
+            multiBoss.StartCoroutine(multiBoss.PlayerDetect());
+            multiBoss.StartCoroutine(multiBoss.ChangeTarget());
+            multiBoss.StartCoroutine(multiBoss.StartThink());
         }
     }
 }

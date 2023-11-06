@@ -91,6 +91,7 @@ public class EnemyHealth : MonoBehaviour
 
     private void ApplyDamage(int damage, bool isNetwork)
     {
+        float realDamage = Math.Min(damage, currentHealth);
         currentHealth = Math.Max(currentHealth - damage, 0);
         if (enemyHealthBar != null)
         {
@@ -100,7 +101,7 @@ public class EnemyHealth : MonoBehaviour
 
         if (damageNumbersPrefab != null)
         {
-            damageNumbersPrefab.Spawn(hudPos.transform.position, damage);
+            damageNumbersPrefab.Spawn(hudPos.transform.position, realDamage);
         }
         
         if (isNetwork)

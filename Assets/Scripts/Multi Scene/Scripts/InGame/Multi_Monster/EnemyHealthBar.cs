@@ -40,10 +40,10 @@ public class EnemyHealthBar : MonoBehaviour
     }
     public void UpdateBossHealth()
     {
-        healthBar.fillAmount= (float)enemyHealth.maxHealth / enemyHealth.currentHealth;
-        healthText.text =  Mathf.Max(0, enemyHealth.maxHealth) + "/" + enemyHealth.currentHealth;
+        healthBar.fillAmount= Mathf.Max(enemyHealth.currentHealth / enemyHealth.maxHealth);
+        healthText.text =  Mathf.Max(0, enemyHealth.currentHealth) + "/" + enemyHealth.maxHealth;
         
-        if(enemyHealth.maxHealth <= 0)
+        if(enemyHealth.currentHealth <= 0)
             healthText.text = "0/0";
     }
     void Update()

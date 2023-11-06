@@ -133,8 +133,10 @@ public class LobbyScene : MonoBehaviour
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(NetGameManager.instance.m_userHandle.m_szUserID);
         string chatText = $"<#4FB7FF><b>알림 : {userSession.m_szUserID} 님이 입장하셨습니다.</b></color>";
         BroadcastChat(chatText);
+
+        int userCount = NetGameManager.instance.m_roomSession.m_userList.Count;
         
-        if (NetGameManager.instance.m_roomSession.m_userList.Count <= 1) //해당 로비에 유저가 본인 뿐이면 방의 방장으로 설정
+        if (userCount == 1) //해당 로비에 유저가 본인 뿐이면 방의 방장으로 설정
         {
             lobbyButtonText.text = "게임 시작";
             userSession.m_nUserData[0] = (int)LobbyUserState.Admin;
@@ -209,11 +211,16 @@ public class LobbyScene : MonoBehaviour
                 }
             }
 
-            if (user.m_nUserData[0] == (int) LobbyUserState.Admin && NetGameManager.instance.m_roomSession.m_userList.Count > 0)
+            if (user.m_nUserData[0] == (int)LobbyUserState.Admin)
             {
-                UserSession userSession = NetGameManager.instance.m_roomSession.m_userList[0];
-                userSession.m_nUserData[0] = (int)LobbyUserState.Admin;
-                NetGameManager.instance.RoomUserDataUpdate(userSession);
+                List<UserSession> userList = NetGameManager.instance.m_roomSession.m_userList;
+
+                if (userList.Count > 0)
+                {
+                    UserSession newAdmin = userList[0];
+                    newAdmin.m_nUserData[0] = (int)LobbyUserState.Admin;
+                    NetGameManager.instance.RoomUserDataUpdate(newAdmin);
+                }
             }
         }
 	}

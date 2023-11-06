@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ObjectHideCamera : MonoBehaviour
 {
-    private Transform target = null;
+    public Transform target = null;
     
     //이 감지거리 안에 플레이어가 있으면 해당 구조물을 안보이게 할거임 
     [SerializeField] private float sphereCastRadius = 0.5f;
@@ -14,7 +14,7 @@ public class ObjectHideCamera : MonoBehaviour
     private List<HideObject> hiddenObjects = new List<HideObject>();
     private List<HideObject> previouslyhiddenObjects = new List<HideObject>();
 
-    private GameObject tPlayer;
+    public GameObject tPlayer;
     
     private void LateUpdate()
     {
@@ -36,7 +36,7 @@ public class ObjectHideCamera : MonoBehaviour
     {
         if (tPlayer == null)
         {
-            tPlayer = GameObject.FindGameObjectWithTag("Player");
+            
             if (tPlayer != null)
             {
                 target = tPlayer.transform;

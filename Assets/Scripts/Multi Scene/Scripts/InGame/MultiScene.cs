@@ -81,7 +81,7 @@ public class MultiScene : MonoBehaviour
     public MultiPlayerHealthBar multiPlayerHealthBar;
     public Image[] skillImages;
     public TextMeshProUGUI skillText;
-    
+    public ObjectHideCamera objectHideCamera;
     public GameObject[] itemPrefabs;
     public bool isMasterClient; //마스터 클라이언트
     public bool isMine;//자기 자신 클라이언트
@@ -166,9 +166,6 @@ public class MultiScene : MonoBehaviour
 
         return -1;
     }
-
-
-
     
     private void SetUsers()
     {
@@ -227,6 +224,8 @@ public class MultiScene : MonoBehaviour
                 cineCam.GetRig(1).LookAt = newPlayer.transform;
                 multiPlayer._camera = playerCamera;
                 thrownWeaponController._cam = playerCamera;
+                objectHideCamera.tPlayer = newPlayer;
+                objectHideCamera.target = newPlayer.transform;
                 //미니맵 카메라 관련
                 var position = newPlayer.transform.position;
                 MinimapCamera.transform.position = new Vector3(position.x, position.y+33, position.z);//Y값만 적절하게 조절하면됩니다.

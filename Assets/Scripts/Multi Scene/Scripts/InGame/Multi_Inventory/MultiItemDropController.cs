@@ -62,13 +62,7 @@ public class MultiItemDropController : MonoBehaviour
     private void ItemInfoAppear()
     {
         pickupActivated = true;
-        //actionText.gameObject.SetActive(true);
 
-        // if (itemColliders[0] != null)
-        // {
-        //     string itemName = itemColliders[0].GetComponent<ItemPickup>().item.itemName;
-        //     actionText.text = itemName + " 아이템 획득 " + "<color=yellow>" + "(G)" + "</color>";
-        // }
         if (itemColliders[0] != null && itemColliders[0].GetComponent<ItemPickup>() != null && actionText != null)
         {
             string itemName = itemColliders[0].GetComponent<ItemPickup>().item.itemName;
@@ -88,26 +82,6 @@ public class MultiItemDropController : MonoBehaviour
 
     private void PickUpItem()
     {
-        // if (pickupActivated && itemColliders != null)
-        // {
-        //     foreach (var t in itemColliders)
-        //     {
-        //         if (t != null && t.CompareTag("Item"))
-        //         {
-        //             int index = MultiScene.Instance.itemsList.IndexOf(t.gameObject);
-        //             
-        //             _playerMovement.SetAnimationTrigger(Pickup);
-        //             MultiScene.Instance.BroadCastingAnimation(Pickup, true);
-        //             
-        //             inventory.AcquireItem(t.GetComponent<ItemPickup>().item);
-        //             Destroy(t.gameObject);
-        //             MultiScene.Instance.BroadCastingPickItem(index);
-        //             SoundManager.instance.PlaySE("Item Drop");
-        //             
-        //             ItemInfoDisappear();
-        //         }
-        //     }
-        // }
         if (pickupActivated && itemColliders != null)
         {
             foreach (var t in itemColliders)

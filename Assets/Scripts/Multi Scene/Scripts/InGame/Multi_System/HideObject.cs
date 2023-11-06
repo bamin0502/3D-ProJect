@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
 public class HideObject : MonoBehaviour
@@ -17,14 +18,10 @@ public class HideObject : MonoBehaviour
 
     public static void InitHideObject()
     {
-        foreach (var obj in hideObjectsMap.Values)
+        foreach (var obj in hideObjectsMap.Values.Where(obj => obj != null && obj.Renderers != null))
         {
-            if (obj != null && obj.Renderers != null)
-            {
-                obj.SetVisible(true);
-                obj._hideObject = null;
-            }
-            
+            obj.SetVisible(true);
+            obj._hideObject = null;
         }
         
         hideObjectsMap.Clear();
@@ -40,19 +37,22 @@ public class HideObject : MonoBehaviour
    
     public static HideObject GetHideObject(Collider collider)
     {
-        if (hideObjectsMap.TryGetValue(collider, out var obj))
-            return GetRoot(obj);
-        else
-            return null;
-
+        return hideObjectsMap.TryGetValue(collider, out var obj) ? GetRoot(obj) : null;
     }
+
     public static HideObject GetRoot(HideObject obj)
     {
-        if (obj._hideObject == null)
-            return obj;
-        else
-            return GetRoot(obj._hideObject);
+        while (true)
+        {
+            if (obj._hideObject == null)
+                return obj;
+            else
+            {
+                obj = obj._hideObject;
+            }
+        }
     }
+
     public void SetVisible(bool visible)
     {
        Renderer rend= Renderers.GetComponent<Renderer>();

@@ -37,19 +37,19 @@ public class EnemyHealth : MonoBehaviour
     private string currentSceneName;
     public Transform hudPos;
     public ParticleSystem dieEffect;
-    public Action OnDead;
     public bool isDead = false;
-    
+
     
     void Start()
     {
         _nav = GetComponent<NavMeshAgent>();
-        
+    }
+    private void Awake()
+    {
         currentSceneName= SceneManager.GetActiveScene().name;
         EnemyHealthBaseOnScene(currentSceneName);
-        
     }
-   
+
     private void EnemyHealthBaseOnScene(string sceneName)
     {
         if (sceneName.Equals("Game Scene"))
@@ -57,15 +57,15 @@ public class EnemyHealth : MonoBehaviour
             string json = "";
             if (enemyType == EnemyType.Monster)
             {
-                json = "{\"EnemyHealth\": 1000, \"Health\": 1000}";
+                json = "{\"EnemyHealth\": 2000, \"Health\": 2000}";
             }
             else if (enemyType == EnemyType.RedSpider)
             {
-                json= "{\"EnemyHealth\": 700, \"Health\": 700}";
+                json= "{\"EnemyHealth\": 1700, \"Health\": 1700}";
             }
             else if (enemyType == EnemyType.GreenSpider)
             {
-                json= "{\"EnemyHealth\": 500, \"Health\": 500}";
+                json= "{\"EnemyHealth\": 1500, \"Health\": 1500}";
             }
             else if (enemyType == EnemyType.Boss)
             {
@@ -124,8 +124,7 @@ public class EnemyHealth : MonoBehaviour
             Die();
             if (enemyType == EnemyType.Boss)
             {
-                //StartCoroutine(BossKill());
-                OnDead?.Invoke();
+                
                 
                 
             }
@@ -139,6 +138,7 @@ public class EnemyHealth : MonoBehaviour
         isDead = true;
         anim.SetTrigger(DoDie);
         MultiScene.Instance.BroadCastingEnemyAnimation(MultiScene.Instance.enemyList.IndexOf(gameObject), DoDie, true);
+        
     }
 
     void BeginDeath()
@@ -152,7 +152,12 @@ public class EnemyHealth : MonoBehaviour
             enemy.isDead = true;
             dieEffect.Play();
         }
-        else if (isBoss) boss.isDead = true;
+        else if (isBoss)
+        {
+            boss.isDead = true;
+            boss.Stop();
+        }
+        
     }
 
     void EndDeath()
@@ -187,6 +192,7 @@ public class EnemyHealth : MonoBehaviour
     {
         deathText.DOText("축하합니다 당신은 " + "<color=red>" + "보스" + "</color>" + "를 잡았습니다!", 3, true, ScrambleMode.None, null);
         EndingImage.rectTransform.gameObject.SetActive(true);
+        
     }
     IEnumerator BossKill()
     {

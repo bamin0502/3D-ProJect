@@ -5302,7 +5302,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 10
   m_Acceleration: 20
   avoidancePriority: 10
   m_AngularSpeed: 360
@@ -5310,7 +5310,7 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 2
+  m_Height: 0.00001
   m_BaseOffset: 0
   m_WalkableMask: 7
   m_ObstacleAvoidanceType: 4
@@ -5374,12 +5374,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c178e1b709720045a2ce04fde3e20f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  equippedWeapon: {fileID: 0}
+  isAttack: 0
   weaponHolder: {fileID: 4226704151474906141}
   weaponHolder2: {fileID: 6116782813749849173}
-  equippedWeapon: {fileID: 0}
   currentTarget: {fileID: 0}
-  isAttack: 0
-  IconCanvas: {fileID: 0}
 --- !u!114 &-2341545059590225211
 MonoBehaviour:
   m_ObjectHideFlags: 0

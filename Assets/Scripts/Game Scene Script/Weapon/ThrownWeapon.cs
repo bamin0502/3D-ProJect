@@ -27,7 +27,7 @@ public class ThrownWeapon : MonoBehaviour
 
     void Start()
     {
-        string json = "{\"damage\": 20}";
+        string json = "{\"damage\": 50}";
         Itemdata FireGrenade = JsonConvert.DeserializeObject<Itemdata>(json);
         damage = (int)FireGrenade.damage;
     }

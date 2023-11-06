@@ -75,6 +75,12 @@ public class MultiBoss : MonoBehaviour
         StopCoroutine(StartThink());
     }
 
+    public void Stop()
+    {
+        StopCoroutine(PlayerDetect());
+        StopCoroutine(ChangeTarget());
+        StopCoroutine(StartThink());
+    }
     public IEnumerator PlayerDetect()
     {
         if (!MultiScene.Instance.isMasterClient) yield break;

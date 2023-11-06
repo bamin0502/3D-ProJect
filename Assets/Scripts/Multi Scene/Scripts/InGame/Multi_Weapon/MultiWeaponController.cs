@@ -215,8 +215,10 @@ public class MultiWeaponController : MonoBehaviour
         
         if (equippedWeapon.TryGetComponent(out Collider collider)) collider.enabled = true;
 
-        equippedWeapon.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-        equippedWeapon.transform.position = transform.position + transform.forward;
+        Transform transform2;
+        (transform2 = equippedWeapon.transform).rotation = Quaternion.Euler(90f, 0f, 0f);
+        var transform1 = transform;
+        transform2.position = transform1.position + transform1.forward;
         
         equippedWeapon = null;
     }

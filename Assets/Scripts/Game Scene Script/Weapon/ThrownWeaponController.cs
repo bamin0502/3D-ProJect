@@ -42,8 +42,9 @@ public class ThrownWeaponController : MonoBehaviour
             {
                 if (throwMode == 0)
                 {
-                    MultiScene.Instance.BroadCastingThrowWeapon(GetMousePositionOnGround(), transform.position, 0);
-                    ThrowGrenade(GetMousePositionOnGround(), transform.position);
+                    var position = transform.position;
+                    MultiScene.Instance.BroadCastingThrowWeapon(GetMousePositionOnGround(), position, 0);
+                    ThrowGrenade(GetMousePositionOnGround(), position);
                 }
                 else if (throwMode == 1)
                 {

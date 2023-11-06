@@ -89,7 +89,8 @@ public class MultiMeleeWeaponController : MonoBehaviour
     public void ShotBow()
     {
         var currentBow = currentWeapon.GetComponent<RangedWeapon>();
-        var arrow = Instantiate(currentBow.projectilePrefab, currentBow.transform.position, currentBow.transform.rotation);
+        var transform1 = currentBow.transform;
+        var arrow = Instantiate(currentBow.projectilePrefab, transform1.position, transform1.rotation);
         arrow.TryGetComponent(out Projectile arrow1);
         arrow1.damage = currentBow.GetDamage();
         arrow1.Shot(currentTarget);

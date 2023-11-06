@@ -24,7 +24,7 @@ public class MultiPlayerHealth : MonoBehaviour
     void Start()
     {
         
-        string json = "{\"PlayerHealth\": 10000, \"Health\": 10000}";
+        string json = "{\"PlayerHealth\": 20000, \"Health\": 20000}";
         var followCamera = MultiScene.Instance.playerCamera;
         PlayerStat playerStat = JsonConvert.DeserializeObject<PlayerStat>(json);
         MaxHealth = (int)playerStat.PlayerHealth;

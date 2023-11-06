@@ -337,7 +337,7 @@ public class MultiScene : MonoBehaviour
     
     
 
-    public void BroadCastingMovement(Vector3 destination, int target = -99)
+    public void BroadCastingMovement(Vector3 destination, int target = -99, bool isBoss = false)
     {
         UserSession userSession = NetGameManager.instance.GetRoomUserSession(
             NetGameManager.instance.m_userHandle.m_szUserID);
@@ -348,6 +348,7 @@ public class MultiScene : MonoBehaviour
             DATA = (int)DataType.PlayerMovement,
             POSITION = VectorToString(destination),
             TARGET = target,
+            ISBOSS = isBoss
         };
 
         string sendData = LitJson.JsonMapper.ToJson(data);
@@ -704,6 +705,7 @@ public class MultiScene : MonoBehaviour
                     {
                         int target = Convert.ToInt32(jData["TARGET"].ToString());
                         Vector3 position = StringToVector(jData["POSITION"].ToString());
+                        bool bossAttack = Convert.ToBoolean(jData["ISBOSS"].ToString());
 
                         if (userMove2.navAgent.isOnNavMesh)
                         {
@@ -720,8 +722,16 @@ public class MultiScene : MonoBehaviour
                                 }
                                 else
                                 {
-                                    userAttack.SetTarget(target);
-                                    userMove2.navAgent.SetDestination(position);
+                                    if (bossAttack)
+                                    {
+                                        userAttack.SetTarget(target, true);
+                                        userMove2.navAgent.SetDestination(position);
+                                    }
+                                    else
+                                    {
+                                        userAttack.SetTarget(target);
+                                        userMove2.navAgent.SetDestination(position);
+                                    }
                                 }
                             }
                         }

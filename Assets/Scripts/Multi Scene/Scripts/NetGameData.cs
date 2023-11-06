@@ -46,6 +46,7 @@ public class PLAYER_MOVE
     public int DATA = 0;
     public string POSITION = "";
     public int TARGET = -99;
+    public bool ISBOSS = false;
 }
 
 [Serializable]

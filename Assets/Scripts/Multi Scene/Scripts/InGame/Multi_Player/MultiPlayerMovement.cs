@@ -64,10 +64,20 @@ public class MultiPlayerMovement : MonoBehaviour
             {
                 if (hit.collider.CompareTag("Enemy"))
                 {
-                    // 오른쪽 마우스 클릭 시 타겟을 설정합니다.
-                    int enemy = MultiScene.Instance.enemyList.IndexOf(hit.transform.gameObject);
-                    _weaponController.SetTarget(enemy);
-                    MultiScene.Instance.BroadCastingMovement(hit.transform.position, enemy);
+                    var isBoss = hit.transform.GetComponent<MultiBoss>();
+
+                    if (isBoss != null)
+                    {
+                        _weaponController.SetTarget(-1, true);
+                        MultiScene.Instance.BroadCastingMovement(hit.transform.position, -1, true);
+                    }
+                    else
+                    {
+                        int enemy = MultiScene.Instance.enemyList.IndexOf(hit.transform.gameObject);
+                        
+                        _weaponController.SetTarget(enemy);
+                        MultiScene.Instance.BroadCastingMovement(hit.transform.position, enemy);
+                    }
                 }
             }
             

@@ -66,8 +66,33 @@ public class MultiWeaponController : MonoBehaviour
         }
     }
 
-    public void SetTarget(int enemy)
+    public void SetTarget(int enemy, bool isBoss = false)
     {
+        if (isBoss)
+        {
+            var target = _multiScene.bossObject;
+            
+            if (target == null)
+            {
+                currentTarget = null;
+                return;
+            }
+
+            if (target != null)
+            {
+                if (equippedWeapon == null) return;
+                currentTarget = target.transform;
+                _agent.stoppingDistance = GetWeaponRange();
+                var position = currentTarget.position;
+                _agent.SetDestination(position);
+                _attackTimer = 0f;
+
+                var range = GetWeaponRange();
+                float distance = Vector3.Distance(transform.position, position);
+                isAttack = distance <= range;
+            }
+        }
+        
         if (enemy >= 0 && enemy < _multiScene.enemyList.Count)
         {
             var target = _multiScene.enemyList[enemy];

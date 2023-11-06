@@ -31,13 +31,19 @@ public class MultiMeleeWeaponController : MonoBehaviour
 
         if (currentWeapon == null) return;
 
+        if (currentTarget == null)
+        {
+            _isAttack = false;
+        }
+
         if (!_weaponController.isAttack && attackRoutine != null)
         {
             _isAttack = false;
             StopCoroutine(attackRoutine);
+            return;
         }
 
-        if (_weaponController.isAttack && !_isAttack)
+        if (_weaponController.isAttack && !_isAttack && currentTarget != null)
         {
             attackRoutine = StartCoroutine(AttackCoroutine());
         }
@@ -54,8 +60,10 @@ public class MultiMeleeWeaponController : MonoBehaviour
         var weaponInterval = currentWeapon.attackInterval;
         var weaponType = currentWeapon.weaponType;
 
-        while (_isAttack)
+        while (true)
         {
+            if(!_isAttack) yield break;
+            
             switch (weaponType)
             {
                 case WeaponType.Bow:

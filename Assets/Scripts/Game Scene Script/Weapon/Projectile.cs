@@ -31,11 +31,12 @@ public class Projectile : MonoBehaviour
         }
         else
         {
-            rb.velocity = transform.forward * speed;
+            Destroy(gameObject);
         }
     }
 
-    private IEnumerator DeleteCoroutine(){
+    private IEnumerator DeleteCoroutine()
+    {
         yield return new WaitForSeconds(3f);
         Destroy(gameObject);
     }
@@ -43,8 +44,15 @@ public class Projectile : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (_target == null) return;
+        
         if (other.CompareTag("Enemy"))
         {
+            if (_target != other.transform)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            
             rb.constraints = RigidbodyConstraints.FreezeAll;
             speed = 0;
             

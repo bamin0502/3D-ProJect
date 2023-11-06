@@ -75,6 +75,7 @@ public class MultiWeaponController : MonoBehaviour
             if (target == null)
             {
                 Debug.LogWarning("적이 null입니다. 인덱스: " + enemy);
+                currentTarget = null;
                 return; 
             }
             if (target != null)
@@ -104,7 +105,7 @@ public class MultiWeaponController : MonoBehaviour
     private float GetWeaponRange()
     {
         if (equippedWeapon == null) return 0;
-        return equippedWeapon is RangedWeapon weapon ? weapon.range + 0.8f : ((MeleeWeapon)equippedWeapon).range + 0.2f;
+        return equippedWeapon is RangedWeapon weapon ? weapon.range + 0.8f : ((MeleeWeapon)equippedWeapon).range;
     }
     public void ClearTarget()
     {

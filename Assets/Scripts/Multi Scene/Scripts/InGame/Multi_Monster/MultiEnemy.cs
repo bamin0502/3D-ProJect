@@ -45,6 +45,7 @@ public class MultiEnemy : MonoBehaviour
     public Coroutine DetectCoroutine;
 
     private Transform currentTarget;
+    private bool isAttacking = false;
 
     private void Awake()
     {
@@ -212,7 +213,7 @@ public class MultiEnemy : MonoBehaviour
         {
             if(isDead) yield break;
             
-            if(IsAttackable())
+            if(!isAttacking && IsAttackable())
             {
                 yield return wait;
                 SetEnemyAnimation(IsAttack, isTrigger: true);
@@ -221,6 +222,16 @@ public class MultiEnemy : MonoBehaviour
             
             yield return wait;
         }
+    }
+
+    public void BeginAttack()
+    {
+        isAttacking = true;
+    }
+
+    public void EndAttack()
+    {
+        isAttacking = false;
     }
 
     private bool IsAttackable()

@@ -35,8 +35,7 @@ public class MultiBoss : MonoBehaviour
     public EnemyHealthBar enemyHealthBar;
     public EnemyHealth enemyHealth;
     public int healAmount;
-    public float maxHealth;
-    public float currentHealth;
+
 
     public GameObject target;
     public Transform targetPos;
@@ -67,11 +66,9 @@ public class MultiBoss : MonoBehaviour
 
     void Start()
     {
-        string json = "{\"Heal\": 20}";
+        string json = "{\"Heal\": 200}";
         EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
         healAmount = (int)enemyStat1.Heal;
-        currentHealth = enemyHealth.maxHealth;
-        maxHealth = enemyHealth.maxHealth;
         jumpObj.gameObject.SetActive(false);
         StopCoroutine(PlayerDetect());
         StopCoroutine(ChangeTarget());
@@ -186,37 +183,34 @@ public class MultiBoss : MonoBehaviour
 
     public void Think()
     {
-        int ranAction = MultiScene.Instance.GetRandomInt(6);
+        int ranAction = MultiScene.Instance.GetRandomInt(4);
         if(target == null) return;
         _isThink = true;
-        switch (4)
+        switch (ranAction)
         {
-       case 1:
+         case 1:
             LaunchMissile();
             MultiScene.Instance.BroadCastingSkill(0);
             anim.SetTrigger(DoShot);
             MultiScene.Instance.BroadCastingBossAnimation(DoShot,true); 
             break;
-       case 2:
+        case 2:
             break;
-       case 3:
+        case 3:
             Debug.LogWarning("Heal");
             Heal();
             MultiScene.Instance.BroadCastingSkill(1);
             anim.SetTrigger(DoBigShot);
             MultiScene.Instance.BroadCastingBossAnimation(DoBigShot,true); 
             break;
-       case 4:
+        case 4:
            Taunt();
            MultiScene.Instance.BroadCastingSkill(2);
            anim.SetTrigger(DoTaunt);
-           Invoke("setJumpObj",1.7f);
+           Invoke(nameof(setJumpObj),1.7f);
            MultiScene.Instance.BroadCastingBossAnimation(DoTaunt,true);
             break;
-        /*case 5:
-            break;
-        case 6:
-            break;*/
+
         }
     }
     public void MissileShot(Transform obj)
@@ -240,22 +234,18 @@ public class MultiBoss : MonoBehaviour
         Debug.Log("체력 회복");
         Healdraw.Play();
         draw.Play();
-    
-        enemyHealth.currentHealth += enemyHealth.maxHealth;
-        if (enemyHealth.currentHealth >= enemyHealth.maxHealth)
-        {
-            enemyHealth.currentHealth = enemyHealth.maxHealth;
-        }
+        
+        enemyHealth.maxHealth+=healAmount;
     }
 
     public void Taunt()
     {
+        if(!MultiScene.Instance.isMasterClient)return;
         if (target != null)
         {
             Jump.Play();
             tauntVec = target.transform.position + lookVec;
             nav.SetDestination(tauntVec);
-        
         }
     }
     public void setJumpObj()

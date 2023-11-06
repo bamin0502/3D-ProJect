@@ -1,6 +1,13 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+
+public enum EnemyHealthType
+{
+    Boss,
+    Monster,
+}
 
 public class EnemyHealthBar : MonoBehaviour
 {
@@ -8,12 +15,22 @@ public class EnemyHealthBar : MonoBehaviour
     public Image healthBar;
     public TMP_Text healthText;
     private Camera _cam;
+    public EnemyHealthType enemyHealthType;
     private void Start()
     {
         _cam = Camera.main;
         if (healthText != null)
         {
             healthText.text = (float)enemyHealth.currentHealth + "/" + enemyHealth.maxHealth;
+        }
+
+        if (enemyHealthType==EnemyHealthType.Boss)
+        {
+            UpdateBossHealth();  
+        }
+        else if(enemyHealthType==EnemyHealthType.Monster)
+        {
+            UpdateHealth();
         }
     }
     public void UpdateHealth()
@@ -22,16 +39,11 @@ public class EnemyHealthBar : MonoBehaviour
     }
     public void UpdateBossHealth()
     {
-        if (enemyHealth.currentHealth > 0)
-        {
-            healthBar.fillAmount = (float)enemyHealth.currentHealth / enemyHealth.maxHealth;
-            healthText.text = (float)enemyHealth.currentHealth + "/" + enemyHealth.maxHealth;
-        }
-        else
-        {
-            healthBar.fillAmount = 0f;
-            healthText.text = "0/" + enemyHealth.maxHealth;
-        }
+        healthBar.fillAmount= (float)enemyHealth.currentHealth / enemyHealth.maxHealth;
+        healthText.text =  Mathf.Max(0, enemyHealth.currentHealth) + "/" + enemyHealth.maxHealth;
+        
+        if(enemyHealth.maxHealth <= 0)
+            healthText.text = "0/0";
     }
     void Update()
     {

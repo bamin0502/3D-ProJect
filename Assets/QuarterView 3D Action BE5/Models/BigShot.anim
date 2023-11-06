@@ -8650,18 +8650,4 @@ AnimationClip:
     script: {fileID: 0}
   m_HasGenericRootTransform: 1
   m_HasMotionFloatCurves: 0
-  m_Events:
-  - time: 0
-    functionName: ReThink
-    data: 
-    objectReferenceParameter: {fileID: 11500000, guid: 7b2664aea0aa6f14cb85d44b72b12f23, type: 3}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 2.16
-    functionName: ReThink
-    data: 
-    objectReferenceParameter: {fileID: 11500000, guid: 7b2664aea0aa6f14cb85d44b72b12f23, type: 3}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
+  m_Events: []

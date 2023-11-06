@@ -139,6 +139,8 @@ namespace MNF
 		{
             MKWNetwork.instance.OnApplicationQuit();
 			Debug.LogError("OnNetConnectDisconnect : " + nRet.ToString());
+            
+            LobbyScene.Instance.ReconnectImage.rectTransform.transform.parent.gameObject.SetActive(true);
 		}
 
 		public void DisConnectServer()

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -13,7 +12,7 @@ public class EnemyCut : MonoBehaviour
     public GameObject checkObject;
     private bool isCutScene = false;
     public MultiPlayerMovement playerMovement;
-    // Start is called before the first frame update
+
     void Start()
     {
         checkObject = MultiScene.Instance.Enemy;
@@ -52,7 +51,6 @@ public class EnemyCut : MonoBehaviour
             {
                 // 컷신이 시작되면 BGM을 중지
                 SoundManager.instance.bgmAudioSource.Stop();
-                
             }
             
             MultiScene.Instance.BroadCastingSecondCutSceneStart(true);

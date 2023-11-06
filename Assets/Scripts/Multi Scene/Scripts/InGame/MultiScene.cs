@@ -82,7 +82,8 @@ public class MultiScene : MonoBehaviour
     public Image[] skillImages;
     public TextMeshProUGUI skillText;
     public ObjectHideCamera objectHideCamera;
-    public EnemyCut enemyCut;
+    public EnemyCut enemyCut;//두번째 컷신 관련
+    public FinalCut finalCut;//마지막 컷신 관련
     public GameObject[] itemPrefabs;
     public bool isMasterClient; //마스터 클라이언트
     public bool isMine;//자기 자신 클라이언트
@@ -228,6 +229,7 @@ public class MultiScene : MonoBehaviour
                 objectHideCamera.tPlayer = newPlayer;
                 objectHideCamera.target = newPlayer.transform;
                 enemyCut.playerMovement = newPlayer.GetComponent<MultiPlayerMovement>();
+                finalCut.playerMovement = newPlayer.GetComponent<MultiPlayerMovement>();
                 //미니맵 카메라 관련
                 var position = newPlayer.transform.position;
                 MinimapCamera.transform.position = new Vector3(position.x, position.y+33, position.z);//Y값만 적절하게 조절하면됩니다.

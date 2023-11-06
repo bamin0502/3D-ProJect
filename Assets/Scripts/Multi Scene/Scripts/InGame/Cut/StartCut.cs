@@ -68,7 +68,6 @@ public class StartCut : MonoBehaviour
             {
                 weaponController.StartCoroutine(weaponController.CheckCanPickupWeapon());
             }
-            
         }
     }
 

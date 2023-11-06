@@ -141,7 +141,7 @@ public class ThrownWeaponController : MonoBehaviour
             bool isEnemy = target.TryGetComponent(out EnemyHealth enemy);
             if (isEnemy)
             {
-                enemy.TakeDamage(_currentWeapon.equippedWeapon.GetSkillDamage(), transform.position);
+                enemy.TakeDamage(_currentWeapon.equippedWeapon.GetSkillDamage());
             }
         }
     }

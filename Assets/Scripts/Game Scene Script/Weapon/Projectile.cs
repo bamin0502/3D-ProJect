@@ -59,7 +59,7 @@ public class Projectile : MonoBehaviour
             _target.TryGetComponent(out EnemyHealth enemy);
             if (enemy != null)
             {
-                enemy.TakeDamage(damage, transform.position);
+                enemy.TakeDamage(damage);
                 Destroy(gameObject);
             }
         }

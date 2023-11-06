@@ -36,6 +36,10 @@ public class EnemyHealth : MonoBehaviour
     private string currentSceneName;
     public Transform hudPos;
     public ParticleSystem dieEffect;
+
+    public bool isDead = false;
+    
+    
     void Start()
     {
         _nav = GetComponent<NavMeshAgent>();
@@ -73,47 +77,78 @@ public class EnemyHealth : MonoBehaviour
             DOTween.SetTweensCapacity(500, 50);
         }
     }
-    public void TakeDamage(float damage,Vector3 position)
+    public void TakeDamage(int damage, bool isNetwork = true)
     {
-        if (enemyType == EnemyType.Monster || enemyType == EnemyType.GreenSpider || enemyType == EnemyType.RedSpider)
+        if (isDead) return;
+        
+        if ((isNetwork && MultiScene.Instance.isMasterClient) || !isNetwork)
         {
-            currentHealth -= damage;
-            enemyHealthBar.UpdateHealth();
-            DamageNumber damageNumber = damageNumbersPrefab.Spawn(hudPos.transform.position, damage);
-        }
-        else if(enemyType == EnemyType.Boss)
-        {
-            currentHealth -= damage;
-            enemyHealthBar.UpdateBossHealth();
-            DamageNumber damageNumber = damageNumbersPrefab.Spawn(hudPos.transform.position, damage);
-        }
-        if (currentHealth <= 0 )
-        {
-            Die();
-            if (enemyType == EnemyType.Boss)
-            {               
-                StartCoroutine(BossKill());                
-            }
+            ApplyDamage(damage, isNetwork);
         }
     }
 
+    private void ApplyDamage(int damage, bool isNetwork)
+    {
+        currentHealth -= damage;
+        
+        if (enemyHealthBar != null)
+        {
+            if (enemyType != EnemyType.Boss) enemyHealthBar.UpdateHealth();
+            else enemyHealthBar.UpdateBossHealth();
+        }
+
+        if (damageNumbersPrefab != null)
+        {
+            damageNumbersPrefab.Spawn(hudPos.transform.position, damage);
+        }
+        
+        if (isNetwork)
+        {
+            if (enemyType == EnemyType.Boss)
+            {
+                MultiScene.Instance.BroadCastingEnemyTakeDamage(MultiScene.Instance.enemyList.IndexOf(this.gameObject),
+                    damage, true);
+            }
+            else
+            {
+                MultiScene.Instance.BroadCastingEnemyTakeDamage(MultiScene.Instance.enemyList.IndexOf(this.gameObject),
+                    damage);
+            }
+        }
+        
+        if (currentHealth <= 0)
+        {
+            Die();
+            if (enemyType == EnemyType.Boss)
+            {
+                StartCoroutine(BossKill());
+            }
+        }
+    }
+    
+    
+
     void Die()
     {
-        Debug.Log("Enemy died!");
-        bool isEnemy = gameObject.TryGetComponent(out MultiEnemy enemy);
-        bool isBoss = gameObject.TryGetComponent(out MultiBoss boss);
-        if (isEnemy)
-        {
-            dieEffect.Play();
-        }
-        _nav.speed = 0;
-        if (isEnemy) enemy.isDead = true;
-        else if (isBoss) boss.isDead = true;
-        
+        isDead = true;
         anim.SetTrigger(DoDie);
         MultiScene.Instance.BroadCastingEnemyAnimation(MultiScene.Instance.enemyList.IndexOf(gameObject), DoDie, true);
     }
-    
+
+    void BeginDeath()
+    {
+        bool isEnemy = gameObject.TryGetComponent(out MultiEnemy enemy);
+        bool isBoss = gameObject.TryGetComponent(out MultiBoss boss);
+        _nav.isStopped = true;
+        
+        if (isEnemy)
+        {
+            enemy.isDead = true;
+            dieEffect.Play();
+        }
+        else if (isBoss) boss.isDead = true;
+    }
+
     void EndDeath()
     {
         if (MultiScene.Instance.isMasterClient)

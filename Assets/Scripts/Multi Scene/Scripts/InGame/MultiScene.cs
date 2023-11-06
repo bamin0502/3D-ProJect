@@ -35,6 +35,8 @@ public enum DataType
     BossAnimation = 16,
     TARGET_SET = 17,
     EnemySkill = 18,
+    EnemyTakeDamage = 19,
+    
 }
 public class MultiScene : MonoBehaviour
 {
@@ -244,6 +246,21 @@ public class MultiScene : MonoBehaviour
         {
             USER = NetGameManager.instance.m_userHandle.m_szUserID,
             DATA = (int)DataType.PlayerSkill,
+        };
+
+        string sendData = LitJson.JsonMapper.ToJson(data);
+        NetGameManager.instance.RoomBroadcast(sendData);
+    }
+
+    public void BroadCastingEnemyTakeDamage(int index, int damage, bool isBoss = false)
+    {
+        var data = new ENEMY_TAKE_DAMAGE
+        {
+            USER = NetGameManager.instance.m_userHandle.m_szUserID,
+            DATA = (int)DataType.EnemyTakeDamage,
+            INDEX = index,
+            DAMAGE = damage,
+            ISBOSS = isBoss,
         };
 
         string sendData = LitJson.JsonMapper.ToJson(data);
@@ -943,6 +960,48 @@ public class MultiScene : MonoBehaviour
                 }
                 break;
             #endregion
+            
+            case (int)DataType.EnemyTakeDamage:
+                int enemyIdx = Convert.ToInt32(jData["INDEX"].ToString());
+                int enemyDamage = Convert.ToInt32(jData["DAMAGE"].ToString());
+                bool isBoss = Convert.ToBoolean(jData["ISBOSS"].ToString());
+
+                if (isBoss)
+                {
+                    if (bossObject == null)
+                    {
+                        Debug.LogWarning("EnemyTakeDamage bossObject 참조 오류");
+                        return;
+                    }
+
+                    var bossHealth = bossObject.GetComponent<EnemyHealth>();
+                    
+                    if(bossHealth == null)
+                    {
+                        Debug.LogWarning("EnemyTakeDamage bossHealth 참조 오류");
+                        return;
+                    }
+
+                    bossHealth.TakeDamage(enemyDamage, false);
+                    return;
+                }
+                
+                if (enemyIdx < 0 || enemyIdx >= enemyList.Count || enemyList[enemyIdx] == null)
+                {
+                    Debug.LogWarning("EnemyTakeDamage : 적의 인덱스 참조 오류");
+                    return;
+                }
+
+                var enemyHealth = enemyList[enemyIdx].GetComponent<EnemyHealth>();
+
+                if (enemyHealth == null)
+                {
+                    Debug.LogWarning("EnemyTakeDamage : enemyHealth 참조 오류");
+                    return;
+                }
+
+                enemyHealth.TakeDamage(enemyDamage, false);
+                break;
         }
     }
     #endregion

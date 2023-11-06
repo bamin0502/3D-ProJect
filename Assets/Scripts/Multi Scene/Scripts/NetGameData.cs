@@ -209,3 +209,14 @@ public class ENEMY_SKILL
     public int DATA = 0;
     public int SKILL_NUM = 0;
 }
+
+
+[Serializable]
+public class ENEMY_TAKE_DAMAGE
+{
+    public string USER = "";
+    public int DATA = 0;
+    public int INDEX = 0;
+    public int DAMAGE = 0;
+    public bool ISBOSS = false;
+}

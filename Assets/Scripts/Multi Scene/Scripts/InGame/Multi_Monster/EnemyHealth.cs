@@ -29,9 +29,7 @@ public class EnemyHealth : MonoBehaviour
     public EnemyType enemyType = EnemyType.Monster;
     public TMP_Text deathText;
     public Image EndingImage;
-    public Image KilledImage;
-    public TMP_Text kill;
-    public TMP_Text death;
+    
     private static readonly int DoDie = Animator.StringToHash("doDie");
     public DamageNumber damageNumbersPrefab;
     private string currentSceneName;
@@ -43,6 +41,7 @@ public class EnemyHealth : MonoBehaviour
     void Start()
     {
         _nav = GetComponent<NavMeshAgent>();
+        
     }
     private void Awake()
     {
@@ -130,17 +129,12 @@ public class EnemyHealth : MonoBehaviour
             }
         }
     }
-    
-    
-
     void Die()
     {
         isDead = true;
         anim.SetTrigger(DoDie);
         MultiScene.Instance.BroadCastingEnemyAnimation(MultiScene.Instance.enemyList.IndexOf(gameObject), DoDie, true);
-        
     }
-
     void BeginDeath()
     {
         bool isEnemy = gameObject.TryGetComponent(out MultiEnemy enemy);
@@ -157,7 +151,6 @@ public class EnemyHealth : MonoBehaviour
             boss.isDead = true;
             boss.Stop();
         }
-        
     }
 
     void EndDeath()
@@ -192,21 +185,5 @@ public class EnemyHealth : MonoBehaviour
     {
         deathText.DOText("축하합니다 당신은 " + "<color=red>" + "보스" + "</color>" + "를 잡았습니다!", 3, true, ScrambleMode.None, null);
         EndingImage.rectTransform.gameObject.SetActive(true);
-        
-    }
-    IEnumerator BossKill()
-    {
-        KilledImage.rectTransform.gameObject.SetActive(true);
-        kill.text = "Player";
-        death.text = "Boss";
-        BossDeath();
-
-        yield return new WaitForSeconds(10f);
-        
-        KilledImage.DOFade(0f, 1f).OnComplete(() =>
-        {
-            KilledImage.rectTransform.gameObject.SetActive(false);
-        });
-       
     }
 }

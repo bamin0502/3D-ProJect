@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
     private GameObject GameOptionImage;
     [SerializeField]
     private GameObject EndingImage;
+
+    [SerializeField] private GameObject BossEndingImage;
     private void Awake()
     {
         if (Inst == null)
@@ -214,7 +216,24 @@ public class GameManager : MonoBehaviour
             {
                 Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
             }
-
+            Button MainButton2 = BossEndingImage.transform.Find("Main Button").GetComponent<Button>();
+            if (MainButton2 != null)
+            {
+                MainButton2.onClick.AddListener(BackMainMenu);
+            }
+            else
+            {
+                Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
+            }
+            Button QuitButton2 = BossEndingImage.transform.Find("Quit Button").GetComponent<Button>();
+            if (QuitButton2 != null)
+            {
+                QuitButton2.onClick.AddListener(QuitGame);
+            }
+            else
+            {
+                Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
+            }
         }
     }
 }

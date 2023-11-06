@@ -103,7 +103,7 @@ public class MultiBoss : MonoBehaviour
 
             yield return wait;
         }
-}
+    }
     public IEnumerator ChangeTarget()
     {
         if (!MultiScene.Instance.isMasterClient) yield break;
@@ -120,20 +120,22 @@ public class MultiBoss : MonoBehaviour
         
             yield return wait;
         }
-}
+    }
 
     public IEnumerator StartThink()
     {
         if (!MultiScene.Instance.isMasterClient) yield break;
     
         WaitForSeconds wait = new WaitForSeconds(3f);
-        while (true)
+        while(true)
         {
             jumpObj.gameObject.SetActive(false);
             if(target == null || _isThink) yield return wait;
             Think();
+            
             yield return wait;
         }
+
     }
     void SelectTarget()
     {
@@ -177,7 +179,7 @@ public class MultiBoss : MonoBehaviour
              Debug.LogWarning("어택 타이머 넘김");
              return;
          }*/
-}
+    }
 
     public void LaunchMissile()
     {
@@ -194,28 +196,27 @@ public class MultiBoss : MonoBehaviour
         _isThink = true;
         switch (ranAction)
         {
-         case 1:
-            LaunchMissile();
-            MultiScene.Instance.BroadCastingSkill(0);
-            anim.SetTrigger(DoShot);
-            MultiScene.Instance.BroadCastingBossAnimation(DoShot,true); 
-            break;
-        case 2:
-            break;
-        case 3:
-            Debug.LogWarning("Heal");
-            Heal();
-            MultiScene.Instance.BroadCastingSkill(1);
-            anim.SetTrigger(DoBigShot);
-            MultiScene.Instance.BroadCastingBossAnimation(DoBigShot,true); 
-            break;
-        case 4:
-           Taunt();
-           MultiScene.Instance.BroadCastingSkill(2);
-           anim.SetTrigger(DoTaunt);
-           Invoke(nameof(setJumpObj),1.7f);
-           MultiScene.Instance.BroadCastingBossAnimation(DoTaunt,true);
-            break;
+            case 1:
+                LaunchMissile();
+                MultiScene.Instance.BroadCastingSkill(0);
+                anim.SetTrigger(DoShot);
+                MultiScene.Instance.BroadCastingBossAnimation(DoShot,true); 
+                break;
+            case 2: break;
+            case 3:
+                Debug.LogWarning("Heal");
+                Heal();
+                MultiScene.Instance.BroadCastingSkill(1);
+                anim.SetTrigger(DoBigShot);
+                MultiScene.Instance.BroadCastingBossAnimation(DoBigShot,true); 
+                break;
+            case 4:
+                Taunt();
+                MultiScene.Instance.BroadCastingSkill(2);
+                anim.SetTrigger(DoTaunt);
+                Invoke(nameof(setJumpObj),1.7f);
+                MultiScene.Instance.BroadCastingBossAnimation(DoTaunt,true);
+                break;
 
         }
     }
@@ -241,7 +242,7 @@ public class MultiBoss : MonoBehaviour
         Healdraw.Play();
         draw.Play();
         
-        enemyHealth.maxHealth+=healAmount;
+        enemyHealth.currentHealth = Math.Min(enemyHealth.currentHealth + healAmount, enemyHealth.maxHealth);
     }
 
     public void Taunt()

@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using Newtonsoft.Json;
 using Data;
@@ -9,7 +11,6 @@ using Unity.Mathematics;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using DamageNumbersPro;
-using DamageNumbersPro.Internal;
 
 public enum EnemyType
 {
@@ -36,15 +37,17 @@ public class EnemyHealth : MonoBehaviour
     private string currentSceneName;
     public Transform hudPos;
     public ParticleSystem dieEffect;
-
+    public Action OnDead;
     public bool isDead = false;
     
     
     void Start()
     {
         _nav = GetComponent<NavMeshAgent>();
+        
         currentSceneName= SceneManager.GetActiveScene().name;
         EnemyHealthBaseOnScene(currentSceneName);
+        
     }
    
     private void EnemyHealthBaseOnScene(string sceneName)
@@ -121,7 +124,10 @@ public class EnemyHealth : MonoBehaviour
             Die();
             if (enemyType == EnemyType.Boss)
             {
-                StartCoroutine(BossKill());
+                //StartCoroutine(BossKill());
+                OnDead?.Invoke();
+                
+                
             }
         }
     }
@@ -153,7 +159,7 @@ public class EnemyHealth : MonoBehaviour
     {
         if (MultiScene.Instance.isMasterClient)
         {
-            int index = MultiScene.Instance.GetRandomInt(3);
+            var index = MultiScene.Instance.GetRandomInt(3);
             var newItem = Instantiate(MultiScene.Instance.itemPrefabs[index], transform.position, quaternion.identity);
             newItem.transform.SetParent(MultiScene.Instance.itemListParent);
             MultiScene.Instance.itemsList.Add(newItem);
@@ -169,14 +175,12 @@ public class EnemyHealth : MonoBehaviour
     {
         var enemies = MultiScene.Instance.enemyList;
 
-        foreach (GameObject enemy in enemies)
+        foreach (var enemy in enemies.Where(enemy => enemy != null))
         {
-            if(enemy == null) continue;
             enemy.TryGetComponent(out MultiEnemy multiEnemy);
             if(multiEnemy == null) continue;
             multiEnemy.SetIndex();
         }
-
     }
     
     void BossDeath()

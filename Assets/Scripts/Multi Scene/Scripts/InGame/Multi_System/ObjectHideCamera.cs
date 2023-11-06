@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ObjectHideCamera : MonoBehaviour
@@ -22,11 +23,10 @@ public class ObjectHideCamera : MonoBehaviour
         
         if (!tPlayer.activeInHierarchy)
         {
-            foreach (var hideable in previouslyhiddenObjects)
+            foreach (var hideable in previouslyhiddenObjects.Where(hideable => Vector3.Distance(transform.position, hideable.transform.position) >0.1f))
             {
-                if (Vector3.Distance(transform.position, hideable.transform.position) >0.1f)
-                    hideable.SetVisible(true);
-            } 
+                hideable.SetVisible(true);
+            }
         }
         
     }
@@ -36,17 +36,18 @@ public class ObjectHideCamera : MonoBehaviour
     {
         if (tPlayer == null)
         {
-            
             if (tPlayer != null)
             {
                 target = tPlayer.transform;
             }
+            Debug.LogWarning("플레이어가 없습니다!");
+            return;
         }
 
         var position = transform.position;
-        Vector3 toTarget= target.position - position;
-        float targetDistance = toTarget.magnitude;
-        Vector3 targetDirection = toTarget / targetDistance;
+        var toTarget= target.position - position;
+        var targetDistance = toTarget.magnitude;
+        var targetDirection = toTarget / targetDistance;
         
         targetDistance -= sphereCastRadius * 1.1f;
         
@@ -64,16 +65,14 @@ public class ObjectHideCamera : MonoBehaviour
                 hiddenObjects.Add(hideable);
         }
 
-        foreach (var hideable in hiddenObjects)
+        foreach (var hideable in hiddenObjects.Where(hideable => !previouslyhiddenObjects.Contains(hideable)))
         {
-            if(!previouslyhiddenObjects.Contains(hideable))
-                hideable.SetVisible(false);
+            hideable.SetVisible(false);
         }
 
-        foreach (var hideable in previouslyhiddenObjects)
+        foreach (var hideable in previouslyhiddenObjects.Where(hideable => !hiddenObjects.Contains(hideable)))
         {
-            if (!hiddenObjects.Contains(hideable))
-                hideable.SetVisible(true);
+            hideable.SetVisible(true);
         }
 
         (hiddenObjects, previouslyhiddenObjects) = (previouslyhiddenObjects, hiddenObjects);

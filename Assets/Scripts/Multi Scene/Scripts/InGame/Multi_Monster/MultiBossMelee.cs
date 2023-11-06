@@ -11,7 +11,7 @@ public class MultiBossMelee : MonoBehaviour
             if (!MultiScene.Instance.isMasterClient) return;
         if (other.CompareTag("Player"))
         {
-            Debug.LogWarning("hit a"+ other.name);
+             Debug.LogWarning("hit a "+ other.name);
             Debug.Log("근접 데메지 입힘");
             Debug.LogWarning(meleeDamage);
             other.TryGetComponent(out MultiPlayerHealth playerHealth);

@@ -30,6 +30,8 @@ public class MultiPlayerMovement : MonoBehaviour
     private readonly float _cooldownTime = 10f;
     private float _currentCooldown = 10f;
     private float _maxCooldown = 10f;
+
+    private bool canMove = true;
     void Start()
     {
         ChangedState(PlayerState.Idle);
@@ -43,10 +45,22 @@ public class MultiPlayerMovement : MonoBehaviour
         }
         
     }
+
+    public void StopMovement()
+    {
+        canMove = false;
+        NavStop();
+    }
+    public void ResumeMovement()
+    {
+        canMove = true;
+        NavResume();
+    }
     private void Update()
     {
         if(!MultiScene.Instance.currentUser.Equals(gameObject.name)) return;
-
+        if (!canMove)
+            return;
         // 오른쪽 마우스 클릭을 확인합니다.
         if (Input.GetMouseButtonDown(1))
         {

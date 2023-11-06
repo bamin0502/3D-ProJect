@@ -12,7 +12,7 @@ public class EnemyCut : MonoBehaviour
     //해당 오브젝트에 자식이 있는지 없는지 검사시킬 오브젝트
     public GameObject checkObject;
     private bool isCutScene = false;
-    
+    public MultiPlayerMovement playerMovement;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,6 +33,7 @@ public class EnemyCut : MonoBehaviour
         // BGM을 다시 재생
         SoundManager.instance.bgmAudioSource.Play();
         StartCoroutine(bossCutScene());
+        playerMovement.ResumeMovement();
     }
     void Update()
     {
@@ -46,10 +47,12 @@ public class EnemyCut : MonoBehaviour
             MultiScene.Instance.nav.areaMask=NavMesh.AllAreas;
             playableDirector.playableAsset = SecondCut;
             playableDirector.Play();
+            playerMovement.StopMovement();
             if (playableDirector.playableAsset == SecondCut)
             {
                 // 컷신이 시작되면 BGM을 중지
                 SoundManager.instance.bgmAudioSource.Stop();
+                
             }
             
             MultiScene.Instance.BroadCastingSecondCutSceneStart(true);

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using MNF;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public enum LobbyUserState
 {
@@ -23,6 +24,8 @@ public class LobbyScene : MonoBehaviour
     public TMP_InputField inputUserID;
     public GameObject loginPanel;
     public Button loginButton;
+    public Image ReconnectImage;
+    public Button menuButton;
     public Button reconnectButton; 
     [Header("로비 패널")]
     public TextMeshProUGUI lobbyButtonText;
@@ -51,12 +54,15 @@ public class LobbyScene : MonoBehaviour
         lobbyButton.onClick.AddListener(OnClick_LobbyButton);
         loginButton.onClick.AddListener(OnClick_Login);
         inputChat.onSubmit.AddListener(SendChatting);
-        reconnectButton.onClick.AddListener(OnClick_Reconnect);
-        NetGameManager.instance.ConnectServer("192.168.0.122", 3650, true);
+        menuButton.onClick.AddListener(OnClick_MenuButton);
+        reconnectButton.onClick.AddListener(OnClick_ReconnectButton);
+        ReconnectImage.rectTransform.gameObject.SetActive(false);
+        //NetGameManager.instance.ConnectServer("192.168.0.122", 3650, true);
+        //NetGameManager.instance.ConnectServer("1.11.11.1111",3650,true);
         //나중에 각자 집에서 단체로 AWS서버로 테스트해야해서 이건 지우지말것
-        //NetGameManager.instance.ConnectServer("3.34.116.91", 3650); 
+        NetGameManager.instance.ConnectServer("3.34.116.91", 3650); 
         //NetGameManager.instance.ConnectServer("3.34.116.91", 3650);
-        //NetGameManager.instance.ConnectServer("3,11,111,1111",3650,true);
+        
     }
 
     private void Awake()
@@ -74,12 +80,10 @@ public class LobbyScene : MonoBehaviour
             Vector2 localMousePosition = chatRoot.InverseTransformPoint(Input.mousePosition);
             if (!chatRoot.rect.Contains(localMousePosition)) chatBox.gameObject.SetActive(false);
         }
+        
+      
     }
-    private void OnClick_Reconnect()
-    {
-        // 재접속 메서드 호출
-        NetManager.instance.Init("3.34.116.91", 3650);
-    }
+
     private void OnClick_LobbyButton()
 	{
         //준비, 시작버튼 클릭시
@@ -292,13 +296,25 @@ public class LobbyScene : MonoBehaviour
     #endregion
 
     #region 로그인
-
     public void OnConnectFail()
     {
         loginAlertText.text = "서버와의 연결에 실패했습니다.";
-       
+        MKWNetwork.instance.Disconnect();
+        ReconnectImage.rectTransform.gameObject.SetActive(true);
     }
 
+    public void OnConnectSuccess()
+    {
+        loginAlertText.text = "서버 접속에 성공했습니다!";
+        
+    }
+
+    public void OnNetConnectDisconnect()
+    {
+        loginAlertText.text = "서버와의 연결이 끊어졌습니다.";
+        MKWNetwork.instance.Disconnect();
+        ReconnectImage.rectTransform.gameObject.SetActive(true);
+    }
     private bool CanEnterRoom(string userID)
     {
         RoomSession roomSession = NetGameManager.instance.m_roomSession;
@@ -320,6 +336,14 @@ public class LobbyScene : MonoBehaviour
         return true;
     }
 
+    private void OnClick_ReconnectButton()
+    {
+        NetGameManager.instance.ConnectServer("3.34.116.91",3650,true);
+    }
+    private void OnClick_MenuButton()
+    {
+        LoadingSceneManager.LoadScene("Start Menu Scene");
+    }
     private void OnClick_Login()
     {
         //로그인 버튼 클릭시

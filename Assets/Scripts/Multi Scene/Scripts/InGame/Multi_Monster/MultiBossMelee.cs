@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 
 public class MultiBossMelee : MonoBehaviour
 {
-    private MultiPlayerHealth playerHealth;
     public int meleeDamage;
     public void OnTriggerEnter(Collider other)
     {

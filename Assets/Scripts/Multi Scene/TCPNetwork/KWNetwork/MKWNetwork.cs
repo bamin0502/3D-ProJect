@@ -36,7 +36,7 @@ public class MKWNetwork : KWSingleton<MKWNetwork>
 
 		m_dicRecvCallBack = new Dictionary<NetHead, NetRecvCallBack>(m_eqSJNetHead);
 	}
-	void OnApplicationQuit()
+	public void OnApplicationQuit()
 	{
         if (IsInit == true)
 		{
@@ -65,39 +65,38 @@ public class MKWNetwork : KWSingleton<MKWNetwork>
 	}
 
 
-	public bool ConnectServer(string szIP, string szPort)
-	{
+    public bool ConnectServer(string szIP, string szPort)
+    {
         if (IsInit == true)
-		{
-			m_nowSession.Disconnect();
-			m_nowSession.IsConnected = false;
-			IsInit = false;
- 		}
+        {
+            m_nowSession.Disconnect();
+            m_nowSession.IsConnected = false;
+            IsInit = false;
+        }
 
-		if (TcpHelper.Instance.IsRunning == false)
-		{
-			if (TcpHelper.Instance.Start(isRunThread:false) == false)
-			{
-				LogManager.Instance.WriteError("TcpHelper.Instance.run() failed");
-				return false;
-			}
-		}
+        if (TcpHelper.Instance.IsRunning == false)
+        {
+            if (TcpHelper.Instance.Start(isRunThread: false) == false)
+            {
+                LogManager.Instance.WriteError("TcpHelper.Instance.run() failed");
+                return false;
+            }
+        }
 
-		m_nowSession = TcpHelper.Instance.AsyncConnect<MKWSession, MKWMessageDispatcher>(szIP, szPort);
-		
-		if (m_nowSession == null)
-		{
-			LogManager.Instance.WriteError("TcpHelper.Instance.AsyncConnect() failed");
-			return false;
-		}
+        m_nowSession = TcpHelper.Instance.AsyncConnect<MKWSession, MKWMessageDispatcher>(szIP, szPort);
 
-		IsInit = true;
+        if (m_nowSession == null)
+        {
+            LogManager.Instance.WriteError("TcpHelper.Instance.AsyncConnect() failed");
+            return false;
+        }
 
-		return true;
-	}
+        IsInit = true;
 
+        return true;
+    }
 	//csj 임시..
-	public	void	Disconnect()
+	public void Disconnect()
 	{
 		m_nowSession.Disconnect();
 		m_nowSession.IsConnected = false;

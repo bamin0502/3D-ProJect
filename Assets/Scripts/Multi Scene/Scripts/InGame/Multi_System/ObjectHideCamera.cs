@@ -38,7 +38,7 @@ public class ObjectHideCamera : MonoBehaviour
     {
         if (tPlayer == null)
         {
-            tPlayer = GameObject.FindGameObjectWithTag("Player");
+            tPlayer = MultiScene.Instance._players[Equals(name).ToString()].gameObject;
             if (tPlayer != null)
             {
                 target = tPlayer.transform;

@@ -126,22 +126,24 @@ namespace MNF
 		public void OnNetConnectSuccess(int nRet)
 		{
 			Debug.Log("OnNetConnectSuccess : " + nRet.ToString());
+           
         }
 
 		public void OnNetConnectFail(int nRet)
 		{
-            LobbyScene.Instance.OnConnectFail();
+            MKWNetwork.instance.OnApplicationQuit();
 			Debug.Log("OnNetConnectFail : " + nRet.ToString());
 		}
 
 		public void OnNetConnectDisconnect(int nRet)
 		{
+            MKWNetwork.instance.OnApplicationQuit();
 			Debug.LogError("OnNetConnectDisconnect : " + nRet.ToString());
 		}
 
 		public void DisConnectServer()
 		{
-            MKWNetwork.instance.Disconnect();
+           
 		}
 
 		public void OnPrcNetRecvPacket(NetHead head, BinaryReader br)

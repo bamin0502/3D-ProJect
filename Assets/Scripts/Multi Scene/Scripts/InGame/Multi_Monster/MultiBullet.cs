@@ -47,7 +47,7 @@ public class MultiBullet : MonoBehaviour
 
     private void HitTarget()
     {
-        //DamagePlayer();
+        
         DamagePlayer();
         Destroy(gameObject);
     }

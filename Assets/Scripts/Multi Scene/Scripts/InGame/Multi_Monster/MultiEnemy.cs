@@ -98,7 +98,7 @@ public class MultiEnemy : MonoBehaviour
         if (!MultiScene.Instance.isMasterClient) yield break;
         
         WaitForSeconds wait = new WaitForSeconds(1f);
-        EnemyState lastState = EnemyState.Idle; // 이전 상태를 저장하는 변수
+        EnemyState lastState = EnemyState.Idle;
 
         yield return new WaitForSeconds(Random.Range(0f, 2f)); //코루틴 분산
 
@@ -119,11 +119,12 @@ public class MultiEnemy : MonoBehaviour
 
                 if (_nav.remainingDistance <= 0.1f)
                 {
-                    if (_currentState != EnemyState.Idle)
+                    if (lastState != EnemyState.Idle)
                     {
                         _currentState = EnemyState.Idle;
                         SetEnemyAnimation(AniEnemy, (int)_currentState);
                         MultiScene.Instance.BroadCastingEnemyAnimation(_index, (int)_currentState);
+                        lastState = _currentState;
                     }
                 }
 
@@ -143,13 +144,14 @@ public class MultiEnemy : MonoBehaviour
                 }
             }
 
-            if (_targetPos != null) //추적
+            if (_targetPos != null) // 추적
             {
-                if (_currentState != EnemyState.Chase)
+                if (lastState != EnemyState.Chase)
                 {
                     _currentState = EnemyState.Chase;
                     SetEnemyAnimation(AniEnemy, (int)_currentState);
                     MultiScene.Instance.BroadCastingEnemyAnimation(_index, (int)_currentState);
+                    lastState = _currentState;
                 }
             }
 

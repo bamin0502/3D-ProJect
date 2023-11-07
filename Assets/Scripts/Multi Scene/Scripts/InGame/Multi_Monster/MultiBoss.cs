@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Data;
 using Newtonsoft.Json;
-
+using DamageNumbersPro;
 public class MultiBoss : MonoBehaviour
 {
     private static readonly int DoShot = Animator.StringToHash("doShot");
@@ -35,7 +35,8 @@ public class MultiBoss : MonoBehaviour
     public EnemyHealthBar enemyHealthBar;
     public EnemyHealth enemyHealth;
     public int healAmount;
-
+    public DamageNumber damageNumber;
+    public Transform damageNumberPos;
 
     public GameObject target;
     public Transform targetPos;
@@ -245,7 +246,7 @@ public class MultiBoss : MonoBehaviour
         draw.Play();
         
         enemyHealth.currentHealth = Math.Min(enemyHealth.currentHealth + healAmount, enemyHealth.maxHealth);
-        
+        damageNumber.Spawn(damageNumberPos.transform.position, healAmount);
         enemyHealthBar.UpdateBossHealth();
     }
 

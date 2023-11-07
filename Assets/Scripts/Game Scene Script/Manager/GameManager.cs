@@ -4,6 +4,8 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Data.Common;
+using Unity.VisualScripting;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -11,19 +13,12 @@ public class GameManager : MonoBehaviour
     public static GameManager Inst;
     [Header ("관리 오브젝트 설정")]
     //리스트배열 형태로 이미지를 관리함
-    [SerializeField]
-    private GameObject MainMenuImage;
-    [SerializeField]
-    private GameObject MainOptionImage;
-    [SerializeField]
-    private GameObject NoticeImage;
-    [SerializeField]
-    private GameObject SourceImage;
-    [SerializeField]
-    private GameObject GameOptionImage;
-    [SerializeField]
-    private GameObject EndingImage;
-
+    [SerializeField] private GameObject MainMenuImage;
+    [SerializeField] private GameObject MainOptionImage;
+    [SerializeField] private GameObject NoticeImage;
+    [SerializeField] private GameObject SourceImage;
+    [SerializeField] private GameObject GameOptionImage;
+    [SerializeField] private GameObject EndingImage;
     [SerializeField] private GameObject BossEndingImage;
     private void Awake()
     {
@@ -134,14 +129,26 @@ public class GameManager : MonoBehaviour
         {
             GameOptionImage.gameObject.SetActive(false);
         }
+        
         EndingImage = GameObject.FindGameObjectWithTag("Ending Image");
         if(EndingImage == null)
         {
+            
             Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
         }
         else
         {
             EndingImage.gameObject.SetActive(false);
+        }
+        
+        BossEndingImage = GameObject.FindGameObjectWithTag("Boss Ending Image");
+        if(BossEndingImage == null)
+        {
+            Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
+        }
+        else
+        {
+            BossEndingImage.gameObject.SetActive(false);
         }
         //시작메뉴 씬 관련 오브젝트
         if (scene.name == "Start Menu Scene")
@@ -197,7 +204,7 @@ public class GameManager : MonoBehaviour
         //게임 씬 오브젝트 
         else if (scene.name == "Game Scene")
         {
-            Button MainButton = EndingImage.transform.Find("Main Button").GetComponent<Button>();
+            Button MainButton = EndingImage.gameObject.transform.Find("Ending Main Button").GetComponent<Button>();
             if(MainButton != null)
             {
                 MainButton.onClick.AddListener(BackMainMenu);
@@ -206,7 +213,8 @@ public class GameManager : MonoBehaviour
             {
                 Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
             }
-            Button QuitButton = EndingImage.transform.Find("Quit Button").GetComponent<Button>();
+
+            Button QuitButton = EndingImage.gameObject.transform.Find("Ending Quit Button").GetComponent<Button>();
             if(QuitButton != null)
             {
                 QuitButton.onClick.AddListener(QuitGame);
@@ -215,7 +223,8 @@ public class GameManager : MonoBehaviour
             {
                 Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
             }
-            Button MainButton2 = BossEndingImage.transform.Find("Main Button").GetComponent<Button>();
+
+            Button MainButton2 = BossEndingImage.gameObject.transform.Find("Boss Main Button").GetComponent<Button>();
             if (MainButton2 != null)
             {
                 MainButton2.onClick.AddListener(BackMainMenu);
@@ -224,10 +233,20 @@ public class GameManager : MonoBehaviour
             {
                 Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
             }
-            Button QuitButton2 = BossEndingImage.transform.Find("Quit Button").GetComponent<Button>();
+            Button QuitButton2 = BossEndingImage.gameObject.transform.Find("Boss Quit Button").GetComponent<Button>();
             if (QuitButton2 != null)
             {
                 QuitButton2.onClick.AddListener(QuitGame);
+            }
+            else
+            {
+                Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
+            }
+            Button GameOptionButton = GameOptionImage.gameObject.transform.Find("HomeButton").GetComponent<Button>();
+            if(GameOptionButton != null)
+            {
+                GameOptionButton.onClick.AddListener(BackMainMenu);
+                
             }
             else
             {

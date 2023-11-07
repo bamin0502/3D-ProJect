@@ -7747,7 +7747,7 @@ MonoBehaviour:
   m_Loop: 0
   m_bufferingTime: 0.1
   m_ClipProperties:
-    volume: 1
+    volume: 0.8
 --- !u!114 &2388770895923331321
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7785,7 +7785,7 @@ MonoBehaviour:
     m_Start: 0
     m_ClipIn: 0
     m_Asset: {fileID: -1856347739415479972}
-    m_Duration: 13.616666666667665
+    m_Duration: 8
     m_TimeScale: 1
     m_ParentTrack: {fileID: 2709930484934183101}
     m_EaseInDuration: 0
@@ -8981,7 +8981,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: SubtitleClip
   - m_Version: 1
-    m_Start: 5.999999999999999
+    m_Start: 6
     m_ClipIn: 0
     m_Asset: {fileID: 885202821354734377}
     m_Duration: 2.000000000000001

@@ -23,7 +23,7 @@ public class FinalCut : MonoBehaviour
     private void OnlastCutsceneEnd(PlayableDirector director)
     {
         SoundManager.instance.bgmAudioSource.Play();
-        playerMovement.ResumeMovement();
+        playerMovement.StopMovement();
     }
     private void Update()
     {

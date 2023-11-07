@@ -974,6 +974,9 @@ public class MultiScene : MonoBehaviour
                     case 2:
                         bossSkill.Taunt();
                         break;
+                    case 3:
+                        bossSkill.DestroyBoss();
+                        break;
                 }
                 break;
             #endregion

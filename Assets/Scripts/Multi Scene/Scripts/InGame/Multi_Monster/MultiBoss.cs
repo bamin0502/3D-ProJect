@@ -22,6 +22,10 @@ public class MultiBoss : MonoBehaviour
     public Transform missilePortA;
     public Transform missilePortB;
 
+    private bool isBossDead = false;
+    private bool deathAnimationPlayed= false;
+    private int isCalled = 0;
+    
     //점프 이동
     public float moveSpeed = 5.0f;
     private Vector3 lookVec;
@@ -75,7 +79,22 @@ public class MultiBoss : MonoBehaviour
         StopCoroutine(ChangeTarget());
         StopCoroutine(StartThink());
     }
-
+    public void Update()
+    {
+        if (target != null)
+        {
+            float h = Input.GetAxisRaw("Horizontal");
+            float v = Input.GetAxisRaw("Vertical");
+            lookVec = new Vector3(h, 0, v) * 5f;
+            transform.LookAt(target.transform.position + lookVec);
+        }
+        if(enemyHealth.currentHealth <= 0&& !isBossDead)
+        {
+            isBossDead = true;
+            StartCoroutine(DeleteSelf());
+            StopCoroutine(StartThink());
+        }
+    }
     public void Stop()
     {
         StopCoroutine(PlayerDetect());
@@ -133,6 +152,15 @@ public class MultiBoss : MonoBehaviour
         }
 
     }
+
+    IEnumerator DeleteSelf()
+    {
+        anim.SetTrigger(Dodie);
+        MultiScene.Instance.BroadCastingBossAnimation(Dodie, true);
+        yield return new WaitForSeconds(8.0f);
+        DestroyBoss();
+        MultiScene.Instance.BroadCastingSkill(3);
+    }
     public void SelectTarget()
     {
         int randomIndex = MultiScene.Instance.GetRandomInt(hitCount - 1);
@@ -140,42 +168,7 @@ public class MultiBoss : MonoBehaviour
         targetPos = target.gameObject.transform;
         MultiScene.Instance.BroadCastingTargetSet(target.name);
     }
-    public void Update()
-    {
-        if (target != null)
-        {
-            float h = Input.GetAxisRaw("Horizontal");
-            float v = Input.GetAxisRaw("Vertical");
-            lookVec = new Vector3(h, 0, v) * 5f;
-            transform.LookAt(target.transform.position + lookVec);
-        }
-        Debug.LogError(this.gameObject.transform.position);
 
-        /* if (startCheck)
-         {
-             Debug.LogWarning("시작 타이머 체크");
-             startAttackTime -= Time.deltaTime;
-         }
-
-         else
-         {
-             Debug.LogWarning("시작 타이머 넘김");
-             return;
-
-         }
-
-         if (startAttack)
-         {
-             Debug.LogWarning("어택 타이머 체크");
-             detectionTime -= Time.deltaTime;
-         }
-         else
-         {
-
-             Debug.LogWarning("어택 타이머 넘김");
-             return;
-         }*/
-    }
 
     public void LaunchMissile()
     {
@@ -207,7 +200,6 @@ public class MultiBoss : MonoBehaviour
                 MultiScene.Instance.BroadCastingBossAnimation(DoTaunt,true); 
                 break;
             case 3:
-                Debug.LogWarning("Heal");
                 Heal();
                 MultiScene.Instance.BroadCastingSkill(1);
                 anim.SetTrigger(DoBigShot);
@@ -237,7 +229,6 @@ public class MultiBoss : MonoBehaviour
     }
     public void Heal()
     {
-        Debug.Log("체력 회복");
         Healdraw.Play();
         draw.Play();
         
@@ -245,7 +236,10 @@ public class MultiBoss : MonoBehaviour
         damageNumber.Spawn(damageNumberPos.transform.position, healAmount);
         enemyHealthBar.UpdateBossHealth();
     }
-
+    public void DestroyBoss()
+    {
+        Destroy(gameObject);
+    }
     public void Taunt()
     {
         if (target != null)

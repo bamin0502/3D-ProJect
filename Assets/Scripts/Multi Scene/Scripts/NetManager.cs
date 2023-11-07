@@ -23,6 +23,8 @@ namespace MNF
             MKWSession.ActionOnConnectSuccess += OnNetConnectSuccess;
             MKWSession.ActionOnConnectFail += OnNetConnectFail;
             MKWSession.ActionOnDisconnect += OnNetConnectDisconnect;
+            
+            
 		}
 
 		public void Init(string ip, int port, bool isIntranet = false)
@@ -140,8 +142,6 @@ namespace MNF
 		{
             MKWNetwork.instance.OnApplicationQuit();
 			Debug.LogError("OnNetConnectDisconnect : " + nRet.ToString());
-            
-            LobbyScene.Instance.ReconnectImage.rectTransform.transform.parent.gameObject.SetActive(true);
 		}
 
 		public void DisConnectServer()

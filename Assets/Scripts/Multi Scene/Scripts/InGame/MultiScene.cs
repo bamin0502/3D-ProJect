@@ -843,7 +843,7 @@ public class MultiScene : MonoBehaviour
                 currentUser = NetGameManager.instance.m_userHandle.m_szUserID;
                 nav = user.GetComponent<NavMeshAgent>();
                 nav.areaMask = NavMesh.AllAreas;
-                
+                nav.speed = 3.5f;
                 secondPlayableDirector.playableAsset = secondCut;
                 secondPlayableDirector.Play();
                 if(secondPlayableDirector.state == PlayState.Playing)

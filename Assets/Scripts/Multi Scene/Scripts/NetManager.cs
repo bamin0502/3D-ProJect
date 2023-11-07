@@ -132,6 +132,7 @@ namespace MNF
 		public void OnNetConnectFail(int nRet)
 		{
             MKWNetwork.instance.OnApplicationQuit();
+            LobbyScene.Instance.ReconnectImage.rectTransform.transform.parent.gameObject.SetActive(true);
 			Debug.Log("OnNetConnectFail : " + nRet.ToString());
 		}
 

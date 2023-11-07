@@ -239,7 +239,7 @@ public class LobbyScene : MonoBehaviour
     {
         //NetGameManager에서 RoomUserDataUpdate사용하면 호출됨
 
-        GameObject character = _characters.FirstOrDefault(character => character.name == user.m_szUserID);
+        GameObject character = _characters.FirstOrDefault(character =>character!=null && character.name == user.m_szUserID);
         if(character == null) return;
         
         character.TryGetComponent<Lobby_Player>(out var toUpdate);

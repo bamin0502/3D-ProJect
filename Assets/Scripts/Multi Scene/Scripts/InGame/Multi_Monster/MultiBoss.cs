@@ -85,7 +85,6 @@ public class MultiBoss : MonoBehaviour
     public IEnumerator PlayerDetect()
     {
         if (!MultiScene.Instance.isMasterClient) yield break;
-    
         WaitForSeconds wait = new WaitForSeconds(1f);
         while (true)
         {
@@ -108,7 +107,6 @@ public class MultiBoss : MonoBehaviour
     public IEnumerator ChangeTarget()
     {
         if (!MultiScene.Instance.isMasterClient) yield break;
-    
         WaitForSeconds wait = new WaitForSeconds(3f);
         while (true)
         {
@@ -125,22 +123,18 @@ public class MultiBoss : MonoBehaviour
 
     public IEnumerator StartThink()
     {
-        if (!MultiScene.Instance.isMasterClient) yield break;
-    
         WaitForSeconds wait = new WaitForSeconds(3f);
         while(true)
         {
             jumpObj.gameObject.SetActive(false);
             if(target == null || _isThink) yield return wait;
             Think();
-            
             yield return wait;
         }
 
     }
-    void SelectTarget()
+    public void SelectTarget()
     {
-        if(!MultiScene.Instance.isMasterClient) return;
         int randomIndex = MultiScene.Instance.GetRandomInt(hitCount - 1);
         target = _targets[randomIndex].gameObject;
         targetPos = target.gameObject.transform;
@@ -155,6 +149,7 @@ public class MultiBoss : MonoBehaviour
             lookVec = new Vector3(h, 0, v) * 5f;
             transform.LookAt(target.transform.position + lookVec);
         }
+        Debug.LogError(this.gameObject.transform.position);
 
         /* if (startCheck)
          {
@@ -192,7 +187,7 @@ public class MultiBoss : MonoBehaviour
 
     public void Think()
     {
-        if(!MultiScene.Instance.isMasterClient)return;
+        if (!MultiScene.Instance.isMasterClient) return;
         int ranAction = MultiScene.Instance.GetRandomInt(4);
         if(target == null) return;
         _isThink = true;

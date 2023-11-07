@@ -83,7 +83,7 @@ public class EnemyHealth : MonoBehaviour
     {
         if (isDead) return;
         
-        if ((isNetwork && MultiScene.Instance.isMasterClient) || !isNetwork)
+        if ((isNetwork && MultiScene.Instance.isMasterClient) || !isNetwork || enemyType == EnemyType.Boss)
         {
             ApplyDamage(damage, isNetwork);
         }

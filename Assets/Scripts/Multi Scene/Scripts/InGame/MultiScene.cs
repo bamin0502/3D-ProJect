@@ -840,11 +840,9 @@ public class MultiScene : MonoBehaviour
             #region 두번째 컷신 관련
             case (int)DataType.SECOND_CUTSCENE:
                 int cutSceneNum = Convert.ToInt32(jData["CUTSCENE_NUM"].ToString());
-                currentUser = NetGameManager.instance.m_userHandle.m_szUserID;
-                
-                nav = user.GetComponent<NavMeshAgent>();
-                nav.areaMask = NavMesh.AllAreas;
-                nav.speed = 3.5f;
+                user.TryGetComponent(out NavMeshAgent navigation);
+                navigation.areaMask = NavMesh.AllAreas;
+                navigation.speed = 3.5f;
                 secondPlayableDirector.playableAsset = secondCut;
                 secondPlayableDirector.Play();
                 if(secondPlayableDirector.state == PlayState.Playing)
@@ -929,6 +927,7 @@ public class MultiScene : MonoBehaviour
                 
 
             #endregion
+            
             #region 보스 애니메이션
             case (int)DataType.BossAnimation:
                 if (bossObject == null) return;
@@ -943,6 +942,7 @@ public class MultiScene : MonoBehaviour
                 }
                 break;
             #endregion
+            
             #region 보스 추적 
             case (int)DataType.TARGET_SET:
                 if (bossObject == null) return;
@@ -955,6 +955,7 @@ public class MultiScene : MonoBehaviour
                 }
                 break;
             #endregion
+            
             #region 보스 스킬 
             case (int)DataType.EnemySkill:
                 int skillNum = Convert.ToInt32(jData["SKILL_NUM"].ToString());
@@ -976,7 +977,8 @@ public class MultiScene : MonoBehaviour
                 }
                 break;
             #endregion
-            
+
+            #region 데미지 처리
             case (int)DataType.EnemyTakeDamage:
                 int enemyIdx = Convert.ToInt32(jData["INDEX"].ToString());
                 int enemyDamage = Convert.ToInt32(jData["DAMAGE"].ToString());
@@ -1018,6 +1020,10 @@ public class MultiScene : MonoBehaviour
 
                 enemyHealth.TakeDamage(enemyDamage, false);
                 break;
+                
+                                          
+            #endregion
+           
         }
     }
     #endregion

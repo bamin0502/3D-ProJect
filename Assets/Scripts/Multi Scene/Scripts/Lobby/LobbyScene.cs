@@ -194,7 +194,7 @@ public class LobbyScene : MonoBehaviour
 	{
         //유저 삭제 및 기존 유저 재정렬
         
-        GameObject toDestroy = _characters.FirstOrDefault(character => character.name == user.m_szUserID);
+        GameObject toDestroy = _characters.FirstOrDefault(character => character!=null && character.name == user.m_szUserID);
         
         if (toDestroy != null)
         {
@@ -204,8 +204,9 @@ public class LobbyScene : MonoBehaviour
             int index = _characters.IndexOf(toDestroy);
             if (index < 0) return;
 
-            Destroy(toDestroy);
             _characters.RemoveAt(index);
+            Destroy(toDestroy);
+            
             
             for (int i = index; i < _characters.Count; i++)
             {

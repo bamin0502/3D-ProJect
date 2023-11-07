@@ -74,6 +74,8 @@ public class MultiPlayerSkill : MonoBehaviour
     {
         switch (_currentWeapon.equippedWeapon.weaponType)
         {
+            case WeaponType.Bow:
+                break;
             case WeaponType.OneHanded:
                 effects[0].Play();
                 break;

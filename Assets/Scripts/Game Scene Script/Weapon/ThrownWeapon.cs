@@ -27,9 +27,16 @@ public class ThrownWeapon : MonoBehaviour
 
     void Start()
     {
+        StartCoroutine(CanExplode());
         string json = "{\"damage\": 50}";
         Itemdata FireGrenade = JsonConvert.DeserializeObject<Itemdata>(json);
         damage = (int)FireGrenade.damage;
+    }
+
+    private IEnumerator CanExplode()
+    {
+        yield return new WaitForSeconds(1f);
+        canExplode = true;
     }
 
     private void OnTriggerEnter(Collider ground)

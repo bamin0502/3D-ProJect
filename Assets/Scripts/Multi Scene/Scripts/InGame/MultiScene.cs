@@ -841,6 +841,7 @@ public class MultiScene : MonoBehaviour
             case (int)DataType.SECOND_CUTSCENE:
                 int cutSceneNum = Convert.ToInt32(jData["CUTSCENE_NUM"].ToString());
                 currentUser = NetGameManager.instance.m_userHandle.m_szUserID;
+                
                 nav = user.GetComponent<NavMeshAgent>();
                 nav.areaMask = NavMesh.AllAreas;
                 nav.speed = 3.5f;
@@ -855,6 +856,7 @@ public class MultiScene : MonoBehaviour
                 {
                     // 컷신이 끝나면 BGM을 재생
                     SoundManager.instance.bgmAudioSource.Play();
+                    
                 }
                 
                 break;
@@ -945,7 +947,7 @@ public class MultiScene : MonoBehaviour
             case (int)DataType.TARGET_SET:
                 if (bossObject == null) return;
                 string targetName = jData["TARGET_POSITION"].ToString();
-                if(string.IsNullOrEmpty(targetName))  return;
+                if(string.IsNullOrEmpty(targetName)) return;
                 _players.TryGetValue(targetName, out GameObject playerObject);
                 if (bossObject.TryGetComponent<MultiBoss>(out var b))
                 {

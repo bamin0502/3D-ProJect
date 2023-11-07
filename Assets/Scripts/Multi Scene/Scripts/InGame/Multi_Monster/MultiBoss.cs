@@ -192,6 +192,7 @@ public class MultiBoss : MonoBehaviour
 
     public void Think()
     {
+        if(!MultiScene.Instance.isMasterClient)return;
         int ranAction = MultiScene.Instance.GetRandomInt(4);
         if(target == null) return;
         _isThink = true;
@@ -252,7 +253,6 @@ public class MultiBoss : MonoBehaviour
 
     public void Taunt()
     {
-        if(!MultiScene.Instance.isMasterClient)return;
         if (target != null)
         {
             Jump.Play();

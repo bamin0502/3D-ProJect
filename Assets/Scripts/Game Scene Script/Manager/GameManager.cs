@@ -42,7 +42,6 @@ public class GameManager : MonoBehaviour
     {
         //옵션 창 비활성화
         MainOptionImage.gameObject.SetActive(false);
-
         //출처 표시 창 비활성화
         SourceImage.gameObject.SetActive(false);
 

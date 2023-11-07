@@ -15,6 +15,7 @@ public class MultiMyStatus : MonoBehaviour
     private MultiPlayerHealth _playerHealth;
     private Quaternion rotation = new (0, 0, 0, 0);
     private GameObject nameStatus;
+    public Gradient gradient;
     public void CreateMyStatus(string myPlayerName, Vector3 playerPosition)
     {
         // 각 캐릭터마다 자신만의 UI 요소를 생성하고 위치를 조정
@@ -61,6 +62,29 @@ public class MultiMyStatus : MonoBehaviour
         {
             Debug.LogError("캔버스를 불러올 수 없습니다.");
         }
+        GradientColorKey[] colorKeys = new GradientColorKey[6];
+        colorKeys[0].color = Color.red;
+        colorKeys[0].time = 0.0f;
+        colorKeys[1].color = Color.red;
+        colorKeys[1].time = 0.25f;
+        colorKeys[2].color = Color.yellow;
+        colorKeys[2].time = 0.25f;
+        colorKeys[3].color = Color.yellow;
+        colorKeys[3].time = 0.75f;
+        colorKeys[4].color = Color.green;
+        colorKeys[4].time = 0.75f;
+        colorKeys[5].color = Color.green;
+        colorKeys[5].time = 1f;
+
+        GradientAlphaKey[] alphaKeys = new GradientAlphaKey[6];
+        for (int i = 0; i < 6; i++)
+        {
+            alphaKeys[i].alpha = 1.0f;
+            alphaKeys[i].time = colorKeys[i].time;
+        }
+
+        gradient = new Gradient();
+        gradient.SetKeys(colorKeys, alphaKeys);
     }
 
     private void Update()
@@ -73,8 +97,10 @@ public class MultiMyStatus : MonoBehaviour
 
     public void UpdatePlayerHp()
     {
-        
-        playerHpImage.fillAmount = (float)_playerHealth.CurrentHealth / _playerHealth.MaxHealth;  
+        playerHpImage.fillAmount = (float)_playerHealth.CurrentHealth / _playerHealth.MaxHealth;
+        float fillAmount = (float)_playerHealth.CurrentHealth / _playerHealth.MaxHealth;
+        playerHpImage.fillAmount = fillAmount;
+        playerHpImage.color = gradient.Evaluate(fillAmount);
     }
     public void Awake()
     {

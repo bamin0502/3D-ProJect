@@ -93,7 +93,6 @@ public class ThrownWeapon : MonoBehaviour
 
     private void OnDestroy()
     {
-        
         if (SoundManager.instance != null)
         {
             SoundManager.instance.StopSE("Fire_Duration");

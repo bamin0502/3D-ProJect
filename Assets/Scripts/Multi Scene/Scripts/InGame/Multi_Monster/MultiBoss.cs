@@ -186,20 +186,20 @@ public class MultiBoss : MonoBehaviour
         _isThink = true;
         switch (ranAction)
         {
-            case 1:
+            case 0:
                 LaunchMissile();
                 MultiScene.Instance.BroadCastingSkill(0);
                 anim.SetTrigger(DoShot);
                 MultiScene.Instance.BroadCastingBossAnimation(DoShot,true); 
                 break;
-            case 2:
+            case 1:
                 Taunt();
                 MultiScene.Instance.BroadCastingSkill(2);
                 anim.SetTrigger(DoTaunt);
                 Invoke(nameof(setJumpObj),1.7f);
                 MultiScene.Instance.BroadCastingBossAnimation(DoTaunt,true); 
                 break;
-            case 3:
+            case 2:
                 Heal();
                 MultiScene.Instance.BroadCastingSkill(1);
                 anim.SetTrigger(DoBigShot);

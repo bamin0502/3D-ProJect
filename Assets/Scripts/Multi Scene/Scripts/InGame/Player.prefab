@@ -5302,7 +5302,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 10
+  m_Speed: 5
   m_Acceleration: 20
   avoidancePriority: 10
   m_AngularSpeed: 360
@@ -5426,6 +5426,35 @@ MonoBehaviour:
   gridLayoutGroup: {fileID: 936742001049693870, guid: 10a76509f4cb9f64b856da18bbb4d5fb, type: 3}
   playerHpImage: {fileID: 0}
   statusbar: {fileID: 0}
+  gradient:
+    serializedVersion: 2
+    key0: {r: 1, g: 1, b: 1, a: 1}
+    key1: {r: 1, g: 1, b: 1, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
 --- !u!114 &-7003272008903750786
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5443,6 +5472,35 @@ MonoBehaviour:
   mynameText: {fileID: 0}
   mystatus: {fileID: 7794320859078124682}
   mynameStatusPrefab: {fileID: 4954051559711252910, guid: 43944e28104c0a444899ceabd08cbdcf, type: 3}
+  gradient:
+    serializedVersion: 2
+    key0: {r: 1, g: 1, b: 1, a: 1}
+    key1: {r: 1, g: 1, b: 1, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
 --- !u!114 &9009733820406593763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5459,9 +5517,6 @@ MonoBehaviour:
   CurrentHealth: 0
   deathText: {fileID: 0}
   endingImage: {fileID: 6842677917849154319, guid: 8247b6285e28b8a4498989934add892c, type: 3}
-  killedImage: {fileID: 0}
-  kill: {fileID: 0}
-  death: {fileID: 0}
   deathParticle: {fileID: 5978614181440743757}
   deathBloodParticle: {fileID: 5946775195833011286}
 --- !u!114 &-7735151206589249757

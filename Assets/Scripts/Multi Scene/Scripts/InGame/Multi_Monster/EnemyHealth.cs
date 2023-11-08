@@ -56,19 +56,19 @@ public class EnemyHealth : MonoBehaviour
             string json = "";
             if (enemyType == EnemyType.Monster)
             {
-                json = "{\"EnemyHealth\": 2000, \"Health\": 2000}";
+                json = "{\"EnemyHealth\": 6000, \"Health\": 6000}";
             }
             else if (enemyType == EnemyType.RedSpider)
             {
-                json= "{\"EnemyHealth\": 1700, \"Health\": 1700}";
+                json= "{\"EnemyHealth\": 5500, \"Health\": 5500}";
             }
             else if (enemyType == EnemyType.GreenSpider)
             {
-                json= "{\"EnemyHealth\": 1500, \"Health\": 1500}";
+                json= "{\"EnemyHealth\": 8000, \"Health\": 8000}";
             }
             else if (enemyType == EnemyType.Boss)
             {
-                json = "{\"EnemyHealth\": 30000, \"Health\": 30000}";
+                json = "{\"EnemyHealth\": 50000, \"Health\": 50000}";
             }
 
             EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);

@@ -25,7 +25,7 @@ public class MultiBossMelee : MonoBehaviour
     }
     private void Start()
     {
-        string json = "{\"damage\": 500}";
+        string json = "{\"damage\": 3000}";
         EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
         meleeDamage = (int)enemyStat1.damage;
     }

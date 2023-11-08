@@ -98,6 +98,6 @@ public class MultiMeleeWeaponController : MonoBehaviour
 
     public void BeginShot()
     {
-        SoundManager.instance.PlaySE("Bow_String");
+        
     }
 }

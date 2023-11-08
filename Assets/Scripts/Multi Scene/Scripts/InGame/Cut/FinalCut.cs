@@ -38,19 +38,9 @@ public class FinalCut : MonoBehaviour
             }
         }
     }
-    private IEnumerator BossStop()
-    {
-        yield return new WaitForSeconds(1f);
-        MultiScene.Instance.bossObject.TryGetComponent(out MultiBoss multiBoss);
-        multiBoss.StopCoroutine(multiBoss.PlayerDetect());
-        multiBoss.StopCoroutine(multiBoss.ChangeTarget());
-        multiBoss.StopCoroutine(multiBoss.StartThink());
-        Debug.LogWarning("보스 스탑 확인");
-    }
     public void LastCutScene()
     {
         isCutScene = true;
-        BossStop();
         playableDirector.playableAsset = lastcut;
         playableDirector.Play();
         if(playableDirector.playableAsset==lastcut)

@@ -11,7 +11,7 @@ public class ThrownWeaponController : MonoBehaviour
     private static readonly int BowSkillHash = Animator.StringToHash("BowSkill");
     public Camera _cam;  //카메라
     public GameObject grenadePrefab;   // 수류탄 프리팹(나중에 인벤토리에서 가져오는걸로 수정)
-    public float maxThrowRange = 10f;  // 최대 던지기 범위
+    public float maxThrowRange = 9f;  // 최대 던지기 범위
     public LayerMask groundLayer;  // 땅 레이어
     public GameObject throwRangeIndicator;  // 던지기 범위 표시
     public GameObject damageRangeIndicator;  // 데미지 범위 표시

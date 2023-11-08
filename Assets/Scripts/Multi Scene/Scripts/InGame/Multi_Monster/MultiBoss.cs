@@ -142,7 +142,7 @@ public class MultiBoss : MonoBehaviour
 
     public IEnumerator StartThink()
     {
-        WaitForSeconds wait = new WaitForSeconds(3f);
+        WaitForSeconds wait = new WaitForSeconds(1f);
         while(true)
         {
             jumpObj.gameObject.SetActive(false);
@@ -181,7 +181,7 @@ public class MultiBoss : MonoBehaviour
     public void Think()
     {
         if (!MultiScene.Instance.isMasterClient) return;
-        int ranAction = MultiScene.Instance.GetRandomInt(4);
+        int ranAction = MultiScene.Instance.GetRandomInt(3);
         if(target == null) return;
         _isThink = true;
         switch (ranAction)
@@ -205,9 +205,7 @@ public class MultiBoss : MonoBehaviour
                 anim.SetTrigger(DoBigShot);
                 MultiScene.Instance.BroadCastingBossAnimation(DoBigShot,true); 
                 break;
-            case 4:
-                
-                break;
+
 
         }
     }

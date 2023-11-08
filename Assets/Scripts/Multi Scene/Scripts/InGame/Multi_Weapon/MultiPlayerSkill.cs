@@ -12,7 +12,7 @@ public class MultiPlayerSkill : MonoBehaviour
     private MultiWeaponController _currentWeapon;
     private ThrownWeaponController _thrownWeaponController;
     private Weapon _weapon = null;
-    public float coolTime = 5.0f; // 쿨타임 (초)
+    public float coolTime = 15.0f; // 쿨타임 (초)
     private bool _isCoolTime = false;
     private Image _coolTimeImage;
 

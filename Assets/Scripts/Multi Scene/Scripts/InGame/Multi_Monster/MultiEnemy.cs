@@ -30,7 +30,7 @@ public class MultiEnemy : MonoBehaviour
     [HideInInspector] public Animator anim; //몬스터 애니메이션
 
     private const float AttackRadius = 3f; //공격 가능 범위
-    private const float DetectionRadius = 7f; //플레이어 감지 범위
+    private const float DetectionRadius = 10f; //플레이어 감지 범위
     public EnemyType enemyType; //해당 몬스터 타입
     private int _index = -1; //해당 몬스터 인덱스
     private int _damage; //해당 몬스터 데미지
@@ -67,17 +67,17 @@ public class MultiEnemy : MonoBehaviour
             string json = "";
             if (enemyType == EnemyType.Box)
             {
-                json = "{\"damage\": 100}";
+                json = "{\"damage\": 300}";
                 _enemyName = "Red Monster";
             }
             else if (enemyType == EnemyType.Red)
             {
-                json = "{\"damage\": 150}";
+                json = "{\"damage\": 450}";
                 _enemyName = "Red Spider";
             }
             else if (enemyType == EnemyType.Green)
             {
-                json = "{\"damage\": 200}";
+                json = "{\"damage\": 600}";
                 _enemyName = "Green Spider";
             }
 

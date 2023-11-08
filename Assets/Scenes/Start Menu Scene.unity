@@ -4316,11 +4316,10 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: b0c1abd0649fdfd428d028574a0805fe, type: 3}
   bgmSounds:
   - name: Start BGM
-    clip: {fileID: 8300000, guid: f3fd3620f4169e649911d06f77bca9c8, type: 3}
+    clip: {fileID: 8300000, guid: 7fe8ea28c136b094c86ee47693dfcec2, type: 3}
   bgmAudioSource: {fileID: 1363383257}
   effectAudioSources:
   - {fileID: 1363383258}
-  - {fileID: 1363383259}
 --- !u!82 &1363383257
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4331,7 +4330,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 1726444444024913708, guid: a03819eca09bec548941f943377420b9, type: 2}
-  m_audioClip: {fileID: 8300000, guid: f3fd3620f4169e649911d06f77bca9c8, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 7fe8ea28c136b094c86ee47693dfcec2, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1

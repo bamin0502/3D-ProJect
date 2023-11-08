@@ -33,7 +33,7 @@ public abstract class Weapon : MonoBehaviour
     private string currentSceneName;
     private void Awake()
     {
-        dataManager=FindObjectOfType<DataManager>();
+        dataManager = FindObjectOfType<DataManager>();
         iconCanvas = GetComponentInChildren<Canvas>();
     }
     private void Start()
@@ -59,15 +59,15 @@ public abstract class Weapon : MonoBehaviour
 
             if (weaponType == WeaponType.Bow)
             {
-                json = "{\"damage\": 9999, \"skillDamage\": 800}";
+                json = "{\"damage\": 800, \"skillDamage\": 1800}";
             }
             else if (weaponType == WeaponType.OneHanded)
             {
-                json = "{\"damage\": 9999, \"skillDamage\": 1000}";
+                json = "{\"damage\": 1350, \"skillDamage\": 2200}";
             }
             else if (weaponType == WeaponType.TwoHanded)
             {
-                json = "{\"damage\": 9999, \"skillDamage\": 1600}";
+                json = "{\"damage\": 1500, \"skillDamage\": 2500}";
             }
 
             WeaponData weaponData = JsonConvert.DeserializeObject<WeaponData>(json);

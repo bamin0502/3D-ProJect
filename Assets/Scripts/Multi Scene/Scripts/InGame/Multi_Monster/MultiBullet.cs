@@ -13,7 +13,7 @@ public class MultiBullet : MonoBehaviour
     {
         StartCoroutine(DeleteMySelf());
 
-        string json = "{\"damage\": 300}";
+        string json = "{\"damage\": 1000}";
         EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
         damage = (int)enemyStat1.damage;
     }

@@ -44,7 +44,6 @@ public class EnemyCut : MonoBehaviour
         {
             isCutScene = true;
             MultiScene.Instance.nav.areaMask=NavMesh.AllAreas;
-            MultiScene.Instance.nav.speed = 3.5f;
             playableDirector.playableAsset = SecondCut;
             playableDirector.Play();
             playerMovement.StopMovement();

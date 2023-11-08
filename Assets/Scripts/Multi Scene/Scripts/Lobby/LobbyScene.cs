@@ -47,6 +47,8 @@ public class LobbyScene : MonoBehaviour
     private const int MinUserToStart = 1;
     private const int MaxUserAmount = 5;
     private string _userId;
+
+    private bool isConnectError = false;
     
     private void Start()
     {
@@ -80,8 +82,6 @@ public class LobbyScene : MonoBehaviour
             Vector2 localMousePosition = chatRoot.InverseTransformPoint(Input.mousePosition);
             if (!chatRoot.rect.Contains(localMousePosition)) chatBox.gameObject.SetActive(false);
         }
-        
-      
     }
 
     private void OnClick_LobbyButton()
@@ -216,10 +216,11 @@ public class LobbyScene : MonoBehaviour
                 }
             }
 
+            
             if (user.m_nUserData[0] == (int)LobbyUserState.Admin)
             {
                 List<UserSession> userList = NetGameManager.instance.m_roomSession.m_userList;
-
+                
                 if (userList.Count > 0)
                 {
                     UserSession newAdmin = userList[0];
@@ -300,22 +301,14 @@ public class LobbyScene : MonoBehaviour
     public void OnConnectFail()
     {
         loginAlertText.text = "서버와의 연결에 실패했습니다.";
-        MKWNetwork.instance.Disconnect();
         ReconnectImage.rectTransform.gameObject.SetActive(true);
     }
 
     public void OnConnectSuccess()
     {
-        loginAlertText.text = "서버 접속에 성공했습니다!";
-        
+        isConnectError = false;
     }
-
-    public void OnNetConnectDisconnect()
-    {
-        loginAlertText.text = "서버와의 연결이 끊어졌습니다.";
-        MKWNetwork.instance.Disconnect();
-        ReconnectImage.rectTransform.gameObject.SetActive(true);
-    }
+    
     private bool CanEnterRoom(string userID)
     {
         RoomSession roomSession = NetGameManager.instance.m_roomSession;
@@ -339,16 +332,22 @@ public class LobbyScene : MonoBehaviour
 
     private void OnClick_ReconnectButton()
     {
-        NetGameManager.instance.ConnectServer("3.34.116.91",3650,true);
+        isConnectError = true;
+        ReconnectImage.rectTransform.gameObject.SetActive(false);
+        loginAlertText.text = "재로그인 해주세요";
     }
     private void OnClick_MenuButton()
     {
+        ReconnectImage.rectTransform.gameObject.SetActive(false);
         LoadingSceneManager.LoadScene("Start Menu Scene");
     }
     private void OnClick_Login()
     {
+        if(isConnectError) NetGameManager.instance.ConnectServer("3.34.116.91", 3650, true);
+        
         //로그인 버튼 클릭시
         _userId = inputUserID.text;
+        
         if (_userId.Length is < 1 or > 10)
         {
             loginAlertText.text = "아이디의 길이를 1자 이상, 10자 이하로 맞춰주세요";
@@ -364,7 +363,6 @@ public class LobbyScene : MonoBehaviour
        
         
         NetGameManager.instance.UserLogin(_userId, 1);
-        
     }
 
     public void UserLoginResult(ushort usResult)
@@ -373,10 +371,13 @@ public class LobbyScene : MonoBehaviour
         if (usResult == 0)
         {
             loginPanel.SetActive(false);
-           
         }
         else if (usResult == 125) loginAlertText.text = "이미 존재하는 아이디입니다.";
-        else loginAlertText.text = "로그인에 실패했습니다." + usResult;
+        else
+        {
+            loginAlertText.text = "로그인에 실패했습니다." + usResult;
+            OnConnectFail();
+        }
     }
     
 

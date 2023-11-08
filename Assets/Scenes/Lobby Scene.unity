@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.36436462, g: 0.3242767, b: 0.2803114, a: 1}
+  m_IndirectSpecularColor: {r: 0.36436492, g: 0.3242759, b: 0.28031197, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -908,8 +908,8 @@ MonoBehaviour:
   loginPanel: {fileID: 1620879061}
   loginButton: {fileID: 18848767}
   ReconnectImage: {fileID: 254660115}
-  menuButton: {fileID: 1632879709}
-  reconnectButton: {fileID: 290255413}
+  menuButton: {fileID: 290255413}
+  reconnectButton: {fileID: 1632879709}
   lobbyButtonText: {fileID: 824498652}
   lobbyButton: {fileID: 1142227437}
   chatPrefab: {fileID: 3570807908617881685, guid: cd2c4361e98d78d4ca353603042595d7, type: 3}
@@ -3908,7 +3908,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 503069619}
   m_HandleRect: {fileID: 503069618}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

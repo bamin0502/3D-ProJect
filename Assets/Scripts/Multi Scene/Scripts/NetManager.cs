@@ -127,21 +127,22 @@ namespace MNF
 
 		public void OnNetConnectSuccess(int nRet)
 		{
+            LobbyScene.Instance.OnConnectSuccess();
 			Debug.Log("OnNetConnectSuccess : " + nRet.ToString());
-           
         }
 
 		public void OnNetConnectFail(int nRet)
 		{
-            MKWNetwork.instance.OnApplicationQuit();
-            LobbyScene.Instance.ReconnectImage.rectTransform.transform.parent.gameObject.SetActive(true);
-			Debug.Log("OnNetConnectFail : " + nRet.ToString());
+            LobbyScene.Instance.OnConnectFail();
+            Debug.Log("OnNetConnectFail : " + nRet.ToString());
+            MKWNetwork.instance.Disconnect();
 		}
 
 		public void OnNetConnectDisconnect(int nRet)
 		{
-            MKWNetwork.instance.OnApplicationQuit();
+            LobbyScene.Instance.OnConnectFail();
 			Debug.LogError("OnNetConnectDisconnect : " + nRet.ToString());
+            MKWNetwork.instance.Disconnect();
 		}
 
 		public void DisConnectServer()

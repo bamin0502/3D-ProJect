@@ -67,17 +67,17 @@ public class MultiEnemy : MonoBehaviour
             string json = "";
             if (enemyType == EnemyType.Box)
             {
-                json = "{\"damage\": 300}";
+                json = "{\"damage\": 200}";
                 _enemyName = "Red Monster";
             }
             else if (enemyType == EnemyType.Red)
             {
-                json = "{\"damage\": 450}";
+                json = "{\"damage\": 300}";
                 _enemyName = "Red Spider";
             }
             else if (enemyType == EnemyType.Green)
             {
-                json = "{\"damage\": 600}";
+                json = "{\"damage\": 400}";
                 _enemyName = "Green Spider";
             }
 

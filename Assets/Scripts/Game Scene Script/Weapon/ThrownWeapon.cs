@@ -28,7 +28,7 @@ public class ThrownWeapon : MonoBehaviour
     void Start()
     {
         StartCoroutine(CanExplode());
-        string json = "{\"damage\": 50}";
+        string json = "{\"damage\": 200}";
         Itemdata FireGrenade = JsonConvert.DeserializeObject<Itemdata>(json);
         damage = (int)FireGrenade.damage;
     }
@@ -75,7 +75,7 @@ public class ThrownWeapon : MonoBehaviour
 
     IEnumerator ApplyDoT(EnemyHealth enemy, float duration, GameObject fireEffect)
     {
-        float applyDamageInterval = 0.1f;
+        float applyDamageInterval = 0.3f;
         float time = 0.0f;
 
         while (time < duration)

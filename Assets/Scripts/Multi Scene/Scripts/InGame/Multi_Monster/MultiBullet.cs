@@ -7,13 +7,13 @@ public class MultiBullet : MonoBehaviour
 {
     public Transform target;
     public int damage;
-    public float speed = 10f; // 미사일 속도
+    public float speed = 3f; // 미사일 속도
 
     private void Start()
     {
         StartCoroutine(DeleteMySelf());
 
-        string json = "{\"damage\": 1000}";
+        string json = "{\"damage\": 500}";
         EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
         damage = (int)enemyStat1.damage;
     }

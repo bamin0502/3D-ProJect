@@ -92,7 +92,6 @@ public class MultiScene : MonoBehaviour
     public MultiPlayerHealth currentPlayerHealth;
     public bool isCutScene = false;
     private string currenViewPlayer = "";
-    public TextMeshProUGUI endingText;
     public Image endingImage; 
     public bool isDead =false;
     [SerializeField]public CinemachineVolumeSettings volumeSettings;
@@ -208,7 +207,6 @@ public class MultiScene : MonoBehaviour
                 newPlayer.TryGetComponent(out MultiItemDropController pickItem);
                 newPlayer.TryGetComponent(out MultiPlayerHealth multiPlayerHealth);
                 currentPlayerHealth = multiPlayerHealth;
-                multiPlayerHealth.deathText = endingText;
                 multiPlayerHealth.endingImage = endingImage;
                 nav = newPlayer.GetComponent<NavMeshAgent>();   
                 //아이템 드랍 관련
@@ -620,7 +618,6 @@ public class MultiScene : MonoBehaviour
     public void SwitchToNextPlayer()
     {
         endingImage.gameObject.SetActive(false);
-        endingText.gameObject.SetActive(false);
         
         noticeText.text = "플레이어 전환(마우스 오른키)";
         List<string> playerKeys = new List<string>(_players.Keys);

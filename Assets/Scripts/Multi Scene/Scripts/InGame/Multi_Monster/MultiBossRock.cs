@@ -30,8 +30,9 @@ public class MultiBossRock : MonoBehaviour
         {
             angularPower += 0.02f;
             scaleValue += 0.005f;
-            transform.localScale = Vector3.one * scaleValue;
-            rigid.AddTorque(transform.right * angularPower, ForceMode.Acceleration);
+            var transform1 = transform;
+            transform1.localScale = Vector3.one * scaleValue;
+            rigid.AddTorque(transform1.right * angularPower, ForceMode.Acceleration);
             yield return null;
         }
     }

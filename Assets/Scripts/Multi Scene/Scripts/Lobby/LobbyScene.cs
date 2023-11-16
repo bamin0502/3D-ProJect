@@ -6,10 +6,10 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using MNF;
 using TMPro;
-using UnityEngine.SceneManagement;
 
 public enum LobbyUserState
 {
+    None = -1,
     Admin,
     Ready,
     NotReady
@@ -26,7 +26,7 @@ public class LobbyScene : MonoBehaviour
     public Button loginButton;
     public Image ReconnectImage;
     public Button menuButton;
-    public Button reconnectButton; 
+    public Button reconnectButton;
     [Header("로비 패널")]
     public TextMeshProUGUI lobbyButtonText;
     public Button lobbyButton;
@@ -50,19 +50,20 @@ public class LobbyScene : MonoBehaviour
     
     private void Start()
     {
-        //NetGameManager.instance.ConnectServer("127.0.0.1", 3650, true);
         lobbyButton.onClick.AddListener(OnClick_LobbyButton);
         loginButton.onClick.AddListener(OnClick_Login);
         inputChat.onSubmit.AddListener(SendChatting);
-        menuButton.onClick.AddListener(OnClick_MenuButton);
-        reconnectButton.onClick.AddListener(OnClick_ReconnectButton);
+        menuButton.onClick.AddListener(OnClick_ReconnectButton);
+        reconnectButton.onClick.AddListener(OnClick_QuitGame);
+        
         ReconnectImage.rectTransform.gameObject.SetActive(false);
-        //NetGameManager.instance.ConnectServer("192.168.0.122", 3650, true);
-        //NetGameManager.instance.ConnectServer("1.11.11.1111",3650,true);
         //나중에 각자 집에서 단체로 AWS서버로 테스트해야해서 이건 지우지말것
         NetGameManager.instance.ConnectServer("3.34.116.91", 3650); 
-        //NetGameManager.instance.ConnectServer("3.34.116.91", 3650);
-        
+    }
+
+    public void OnDestroy()
+    {
+        Instance = null;
     }
 
     private void Awake()
@@ -71,6 +72,12 @@ public class LobbyScene : MonoBehaviour
         {
             Instance = this;
         }
+        else if (Instance != null)
+        {
+            // 이미 다른 인스턴스가 존재하면 현재 인스턴스를 파괴하여 초기화
+            Destroy(Instance);
+        }
+        
     }
 
     private void Update()
@@ -80,8 +87,7 @@ public class LobbyScene : MonoBehaviour
             Vector2 localMousePosition = chatRoot.InverseTransformPoint(Input.mousePosition);
             if (!chatRoot.rect.Contains(localMousePosition)) chatBox.gameObject.SetActive(false);
         }
-        
-      
+
     }
 
     private void OnClick_LobbyButton()
@@ -130,7 +136,8 @@ public class LobbyScene : MonoBehaviour
         if (!CanEnterRoom(NetGameManager.instance.m_userHandle.m_szUserID))
         {
             loginPanel.SetActive(true);
-            loginAlertText.text = "로그인에 실패했습니다.";
+            loginAlertText.text = "로그인을 시도해 주세요";
+            
             return;
         }
         
@@ -166,7 +173,7 @@ public class LobbyScene : MonoBehaviour
         if (!CanEnterRoom(user.m_szUserID)) return;
         RoomOneUserAdd(user);
 	}
-    void RoomOneUserAdd(UserSession user)
+    public void RoomOneUserAdd(UserSession user)
     {
         //유저 추가
         if (!CanEnterRoom(user.m_szUserID)) return;
@@ -193,7 +200,6 @@ public class LobbyScene : MonoBehaviour
     public void RoomUserDel(UserSession user)
 	{
         //유저 삭제 및 기존 유저 재정렬
-        
         GameObject toDestroy = _characters.FirstOrDefault(character => character!=null && character.name == user.m_szUserID);
         
         if (toDestroy != null)
@@ -281,7 +287,6 @@ public class LobbyScene : MonoBehaviour
         switch (dataID)
         {
             case 1:
-                //InvokeRepeating("UserMove", 0, 0.1f);
                 LoadingSceneManager.LoadScene("Game Scene");
                 break;
             case 3:
@@ -301,20 +306,17 @@ public class LobbyScene : MonoBehaviour
     {
         loginAlertText.text = "서버와의 연결에 실패했습니다.";
         MKWNetwork.instance.Disconnect();
-        ReconnectImage.rectTransform.gameObject.SetActive(true);
     }
 
     public void OnConnectSuccess()
     {
         loginAlertText.text = "서버 접속에 성공했습니다!";
-        
     }
 
     public void OnNetConnectDisconnect()
     {
         loginAlertText.text = "서버와의 연결이 끊어졌습니다.";
         MKWNetwork.instance.Disconnect();
-        ReconnectImage.rectTransform.gameObject.SetActive(true);
     }
     private bool CanEnterRoom(string userID)
     {
@@ -337,15 +339,18 @@ public class LobbyScene : MonoBehaviour
         return true;
     }
 
-    private void OnClick_ReconnectButton()
+    public void OnClick_ReconnectButton()
     {
-        NetGameManager.instance.ConnectServer("3.34.116.91",3650,true);
+        LoadingSceneManager.LoadScene("lobby Scene");
+        TcpHelper.Instance.IsRunning = true;
     }
-    private void OnClick_MenuButton()
+   
+    private void OnClick_QuitGame()
     {
-        LoadingSceneManager.LoadScene("Start Menu Scene");
+        Application.Quit();
+        Debug.LogWarning("종료되는지 확인용");
     }
-    private void OnClick_Login()
+    public void OnClick_Login()
     {
         //로그인 버튼 클릭시
         _userId = inputUserID.text;
@@ -354,17 +359,13 @@ public class LobbyScene : MonoBehaviour
             loginAlertText.text = "아이디의 길이를 1자 이상, 10자 이하로 맞춰주세요";
             return;
         }
-
-
         if (!_regex.IsMatch(_userId))
         {
             loginAlertText.text = "아이디에 특수문자는 사용할 수 없습니다.";
             return;
         }
-       
-        
         NetGameManager.instance.UserLogin(_userId, 1);
-        
+        Debug.LogWarning("클릭이벤트 발생 확인용");
     }
 
     public void UserLoginResult(ushort usResult)

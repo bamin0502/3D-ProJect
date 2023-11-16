@@ -6,7 +6,9 @@ using TMPro;
 public enum EnemyHealthType
 {
     Boss,
-    Monster,
+    Green,
+    Red,
+    Box
 }
 
 public class EnemyHealthBar : MonoBehaviour
@@ -21,14 +23,14 @@ public class EnemyHealthBar : MonoBehaviour
         _cam = Camera.main;
         if (healthText != null)
         {
-            healthText.text = (float)enemyHealth.currentHealth + "/" + enemyHealth.maxHealth;
+            healthText.text = enemyHealth.currentHealth + "/" + enemyHealth.maxHealth;
         }
 
         if (enemyHealthType==EnemyHealthType.Boss)
         {
             UpdateBossHealth();  
         }
-        else if(enemyHealthType==EnemyHealthType.Monster)
+        else
         {
             UpdateHealth();
         }
@@ -36,22 +38,28 @@ public class EnemyHealthBar : MonoBehaviour
     
     public void UpdateHealth()
     {
-        healthBar.fillAmount = (float)enemyHealth.currentHealth / enemyHealth.maxHealth;
+        if (enemyHealth.maxHealth > 0)
+        {
+            healthBar.fillAmount = Mathf.Clamp01(enemyHealth.currentHealth / enemyHealth.maxHealth);
+        }
+        
     }
     public void UpdateBossHealth()
     {
-        healthBar.fillAmount= Mathf.Max(enemyHealth.currentHealth / enemyHealth.maxHealth);
-        healthText.text =  Mathf.Max(0, enemyHealth.currentHealth) + "/" + enemyHealth.maxHealth;
+        if (healthBar != null && healthText != null && enemyHealth != null)
+        {
+            healthBar.fillAmount= Mathf.Max(enemyHealth.currentHealth / enemyHealth.maxHealth);
+            healthText.text =  Mathf.Max(0, enemyHealth.currentHealth) + "/" + enemyHealth.maxHealth;
         
-        if(enemyHealth.currentHealth <= 0)
-            healthText.text = "0/0";
+            if(enemyHealth.currentHealth <= 0)
+                healthText.text = "0/0"; 
+        }
+      
     }
     void Update()
     {
         Vector3 lookAtPosition = _cam.transform.position;
         lookAtPosition.x = transform.position.x;
         transform.LookAt(lookAtPosition);
-       
-       
     }
 }

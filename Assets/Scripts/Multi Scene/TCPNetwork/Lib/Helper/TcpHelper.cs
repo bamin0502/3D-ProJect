@@ -18,7 +18,7 @@ namespace MNF
 		IDispatchHelper dbMessageDispatchExporter;
 		IDispatchHelper interMessageDispatchExporter;
 
-		public bool IsRunning { get; private set; }
+		public bool IsRunning { get;  set; }
 		public bool IsRunThread { get; private set; }
 
 		/**

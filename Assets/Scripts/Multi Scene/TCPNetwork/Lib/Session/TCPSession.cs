@@ -103,7 +103,6 @@ namespace MNF
         public bool AsyncSend()
         {
             return AsyncIO.AsyncSend(this);
-            
         }
 
         protected abstract IMessageFactory AllocMessageFactory();

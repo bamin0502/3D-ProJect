@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject GameOptionImage;
     [SerializeField] private GameObject EndingImage;
     [SerializeField] private GameObject BossEndingImage;
+    [SerializeField] private GameObject LoginImage;
     private void Awake()
     {
         if (Inst == null)
@@ -150,6 +151,11 @@ public class GameManager : MonoBehaviour
         {
             BossEndingImage.gameObject.SetActive(false);
         }
+        LoginImage= GameObject.FindGameObjectWithTag("Login Image");
+        if (LoginImage == null)
+        {
+            Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
+        }
         //시작메뉴 씬 관련 오브젝트
         if (scene.name == "Start Menu Scene")
         {
@@ -253,5 +259,18 @@ public class GameManager : MonoBehaviour
                 Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
             }
         }
+        // else if (scene.name == "Lobby Scene")
+        // {
+        //     Button LoginButton = LoginImage.transform.Find("Login Button").GetComponent<Button>();
+        //     if(LoginButton != null)
+        //     {
+        //         LoginButton.onClick.AddListener(LobbyScene.Instance.OnClick_Login);
+        //         
+        //     }
+        //     else
+        //     {
+        //         Debug.Log("해당 오브젝트는 해당 Scene에 없습니다!");
+        //     }
+        // }
     }
 }

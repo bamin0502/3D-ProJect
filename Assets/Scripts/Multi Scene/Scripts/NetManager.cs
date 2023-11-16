@@ -128,29 +128,24 @@ namespace MNF
 		public void OnNetConnectSuccess(int nRet)
 		{
 			Debug.Log("OnNetConnectSuccess : " + nRet.ToString());
-           
+            MKWSession session = MKWNetwork.instance.m_nowSession;
         }
 
 		public void OnNetConnectFail(int nRet)
 		{
-            MKWNetwork.instance.OnApplicationQuit();
-            LobbyScene.Instance.ReconnectImage.rectTransform.transform.parent.gameObject.SetActive(true);
 			Debug.Log("OnNetConnectFail : " + nRet.ToString());
 		}
 
 		public void OnNetConnectDisconnect(int nRet)
 		{
-            MKWNetwork.instance.OnApplicationQuit();
 			Debug.LogError("OnNetConnectDisconnect : " + nRet.ToString());
-		}
-
-		public void DisConnectServer()
-		{
-           
-		}
-
+            LobbyScene.Instance.ReconnectImage.transform.gameObject.SetActive(true);
+            TcpHelper.Instance.IsRunning = true;
+        }
+        
 		public void OnPrcNetRecvPacket(NetHead head, BinaryReader br)
-		{// 전체유저에게 전송되는 패킷 처리
+		{
+            // 전체유저에게 전송되는 패킷 처리
 			if (head.m_Class == HeadClass.SOCK_MENU)
 			{
 			}

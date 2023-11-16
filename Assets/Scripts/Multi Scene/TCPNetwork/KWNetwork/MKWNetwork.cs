@@ -1,32 +1,19 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using MNF;
-using MNF.Message;
-
-using System.IO;
-
-public class _SendDummy
-{
-	public _SendDummy()
-	{
-	}
-}
 
 public class MKWNetwork : KWSingleton<MKWNetwork>
 {
 	public bool IsInit { get; private set; }
 
-	private MKWSession m_nowSession = null;
+	public MKWSession m_nowSession = null;
 	public readonly NetHead_Equal m_eqSJNetHead	= new NetHead_Equal();
-	public	Dictionary<NetHead,NetRecvCallBack> m_dicRecvCallBack;
+	public Dictionary<NetHead,NetRecvCallBack> m_dicRecvCallBack;
 
     override public void Awake()
 	{
 		base.Awake();
-
+        
 		IsInit = false;
 
 		MNF.Message.StreamBinRecver.Alloc();
@@ -35,6 +22,8 @@ public class MKWNetwork : KWSingleton<MKWNetwork>
 			Debug.Log("LogWriter init failed");
 
 		m_dicRecvCallBack = new Dictionary<NetHead, NetRecvCallBack>(m_eqSJNetHead);
+        
+        
 	}
 	public void OnApplicationQuit()
 	{
@@ -45,12 +34,16 @@ public class MKWNetwork : KWSingleton<MKWNetwork>
 
 			IsInit = false;
  		}
-
+        
 		TcpHelper.Instance.Stop();
 		LogManager.Instance.Release();
-	}
+        LobbyScene.Instance.ReconnectImage.transform.gameObject.SetActive(true);
+        
+    }
 
-	/**
+
+
+    /**
      * @brief A function that is called every frame in Unity.
      * @details Basic_1_ClientSession can handle messages received by calling TcpHelper.Instance.dipatchNetworkInterMessage ().
      */
@@ -107,6 +100,7 @@ public class MKWNetwork : KWSingleton<MKWNetwork>
     {
         if (IsInit)
             return m_nowSession.IsConnected;
+        m_nowSession.IsConnected = true;
         return false;
     }
 
@@ -118,7 +112,7 @@ public class MKWNetwork : KWSingleton<MKWNetwork>
 		if( goFunction != null )
 		{
 			NetRecvCallBack netRecvObj;
-			if (MKWNetwork.instance.m_dicRecvCallBack.TryGetValue(head, out netRecvObj) == false)
+			if (m_dicRecvCallBack.TryGetValue(head, out netRecvObj) == false)
 			{
 				NetRecvCallBack netCallBack = new NetRecvCallBack
                 {

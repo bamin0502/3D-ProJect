@@ -7,12 +7,12 @@ public class MKWMessageDispatcher : DefaultDispatchHelper<MKWSession, MKWMessage
 {
 	public static event System.Action <BinaryReader> ActionReceivePacket	= delegate {};
 
-	int onRecv(MKWSession session, object message)
+	public int onRecv(MKWSession session, object message)
 	{
 		StreamBin_RecvBuff  buff_obj =	message as  StreamBin_RecvBuff;
 		var br =	buff_obj!.Read_Start();
 
-		ActionReceivePacket( br);
+		ActionReceivePacket(br);
 
 		StreamBinRecver.ReturnRecvBuffObj( buff_obj );
 

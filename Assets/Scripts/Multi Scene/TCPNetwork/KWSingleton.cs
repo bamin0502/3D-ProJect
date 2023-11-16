@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections;
 
@@ -6,7 +7,12 @@ namespace MNF
     public abstract class KWSingleton<T> : MonoBehaviour where T : KWSingleton<T>
     {	
         private static T ms_Instance = null;
-	
+
+        public void OnDestroy()
+        {
+            ms_Instance = null;
+        }
+
         public static T instance
         {
             get

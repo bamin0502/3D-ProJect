@@ -199,11 +199,6 @@ public class ThrownWeaponController : MonoBehaviour
     Vector3 GetMousePositionOnGround()
     {
         Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, groundLayer))
-        {
-            return hit.point;
-        }
-
-        return Vector3.zero;
+        return Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, groundLayer) ? hit.point : Vector3.zero;
     }
 }

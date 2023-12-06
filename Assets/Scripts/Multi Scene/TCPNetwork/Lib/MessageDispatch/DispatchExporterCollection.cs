@@ -27,12 +27,10 @@ namespace MNF
 
         public IDispatchHelper Get(Type type)
         {
-            if (messageDispatchExporters.TryGetValue(type, out var messageDipatchExporter) == false)
-            {
-                if (Add(type) == false)
-                    return null;
-                messageDispatchExporters.TryGetValue(type, out messageDipatchExporter);
-            }
+            if (messageDispatchExporters.TryGetValue(type, out var messageDipatchExporter) != false) return messageDipatchExporter;
+            if (Add(type) == false)
+                return null;
+            messageDispatchExporters.TryGetValue(type, out messageDipatchExporter);
 
             return messageDipatchExporter;
         }

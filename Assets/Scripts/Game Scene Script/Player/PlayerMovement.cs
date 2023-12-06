@@ -124,19 +124,17 @@ public class PlayerMovement : MonoBehaviour
     
     public void Attack(int isSkill)
     {
-        if (weaponController.currentTarget != null)
-        {
-            weaponController.equippedWeapon.Attack(weaponController.currentTarget, isSkill);
+        if (weaponController.currentTarget == null) return;
+        weaponController.equippedWeapon.Attack(weaponController.currentTarget, isSkill);
             
-            if (weaponController.currentTarget.TryGetComponent(out Enemy enemy))
-            {
-                if (enemy.isDead) weaponController.currentTarget = null;
-            }
+        if (weaponController.currentTarget.TryGetComponent(out Enemy enemy))
+        {
+            if (enemy.isDead) weaponController.currentTarget = null;
+        }
 
-            else if (weaponController.currentTarget.TryGetComponent(out Boss boss))
-            {
-                if (boss.isDead) weaponController.currentTarget = null;
-            }
+        else if (weaponController.currentTarget.TryGetComponent(out Boss boss))
+        {
+            if (boss.isDead) weaponController.currentTarget = null;
         }
     }
 

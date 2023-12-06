@@ -74,11 +74,8 @@ namespace MNF
 
 			DateTime dtNow = DateTime.Now;
 			TimeSpan ts = dtNow - m_dtConnectionTest;
-			if (ts.Minutes > 2)
-				return false;
-
-			return true;
-		}
+			return ts.Minutes <= 2;
+        }
 
 		public void OnNetReceivePacket( BinaryReader br)
 		{
@@ -134,6 +131,8 @@ namespace MNF
 		public void OnNetConnectFail(int nRet)
 		{
 			Debug.Log("OnNetConnectFail : " + nRet.ToString());
+            LobbyScene.Instance.ReconnectImage.transform.gameObject.SetActive(true);
+            TcpHelper.Instance.IsRunning = true;
 		}
 
 		public void OnNetConnectDisconnect(int nRet)
@@ -144,33 +143,44 @@ namespace MNF
         }
         
 		public void OnPrcNetRecvPacket(NetHead head, BinaryReader br)
-		{
-            // 전체유저에게 전송되는 패킷 처리
-			if (head.m_Class == HeadClass.SOCK_MENU)
-			{
-			}
-            else if (head.m_Class == HeadClass.SOCK_ROOM)
+        {
+            switch (head.m_Class)
             {
-				if (head.m_Event == HeadEvent.ROOM_BROADCAST)
-					NetGameManager.instance.Recv_ROOM_BROADCAST(br);
-				else if (head.m_Event == HeadEvent.ROOM_USER_DATA_UPDATE)
-					NetGameManager.instance.Recv_ROOM_USER_DATA_UPDATE(br);
-                else if (head.m_Event == HeadEvent.ROOM_USER_MOVE_DIRECT)
+                // 전체유저에게 전송되는 패킷 처리
+                case HeadClass.SOCK_MENU:
+                    break;
+                case HeadClass.SOCK_ROOM when head.m_Event == HeadEvent.ROOM_BROADCAST:
+                    NetGameManager.instance.Recv_ROOM_BROADCAST(br);
+                    break;
+                case HeadClass.SOCK_ROOM when head.m_Event == HeadEvent.ROOM_USER_DATA_UPDATE:
+                    NetGameManager.instance.Recv_ROOM_USER_DATA_UPDATE(br);
+                    break;
+                case HeadClass.SOCK_ROOM when head.m_Event == HeadEvent.ROOM_USER_MOVE_DIRECT:
                     NetGameManager.instance.Recv_ROOM_USER_MOVE_DIRECT(br);
-                else if (head.m_Event == HeadEvent.ROOM_USER_ITEM_UPDATE)
+                    break;
+                case HeadClass.SOCK_ROOM when head.m_Event == HeadEvent.ROOM_USER_ITEM_UPDATE:
                     NetGameManager.instance.Recv_ROOM_USER_ITEM_UPDATE(br);
-                else if (head.m_Event == HeadEvent.ROOM_ENTER)
-					NetGameManager.instance.Recv_ROOM_ENTER(br);
-				else if (head.m_Event == HeadEvent.ROOM_MAN_IN)
-					NetGameManager.instance.Recv_ROOM_MAN_IN(br);
-				else if (head.m_Event == HeadEvent.ROOM_MAN_OUT)
-					NetGameManager.instance.Recv_ROOM_MAN_OUT(br);
-				else if (head.m_Event == HeadEvent.ROOM_DATA_UPDATE)
-					NetGameManager.instance.Recv_ROOM_DATA_UPDATE(br);
-                else if (head.m_Event == HeadEvent.ROOM_UPDATE)
-                    NetGameManager.instance.Recv_ROOM_UPDATE(br);
+                    break;
+                case HeadClass.SOCK_ROOM when head.m_Event == HeadEvent.ROOM_ENTER:
+                    NetGameManager.instance.Recv_ROOM_ENTER(br);
+                    break;
+                case HeadClass.SOCK_ROOM when head.m_Event == HeadEvent.ROOM_MAN_IN:
+                    NetGameManager.instance.Recv_ROOM_MAN_IN(br);
+                    break;
+                case HeadClass.SOCK_ROOM when head.m_Event == HeadEvent.ROOM_MAN_OUT:
+                    NetGameManager.instance.Recv_ROOM_MAN_OUT(br);
+                    break;
+                case HeadClass.SOCK_ROOM when head.m_Event == HeadEvent.ROOM_DATA_UPDATE:
+                    NetGameManager.instance.Recv_ROOM_DATA_UPDATE(br);
+                    break;
+                case HeadClass.SOCK_ROOM:
+                {
+                    if (head.m_Event == HeadEvent.ROOM_UPDATE)
+                        NetGameManager.instance.Recv_ROOM_UPDATE(br);
+                    break;
+                }
             }
-		}
+        }
 		public void Send_WAIT_LOGIN(string szUserID, byte uGroup, GameObject objCallback)
 		{
 			BinaryWriter bw = StreamBinData.WriteStart(HeadClass.SOCK_WAIT, HeadEvent.WAIT_LOGIN);

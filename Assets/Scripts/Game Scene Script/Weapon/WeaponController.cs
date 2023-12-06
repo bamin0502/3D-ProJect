@@ -74,11 +74,9 @@ public class WeaponController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Weapon"))
-        {
-            isInRangeToPickup = false;
-            HidePickupText();
-        }
+        if (!other.CompareTag("Weapon")) return;
+        isInRangeToPickup = false;
+        HidePickupText();
     }
     private void ShowPickupText()
     {
@@ -98,22 +96,16 @@ public class WeaponController : MonoBehaviour
             TryPickupWeapon();
         }
         // 오른쪽 마우스 클릭을 확인합니다.
-        if (Input.GetMouseButtonDown(1))
-        {
-            if (Camera.main != null)
-            {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                LayerMask layerMask = ~LayerMask.GetMask("Player");
+        if (!Input.GetMouseButtonDown(1)) return;
+        if (Camera.main == null) return;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        LayerMask layerMask = ~LayerMask.GetMask("Player");
 
-                if (Physics.Raycast(ray, out var hit, Mathf.Infinity, layerMask))
-                {
-                    if (hit.collider.CompareTag("Enemy"))
-                    {
-                        // 오른쪽 마우스 클릭 시 타겟을 설정합니다.
-                        SetTarget(hit.transform);
-                    }
-                }
-            }
+        if (!Physics.Raycast(ray, out var hit, Mathf.Infinity, layerMask)) return;
+        if (hit.collider.CompareTag("Enemy"))
+        {
+            // 오른쪽 마우스 클릭 시 타겟을 설정합니다.
+            SetTarget(hit.transform);
         }
     }
 
@@ -165,21 +157,17 @@ public class WeaponController : MonoBehaviour
         int weaponCount = Physics.OverlapSphereNonAlloc(transform.position, weaponPickupRange, itemColliders);
         
         //만약 무기를 찾았다면
-        if (weaponCount > 0)
+        if (weaponCount <= 0) return;
+        for (int i = 0; i < weaponCount; i++)
         {
-            for (int i = 0; i < weaponCount; i++)
-            {
-                Collider collider = itemColliders[i];
-               
-                if (collider.CompareTag("Weapon"))
-                {
-                    playerMovement.ani.ani.SetTrigger(Pickup);
-                    StartCoroutine(EquipWeaponAfterDelay(collider.GetComponent<Weapon>(), 0.1f));
-                    HidePickupText();
-                }
-            }
+            Collider collider = itemColliders[i];
+
+            if (!collider.CompareTag("Weapon")) continue;
+            playerMovement.ani.ani.SetTrigger(Pickup);
+            StartCoroutine(EquipWeaponAfterDelay(collider.GetComponent<Weapon>(), 0.1f));
+            HidePickupText();
         }
-        
+
     }
 
     private IEnumerator EquipWeaponAfterDelay(Weapon newWeapon, float delay)
@@ -216,49 +204,45 @@ public class WeaponController : MonoBehaviour
         {            
             DropEquippedWeapon();
         }
-        if(newWeapon != null)
-        {
-            newWeapon.isEquipped = true;
-            if(newWeapon.TryGetComponent(out Collider collider))
-            {
-                collider.enabled = false;
-            }
 
-            var transform1 = newWeapon.transform;
-            transform1.parent = newWeapon.weaponType != WeaponType.Bow ? weaponHolder : weaponHolder2;
-            transform1.localPosition = newWeapon.PickPosition;
-            newWeapon.transform.localRotation = Quaternion.Euler(newWeapon.PickRotation);
-            equippedWeapon = newWeapon;
-            if (equippedWeapon.iconCanvas != null)
-            {
-                DisableCanvas(equippedWeapon.iconCanvas); // 현재 무기의 아이콘 비활성화
-            }
+        if (newWeapon == null) return;
+        newWeapon.isEquipped = true;
+        if(newWeapon.TryGetComponent(out Collider collider))
+        {
+            collider.enabled = false;
         }
 
-       
+        var transform1 = newWeapon.transform;
+        transform1.parent = newWeapon.weaponType != WeaponType.Bow ? weaponHolder : weaponHolder2;
+        transform1.localPosition = newWeapon.PickPosition;
+        newWeapon.transform.localRotation = Quaternion.Euler(newWeapon.PickRotation);
+        equippedWeapon = newWeapon;
+        if (equippedWeapon.iconCanvas != null)
+        {
+            DisableCanvas(equippedWeapon.iconCanvas); // 현재 무기의 아이콘 비활성화
+        }
+
+
     }
 
     private void DropEquippedWeapon()
     {
-
-        if(equippedWeapon != null)
+        if (equippedWeapon == null) return;
+        if(equippedWeapon.iconCanvas != null)
         {
-            if(equippedWeapon.iconCanvas != null)
-            {
-                EnableCanvas(equippedWeapon.iconCanvas);
-            }
-            equippedWeapon.transform.SetParent(null);
-            equippedWeapon.isEquipped = false;
-            if(equippedWeapon.TryGetComponent(out Collider collider)){
-                collider.enabled = true;
-            }
-
-            Transform transform1;
-            (transform1 = equippedWeapon.transform).rotation = Quaternion.Euler(90f, 0f, 0f);
-            var transform2 = transform;
-            transform1.position = transform2.position + transform2.forward * 1f;
-            equippedWeapon = null;
+            EnableCanvas(equippedWeapon.iconCanvas);
         }
+        equippedWeapon.transform.SetParent(null);
+        equippedWeapon.isEquipped = false;
+        if(equippedWeapon.TryGetComponent(out Collider collider)){
+            collider.enabled = true;
+        }
+
+        Transform transform1;
+        (transform1 = equippedWeapon.transform).rotation = Quaternion.Euler(90f, 0f, 0f);
+        var transform2 = transform;
+        transform1.position = transform2.position + transform2.forward * 1f;
+        equippedWeapon = null;
 
     }
     private void DisableCanvas(Canvas canvas)

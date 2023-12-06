@@ -62,28 +62,26 @@ public class MultiEnemy : MonoBehaviour
     
     private void SetState(string sceneName)
     {
-        if (sceneName.Equals("Game Scene"))
+        if (!sceneName.Equals("Game Scene")) return;
+        string json = "";
+        switch (enemyType)
         {
-            string json = "";
-            if (enemyType == EnemyType.Box)
-            {
+            case EnemyType.Box:
                 json = "{\"damage\": 200}";
                 _enemyName = "Red Monster";
-            }
-            else if (enemyType == EnemyType.Red)
-            {
+                break;
+            case EnemyType.Red:
                 json = "{\"damage\": 300}";
                 _enemyName = "Red Spider";
-            }
-            else if (enemyType == EnemyType.Green)
-            {
+                break;
+            case EnemyType.Green:
                 json = "{\"damage\": 400}";
                 _enemyName = "Green Spider";
-            }
-
-            EnemyStat enemy = JsonConvert.DeserializeObject<EnemyStat>(json);
-            _damage = (int)enemy.damage;
+                break;
         }
+
+        EnemyStat enemy = JsonConvert.DeserializeObject<EnemyStat>(json);
+        _damage = (int)enemy.damage;
     }
 
     public void SetIndex()
@@ -137,11 +135,9 @@ public class MultiEnemy : MonoBehaviour
 
                 float distance = Vector3.Distance(transform.position, target.transform.position);
 
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    _targetPos = target.transform;
-                }
+                if (!(distance < closestDistance)) continue;
+                closestDistance = distance;
+                _targetPos = target.transform;
             }
 
             if (_targetPos != null) // 추적
@@ -171,17 +167,15 @@ public class MultiEnemy : MonoBehaviour
     {
         if (_index < 0 || _index > MultiScene.Instance.enemyList.Count) return;
 
-        if (target != currentTarget || (_nav.remainingDistance > 0.15f && target != null))
+        if (target == currentTarget && (!(_nav.remainingDistance > 0.15f) || target == null)) return;
+        _targetPos = target;
+        currentTarget = target;
+
+        _nav.SetDestination(target == null ? _originalPos : target.transform.position);
+
+        if (isNetwork)
         {
-            _targetPos = target;
-            currentTarget = target;
-
-            _nav.SetDestination(target == null ? _originalPos : target.transform.position);
-
-            if (isNetwork)
-            {
-                MultiScene.Instance.BroadCastingSetEnemyTarget(_targetPos != null ? _targetPos.name : "", _index);
-            }
+            MultiScene.Instance.BroadCastingSetEnemyTarget(_targetPos != null ? _targetPos.name : "", _index);
         }
     }
 
@@ -194,13 +188,11 @@ public class MultiEnemy : MonoBehaviour
         
         _targetPos.TryGetComponent(out MultiPlayerHealth playerHealth);
 
-        if (playerHealth != null)
-        {
-            if(playerHealth.CurrentHealth <= 0) return;
+        if (playerHealth == null) return;
+        if(playerHealth.CurrentHealth <= 0) return;
             
-            playerHealth.TakeDamage(_damage);
-            MultiScene.Instance.BroadCastingTakeDamage(_targetPos != null ? _targetPos.name : "", _damage);
-        }
+        playerHealth.TakeDamage(_damage);
+        MultiScene.Instance.BroadCastingTakeDamage(_targetPos != null ? _targetPos.name : "", _damage);
     }
 
     public IEnumerator TryAttack()

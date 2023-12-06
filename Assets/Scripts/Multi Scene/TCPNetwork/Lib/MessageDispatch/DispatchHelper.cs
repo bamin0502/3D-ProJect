@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace MNF
@@ -44,10 +45,7 @@ namespace MNF
             if (dispatchList.ContainsKey(messageType) == false)
                 return null;
 
-            if (dispatchList.TryGetValue(messageType, out var dispatchInfo) == false)
-                return null;
-
-            return dispatchInfo;
+            return dispatchList.TryGetValue(messageType, out var dispatchInfo) == false ? null : dispatchInfo;
         }
 
 		/**
@@ -60,10 +58,7 @@ namespace MNF
 		public IMessage TryCreateMessage<TTarget, TData>(int messageType, TTarget target, TData data)
         {
             DispatchInfo dispatchInfo = TryGetMessageDispatch(messageType);
-            if (dispatchInfo == null)
-                return null;
-
-            return AllocMessage(target, dispatchInfo.dispatcher, data);
+            return dispatchInfo == null ? null : AllocMessage(target, dispatchInfo.dispatcher, data);
         }
 
 		/**
@@ -144,17 +139,9 @@ namespace MNF
 				string packetName = typeof(TClass) + "+PACK_" + enumMessage.Value;
 				try
 				{
-					Type messageType = null;
-					foreach (Type type in mscorlib.GetTypes())
-					{
-						if (type.ToString() == packetName)
-						{
-							messageType = type;
-							break;
-						}
-					}
+					Type messageType = mscorlib.GetTypes().FirstOrDefault(type => type.ToString() == packetName);
 
-					if (messageType == null)
+                    if (messageType == null)
 						throw new Exception($"{packetName} Packet Invalid");
 
 					DispatchInfo dispatchInfo = TryGetMessageDispatch(enumMessage.Key);
@@ -236,12 +223,9 @@ namespace MNF
 			if (ExportFunctionFromEnum<TMessageEnum>() == false)
 				return false;
 
-			// The message object defined in the TMessageClass class and the message defined in the TMessageEnum are extracted and combined.
-			if (ExportClassFromEnum<TMessageClass, TMessageEnum>() == false)
-				return false;
-
-			return true;
-		}
+            // The message object defined in the TMessageClass class and the message defined in the TMessageEnum are extracted and combined.
+            return ExportClassFromEnum<TMessageClass, TMessageEnum>() != false;
+        }
 	}
 
 	/**

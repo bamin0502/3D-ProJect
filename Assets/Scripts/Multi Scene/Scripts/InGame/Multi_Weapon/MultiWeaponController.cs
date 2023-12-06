@@ -173,34 +173,30 @@ public class MultiWeaponController : MonoBehaviour
     
     private void AttackTarget()
     {
-        if (Vector3.Distance(transform.position, currentTarget.position) <= _agent.stoppingDistance)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(currentTarget.position - transform.position);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
-        }
+        if (!(Vector3.Distance(transform.position, currentTarget.position) <= _agent.stoppingDistance)) return;
+        Quaternion targetRotation = Quaternion.LookRotation(currentTarget.position - transform.position);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
     }
     
     private void EquipWeapon(Weapon newWeapon)
     {
         if (equippedWeapon != null) DropEquippedWeapon();
-        
-        if(newWeapon != null)
-        {
-            newWeapon.tag = Untagged;
-            newWeapon.isEquipped = true;
-            
-            if(newWeapon.TryGetComponent(out Collider collider)) collider.enabled = false;
 
-            Transform weaponTransform = newWeapon.transform;
-            weaponTransform.parent = newWeapon.weaponType != WeaponType.Bow ? weaponHolder : weaponHolder2;
-            weaponTransform.localPosition = newWeapon.PickPosition;
-            weaponTransform.localRotation = Quaternion.Euler(newWeapon.PickRotation);
-            equippedWeapon = newWeapon;
+        if (newWeapon == null) return;
+        newWeapon.tag = Untagged;
+        newWeapon.isEquipped = true;
             
-            if (equippedWeapon.iconCanvas != null)
-            {
-                OnOffCanvas(equippedWeapon.iconCanvas, false);
-            }
+        if(newWeapon.TryGetComponent(out Collider collider)) collider.enabled = false;
+
+        Transform weaponTransform = newWeapon.transform;
+        weaponTransform.parent = newWeapon.weaponType != WeaponType.Bow ? weaponHolder : weaponHolder2;
+        weaponTransform.localPosition = newWeapon.PickPosition;
+        weaponTransform.localRotation = Quaternion.Euler(newWeapon.PickRotation);
+        equippedWeapon = newWeapon;
+            
+        if (equippedWeapon.iconCanvas != null)
+        {
+            OnOffCanvas(equippedWeapon.iconCanvas, false);
         }
     }
 

@@ -44,6 +44,8 @@ namespace MNF
                     case SYSTEM_MESSAGE_TYPE.SYSTEM_MESSAGE_DISCONNECT:
                         session!.OnDisconnect();
                         break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
                 return 0;
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MNF;
 
 namespace MNF
@@ -121,12 +122,10 @@ namespace MNF
 		public void RemoveClientSession<TSession>(TSession session) where TSession : TCPSession, new()
         {
             int key = 0;
-            foreach(var clientSession in connectedSessionList)
+            foreach (var clientSession in connectedSessionList.Where(clientSession 
+                         => clientSession.Value == session))
             {
-                if (clientSession.Value == session)
-                {
-                    key = clientSession.Key;
-                }
+                key = clientSession.Key;
             }
             RemoveClientSession(key);
         }
@@ -177,11 +176,10 @@ namespace MNF
         {
             try
             {
-                foreach (var acceptHelperIter in acceptHelperList)
+                if (acceptHelperList.Any(acceptHelperIter => acceptHelperIter.IP == ipString
+                                                             && acceptHelperIter.Port == portString))
                 {
-                    if (acceptHelperIter.IP == ipString
-                    && acceptHelperIter.Port == portString)
-                        throw new Exception("Already bind!");
+                    throw new Exception("Already bind!");
                 }
 
                 var acceptHelper = new AcceptHelper<TSession, TDispatcher>();
@@ -263,10 +261,7 @@ namespace MNF
 				return false;
 
 			interMessageDispatchExporter = RegistMsgDispatcher(typeof(TInterMessageDispatcher));
-            if (interMessageDispatchExporter == null)
-                return false;
-
-            return true;
+            return interMessageDispatchExporter != null;
         }
 
 		/**

@@ -336,21 +336,18 @@ namespace Data
             }
             if (_item.itemType == Item.ItemType.Used)
             {
-                if (currentPlayerHealth.CurrentHealth < currentPlayerHealth.MaxHealth)
+                if (currentPlayerHealth.CurrentHealth >= currentPlayerHealth.MaxHealth) return false;
+                currentPlayerHealth.CurrentHealth += 500;
+                if (currentPlayerHealth.CurrentHealth >= currentPlayerHealth.MaxHealth)
                 {
-                    currentPlayerHealth.CurrentHealth += 500;
-                    if (currentPlayerHealth.CurrentHealth >= currentPlayerHealth.MaxHealth)
-                    {
-                        currentPlayerHealth.CurrentHealth = currentPlayerHealth.MaxHealth;
-                    }
-
-                    currentPlayerHealth.UpdateHealth();
-                    MultiScene.Instance.BroadCastingItemUse((int)Item.ItemType.Used);
-                    StartCoroutine(DisplayItemMessage("체력을 회복했습니다!"));
-                    return true;
+                    currentPlayerHealth.CurrentHealth = currentPlayerHealth.MaxHealth;
                 }
 
-                return false;
+                currentPlayerHealth.UpdateHealth();
+                MultiScene.Instance.BroadCastingItemUse((int)Item.ItemType.Used);
+                StartCoroutine(DisplayItemMessage("체력을 회복했습니다!"));
+                return true;
+
             }            
             return false;
         }

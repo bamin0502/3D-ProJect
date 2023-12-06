@@ -17,22 +17,18 @@ namespace MNF
         {
             get
             {
+                if (null != ms_Instance) return ms_Instance;
+                ms_Instance = GameObject.FindObjectOfType(typeof(T)) as T;
+
+                if (null != ms_Instance) return ms_Instance;
+                Debug.Log($"No instance of  {typeof(T).ToString()} a temporary on is created.");
+                ms_Instance = new GameObject( typeof(T).ToString(), typeof(T) ).GetComponent<T> ();
+					
                 if( null == ms_Instance )
                 {
-                    ms_Instance = GameObject.FindObjectOfType(typeof(T)) as T;
-				
-                    if( null == ms_Instance )
-                    {
-                        Debug.Log($"No instance of  {typeof(T).ToString()} a temporary on is created.");
-                        ms_Instance = new GameObject( typeof(T).ToString(), typeof(T) ).GetComponent<T> ();
-					
-                        if( null == ms_Instance )
-                        {
-                            Debug.LogError($"Failed to create a  {typeof(T).ToString()}");					
-                        }				
-                    }
+                    Debug.LogError($"Failed to create a  {typeof(T).ToString()}");					
                 }
-			
+
                 return ms_Instance;
             }
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Net;
 using System.Net.Sockets;
@@ -94,10 +95,7 @@ namespace MNF
             try
             {
                 int portNum = Convert.ToInt32(portString);
-                if (ipString.Length == 0)
-                    return new IPEndPoint(IPAddress.Any, portNum);
-                else
-                    return new IPEndPoint(IPAddress.Parse(ipString), portNum);
+                return ipString.Length == 0 ? new IPEndPoint(IPAddress.Any, portNum) : new IPEndPoint(IPAddress.Parse(ipString), portNum);
             }
             catch (Exception e)
             {
@@ -140,12 +138,7 @@ namespace MNF
         // for enum
         public static Dictionary<int, string> EnumDictionary<T>()
         {
-            Dictionary<int, string> dict = new Dictionary<int, string>();
-            foreach (var foo in Enum.GetValues(typeof(T)))
-            {
-                dict.Add((int)foo, foo.ToString());
-            }
-            return dict;
+            return Enum.GetValues(typeof(T)).Cast<object>().ToDictionary(foo => (int)foo, foo => foo.ToString());
         }
 
         // for delegate
@@ -212,11 +205,9 @@ namespace MNF
                 // get local ip
                 foreach (IPAddress ipAddress in host.AddressList)
                 {
-                    if (ipAddress.ToString().StartsWith("192.168.") == true)
-                    {
-                        serverIP = ipAddress.ToString();
-                        break;
-                    }
+                    if (ipAddress.ToString().StartsWith("192.168.") != true) continue;
+                    serverIP = ipAddress.ToString();
+                    break;
                 }
                 if (serverIP.Length == 0)
                 {
@@ -278,12 +269,10 @@ namespace MNF
             {
                 foreach (UnicastIPAddressInformation unicastIPAddressInformation in adapter.GetIPProperties().UnicastAddresses)
                 {
-                    if (unicastIPAddressInformation.Address.AddressFamily == AddressFamily.InterNetwork)
+                    if (unicastIPAddressInformation.Address.AddressFamily != AddressFamily.InterNetwork) continue;
+                    if (address.Equals(unicastIPAddressInformation.Address))
                     {
-                        if (address.Equals(unicastIPAddressInformation.Address))
-                        {
-                            return unicastIPAddressInformation.IPv4Mask;
-                        }
+                        return unicastIPAddressInformation.IPv4Mask;
                     }
                 }
             }
@@ -303,11 +292,9 @@ namespace MNF
 
                 foreach (UnicastIPAddressInformation UnicastIPAddressInformation in UnicastIPAddressInformationCollection)
                 {
-                    if (UnicastIPAddressInformation.Address.AddressFamily == AddressFamily.InterNetwork)
-                    {
-                        localAddressInfo.localAddress = UnicastIPAddressInformation.Address;
-                        localAddressInfo.subnetAddress = UnicastIPAddressInformation.IPv4Mask;
-                    }
+                    if (UnicastIPAddressInformation.Address.AddressFamily != AddressFamily.InterNetwork) continue;
+                    localAddressInfo.localAddress = UnicastIPAddressInformation.Address;
+                    localAddressInfo.subnetAddress = UnicastIPAddressInformation.IPv4Mask;
                 }
             }
             return localAddressInfo;

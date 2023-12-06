@@ -29,13 +29,11 @@ public class MultiPlayerSkill : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q) && !_isCoolTime)
-        {
-            if (_weapon == null) return;
+        if (!Input.GetKeyDown(KeyCode.Q) || _isCoolTime) return;
+        if (_weapon == null) return;
             
-            Skill(NetGameManager.instance.m_userHandle.m_szUserID);
-            MultiScene.Instance.BroadCastingPlayerSkill();
-        }
+        Skill(NetGameManager.instance.m_userHandle.m_szUserID);
+        MultiScene.Instance.BroadCastingPlayerSkill();
     }
 
         
@@ -67,6 +65,10 @@ public class MultiPlayerSkill : MonoBehaviour
             case WeaponType.TwoHanded:
                 _playerMovement.SetAnimationTrigger(TwoHandedSkill);
                 break;
+            case WeaponType.Gun:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 
@@ -82,6 +84,7 @@ public class MultiPlayerSkill : MonoBehaviour
             case WeaponType.TwoHanded:
                 effects[1].Play();
                 break;
+            case WeaponType.Gun:
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -137,6 +140,7 @@ public class MultiPlayerSkill : MonoBehaviour
                 MultiScene.Instance.skillImages[1].enabled = false;
                 MultiScene.Instance.skillImages[2].enabled = true;
                 break;
+            case WeaponType.Gun:
             default:
                 break;
         }

@@ -88,12 +88,11 @@ public class MultiBoss : MonoBehaviour
             lookVec = new Vector3(h, 0, v) * 5f;
             transform.LookAt(target.transform.position + lookVec);
         }
-        if(enemyHealth.currentHealth <= 0&& !isBossDead)
-        {
-            isBossDead = true;
-            StartCoroutine(DeleteSelf());
-            StopCoroutine(StartThink());
-        }
+
+        if (!(enemyHealth.currentHealth <= 0) || isBossDead) return;
+        isBossDead = true;
+        StartCoroutine(DeleteSelf());
+        StopCoroutine(StartThink());
     }
     public void Stop()
     {
@@ -212,13 +211,11 @@ public class MultiBoss : MonoBehaviour
     }
     public void MissileShot(Transform obj)
     {
-        if (target != null)
-        {
-            GameObject instantMissileA = Instantiate(missile, obj.position, missilePortA.rotation);
-            MultiBullet bossMissileA = instantMissileA.GetComponent<MultiBullet>();
-            bossMissileA.target = target.transform;
-            SoundManager.instance.PlaySE("Missile");
-        }
+        if (target == null) return;
+        GameObject instantMissileA = Instantiate(missile, obj.position, missilePortA.rotation);
+        MultiBullet bossMissileA = instantMissileA.GetComponent<MultiBullet>();
+        bossMissileA.target = target.transform;
+        SoundManager.instance.PlaySE("Missile");
     }
 
     public void ReThink()
@@ -241,12 +238,10 @@ public class MultiBoss : MonoBehaviour
     }
     public void Taunt()
     {
-        if (target != null)
-        {
-            Jump.Play();
-            tauntVec = target.transform.position + lookVec;
-            nav.SetDestination(tauntVec);
-        }
+        if (target == null) return;
+        Jump.Play();
+        tauntVec = target.transform.position + lookVec;
+        nav.SetDestination(tauntVec);
     }
     public void setJumpObj()
     {

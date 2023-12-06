@@ -63,6 +63,12 @@ namespace MNF
                 case SocketAsyncOperation.Connect:
                     ProcessConnect(e);
                     break;
+                case SocketAsyncOperation.Disconnect:
+                case SocketAsyncOperation.None:
+                case SocketAsyncOperation.ReceiveFrom:
+                case SocketAsyncOperation.ReceiveMessageFrom:
+                case SocketAsyncOperation.SendPackets:
+                case SocketAsyncOperation.SendTo:
                 default:
                    LogManager.Instance.WriteError("sender({0}) wrong operation({1})", sender.GetType(), e.LastOperation);
                     break;
@@ -273,11 +279,9 @@ namespace MNF
 
                 TotalSend += (UInt64)bytesSent;
 
-                if (bytesSent == 0)
-                {
-                    ProcSessionDisconnect(session);
-                    return;
-                }
+                if (bytesSent != 0) return;
+                ProcSessionDisconnect(session);
+                return;
             }
             catch (Exception exception)
             {

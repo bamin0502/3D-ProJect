@@ -19,15 +19,14 @@ public class ObjectHideCamera : MonoBehaviour
     private void LateUpdate()
     {
         RefreshHiddenObjects();
-        
-        if (!tPlayer.activeInHierarchy)
+
+        if (tPlayer.activeInHierarchy) return;
+        foreach (var hideable in previouslyhiddenObjects.Where(hideable 
+                     => Vector3.Distance(transform.position, hideable.transform.position) >0.1f))
         {
-            foreach (var hideable in previouslyhiddenObjects.Where(hideable => Vector3.Distance(transform.position, hideable.transform.position) >0.1f))
-            {
-                hideable.SetVisible(true);
-            }
+            hideable.SetVisible(true);
         }
-        
+
     }
 
 

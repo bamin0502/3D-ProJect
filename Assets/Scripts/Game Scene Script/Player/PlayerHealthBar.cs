@@ -36,7 +36,7 @@ public class PlayerHealthBar : MonoBehaviour
             healthBar.fillAmount = 0 / maxHealth;
 
         }
-        else if(displayedHealth>0f)
+        else if(displayedHealth > 0f)
         {
             // 체력 바 업데이트
             healthBar.fillAmount = displayedHealth / maxHealth;

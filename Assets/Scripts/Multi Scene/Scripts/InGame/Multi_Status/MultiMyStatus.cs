@@ -62,6 +62,7 @@ public class MultiMyStatus : MonoBehaviour
         {
             Debug.LogError("캔버스를 불러올 수 없습니다.");
         }
+        
         GradientColorKey[] colorKeys = new GradientColorKey[6];
         colorKeys[0].color = Color.red;
         colorKeys[0].time = 0.0f;
@@ -75,8 +76,8 @@ public class MultiMyStatus : MonoBehaviour
         colorKeys[4].time = 0.75f;
         colorKeys[5].color = Color.green;
         colorKeys[5].time = 1f;
-
         GradientAlphaKey[] alphaKeys = new GradientAlphaKey[6];
+        
         for (int i = 0; i < 6; i++)
         {
             alphaKeys[i].alpha = 1.0f;

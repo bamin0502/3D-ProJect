@@ -27,15 +27,11 @@ public class FinalCut : MonoBehaviour
     }
     private void Update()
     {
-        if (!isCutScene && MultiScene.Instance.bossObject)
+        if (isCutScene || !MultiScene.Instance.bossObject) return;
+        if (!MultiScene.Instance.bossObject.TryGetComponent(out EnemyHealth enemyHealth)) return;
+        if (enemyHealth.currentHealth <= 0)
         {
-            if(MultiScene.Instance.bossObject.TryGetComponent(out EnemyHealth enemyHealth))
-            {
-                if (enemyHealth.currentHealth <= 0)
-                {
-                    LastCutScene();
-                }
-            }
+            LastCutScene();
         }
     }
     public void LastCutScene()

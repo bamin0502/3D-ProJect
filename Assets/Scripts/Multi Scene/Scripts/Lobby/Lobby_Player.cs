@@ -20,19 +20,19 @@ public class Lobby_Player : MonoBehaviour
     {
         topHeadIconImage.enabled = true;
         
-        if (state == (int)LobbyUserState.Admin) //어드민이면
+        switch (state)
         {
-            topHeadIconImage.sprite = topHeadIconSprites[0];
-            return;
-        }
-
-        if ((int)LobbyUserState.Ready == state) //준비 완료
-        {
-            topHeadIconImage.sprite = topHeadIconSprites[1];
-        }
-        else
-        {
-            topHeadIconImage.enabled = false;
+            //어드민이면
+            case (int)LobbyUserState.Admin:
+                topHeadIconImage.sprite = topHeadIconSprites[0];
+                return;
+            //준비 완료
+            case (int)LobbyUserState.Ready:
+                topHeadIconImage.sprite = topHeadIconSprites[1];
+                break;
+            default:
+                topHeadIconImage.enabled = false;
+                break;
         }
     }
 }

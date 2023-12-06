@@ -31,15 +31,15 @@ public class MeleeWeaponController : MonoBehaviour
 
         if (currentWeapon == null) return;
 
-        if (!weaponController.isAttack && attackRoutine != null)
+        switch (weaponController.isAttack)
         {
-            isAttack = false;
-            StopCoroutine(attackRoutine);
-        }
-
-        if (weaponController.isAttack && !isAttack)
-        {
-            attackRoutine = StartCoroutine(AttackCoroutine());
+            case false when attackRoutine != null:
+                isAttack = false;
+                StopCoroutine(attackRoutine);
+                break;
+            case true when !isAttack:
+                attackRoutine = StartCoroutine(AttackCoroutine());
+                break;
         }
     }
 
@@ -68,6 +68,8 @@ public class MeleeWeaponController : MonoBehaviour
                 case WeaponType.TwoHanded:
                     playerMovement.ani.ani.SetTrigger(TwoHandedAttack);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             yield return new WaitForSeconds(weaponInterval);

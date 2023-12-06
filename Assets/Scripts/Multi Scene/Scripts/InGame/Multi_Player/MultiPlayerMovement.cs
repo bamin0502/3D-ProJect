@@ -132,21 +132,20 @@ public class MultiPlayerMovement : MonoBehaviour
             _isCoolingDown = true;
             _cooldownEndTime = Time.time + _cooldownTime;                           
         }
-        if (_isCoolingDown)
-        {
-            float remainingTime = Mathf.Max(0, _cooldownEndTime - Time.time);
+
+        if (!_isCoolingDown) return;
+        float remainingTime = Mathf.Max(0, _cooldownEndTime - Time.time);
         
-            if (remainingTime > 0)
-            {
-                SpaceBarUI();//시간이 남아있는동안 실행시킬거임
-                coolText.text = Mathf.CeilToInt(remainingTime).ToString();
-            }
-            else
-            {
-                spaceUI.SetActive(false);
-                _isCoolingDown = false;
-                coolText.text = "";
-            }
+        if (remainingTime > 0)
+        {
+            SpaceBarUI();//시간이 남아있는동안 실행시킬거임
+            coolText.text = Mathf.CeilToInt(remainingTime).ToString();
+        }
+        else
+        {
+            spaceUI.SetActive(false);
+            _isCoolingDown = false;
+            coolText.text = "";
         }
     }
 
@@ -166,19 +165,17 @@ public class MultiPlayerMovement : MonoBehaviour
     
     public void Attack(int isSkill)
     {
-        if (_weaponController.currentTarget != null)
-        {
-            _weaponController.equippedWeapon.Attack(_weaponController.currentTarget, isSkill);
+        if (_weaponController.currentTarget == null) return;
+        _weaponController.equippedWeapon.Attack(_weaponController.currentTarget, isSkill);
             
-            if (_weaponController.currentTarget.TryGetComponent(out Enemy enemy))
-            {
-                if (enemy.isDead) _weaponController.currentTarget = null;
-            }
+        if (_weaponController.currentTarget.TryGetComponent(out Enemy enemy))
+        {
+            if (enemy.isDead) _weaponController.currentTarget = null;
+        }
         
-            else if (_weaponController.currentTarget.TryGetComponent(out Boss boss))
-            {
-                if (boss.isDead) _weaponController.currentTarget = null;
-            }
+        else if (_weaponController.currentTarget.TryGetComponent(out Boss boss))
+        {
+            if (boss.isDead) _weaponController.currentTarget = null;
         }
     }
 

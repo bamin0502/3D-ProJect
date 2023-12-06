@@ -80,19 +80,15 @@ public class ItemDropController : MonoBehaviour
 
     private void PickUpItem()
     {
-        if (pickupActivated && itemColliders != null)
+        if (!pickupActivated || itemColliders == null) return;
+        foreach (var t in itemColliders)
         {
-            foreach (var t in itemColliders)
-            {
-                if (t != null && t.CompareTag("Item"))
-                {
-                    Debug.Log(t.GetComponent<ItemPickup>().item.itemName + " 획득 했습니다.");  // 인벤토리 넣기
-                    theInventory.AcquireItem(t.GetComponent<ItemPickup>().item);
-                    Destroy(t.gameObject);
-                    SoundManager.instance.PlaySE("Item Drop");
-                    ItemInfoDisappear();
-                }
-            }
+            if (t == null || !t.CompareTag("Item")) continue;
+            Debug.Log(t.GetComponent<ItemPickup>().item.itemName + " 획득 했습니다.");  // 인벤토리 넣기
+            theInventory.AcquireItem(t.GetComponent<ItemPickup>().item);
+            Destroy(t.gameObject);
+            SoundManager.instance.PlaySE("Item Drop");
+            ItemInfoDisappear();
         }
     }
 

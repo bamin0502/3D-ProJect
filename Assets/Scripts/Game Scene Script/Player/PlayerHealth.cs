@@ -37,13 +37,10 @@ public class PlayerHealth : MonoBehaviour
     {
         currentHealth -= damage;
         HealthBar.UpdatePlayerHp();
-        
-        if (currentHealth <= 0)
-        {
-           
-            Die();
-            StartCoroutine(DeathTitle());
-        }
+
+        if (currentHealth > 0) return;
+        Die();
+        StartCoroutine(DeathTitle());
     }
 
     public void Die()

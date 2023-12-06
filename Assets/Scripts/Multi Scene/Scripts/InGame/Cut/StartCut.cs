@@ -26,12 +26,10 @@ public class StartCut : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            // 'Esc' 키를 누르면 컷신을 넘깁니다.
-            _playableDirector.time = _playableDirector.duration;
-            StartCoroutine(SetEnemy());
-        }  
+        if (!Input.GetKeyDown(KeyCode.Escape)) return;
+        // 'Esc' 키를 누르면 컷신을 넘깁니다.
+        _playableDirector.time = _playableDirector.duration;
+        StartCoroutine(SetEnemy());
     }
 
     private IEnumerator SetEnemy()
@@ -61,13 +59,11 @@ public class StartCut : MonoBehaviour
         // }
 
         MultiScene.Instance._players.TryGetValue(MultiScene.Instance.currentUser, out GameObject player);
-        if (player != null)
+        if (player == null) yield break;
+        var weaponController = player.GetComponent<MultiWeaponController>();
+        if (weaponController != null)
         {
-            var weaponController = player.GetComponent<MultiWeaponController>();
-            if (weaponController != null)
-            {
-                weaponController.StartCoroutine(weaponController.CheckCanPickupWeapon());
-            }
+            weaponController.StartCoroutine(weaponController.CheckCanPickupWeapon());
         }
     }
 

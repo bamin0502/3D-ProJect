@@ -79,10 +79,7 @@ namespace MNF
     {
         public override bool Equals(NetHead s1, NetHead s2)
         {
-            if (s1!.m_Class == s2!.m_Class && s1.m_Event == s2.m_Event)
-                return true;
-            else
-                return false;
+            return s1!.m_Class == s2!.m_Class && s1.m_Event == s2.m_Event;
         }
 
         public override int GetHashCode(NetHead sh)

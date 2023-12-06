@@ -82,11 +82,9 @@ public class LobbyScene : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector2 localMousePosition = chatRoot.InverseTransformPoint(Input.mousePosition);
-            if (!chatRoot.rect.Contains(localMousePosition)) chatBox.gameObject.SetActive(false);
-        }
+        if (!Input.GetMouseButtonDown(0)) return;
+        Vector2 localMousePosition = chatRoot.InverseTransformPoint(Input.mousePosition);
+        if (!chatRoot.rect.Contains(localMousePosition)) chatBox.gameObject.SetActive(false);
 
     }
 
@@ -180,61 +178,53 @@ public class LobbyScene : MonoBehaviour
 
         GameObject newCharacter = Instantiate(playerPrefab);
 
-        for (int i = 0; i < MaxUserAmount; i++)
+        for(int i = 0; i < MaxUserAmount; i++)
         {
-            if (_characters.Count <= i || _characters[i] == null)
-            {
-                newCharacter.transform.position = positions[i].position;
-                newCharacter.transform.rotation = Quaternion.Euler(0, 180, 0);
-                newCharacter.TryGetComponent(out Lobby_Player player);
+            if (_characters.Count > i && _characters[i] != null) continue;
+            newCharacter.transform.position = positions[i].position;
+            newCharacter.transform.rotation = Quaternion.Euler(0, 180, 0);
+            newCharacter.TryGetComponent(out Lobby_Player player);
                 
-                player.Init(user);
-                player.ChangeIcon(user.m_nUserData[0]);
+            player.Init(user);
+            player.ChangeIcon(user.m_nUserData[0]);
 
-                if (_characters.Count <= i) _characters.Add(newCharacter);
-                else _characters[i] = newCharacter;
-                break;
-            }
+            if (_characters.Count <= i) _characters.Add(newCharacter);
+            else _characters[i] = newCharacter;
+            break;
         }
     }
     public void RoomUserDel(UserSession user)
 	{
         //유저 삭제 및 기존 유저 재정렬
         GameObject toDestroy = _characters.FirstOrDefault(character => character!=null && character.name == user.m_szUserID);
-        
-        if (toDestroy != null)
+
+        if (toDestroy == null) return;
+        string chatText = $"<#4FB7FF><b>알림 : {user.m_szUserID} 님이 퇴장하셨습니다.</b></color>";
+        AddChatting(chatText);
+            
+        int index = _characters.IndexOf(toDestroy);
+        if (index < 0) return;
+
+        _characters.RemoveAt(index);
+        Destroy(toDestroy);
+            
+            
+        for (int i = index; i < _characters.Count; i++)
         {
-            string chatText = $"<#4FB7FF><b>알림 : {user.m_szUserID} 님이 퇴장하셨습니다.</b></color>";
-            AddChatting(chatText);
-            
-            int index = _characters.IndexOf(toDestroy);
-            if (index < 0) return;
-
-            _characters.RemoveAt(index);
-            Destroy(toDestroy);
-            
-            
-            for (int i = index; i < _characters.Count; i++)
+            if (_characters[i] != null)
             {
-                if (_characters[i] != null)
-                {
-                    _characters[i].transform.position = positions[i].position;
-                }
-            }
-
-            if (user.m_nUserData[0] == (int)LobbyUserState.Admin)
-            {
-                List<UserSession> userList = NetGameManager.instance.m_roomSession.m_userList;
-
-                if (userList.Count > 0)
-                {
-                    UserSession newAdmin = userList[0];
-                    newAdmin.m_nUserData[0] = (int)LobbyUserState.Admin;
-                    NetGameManager.instance.RoomUserDataUpdate(newAdmin);
-                }
+                _characters[i].transform.position = positions[i].position;
             }
         }
-	}
+
+        if (user.m_nUserData[0] != (int)LobbyUserState.Admin) return;
+        List<UserSession> userList = NetGameManager.instance.m_roomSession.m_userList;
+
+        if (userList.Count <= 0) return;
+        UserSession newAdmin = userList[0];
+        newAdmin.m_nUserData[0] = (int)LobbyUserState.Admin;
+        NetGameManager.instance.RoomUserDataUpdate(newAdmin);
+    }
     
 
     public void RoomUpdate()
@@ -330,13 +320,10 @@ public class LobbyScene : MonoBehaviour
             return false;
         }
 
-        if (userCount > MaxUserAmount)
-        {
-            NetGameManager.instance.RoomUserForcedOut(userID);
-            return false;
-        }
+        if (userCount <= MaxUserAmount) return true;
+        NetGameManager.instance.RoomUserForcedOut(userID);
+        return false;
 
-        return true;
     }
 
     public void OnClick_ReconnectButton()
@@ -370,14 +357,19 @@ public class LobbyScene : MonoBehaviour
 
     public void UserLoginResult(ushort usResult)
     {
-        //로그인 결과
-        if (usResult == 0)
+        switch (usResult)
         {
-            loginPanel.SetActive(false);
-           
+            //로그인 결과
+            case 0:
+                loginPanel.SetActive(false);
+                break;
+            case 125:
+                loginAlertText.text = "이미 존재하는 아이디입니다.";
+                break;
+            default:
+                loginAlertText.text = "로그인에 실패했습니다." + usResult;
+                break;
         }
-        else if (usResult == 125) loginAlertText.text = "이미 존재하는 아이디입니다.";
-        else loginAlertText.text = "로그인에 실패했습니다." + usResult;
     }
     
 
@@ -395,13 +387,11 @@ public class LobbyScene : MonoBehaviour
     {
         if (string.IsNullOrWhiteSpace(inputChat.text)) return;
 
-        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
-        {
-            string chatText = $"{_userId} : {text}";
-            BroadcastChat(chatText);
-            inputChat.text = "";
-            inputChat.ActivateInputField();
-        }
+        if (!Input.GetKeyDown(KeyCode.Return) && !Input.GetKeyDown(KeyCode.KeypadEnter)) return;
+        string chatText = $"{_userId} : {text}";
+        BroadcastChat(chatText);
+        inputChat.text = "";
+        inputChat.ActivateInputField();
     }
 
     private void BroadcastChat(string chat)

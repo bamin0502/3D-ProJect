@@ -29,10 +29,7 @@ namespace MNF
             if (Session == null)
                 return $"session(null):{Dispatcher}";
 
-            if (Dispatcher == null)
-                return Session.ToString();
-
-            return $"{Session}:{Dispatcher}";
+            return Dispatcher == null ? Session.ToString() : $"{Session}:{Dispatcher}";
         }
 
         public abstract int execute();

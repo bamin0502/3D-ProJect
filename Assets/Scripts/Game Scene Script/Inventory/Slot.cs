@@ -30,14 +30,12 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
     {
         theItemEffectDatabase = FindObjectOfType<DataManager>();
         slots = new Slot[4];
-        if (MultiScene.Instance.inventory.slots.Length >= 4)
-        {
-            slots[0] = slot1.GetComponent<Slot>();
-            slots[1] = slot2.GetComponent<Slot>();
-            slots[2] = slot3.GetComponent<Slot>();
-            slots[3] = slot4.GetComponent<Slot>(); 
-        }
-        
+        if (MultiScene.Instance.inventory.slots.Length < 4) return;
+        slots[0] = slot1.GetComponent<Slot>();
+        slots[1] = slot2.GetComponent<Slot>();
+        slots[2] = slot3.GetComponent<Slot>();
+        slots[3] = slot4.GetComponent<Slot>();
+
     }
     void Update()
     {
@@ -126,34 +124,28 @@ public class Slot : MonoBehaviour, /*IPointerEnterHandler, IPointerExitHandler,*
     //아이템이 있는 슬롯을 클릭했을때 호출할 이벤트
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (eventData.button == PointerEventData.InputButton.Right)
+        if (eventData.button != PointerEventData.InputButton.Right) return;
+        if (item == null) return;
+        bool itemUsed=theItemEffectDatabase.UseItem(item);
+        if(itemUsed)
         {
-            if (item != null)
-            {                
-                bool itemUsed=theItemEffectDatabase.UseItem(item);
-                if(itemUsed)
-                {
-                    if (item.itemType == Item.ItemType.Used || item.itemType == Item.ItemType.Buff || item.itemType==Item.ItemType.Throw)
-                    {
-                        SetSlotCount(-1);
-                    }
-                }
-                else
-                {
-                    Debug.Log("아이템 사용에 실패했습니다.");
-                }
+            if (item.itemType == Item.ItemType.Used || item.itemType == Item.ItemType.Buff || item.itemType==Item.ItemType.Throw)
+            {
+                SetSlotCount(-1);
             }
-        }        
+        }
+        else
+        {
+            Debug.Log("아이템 사용에 실패했습니다.");
+        }
     }
     //아이템이 있는 슬롯을 처음 드래그할때 호출할 이벤트
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if(item != null)
-        {
-            DragSlot.inst.dragSlot = this;
-            DragSlot.inst.DragSetImage(itemImage);
-            DragSlot.inst.transform.position = eventData.position;
-        }
+        if (item == null) return;
+        DragSlot.inst.dragSlot = this;
+        DragSlot.inst.DragSetImage(itemImage);
+        DragSlot.inst.transform.position = eventData.position;
     }
     //아이템이 있는 슬롯을 드래그 중일때 호출할 이벤트
     public void OnDrag(PointerEventData eventData)

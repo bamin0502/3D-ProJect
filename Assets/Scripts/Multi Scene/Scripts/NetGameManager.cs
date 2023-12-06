@@ -35,11 +35,9 @@ public class NetGameManager : KWSingleton<NetGameManager>
     {
         for (int i = 0; i < m_roomSession.m_userList.Count; i++)
         {
-            if (m_roomSession.m_userList[i].m_szUserID == userID)
-            {
-                m_roomSession.m_userList.RemoveAt(i);
-                break;
-            }
+            if (m_roomSession.m_userList[i].m_szUserID != userID) continue;
+            m_roomSession.m_userList.RemoveAt(i);
+            break;
         }
     }
 
@@ -73,14 +71,12 @@ public class NetGameManager : KWSingleton<NetGameManager>
 		userSession.ReadBin(br);
 
 		for(int i = 0; i < m_roomSession.m_userList.Count; i++)
-		{
-			if (m_roomSession.m_userList[i].m_szUserID == userSession.m_szUserID)
-			{
-				m_roomSession.m_userList.RemoveAt(i);
+        {
+            if (m_roomSession.m_userList[i].m_szUserID != userSession.m_szUserID) continue;
+            m_roomSession.m_userList.RemoveAt(i);
                 
-				break;
-			}
-		}
+            break;
+        }
 
         if (SceneManager.GetActiveScene().name == "Lobby Scene")
         {
@@ -114,18 +110,17 @@ public class NetGameManager : KWSingleton<NetGameManager>
                 Debug.LogError("LobbyScene.Instance is null");
             }
         }
-        if(SceneManager.GetActiveScene().name=="Game Scene")
+
+        if (SceneManager.GetActiveScene().name != "Game Scene") return;
+        if (MultiScene.Instance != null)
         {
-            if (MultiScene.Instance != null)
-            {
-                MultiScene.Instance.RoomBroadcast(szData);
-            }
-            else
-            {
-                Debug.LogError("MultiScene.Instance is null");
-            }
+            MultiScene.Instance.RoomBroadcast(szData);
         }
-	}
+        else
+        {
+            Debug.LogError("MultiScene.Instance is null");
+        }
+    }
 
 	//방에서 본인정보 업데이트
 	public void Recv_ROOM_USER_DATA_UPDATE(BinaryReader br)
@@ -183,7 +178,7 @@ public class NetGameManager : KWSingleton<NetGameManager>
 		m_roomSession.ReadBin(br);
 		Debug.Log("Recv_ROOM_UPDATE : " + m_roomSession.m_RoomNo.ToString() );
 
-		LobbyScene.Instance.RoomUpdate();
+		//LobbyScene.Instance.RoomUpdate();
 	}
 
 	public void UserLogin(string szID, byte byGroup)

@@ -99,7 +99,7 @@ public class MonsterSpawner : MonoBehaviour
     private GameObject GetOrCreateMonsterFromPool()
     {
         GameObject monster = monsterPool.Find(m => !m.activeSelf);
-        if (monster == null)
+        if (monster != null) return monster;
         {
             // 모든 몬스터 프리팹을 순회하며 오브젝트 풀에 추가
             foreach (GameObject monsterPrefab in monsterPrefabs)

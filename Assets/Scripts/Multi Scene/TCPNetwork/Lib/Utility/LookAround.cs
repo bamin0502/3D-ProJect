@@ -2,6 +2,7 @@
 using System.Text;
 using System.Net;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 #if !NETFX_CORE
@@ -491,17 +492,15 @@ namespace MNF
 			{
 				var recvIPEndPoint = Utility.GetIPEndPoint(remoteIP, port);
 				try
-				{
-					foreach (var endPoint in responseEndPoint)
-					{
-                        if ((endPoint.ipEndPoint.ToString() == recvIPEndPoint.ToString()) && (uniqueKey == endPoint.uniqueKey))
-						{
-                            endPoint.registedDateTime = DateTime.Now;
-							recvIPEndPoint = null;
-							break;
-						}
-					}
-				}
+                {
+                    foreach (var endPoint in responseEndPoint.Where(endPoint => 
+                                 (endPoint.ipEndPoint.ToString() == recvIPEndPoint.ToString()) && (uniqueKey == endPoint.uniqueKey)))
+                    {
+                        endPoint.registedDateTime = DateTime.Now;
+                        recvIPEndPoint = null;
+                        break;
+                    }
+                }
 				catch (Exception e)
 				{
 					LogManager.Instance.WriteException(e, "3. lookRecvThread");

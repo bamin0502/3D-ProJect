@@ -21,30 +21,15 @@ public class OptionManager : MonoBehaviour
     //드롭다운 변수 선언
     public TMP_Dropdown resolutionDropdown;
     //해상도를 변경할수 있게 해주는 변수 선언
-    int resolutionNum;
-    //인스턴스화 정적으로 선언
-    //[SerializeField] public static GameManager instance = null;
-    //배경음악 슬라이더 지정
-    //[SerializeField] public Slider BackGroundMusic;
-    //이펙트 사운드 슬라이더 지정
-    //[SerializeField] public Slider SoundEffect;
-    //배경음 지정
-    //[SerializeField] public AudioSource BackGround;
-    //이펙트 사운드 지정
-    //[SerializeField] public AudioSource EffectSound;
+    private int resolutionNum;
 
-    //[Header("관리 오브젝트 설정")]
-    //리스트 배열 형태로 슬라이더를 관리함
-    //[SerializeField] public List<Slider> slider = new List<Slider>();
-    //리스트배열 형태로 이미지를 관리함
-    //[SerializeField] public List<Image> image = new List<Image>();
 
     // Start is called before the first frame update
     void Start()
     {
-        //옵션 창 비활성화
-        //image[1].transform.gameObject.SetActive(false);
+        //프레임 설정
         ChangeSize();
+        resolutionNum = 1;
     }
     public void ChangeSize()
     {

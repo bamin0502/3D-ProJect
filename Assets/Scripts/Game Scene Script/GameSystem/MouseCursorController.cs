@@ -24,20 +24,18 @@ public class MouseCursorController : MonoBehaviour
 
         int layerMask = ~(1 << LayerMask.NameToLayer("Player")); //Player 레이어 무시
 
-        if (Physics.Raycast(ray, out var hit, Mathf.Infinity, layerMask))
+        if (!Physics.Raycast(ray, out var hit, Mathf.Infinity, layerMask)) return;
+        if (hit.collider.CompareTag("Enemy"))
         {
-            if (hit.collider.CompareTag("Enemy"))
-            {
-                ChangeCursor(attackCursor);
-            }
-            else if (hit.collider.CompareTag("Item"))
-            {
-                ChangeCursor(itemCursor);
-            }
-            else
-            {
-                ChangeCursor(defaultCursor);
-            }
+            ChangeCursor(attackCursor);
+        }
+        else if (hit.collider.CompareTag("Item"))
+        {
+            ChangeCursor(itemCursor);
+        }
+        else
+        {
+            ChangeCursor(defaultCursor);
         }
     }
 

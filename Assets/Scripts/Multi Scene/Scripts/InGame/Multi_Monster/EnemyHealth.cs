@@ -64,128 +64,106 @@ public class EnemyHealth : MonoBehaviour
     public void EnemyHealthBase()
     {
         int childCount = playerCount.transform.childCount;
-        
-        if (childCount == 1)
+
+        switch (childCount)
         {
-            string json = "";
-            if (enemyType == EnemyType.Monster)
+            case 1:
             {
-                json = "{\"EnemyHealth\": 1500, \"Health\": 1500}";
-            }
-            else if (enemyType == EnemyType.RedSpider)
-            {
-                json= "{\"EnemyHealth\": 1600, \"Health\": 1600}";
-            }                                               
-            else if (enemyType == EnemyType.GreenSpider)
-            {
-                json= "{\"EnemyHealth\": 1800, \"Health\": 1800}";
-            }
-            else if (enemyType == EnemyType.Boss)
-            {
-                json = "{\"EnemyHealth\": 20000, \"Health\": 20000}";
-            }
+                string json = "";
+                if (enemyType == EnemyType.Monster)
+                {
+                    json = "{\"EnemyHealth\": 1500, \"Health\": 1500}";
+                }
+                else if (enemyType == EnemyType.RedSpider)
+                {
+                    json= "{\"EnemyHealth\": 1600, \"Health\": 1600}";
+                }                                               
+                else if (enemyType == EnemyType.GreenSpider)
+                {
+                    json= "{\"EnemyHealth\": 1800, \"Health\": 1800}";
+                }
+                else if (enemyType == EnemyType.Boss)
+                {
+                    json = "{\"EnemyHealth\": 20000, \"Health\": 20000}";
+                }
 
-            EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
-            maxHealth = (int)enemyStat1.EnemyHealth;
-            currentHealth = (int)enemyStat1.Health;
-            currentHealth = maxHealth;
-            if (enemyHealthBar != null && enemyType != EnemyType.Boss)
-                enemyHealthBar.UpdateHealth();
-            if(enemyHealthBar!= null && enemyType == EnemyType.Boss)
-                enemyHealthBar.UpdateBossHealth();
-            DOTween.SetTweensCapacity(500, 50);
-        }
-        else if(childCount== 2 || childCount== 3)
-        {
-            string json = "";
-            if (enemyType == EnemyType.Monster)
-            {
-                json = "{\"EnemyHealth\": 3000, \"Health\": 3000}";
+                EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
+                maxHealth = (int)enemyStat1.EnemyHealth;
+                currentHealth = (int)enemyStat1.Health;
+                currentHealth = maxHealth;
+                if (enemyHealthBar != null && enemyType != EnemyType.Boss)
+                    enemyHealthBar.UpdateHealth();
+                if(enemyHealthBar!= null && enemyType == EnemyType.Boss)
+                    enemyHealthBar.UpdateBossHealth();
+                DOTween.SetTweensCapacity(500, 50);
+                break;
             }
-            else if (enemyType == EnemyType.RedSpider)
+            case 2:
+            case 3:
             {
-                json= "{\"EnemyHealth\": 3200, \"Health\": 3200}";
-            }
-            else if (enemyType == EnemyType.GreenSpider)
-            {
-                json= "{\"EnemyHealth\": 3600, \"Health\":3600}";
-            }
-            else if (enemyType == EnemyType.Boss)
-            {
-                json = "{\"EnemyHealth\": 30000, \"Health\": 30000}";
-            }
+                string json = "";
+                if (enemyType == EnemyType.Monster)
+                {
+                    json = "{\"EnemyHealth\": 3000, \"Health\": 3000}";
+                }
+                else if (enemyType == EnemyType.RedSpider)
+                {
+                    json= "{\"EnemyHealth\": 3200, \"Health\": 3200}";
+                }
+                else if (enemyType == EnemyType.GreenSpider)
+                {
+                    json= "{\"EnemyHealth\": 3600, \"Health\":3600}";
+                }
+                else if (enemyType == EnemyType.Boss)
+                {
+                    json = "{\"EnemyHealth\": 30000, \"Health\": 30000}";
+                }
 
-            EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
+                EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
 
-            maxHealth = (int)enemyStat1.EnemyHealth;
-            currentHealth = (int)enemyStat1.Health;
-            currentHealth = maxHealth;
-            if (enemyHealthBar != null && enemyType != EnemyType.Boss)
-                enemyHealthBar.UpdateHealth();
-            if(enemyHealthBar!= null && enemyType == EnemyType.Boss)
-                enemyHealthBar.UpdateBossHealth();
+                maxHealth = (int)enemyStat1.EnemyHealth;
+                currentHealth = (int)enemyStat1.Health;
+                currentHealth = maxHealth;
+                if (enemyHealthBar != null && enemyType != EnemyType.Boss)
+                    enemyHealthBar.UpdateHealth();
+                if(enemyHealthBar!= null && enemyType == EnemyType.Boss)
+                    enemyHealthBar.UpdateBossHealth();
             
-            DOTween.SetTweensCapacity(500, 50);
-        }
-        else if(childCount==4 || childCount== 5)
-        {
-            string json = "";
-            if (enemyType == EnemyType.Monster)
-            {
-                json = "{\"EnemyHealth\": 6000, \"Health\": 6000}";
+                DOTween.SetTweensCapacity(500, 50);
+                break;
             }
-            else if (enemyType == EnemyType.RedSpider)
+            case 4:
+            case 5:
             {
-                json= "{\"EnemyHealth\": 5500, \"Health\": 5500}";
-            }
-            else if (enemyType == EnemyType.GreenSpider)
-            {
-                json= "{\"EnemyHealth\": 8000, \"Health\":8000}";
-            }
-            else if (enemyType == EnemyType.Boss)
-            {
-                json = "{\"EnemyHealth\": 50000, \"Health\": 50000}";
-            }
+                string json = "";
+                if (enemyType == EnemyType.Monster)
+                {
+                    json = "{\"EnemyHealth\": 6000, \"Health\": 6000}";
+                }
+                else if (enemyType == EnemyType.RedSpider)
+                {
+                    json= "{\"EnemyHealth\": 5500, \"Health\": 5500}";
+                }
+                else if (enemyType == EnemyType.GreenSpider)
+                {
+                    json= "{\"EnemyHealth\": 8000, \"Health\":8000}";
+                }
+                else if (enemyType == EnemyType.Boss)
+                {
+                    json = "{\"EnemyHealth\": 50000, \"Health\": 50000}";
+                }
 
-            EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
-            maxHealth = (int)enemyStat1.EnemyHealth;
-            currentHealth = (int)enemyStat1.Health;
-            currentHealth = maxHealth;
-            if (enemyHealthBar != null && enemyType != EnemyType.Boss)
-                enemyHealthBar.UpdateHealth();
-            if(enemyHealthBar!= null && enemyType == EnemyType.Boss)
-                enemyHealthBar.UpdateBossHealth();
-            DOTween.SetTweensCapacity(500, 50);
-        }
-    }
-    private void EnemyHealthBaseOnScene(string sceneName)
-    {
-        if (sceneName.Equals("Game Scene"))
-        {
-            string json = "";
-            if (enemyType == EnemyType.Monster)
-            {
-                json = "{\"EnemyHealth\": 6000, \"Health\": 6000}";
+                EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
+                maxHealth = (int)enemyStat1.EnemyHealth;
+                currentHealth = (int)enemyStat1.Health;
+                currentHealth = maxHealth;
+                if (enemyHealthBar != null && enemyType != EnemyType.Boss)
+                    enemyHealthBar.UpdateHealth();
+                if(enemyHealthBar!= null && enemyType == EnemyType.Boss)
+                    enemyHealthBar.UpdateBossHealth();
+                DOTween.SetTweensCapacity(500, 50);
+                break;
             }
-            else if (enemyType == EnemyType.RedSpider)
-            {
-                json= "{\"EnemyHealth\": 5500, \"Health\": 5500}";
-            }
-            else if (enemyType == EnemyType.GreenSpider)
-            {
-                json= "{\"EnemyHealth\": 8000, \"Health\": 8000}";
-            }
-            else if (enemyType == EnemyType.Boss)
-            {
-                json = "{\"EnemyHealth\": 50000, \"Health\": 50000}";
-            }
-
-            EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
-            maxHealth = (int)enemyStat1.EnemyHealth;
-            currentHealth = (int)enemyStat1.Health;
-            currentHealth = maxHealth;
-            enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
-            DOTween.SetTweensCapacity(500, 50);
         }
     }
     public void TakeDamage(int damage, bool isNetwork = true)
@@ -204,10 +182,17 @@ public class EnemyHealth : MonoBehaviour
         currentHealth = Math.Max(currentHealth - damage, 0);
         if (enemyHealthBar != null)
         {
-            if(enemyType == EnemyType.Boss)
-                enemyHealthBar.UpdateBossHealth();
-            else if(enemyType == EnemyType.Monster || enemyType == EnemyType.RedSpider || enemyType == EnemyType.GreenSpider)
-                 enemyHealthBar.UpdateHealth();   
+            switch (enemyType)
+            {
+                case EnemyType.Boss:
+                    enemyHealthBar.UpdateBossHealth();
+                    break;
+                case EnemyType.Monster:
+                case EnemyType.RedSpider:
+                case EnemyType.GreenSpider:
+                    enemyHealthBar.UpdateHealth();
+                    break;
+            }
         }
 
         if (damageNumbersPrefab != null)
@@ -228,13 +213,11 @@ public class EnemyHealth : MonoBehaviour
                     damage);
             }
         }
-        
-        if (currentHealth <= 0)
+
+        if (!(currentHealth <= 0)) return;
+        Die();
+        if (enemyType == EnemyType.Boss)
         {
-            Die();
-            if (enemyType == EnemyType.Boss)
-            {
-            }
         }
     }
     void Die()

@@ -36,16 +36,15 @@ public class MultiMeleeWeaponController : MonoBehaviour
             _isAttack = false;
         }
 
-        if (!_weaponController.isAttack && attackRoutine != null)
+        switch (_weaponController.isAttack)
         {
-            _isAttack = false;
-            StopCoroutine(attackRoutine);
-            return;
-        }
-
-        if (_weaponController.isAttack && !_isAttack && currentTarget != null)
-        {
-            attackRoutine = StartCoroutine(AttackCoroutine());
+            case false when attackRoutine != null:
+                _isAttack = false;
+                StopCoroutine(attackRoutine);
+                return;
+            case true when !_isAttack && currentTarget != null:
+                attackRoutine = StartCoroutine(AttackCoroutine());
+                break;
         }
     }
     private IEnumerator AttackCoroutine()
@@ -78,6 +77,7 @@ public class MultiMeleeWeaponController : MonoBehaviour
                     _playerMovement.SetAnimationTrigger(TwoHandedAttack);
                     MultiScene.Instance.BroadCastingAnimation(TwoHandedAttack, true);
                     break;
+                case WeaponType.Gun:
                 default:
                     break;
             }

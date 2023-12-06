@@ -64,10 +64,9 @@ public class MultiBullet : MonoBehaviour
     private void DamagePlayer()
     {
         bool isPlayer = target.TryGetComponent(out MultiPlayerHealth playerHealth);
-        if (isPlayer && playerHealth != null && playerHealth.CurrentHealth > 0)
-        {
-            playerHealth.TakeDamage(damage);
-            MultiScene.Instance.BroadCastingTakeDamage(target.name, damage);
-        }
+        
+        if (!isPlayer || playerHealth == null || playerHealth.CurrentHealth <= 0) return;
+        playerHealth.TakeDamage(damage);
+        MultiScene.Instance.BroadCastingTakeDamage(target.name, damage);
     }
 }

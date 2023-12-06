@@ -53,27 +53,19 @@ public abstract class Weapon : MonoBehaviour
     }
     private void LoadWeaponData(string sceneName)
     {
-        if (sceneName.Equals("Game Scene"))
+        if (!sceneName.Equals("Game Scene")) return;
+
+        string json = weaponType switch
         {
-            string json = "";
+            WeaponType.Bow => "{\"damage\": 800, \"skillDamage\": 1800}",
+            WeaponType.OneHanded => "{\"damage\": 1350, \"skillDamage\": 2200}",
+            WeaponType.TwoHanded => "{\"damage\": 1500, \"skillDamage\": 2500}",
+            _ => ""
+        };
 
-            if (weaponType == WeaponType.Bow)
-            {
-                json = "{\"damage\": 800, \"skillDamage\": 1800}";
-            }
-            else if (weaponType == WeaponType.OneHanded)
-            {
-                json = "{\"damage\": 1350, \"skillDamage\": 2200}";
-            }
-            else if (weaponType == WeaponType.TwoHanded)
-            {
-                json = "{\"damage\": 1500, \"skillDamage\": 2500}";
-            }
-
-            WeaponData weaponData = JsonConvert.DeserializeObject<WeaponData>(json);
-            damage = weaponData.damage;
-            skillDamage = weaponData.skillDamage;
-        }
+        WeaponData weaponData = JsonConvert.DeserializeObject<WeaponData>(json);
+        damage = weaponData.damage;
+        skillDamage = weaponData.skillDamage;
     }
     public abstract void Attack(Transform target, int isSkill);
     public void EnableCanvas()

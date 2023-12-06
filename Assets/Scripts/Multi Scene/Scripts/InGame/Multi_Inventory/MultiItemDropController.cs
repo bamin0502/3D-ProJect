@@ -46,11 +46,9 @@ public class MultiItemDropController : MonoBehaviour
         {
             for (int i = 0; i < itemCount; i++)
             {
-                if (itemColliders[i] != null && itemColliders[i].CompareTag("Item"))
-                {
-                    ItemInfoAppear();
-                    return; // 가장 가까운 아이템만 처리하도록 리턴
-                }
+                if (itemColliders[i] == null || !itemColliders[i].CompareTag("Item")) continue;
+                ItemInfoAppear();
+                return; // 가장 가까운 아이템만 처리하도록 리턴
             }
         }
         else
@@ -63,12 +61,10 @@ public class MultiItemDropController : MonoBehaviour
     {
         pickupActivated = true;
 
-        if (itemColliders[0] != null && itemColliders[0].GetComponent<ItemPickup>() != null && actionText != null)
-        {
-            string itemName = itemColliders[0].GetComponent<ItemPickup>().item.itemName;
-            actionText.text = itemName + " 아이템 획득 " + "<color=yellow>" + "(G)" + "</color>";
-        }
-        
+        if (itemColliders[0] == null || itemColliders[0].GetComponent<ItemPickup>() == null || actionText == null) return;
+        string itemName = itemColliders[0].GetComponent<ItemPickup>().item.itemName;
+        actionText.text = itemName + " 아이템 획득 " + "<color=yellow>" + "(G)" + "</color>";
+
     }
     private void ItemInfoDisappear()
     {
@@ -82,32 +78,28 @@ public class MultiItemDropController : MonoBehaviour
 
     private void PickUpItem()
     {
-        if (pickupActivated && itemColliders != null)
+        if (!pickupActivated || itemColliders == null) return;
+        foreach (var t in itemColliders)
         {
-            foreach (var t in itemColliders)
+            if (t == null || !t.CompareTag("Item") || t.GetComponent<ItemPickup>() == null) continue;
+            int index = MultiScene.Instance.itemsList.IndexOf(t.gameObject);
+                
+            if(_playerMovement != null)
             {
-                if (t != null && t.CompareTag("Item") && t.GetComponent<ItemPickup>() != null)
-                {
-                    int index = MultiScene.Instance.itemsList.IndexOf(t.gameObject);
-                
-                    if(_playerMovement != null)
-                    {
-                        _playerMovement.SetAnimationTrigger(Pickup);
-                    }
-
-                    MultiScene.Instance.BroadCastingAnimation(Pickup, true);
-                
-                    if (inventory != null)
-                    {
-                        inventory.AcquireItem(t.GetComponent<ItemPickup>().item);
-                    }
-                    Destroy(t.gameObject);
-                    MultiScene.Instance.BroadCastingPickItem(index);
-                    SoundManager.instance.PlaySE("Item Drop");
-                
-                    ItemInfoDisappear();
-                }
+                _playerMovement.SetAnimationTrigger(Pickup);
             }
+
+            MultiScene.Instance.BroadCastingAnimation(Pickup, true);
+                
+            if (inventory != null)
+            {
+                inventory.AcquireItem(t.GetComponent<ItemPickup>().item);
+            }
+            Destroy(t.gameObject);
+            MultiScene.Instance.BroadCastingPickItem(index);
+            SoundManager.instance.PlaySE("Item Drop");
+                
+            ItemInfoDisappear();
         }
     }
 }

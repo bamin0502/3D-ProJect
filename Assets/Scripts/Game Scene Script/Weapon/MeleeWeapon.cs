@@ -11,18 +11,17 @@ public class MeleeWeapon : Weapon
     public override void Attack(Transform target, int isSkill)
     {
         bool isEnemy = target.TryGetComponent(out EnemyHealth enemy);
-        if (isEnemy)
+        if (!isEnemy) return;
+        switch (weaponType)
         {
-            if (weaponType == WeaponType.OneHanded)
-            {
+            case WeaponType.OneHanded:
                 SoundManager.instance.PlaySE("Sword_Attack");
-            }
-            else if (weaponType == WeaponType.TwoHanded)
-            {
+                break;
+            case WeaponType.TwoHanded:
                 SoundManager.instance.PlaySE("Hammer_Attack");
-            }
-            enemy.TakeDamage(isSkill == 0 ? damage : skillDamage);
+                break;
         }
+        enemy.TakeDamage(isSkill == 0 ? damage : skillDamage);
     }
 
 }

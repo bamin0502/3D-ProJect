@@ -43,34 +43,28 @@ public class LoadingSceneManager : MonoBehaviour
             ProgressBar.fillAmount = progress;
 
             OtherImage.fillAmount = Mathf.Clamp01(OtherImage.fillAmount + (fillSpeed * Time.deltaTime));
-            if (ProgressBar.fillAmount >= targetFillAmount)
+            if (!(ProgressBar.fillAmount >= targetFillAmount)) continue;
+            // ProgressBar가 목표치에 도달하면 나머지 시간을 기다린 후 씬 전환
+            if (timer >= timeToFill)
             {
-                // ProgressBar가 목표치에 도달하면 나머지 시간을 기다린 후 씬 전환
-                if (timer >= timeToFill)
-                {
-                    operation.allowSceneActivation = true;
-                    break;
-                }
-                if (fillingOtherImage)
-                {
-                    OtherImage.fillAmount += otherImageFillSpeed * Time.deltaTime;
-                    // OtherImage가 1에 도달하면 빠르게 비우도록 상태 변경
-                    if (OtherImage.fillAmount >= 1.0f)
-                    {
-                        fillingOtherImage = false;
-                        OtherImage.fillAmount = 1.0f; // 최대로 채운 후 빠르게 비우도록
-                    }
-                }
-                else
-                {
-                    OtherImage.fillAmount -= otherImageFillSpeed * Time.deltaTime;
-                    // OtherImage가 0에 도달하면 다시 채우도록 상태 변경
-                    if (OtherImage.fillAmount <= 0.0f)
-                    {
-                        fillingOtherImage = true;
-                        OtherImage.fillAmount = 0.0f; // 최저로 비운 후 빠르게 채우도록
-                    }
-                }
+                operation.allowSceneActivation = true;
+                break;
+            }
+            if (fillingOtherImage)
+            {
+                OtherImage.fillAmount += otherImageFillSpeed * Time.deltaTime;
+                // OtherImage가 1에 도달하면 빠르게 비우도록 상태 변경
+                if (!(OtherImage.fillAmount >= 1.0f)) continue;
+                fillingOtherImage = false;
+                OtherImage.fillAmount = 1.0f; // 최대로 채운 후 빠르게 비우도록
+            }
+            else
+            {
+                OtherImage.fillAmount -= otherImageFillSpeed * Time.deltaTime;
+                // OtherImage가 0에 도달하면 다시 채우도록 상태 변경
+                if (!(OtherImage.fillAmount <= 0.0f)) continue;
+                fillingOtherImage = true;
+                OtherImage.fillAmount = 0.0f; // 최저로 비운 후 빠르게 채우도록
             }
         }
     }

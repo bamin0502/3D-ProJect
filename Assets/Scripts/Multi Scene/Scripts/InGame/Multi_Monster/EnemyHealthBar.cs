@@ -46,15 +46,13 @@ public class EnemyHealthBar : MonoBehaviour
     }
     public void UpdateBossHealth()
     {
-        if (healthBar != null && healthText != null && enemyHealth != null)
-        {
-            healthBar.fillAmount= Mathf.Max(enemyHealth.currentHealth / enemyHealth.maxHealth);
-            healthText.text =  Mathf.Max(0, enemyHealth.currentHealth) + "/" + enemyHealth.maxHealth;
+        if (healthBar == null || healthText == null || enemyHealth == null) return;
+        healthBar.fillAmount= Mathf.Max(enemyHealth.currentHealth / enemyHealth.maxHealth);
+        healthText.text =  Mathf.Max(0, enemyHealth.currentHealth) + "/" + enemyHealth.maxHealth;
         
-            if(enemyHealth.currentHealth <= 0)
-                healthText.text = "0/0"; 
-        }
-      
+        if(enemyHealth.currentHealth <= 0)
+            healthText.text = "0/0";
+
     }
     void Update()
     {

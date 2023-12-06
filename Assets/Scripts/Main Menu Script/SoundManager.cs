@@ -64,12 +64,10 @@ public class SoundManager : MonoBehaviour
         {
             foreach (AudioSource effectAudioSource in effectAudioSources)
             {
-                if (!effectAudioSource.isPlaying)
-                {
-                    effectAudioSource.clip = effectSound.clip;
-                    effectAudioSource.Play();
-                    break;
-                }
+                if (effectAudioSource.isPlaying) continue;
+                effectAudioSource.clip = effectSound.clip;
+                effectAudioSource.Play();
+                break;
             }
         }
         else
@@ -85,11 +83,9 @@ public class SoundManager : MonoBehaviour
         {
             foreach (AudioSource effectAudioSource in effectAudioSources)
             {
-                if (effectAudioSource.isPlaying && effectAudioSource.clip == effectSound.clip)
-                {
-                    effectAudioSource.Stop();
-                    break;
-                }
+                if (!effectAudioSource.isPlaying || effectAudioSource.clip != effectSound.clip) continue;
+                effectAudioSource.Stop();
+                break;
             }
         }
         else

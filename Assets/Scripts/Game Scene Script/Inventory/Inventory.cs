@@ -34,24 +34,18 @@ public class Inventory : MonoBehaviour
         {
             foreach (var t in slots)
             {
-                if (t.item != null)
-                {
-                    if (t.item.itemName == _item.itemName)
-                    {
-                        t.SetSlotCount(_count);
-                        return;
-                    }
-                }
+                if (t.item == null) continue;
+                if (t.item.itemName != _item.itemName) continue;
+                t.SetSlotCount(_count);
+                return;
             }
         }
         //아이템이 없다면
         foreach (var t in slots)
         {
-            if (t.item == null)
-            {
-                t.AddItem(_item, _count);
-                return;
-            }
+            if (t.item != null) continue;
+            t.AddItem(_item, _count);
+            return;
         }
     }
 }

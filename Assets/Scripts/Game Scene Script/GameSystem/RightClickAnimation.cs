@@ -27,17 +27,13 @@ public class RightClickAnimation : MonoBehaviour
 
     private void Update()
     {
-        if (!MultiScene.Instance.isDead && Input.GetMouseButtonDown(1)) // 오른쪽 클릭
-        {
-            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+        if (MultiScene.Instance.isDead || !Input.GetMouseButtonDown(1)) return; // 오른쪽 클릭
+        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out var hit))
-            {
-                if (hit.collider.gameObject.CompareTag("Ground")) // 클릭된 위치가 지면일 경우
-                {
-                    StartCoroutine(PlayClickAnimation(hit.point)); // 클릭한 위치에 애니메이션 생성
-                }
-            }
+        if (!Physics.Raycast(ray, out var hit)) return;
+        if (hit.collider.gameObject.CompareTag("Ground")) // 클릭된 위치가 지면일 경우
+        {
+            StartCoroutine(PlayClickAnimation(hit.point)); // 클릭한 위치에 애니메이션 생성
         }
     }
 

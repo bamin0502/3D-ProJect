@@ -83,10 +83,7 @@ namespace MNF
          */
 		public bool Init()
         {
-            if (logWriter_ == null)
-                return false;
-
-            return logWriter_.OnInit();
+            return logWriter_ != null && logWriter_.OnInit();
         }
 
 		/**

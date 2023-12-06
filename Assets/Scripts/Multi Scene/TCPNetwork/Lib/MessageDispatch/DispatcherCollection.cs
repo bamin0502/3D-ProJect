@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace MNF
@@ -29,12 +30,11 @@ namespace MNF
 		{
 			MessageEvent = new AutoResetEvent(false);
 			Dispatcher = new Dispatcher(new DoEventNotifier(MessageEvent), dispatchType);
-			if (isRunThread == true)
-			{
-				ThreadAdapter = new ThreadAdapter(MessageEvent);
-				ThreadAdapter.ThreadEvent += Dispatcher.dispatchMessage;
-			}
-		}
+            
+            if (isRunThread != true) return;
+            ThreadAdapter = new ThreadAdapter(MessageEvent);
+            ThreadAdapter.ThreadEvent += Dispatcher.dispatchMessage;
+        }
 
 		AutoResetEvent MessageEvent { get; set; }
 		public Dispatcher Dispatcher { get; private set; }
@@ -76,13 +76,14 @@ namespace MNF
          * @brief Stops all Dispatchers that were started via DispatcherCollection.Start ().
          */
 		internal void Stop()
-		{
-			foreach (var dispatcherThread in dispatcherThreads)
-			{
-				if (dispatcherThread.Value.ThreadAdapter != null)
-					dispatcherThread.Value.ThreadAdapter.Stop();
-			}
-		}
+        {
+            foreach (var dispatcherThread 
+                     in dispatcherThreads.Where(dispatcherThread 
+                    => dispatcherThread.Value.ThreadAdapter != null))
+            {
+                dispatcherThread.Value.ThreadAdapter.Stop();
+            }
+        }
 
 		/**
          * @brief Send a message with the DISPATCH_TYPE received as an argument.
@@ -92,9 +93,7 @@ namespace MNF
          */
 		internal bool PushMessage(DISPATCH_TYPE dispatchType, IMessage message)
         {
-            if (dispatcherThreads.TryGetValue(dispatchType, out var dispatcherThread) == false)
-                return false;
-            return dispatcherThread.Dispatcher.pushMessage(message);
+            return dispatcherThreads.TryGetValue(dispatchType, out var dispatcherThread) != false && dispatcherThread.Dispatcher.pushMessage(message);
         }
 
 		/**
@@ -104,9 +103,7 @@ namespace MNF
          */
 		internal Dispatcher GetDispatcher(DISPATCH_TYPE dispatchType)
         {
-            if (dispatcherThreads.TryGetValue(dispatchType, out var dispatcherThread) == false)
-                return null;
-            return dispatcherThread.Dispatcher;
+            return dispatcherThreads.TryGetValue(dispatchType, out var dispatcherThread) == false ? null : dispatcherThread.Dispatcher;
         }
     }
 }

@@ -34,41 +34,37 @@ public class QuickSlotController : MonoBehaviour
     }
     private void CoolTimeCalc()
     {
-        if(isCoolTime)
+        if (!isCoolTime) return;
+        currentCoolTime -= Time.deltaTime;
+
+        foreach (var t in img_coolTime)
         {
-            currentCoolTime -= Time.deltaTime;
+            t.fillAmount = currentCoolTime / coolTime;
 
-            foreach (var t in img_coolTime)
+            if (currentCoolTime <= 0)
             {
-                t.fillAmount = currentCoolTime / coolTime;
-
-                if (currentCoolTime <= 0)
-                {
-                    isCoolTime=false;
-                }
+                isCoolTime=false;
             }
         }
     }
     private void TryInputNumber()
     {
-        if (!isCoolTime)
+        if (isCoolTime) return;
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                ChangeSlot(0);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                ChangeSlot(1);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                ChangeSlot(2);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha4))
-            {
-                ChangeSlot(3);
-            }
+            ChangeSlot(0);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            ChangeSlot(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            ChangeSlot(2);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            ChangeSlot(3);
         }
     }
     private void ChangeSlot(int _num)
@@ -84,14 +80,12 @@ public class QuickSlotController : MonoBehaviour
     {
         CoolTimeReset();
 
-        if (quickSlots[selectedSlot].item != null)
+        if (quickSlots[selectedSlot].item == null) return;
+        if (quickSlots[selectedSlot].item.itemType==Item.ItemType.Used 
+            || quickSlots[selectedSlot].item.itemType == Item.ItemType.Buff 
+            || quickSlots[selectedSlot].item.itemType == Item.ItemType.Throw)
         {
-            if (quickSlots[selectedSlot].item.itemType==Item.ItemType.Used 
-                || quickSlots[selectedSlot].item.itemType == Item.ItemType.Buff 
-                || quickSlots[selectedSlot].item.itemType == Item.ItemType.Throw)
-            {
-                EatItem();
-            }
+            EatItem();
         }
     }
     public void EatItem()

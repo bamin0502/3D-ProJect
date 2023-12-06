@@ -44,24 +44,20 @@ public class Projectile : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (_target == null) return;
-        
-        if (other.CompareTag("Enemy"))
+
+        if (!other.CompareTag("Enemy")) return;
+        if (_target != other.transform)
         {
-            if (_target != other.transform)
-            {
-                Destroy(gameObject);
-                return;
-            }
-            
-            rb.constraints = RigidbodyConstraints.FreezeAll;
-            speed = 0;
-            
-            _target.TryGetComponent(out EnemyHealth enemy);
-            if (enemy != null)
-            {
-                enemy.TakeDamage(damage);
-                Destroy(gameObject);
-            }
+            Destroy(gameObject);
+            return;
         }
+            
+        rb.constraints = RigidbodyConstraints.FreezeAll;
+        speed = 0;
+            
+        _target.TryGetComponent(out EnemyHealth enemy);
+        if (enemy == null) return;
+        enemy.TakeDamage(damage);
+        Destroy(gameObject);
     }
 }

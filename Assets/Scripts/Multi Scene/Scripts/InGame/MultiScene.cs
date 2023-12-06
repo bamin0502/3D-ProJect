@@ -96,6 +96,7 @@ public class MultiScene : MonoBehaviour
     public bool isDead =false;
     [SerializeField]public CinemachineVolumeSettings volumeSettings;
     public NavMeshAgent nav;
+    public Button MenuBackButton;
     #endregion
 
     #region 이벤트 함수
@@ -131,6 +132,17 @@ public class MultiScene : MonoBehaviour
         {
             RevertColor(); 
         }
+        MenuBackButton.onClick.AddListener(() =>
+        {
+            if (isMasterClient)
+            {
+                NetGameManager.instance.RoomUserForcedOut(currentUser);
+            }
+            else
+            {
+                NetGameManager.instance.RoomUserForcedOut(NetGameManager.instance.m_userHandle.m_szUserID);
+            }
+        });
     }
 
     private void Update()
@@ -143,15 +155,11 @@ public class MultiScene : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (_players.TryGetValue(currentUser, out GameObject player))
-        {
-            if (MinimapCamera != null)
-            {
-                // 플레이어의 위치를 기준으로 미니맵 카메라의 위치를 갱신합니다.
-                var position = player.transform.position;
-                MinimapCamera.transform.position = new Vector3(position.x, position.y+33, position.z);
-            }
-        }
+        if (!_players.TryGetValue(currentUser, out GameObject player)) return;
+        if (MinimapCamera == null) return;
+        // 플레이어의 위치를 기준으로 미니맵 카메라의 위치를 갱신합니다.
+        var position = player.transform.position;
+        MinimapCamera.transform.position = new Vector3(position.x, position.y+33, position.z);
     }
 
     #endregion
@@ -159,13 +167,10 @@ public class MultiScene : MonoBehaviour
     public int GetRandomInt(int range)
     {
         //랜덤한 int 값 생성
-        if (isMasterClient)
-        {
-            int rnd = Random.Range(0, range);
-            return rnd;
-        }
+        if (!isMasterClient) return -1;
+        int rnd = Random.Range(0, range);
+        return rnd;
 
-        return -1;
     }
     
     private void SetUsers()
@@ -200,42 +205,39 @@ public class MultiScene : MonoBehaviour
             myStatus.mystatus = playerMyCanvas;
             
             myStatus.CreateMyStatus(newPlayerName, playerMyCanvas.transform.position);
-            if (newPlayerName.Equals(currentUser))
-            {
-                //만약 현재 유저일경우 실행시킬 것들
-                newPlayer.TryGetComponent(out ThrownWeaponController thrownWeaponController);
-                newPlayer.TryGetComponent(out MultiItemDropController pickItem);
-                newPlayer.TryGetComponent(out MultiPlayerHealth multiPlayerHealth);
-                currentPlayerHealth = multiPlayerHealth;
-                multiPlayerHealth.endingImage = endingImage;
-                nav = newPlayer.GetComponent<NavMeshAgent>();   
-                //아이템 드랍 관련
-                pickItem.actionText = itemUsedText;
-                pickItem.inventory = inventory;
-                //스페이스바 관련
-                multiPlayer.coolText = coolText;
-                multiPlayer.spaceUI = spaceUI;
-                multiPlayer.fill = spaceUI.GetComponent<UnityEngine.UI.Image>();
-                //개인체력바 관련
-                multiPlayerHealthBar.CreateUiStatus(newPlayerName);
-                //카메라 관련
-                cineCam.Follow = newPlayer.transform;
-                cineCam.LookAt = newPlayer.transform;
-                cineCam.GetRig(1).LookAt = newPlayer.transform;
-                multiPlayer._camera = playerCamera;
-                thrownWeaponController._cam = playerCamera;
-                objectHideCamera.tPlayer = newPlayer;
-                objectHideCamera.target = newPlayer.transform;
-                enemyCut.playerMovement = newPlayer.GetComponent<MultiPlayerMovement>();
-                finalCut.playerMovement = newPlayer.GetComponent<MultiPlayerMovement>();
-                //미니맵 카메라 관련
-                var position = newPlayer.transform.position;
-                MinimapCamera.transform.position = new Vector3(position.x, position.y+33, position.z);//Y값만 적절하게 조절하면됩니다.
-                //던지는 아이템 관련
-                currentThrownWeaponController = thrownWeaponController;
-                
-                
-            }
+            
+            if (!newPlayerName.Equals(currentUser)) continue;
+            //만약 현재 유저일경우 실행시킬 것들
+            newPlayer.TryGetComponent(out ThrownWeaponController thrownWeaponController);
+            newPlayer.TryGetComponent(out MultiItemDropController pickItem);
+            newPlayer.TryGetComponent(out MultiPlayerHealth multiPlayerHealth);
+            currentPlayerHealth = multiPlayerHealth;
+            multiPlayerHealth.endingImage = endingImage;
+            nav = newPlayer.GetComponent<NavMeshAgent>();   
+            //아이템 드랍 관련
+            pickItem.actionText = itemUsedText;
+            pickItem.inventory = inventory;
+            //스페이스바 관련
+            multiPlayer.coolText = coolText;
+            multiPlayer.spaceUI = spaceUI;
+            multiPlayer.fill = spaceUI.GetComponent<UnityEngine.UI.Image>();
+            //개인체력바 관련
+            multiPlayerHealthBar.CreateUiStatus(newPlayerName);
+            //카메라 관련
+            cineCam.Follow = newPlayer.transform;
+            cineCam.LookAt = newPlayer.transform;
+            cineCam.GetRig(1).LookAt = newPlayer.transform;
+            multiPlayer._camera = playerCamera;
+            thrownWeaponController._cam = playerCamera;
+            objectHideCamera.tPlayer = newPlayer;
+            objectHideCamera.target = newPlayer.transform;
+            enemyCut.playerMovement = newPlayer.GetComponent<MultiPlayerMovement>();
+            finalCut.playerMovement = newPlayer.GetComponent<MultiPlayerMovement>();
+            //미니맵 카메라 관련
+            var position = newPlayer.transform.position;
+            MinimapCamera.transform.position = new Vector3(position.x, position.y+33, position.z);//Y값만 적절하게 조절하면됩니다.
+            //던지는 아이템 관련
+            currentThrownWeaponController = thrownWeaponController;
 
         }
     }
@@ -818,16 +820,20 @@ public class MultiScene : MonoBehaviour
                 int itemType = Convert.ToInt32(jData["ITEM_TYPE"].ToString());
                 user.TryGetComponent(out MultiPlayerHealth playerHp);
                 
-                if (itemType == (int)Item.ItemType.Buff)
+                switch (itemType)
                 {
-                    playerHp.MaxHealth += 500;
-                }
-                else if (itemType == (int)Item.ItemType.Used)
-                {
-                    playerHp.CurrentHealth += 500;
-                    if (playerHp.CurrentHealth >= playerHp.MaxHealth)
+                    case (int)Item.ItemType.Buff:
+                        playerHp.MaxHealth += 500;
+                        break;
+                    case (int)Item.ItemType.Used:
                     {
-                        playerHp.CurrentHealth = playerHp.MaxHealth;
+                        playerHp.CurrentHealth += 500;
+                        if (playerHp.CurrentHealth >= playerHp.MaxHealth)
+                        {
+                            playerHp.CurrentHealth = playerHp.MaxHealth;
+                        }
+
+                        break;
                     }
                 }
                 playerHp.UpdateHealth();

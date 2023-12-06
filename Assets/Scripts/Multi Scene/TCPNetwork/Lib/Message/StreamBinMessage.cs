@@ -293,13 +293,10 @@ namespace MNF.Message
 
 		static public StreamBin_RecvBuff GetRecvBuffObj()
 		{
-			if( g.qRecvBuff.Count < 1 )
-			{
-				Debug.LogError( "!!! GetRecvBuffObj : g.qRecvBuff.Count < 1 " );
-				return null;
-			}
-			return g.qRecvBuff.Dequeue();
-		}
+            if (g.qRecvBuff.Count >= 1) return g.qRecvBuff.Dequeue();
+            Debug.LogError( "!!! GetRecvBuffObj : g.qRecvBuff.Count < 1 " );
+            return null;
+        }
 
 		static public void ReturnRecvBuffObj( StreamBin_RecvBuff buff_obj )
 		{

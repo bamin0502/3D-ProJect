@@ -37,7 +37,6 @@ public class MKWNetwork : KWSingleton<MKWNetwork>
         
 		TcpHelper.Instance.Stop();
 		LogManager.Instance.Release();
-        LobbyScene.Instance.ReconnectImage.transform.gameObject.SetActive(true);
         
     }
 
@@ -137,24 +136,22 @@ public class MKWNetwork : KWSingleton<MKWNetwork>
 		NetHead head = new NetHead();
 		head.MakeHead(uClass, uEvent);
 
-		if( goFunction != null )
-		{
-			NetRecvCallBack netRecvObj;
-			if (MKWNetwork.instance.m_dicRecvCallBack.TryGetValue(head, out netRecvObj) == false)
-			{
-				NetRecvCallBack netCallBack = new NetRecvCallBack
-                {
-                    m_ObjFunction = goFunction,
-                    m_Func = szRecvFunc
-                };
+        if (goFunction == null) return;
+        NetRecvCallBack netRecvObj;
+        if (MKWNetwork.instance.m_dicRecvCallBack.TryGetValue(head, out netRecvObj) == false)
+        {
+            NetRecvCallBack netCallBack = new NetRecvCallBack
+            {
+                m_ObjFunction = goFunction,
+                m_Func = szRecvFunc
+            };
 
-                m_dicRecvCallBack[head] = netCallBack;
-			}
-			else
-			{
-				netRecvObj.m_ObjFunction = goFunction;
-				netRecvObj.m_Func = szRecvFunc;
-			}
-		}
-	}
+            m_dicRecvCallBack[head] = netCallBack;
+        }
+        else
+        {
+            netRecvObj.m_ObjFunction = goFunction;
+            netRecvObj.m_Func = szRecvFunc;
+        }
+    }
 }

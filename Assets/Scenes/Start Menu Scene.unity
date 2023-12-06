@@ -446,6 +446,7 @@ MonoBehaviour:
   GameOptionImage: {fileID: 2828150137946540020, guid: 6b0d79bb891fb7341a8f66972a15ff86, type: 3}
   EndingImage: {fileID: 3013825217258684097, guid: 8247b6285e28b8a4498989934add892c, type: 3}
   BossEndingImage: {fileID: 2261908346246919436, guid: 99abec931e6baf943ba31b12a5ea0fbb, type: 3}
+  LoginImage: {fileID: 0}
 --- !u!1 &244799180
 GameObject:
   m_ObjectHideFlags: 0

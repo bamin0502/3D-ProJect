@@ -4,9 +4,9 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Data.Common;
-using Unity.VisualScripting;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
+using Cysharp.Threading.Tasks;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject EndingImage;
     [SerializeField] private GameObject BossEndingImage;
     [SerializeField] private GameObject LoginImage;
+    private bool isModalActive;
+    private bool? _wantsToQuit;
     private void Awake()
     {
         if (Inst == null)
@@ -42,6 +44,77 @@ public class GameManager : MonoBehaviour
         SourceImage.gameObject.SetActive(false);
 
     }
+   
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKey(KeyCode.F4))
+        {
+            QuitConfirmation().Forget();
+        }
+
+        if (_wantsToQuit == true)
+            Application.Quit();
+    }
+    
+    #region 강제종료 관련 코드          
+    [RuntimeInitializeOnLoadMethod]
+    static void RunOnStart()
+    {
+        Application.wantsToQuit += WantsToQuit;
+    }
+    static bool WantsToQuit()
+    {
+        if (Inst._wantsToQuit == null)
+        {
+            Inst.QuitConfirmation().Forget();
+            return false;
+        }
+        else
+        {
+            return Inst._wantsToQuit.Value;
+        }
+    }
+    private async UniTaskVoid QuitConfirmation()
+    {
+        if (isModalActive)
+        {
+            return;
+        }
+        isModalActive = true;
+        bool? result = null;
+
+        SimpleModalWindow.Create(false)
+            .SetHeader("종료")
+            .SetBody("정말로 종료하시겠습니까?")
+            .AddButton("종료", () => { result = true; }, ModalButtonType.Success)
+            .AddButton("취소", () => { result = false; }, ModalButtonType.Danger)
+            .Show();
+
+        await UniTask.WaitUntil(() => result != null);
+
+        _wantsToQuit = result;
+        isModalActive = false;
+    }
+    #endregion
+
+    #region 버튼을 통한 메뉴 관련 코드
+    private void RequestMenuConfirmation()
+    {
+        if (isModalActive)
+        {                                                       
+            return;
+        }
+        isModalActive = true;
+        
+        SimpleModalWindow.Create(false)
+            .SetHeader("메뉴 이동")
+            .SetBody("정말로 이동하시겠습니까?")
+            .AddButton("이동", () => { LoadingSceneManager.LoadScene("Game Scene"); }, ModalButtonType.Success)
+            .AddButton("취소", () => { }, ModalButtonType.Danger)
+            .Show();
+        isModalActive = false;
+    } 
+    #endregion
     //게임 실행을 시킬 메서드 지정
     public void GamestartButtonClick()
     {
@@ -56,7 +129,8 @@ public class GameManager : MonoBehaviour
     //게임 종료를 시킬 메서드 지정
     public void QuitGame()
     {
-        Application.Quit();
+        QuitConfirmation().Forget();
+        //Application.Quit();
         Debug.Log("게임 종료 확인용");
     }
     //일단은 클릭해도 안보이게 해둠 프로젝트가 private이여서 링크가 없다고 하는게 맞음

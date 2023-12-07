@@ -9,7 +9,6 @@ using DG.Tweening;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine.AI;
-using UnityEngine.SceneManagement;
 using DamageNumbersPro;
 
 public enum EnemyType
@@ -45,14 +44,7 @@ public class EnemyHealth : MonoBehaviour
         StartCoroutine(DelayedStart());
         
     }
-    private void Awake()
-    {
-       
-        //currentSceneName= SceneManager.GetActiveScene().name;
-        //EnemyHealthBaseOnScene(currentSceneName);
-        
-    }
-
+    
     IEnumerator DelayedStart()
     {
         yield return new WaitForSeconds(0.1f);

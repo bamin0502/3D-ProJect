@@ -10,6 +10,7 @@ public class MultiPlayerHealthBar : MonoBehaviour
     private string _playerName;
     public string playerName = "";
     public TextMeshProUGUI nameText;
+    
     public void CreateUiStatus(string _playerName)
     {
         MultiScene.Instance._players.TryGetValue(_playerName, out var playerPrefab);

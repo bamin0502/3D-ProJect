@@ -1,21 +1,18 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
 public class HideObject : MonoBehaviour
 {
+    //숨길 오브젝트 지정
     private HideObject _hideObject;
     private static readonly Dictionary<Collider,HideObject>hideObjectsMap = new Dictionary<Collider, HideObject>();
-    
-    //숨길 오브젝트 지정
     [SerializeField] public GameObject Renderers;
     public Collider Collider = null;
     void Start()
     {
        InitHideObject(); 
     }
-
     public static void InitHideObject()
     {
         foreach (var obj in hideObjectsMap.Values.Where(obj => obj != null && obj.Renderers != null))
@@ -34,12 +31,10 @@ public class HideObject : MonoBehaviour
             }   
         }
     }
-   
     public static HideObject GetHideObject(Collider collider)
     {
         return hideObjectsMap.TryGetValue(collider, out var obj) ? GetRoot(obj) : null;
     }
-
     public static HideObject GetRoot(HideObject obj)
     {
         while (true)
@@ -52,7 +47,6 @@ public class HideObject : MonoBehaviour
             }
         }
     }
-
     public void SetVisible(bool visible)
     {
        Renderer rend= Renderers.GetComponent<Renderer>();

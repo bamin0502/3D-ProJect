@@ -2,7 +2,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
-using Cinemachine;
 public class StartCut : MonoBehaviour
 {
     public PlayableDirector _playableDirector;
@@ -18,12 +17,9 @@ public class StartCut : MonoBehaviour
             // 컷신이 시작되면 BGM을 중지
             SoundManager.instance.bgmAudioSource.Stop();
         }
-
         // 컷신 종료 이벤트 핸들러 등록
         _playableDirector.stopped += OnCutsceneEnd;
-        
     }
-
     private void Update()
     {
         if (!Input.GetKeyDown(KeyCode.Escape)) return;
@@ -31,7 +27,6 @@ public class StartCut : MonoBehaviour
         _playableDirector.time = _playableDirector.duration;
         StartCoroutine(SetEnemy());
     }
-
     private IEnumerator SetEnemy()
     {
         yield return new WaitForSeconds(1f);
@@ -49,15 +44,6 @@ public class StartCut : MonoBehaviour
                 Debug.LogWarning("MultiEnemy 컴포넌트를 찾을 수 없습니다. GameObject 이름: " + enemy.name);
             }
         }
-        // MultiScene.Instance.bossObject.TryGetComponent(out MultiBoss multiBoss);
-        // if (multiBoss != null)
-        // {
-        //     Debug.LogWarning("Setting");
-        //     multiBoss.StartCoroutine(multiBoss.PlayerDetect());
-        //     multiBoss.StartCoroutine(multiBoss.ChangeTarget());
-        //     multiBoss.StartCoroutine(multiBoss.StartThink());
-        // }
-
         MultiScene.Instance._players.TryGetValue(MultiScene.Instance.currentUser, out GameObject player);
         if (player == null) yield break;
         var weaponController = player.GetComponent<MultiWeaponController>();

@@ -151,6 +151,7 @@ public class MultiScene : MonoBehaviour
         {
             SwitchToNextPlayer();
         }
+        cineCam.transform.rotation=Quaternion.Euler(0,0,0);
     }
 
     private void LateUpdate()
@@ -226,6 +227,7 @@ public class MultiScene : MonoBehaviour
             //카메라 관련
             cineCam.Follow = newPlayer.transform;
             cineCam.LookAt = newPlayer.transform;
+           
             cineCam.GetRig(1).LookAt = newPlayer.transform;
             multiPlayer._camera = playerCamera;
             thrownWeaponController._cam = playerCamera;

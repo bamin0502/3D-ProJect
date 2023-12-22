@@ -61,23 +61,14 @@ public class EnemyHealth : MonoBehaviour
         {
             case 1:
             {
-                string json = "";
-                if (enemyType == EnemyType.Monster)
+                string json = enemyType switch
                 {
-                    json = "{\"EnemyHealth\": 1500, \"Health\": 1500}";
-                }
-                else if (enemyType == EnemyType.RedSpider)
-                {
-                    json= "{\"EnemyHealth\": 1600, \"Health\": 1600}";
-                }                                               
-                else if (enemyType == EnemyType.GreenSpider)
-                {
-                    json= "{\"EnemyHealth\": 1800, \"Health\": 1800}";
-                }
-                else if (enemyType == EnemyType.Boss)
-                {
-                    json = "{\"EnemyHealth\": 20000, \"Health\": 20000}";
-                }
+                    EnemyType.Monster => "{\"EnemyHealth\": 1500, \"Health\": 1500}",
+                    EnemyType.RedSpider => "{\"EnemyHealth\": 1600, \"Health\": 1600}",
+                    EnemyType.GreenSpider => "{\"EnemyHealth\": 1800, \"Health\": 1800}",
+                    EnemyType.Boss => "{\"EnemyHealth\": 20000, \"Health\": 20000}",
+                    _ => ""
+                };
 
                 EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
                 maxHealth = (int)enemyStat1.EnemyHealth;
@@ -93,23 +84,14 @@ public class EnemyHealth : MonoBehaviour
             case 2:
             case 3:
             {
-                string json = "";
-                if (enemyType == EnemyType.Monster)
+                string json = enemyType switch
                 {
-                    json = "{\"EnemyHealth\": 3000, \"Health\": 3000}";
-                }
-                else if (enemyType == EnemyType.RedSpider)
-                {
-                    json= "{\"EnemyHealth\": 3200, \"Health\": 3200}";
-                }
-                else if (enemyType == EnemyType.GreenSpider)
-                {
-                    json= "{\"EnemyHealth\": 3600, \"Health\":3600}";
-                }
-                else if (enemyType == EnemyType.Boss)
-                {
-                    json = "{\"EnemyHealth\": 30000, \"Health\": 30000}";
-                }
+                    EnemyType.Monster => "{\"EnemyHealth\": 3000, \"Health\": 3000}",
+                    EnemyType.RedSpider => "{\"EnemyHealth\": 3200, \"Health\": 3200}",
+                    EnemyType.GreenSpider => "{\"EnemyHealth\": 3600, \"Health\":3600}",
+                    EnemyType.Boss => "{\"EnemyHealth\": 30000, \"Health\": 30000}",
+                    _ => ""
+                };
 
                 EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
 
@@ -127,23 +109,14 @@ public class EnemyHealth : MonoBehaviour
             case 4:
             case 5:
             {
-                string json = "";
-                if (enemyType == EnemyType.Monster)
+                string json = enemyType switch
                 {
-                    json = "{\"EnemyHealth\": 6000, \"Health\": 6000}";
-                }
-                else if (enemyType == EnemyType.RedSpider)
-                {
-                    json= "{\"EnemyHealth\": 5500, \"Health\": 5500}";
-                }
-                else if (enemyType == EnemyType.GreenSpider)
-                {
-                    json= "{\"EnemyHealth\": 8000, \"Health\":8000}";
-                }
-                else if (enemyType == EnemyType.Boss)
-                {
-                    json = "{\"EnemyHealth\": 50000, \"Health\": 50000}";
-                }
+                    EnemyType.Monster => "{\"EnemyHealth\": 6000, \"Health\": 6000}",
+                    EnemyType.RedSpider => "{\"EnemyHealth\": 5500, \"Health\": 5500}",
+                    EnemyType.GreenSpider => "{\"EnemyHealth\": 8000, \"Health\":8000}",
+                    EnemyType.Boss => "{\"EnemyHealth\": 50000, \"Health\": 50000}",
+                    _ => ""
+                };
 
                 EnemyStat enemyStat1 = JsonConvert.DeserializeObject<EnemyStat>(json);
                 maxHealth = (int)enemyStat1.EnemyHealth;
